@@ -132,6 +132,9 @@ export default class App extends React.Component {
                 />
             </div>
           </section>
+          <section>
+            <div className="mui--text-center">Contribute on <a href="https://github.com/stellar/dashboard">GitHub</a>!</div>
+          </section>
         </div>
       </div>
     );
