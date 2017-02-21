@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stellar.org Dashboard</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- load custom font -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css" />
+  <!-- load MUI -->
+  <link href="https://cdn.muicss.com/mui-0.9.6/css/mui.min.css" rel="stylesheet" type="text/css" media="screen" />
+  <style type="text/css">
+    body {
+      background-color: #eeeeee;
+      font-family: "Roboto", "Helvetica Neue", Helvetica, Arial;
+    }
+
+    section {
+      clear: both;
+    }
+
+    section > h1 {
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 1em;
+      font-weight: 600;
+      text-shadow: 1px 1px white;
+    }
+
+    .mui-appbar .mui--text-headline {
+      line-height: 64px;
+      margin-left: 20px;
+      float: left;
+    }
+
+    .mui-appbar .controls {
+      margin-top: 20px;
+      margin-left: 20px;
+      float: left;
+      cursor: pointer;
+    }
+
+    @media only screen and (max-width: 768px){
+      .mui-appbar .controls {
+        display: none;
+      }
+
+      .progress {
+        display: none;
+      }
+    }
+
+    .widget-name {
+      text-transform: uppercase;
+    }
+
+    .mui-table.small {
+      font-size: 0.8em;
+      margin-bottom: 0px;
+    }
+
+    .chart-labels {
+      font-size: 0.8em;
+    }
+
+    .mui-table.small td, .mui-table.small th {
+      padding: 0px;
+    }
+
+    .row {
+      clear: both;
+    }
+
+    .amount-column {
+      text-align: right;
+    }
+
+    .account-tag {
+      text-transform: uppercase;
+      font-size: 0.8em;
+      background-color: #eeeeee;
+      margin-left: 2px;
+      padding: 2px;
+    }
+
+    .slick-slider {
+      user-select: initial;
+      -webkit-user-select: initial;
+      -moz-user-select: initial;
+      -ms-user-select: initial;
+    }
+
+    .pulse-container {
+      width: 60px;
+      height: 60px;
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .pulse-container > .pulse {
+      background-color: rgb(33, 150, 243);
+      width: 60px; height: 60px;
+      border-radius: 100%;
+      opacity: 0.6;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+
+    @keyframes anim_pulse {
+      0%, 100% {transform: scale(0)}
+      50% {transform: scale(1.0)}
+    }
+
+    .pulse-container > .pulse.pulse1 {
+      animation: anim_pulse 2s ease-in-out 1s infinite both;
+    }
+
+    .pulse-container > .pulse.pulse2 {
+      animation: anim_pulse 2s ease-in-out 0s infinite both;
+    }
+
+    .pulse-container > .pulse.pulse1.slow {
+      animation: anim_pulse 4s ease-in-out 2s infinite both;
+      background-color: orange;
+    }
+
+    .pulse-container > .pulse.pulse2.slow {
+      animation: anim_pulse 4s ease-in-out 0s infinite both;
+      background-color: orange;
+    }
+
+    .pulse-container > .pulse.pulse1.very-slow {
+      animation: anim_pulse 10s ease-in-out 5s infinite both;
+      background-color: red;
+    }
+
+    .pulse-container > .pulse.pulse2.very-slow {
+      animation: anim_pulse 10s ease-in-out 0s infinite both;
+      background-color: red;
+    }
+
+    .pulse-container > .pulse.pulse1.down {
+      animation: anim_pulse 20s ease-in-out 10s infinite both;
+      background-color: black;
+    }
+
+    .pulse-container > .pulse.pulse2.down {
+      animation: anim_pulse 20s ease-in-out 0s infinite both;
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script type="text/javascript" src="vendor.js"></script>
+<script type="text/javascript" src="app.js"></script></body>
+
+</body>
+</html>
