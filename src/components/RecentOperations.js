@@ -73,7 +73,9 @@ export default class RecentOperations extends React.Component {
   updateAgo() {
     let operations = clone(this.state.operations);
     for (let i = 0; i < operations.length; i++) {
-      operations[i].ago = operations[i].createdAtMoment.fromNow(true);
+      if (operations[i].createdAtMoment) {
+        operations[i].ago = operations[i].createdAtMoment.fromNow(true);
+      }
     }
     this.setState({operations});
   }
