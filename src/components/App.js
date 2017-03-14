@@ -131,6 +131,13 @@ export default class App extends React.Component {
                 emitter={this.emitter}
                 />
             </div>
+            <div className="mui-col-md-4">
+              <AccountBalance
+                horizonURL={horizonTest}
+                name="Friendbot"
+                id="GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K"
+                />
+            </div>
           </section>
           <section>
             <div className="mui--text-center">Contribute on <a href="https://github.com/stellar/dashboard">GitHub</a>!</div>
