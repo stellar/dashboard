@@ -1,4 +1,5 @@
 import React from 'react';
+import Panel from 'muicss/lib/react/panel';
 import Button from 'muicss/lib/react/button';
 import {EventEmitter} from 'fbemitter';
 import axios from 'axios';
@@ -21,6 +22,7 @@ const horizonTest = "https://horizon-testnet.stellar.org";
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {};
     this.emitter = new EventEmitter();
 
     this.streamLedgers(horizonLive, LIVE_NEW_LEDGER);
@@ -28,6 +30,24 @@ export default class App extends React.Component {
 
     this.streamLedgers(horizonTest, TEST_NEW_LEDGER);
     this.streamOperations(horizonTest, TEST_NEW_OPERATION);
+
+    this.sleepDetector();
+  }
+
+  sleepDetector() {
+    if (!this.lastTime) {
+      this.lastTime = new Date();
+    }
+
+    let currentTime = new Date();
+    if (currentTime - this.lastTime > 60*1000) {
+      this.setState({sleeping: true});
+      location.reload();
+      return;
+    }
+
+    this.lastTime = new Date();
+    setTimeout(this.sleepDetector.bind(this), 5000);
   }
 
   streamLedgers(horizonURL, eventName) {
@@ -60,6 +80,15 @@ export default class App extends React.Component {
     return (
       <div>
         <AppBar />
+
+        {this.state.sleeping ?
+          <Panel>
+            <div className="mui--text-subhead mui--text-accent">System sleep detected. Reloading...</div>
+          </Panel>
+          :
+          null
+        }
+
         <div id="main" className="mui-container-fluid">
           <section>
             <h1>Live network status</h1>
