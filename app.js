@@ -18,7 +18,7 @@ app.get('/ledgers/public', function(req, res) {
   var days = 30;
 
   for (var i = 0; i < days; i++) {
-    response.push({date: day.format("DD")});
+    response.push({date: day.format("DD-MM")});
     multi.hmget('ledger_public'+day.format("YYYY-MM-DD"), 'transaction_count', 'operation_count');
     day = day.subtract(1, 'days')
   }
