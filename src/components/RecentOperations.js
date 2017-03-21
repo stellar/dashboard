@@ -2,7 +2,9 @@ import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
 import moment from 'moment';
-import {clone, each, defaults} from 'lodash';
+import clone from 'lodash/clone';
+import each from 'lodash/each';
+import defaults from 'lodash/defaults';
 import AccountLink from './AccountLink';
 import BigNumber from 'bignumber.js';
 
@@ -11,7 +13,12 @@ export default class RecentOperations extends React.Component {
     super(props);
     this.props = defaults(props, {limit: 10});
     this.state = {loading: true, operations: []};
-    this.getRecentOperations();
+
+    this.url = `${this.props.horizonURL}/operations`;
+    if (this.props.account) {
+      this.url = `${this.props.horizonURL}/accounts/${this.props.account}/operations`;
+    }
+    this.url = `${this.url}?order=desc&limit=${this.props.limit}`;
   }
 
   onNewOperation(operation) {
@@ -32,11 +39,7 @@ export default class RecentOperations extends React.Component {
   }
 
   getRecentOperations() {
-    let url = `${this.props.horizonURL}/operations`;
-    if (this.props.account) {
-      url = `${this.props.horizonURL}/accounts/${this.props.account}/operations`;
-    }
-    axios.get(`${url}?order=desc&limit=${this.props.limit}`)
+    axios.get(this.url)
       .then(response => {
         let records = response.data._embedded.records;
         let operations = this.state.operations;
@@ -83,6 +86,7 @@ export default class RecentOperations extends React.Component {
   componentDidMount() {
     // Update seconds ago
     this.timerID = setInterval(() => this.updateAgo(), 10*1000);
+    this.getRecentOperations();
   }
 
   componentWillUnmount() {
@@ -143,6 +147,7 @@ export default class RecentOperations extends React.Component {
       <Panel>
         <div className="widget-name">
           Recent operations: {this.props.label} {this.props.account ? this.props.account.substr(0, 4) : ''}
+          <a href={this.url} target="_blank" className="api-link">API</a>
         </div>
         <table className="mui-table small">
         <thead>

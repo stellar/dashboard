@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from 'muicss/lib/react/button';
-import {assign} from 'lodash';
-import {SLIDE} from '../events';
+import assign from 'lodash/assign';
 
 export default class AppBar extends React.Component {
   render() {

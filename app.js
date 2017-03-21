@@ -1,11 +1,18 @@
+// Needed to load lumens.js. Will switch to full ES6 support in backend
+// app soon.
+require("babel-register")({
+  "presets": ["es2015"]
+});
 var express = require('express');
 var stellarSdk = require('stellar-sdk');
 var moment = require('moment');
 var redis = require("redis"),
     redisClient = redis.createClient(process.env.REDIS_URL);
+var lumens = require("./common/lumens.js");
 
 var app = express();
 app.set('port', (process.env.PORT || 5000));
+app.set('json spaces', 2);
 
 app.use(express.static('dist'));
 
@@ -40,6 +47,56 @@ app.get('/ledgers/public', function(req, res) {
   });
 });
 
+app.get('/api/lumens', function(req, res) {
+  redisClient.get('api_lumens', function(err, data) {
+    if (err) {
+      console.error(err);
+      res.sendStatus(500);
+      return;
+    }
+
+    data = JSON.parse(data);
+    res.send(data);
+  });
+});
+
+function updateApiLumens() {
+  Promise.all([
+    lumens.totalCoins("https://horizon.stellar.org"),
+    lumens.availableCoins(),
+    lumens.distributionDirectSignup(),
+    lumens.distributionBitcoinProgram(),
+    lumens.distributionNonprofitProgram(),
+  ]).then(function(data) {
+    var response = {
+      time: new Date(),
+      totalCoins: data[0],
+      availableCoins: data[1],
+      programs: {
+        directProgram: data[2],
+        bitcoinProgram: data[3],
+        nonprofitProgram: data[4]
+      }
+    };
+
+    redisClient.set("api_lumens", JSON.stringify(response), function(err, data) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      console.log("/api/lumens data saved!");
+    });
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.sendStatus(500);
+  });
+}
+
+setInterval(updateApiLumens, 10*60*1000);
+updateApiLumens();
+
 // Stream ledgers - get last paging_token
 redisClient.get('paging_token', function(err, pagingToken) {
   if (err) {
@@ -48,7 +105,7 @@ redisClient.get('paging_token', function(err, pagingToken) {
   }
 
   if (!pagingToken) {
-    pagingToken = '37188317929799680'; // Ledger 8658580 2017-01-18T16:25:54Z
+    pagingToken = 'now';
   }
 
   var horizon = new stellarSdk.Server('https://horizon.stellar.org');

@@ -1,7 +1,7 @@
 import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
-import {find} from 'lodash';
+import find from 'lodash/find';
 
 const knownAccounts = {
   'GCKX3XVTPVNFXQWLQCIBZX6OOPOIUT7FOAZVNOFCNEIXEZFRFSPNZKZT': 'Coins base',
