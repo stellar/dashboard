@@ -64,6 +64,7 @@ function updateApiLumens() {
   Promise.all([
     lumens.totalCoins("https://horizon.stellar.org"),
     lumens.availableCoins(),
+    lumens.distributionAll(),
     lumens.distributionDirectSignup(),
     lumens.distributionBitcoinProgram(),
     lumens.distributionNonprofitProgram(),
@@ -72,10 +73,11 @@ function updateApiLumens() {
       time: new Date(),
       totalCoins: data[0],
       availableCoins: data[1],
+      distributedCoins: data[2],
       programs: {
-        directProgram: data[2],
-        bitcoinProgram: data[3],
-        nonprofitProgram: data[4]
+        directProgram: data[3],
+        bitcoinProgram: data[4],
+        nonprofitProgram: data[5]
       }
     };
 
