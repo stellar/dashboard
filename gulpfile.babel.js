@@ -11,11 +11,14 @@ gulp.task('default', ['develop']);
 var webpackOptions = {
   entry: {
     app: "./src/app.js",
-    vendor: ["react", "react-dom", "lodash", "muicss", "stellar-sdk", "axios", "d3", "react-d3-components", "fbemitter"]
+    vendor: ["react", "react-dom", "muicss", "stellar-sdk", "axios", "d3", "fbemitter"]
   },
   devtool: "source-map",
   resolve: {
-    root: ['src'],
+    root: [
+      path.resolve('src'),
+      path.resolve('common')
+    ],
     modulesDirectories: ["node_modules"]
   },
   module: {
@@ -31,21 +34,13 @@ var webpackOptions = {
 };
 
 gulp.task('develop', function(done) {
-  var mixpanelSecret = '7d6b4a91f04cd8228ff3e2387f26277d' // empty project
-  if (process.env.MIXPANEL_SECRET) {
-    mixpanelSecret = process.env.MIXPANEL_SECRET;
-  }
-
   var options = merge(webpackOptions, {
     output: {
       filename: "[name].js",
       path: './.tmp'
     },
     plugins: [
-      new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.js"),
-      new webpack.DefinePlugin({
-        'MIXPANEL_SECRET': JSON.stringify(mixpanelSecret)
-      }),
+      new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.js")
     ]
   });
 
@@ -91,8 +86,7 @@ gulp.task('build', function(done) {
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: JSON.stringify('production'),
-        },
-        'MIXPANEL_SECRET': JSON.stringify(process.env.MIXPANEL_SECRET)
+        }
       }),
       new webpack.optimize.UglifyJsPlugin()
     ]

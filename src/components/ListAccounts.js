@@ -1,7 +1,9 @@
 import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
-import {clone, find, reduce} from 'lodash';
+import clone from 'lodash/clone';
+import find from 'lodash/find';
+import reduce from 'lodash/reduce';
 import AccountLink from './AccountLink';
 import BigNumber from 'bignumber.js';
 
@@ -9,7 +11,6 @@ export default class ListAccounts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {balances: {}};
-    this.loadBalances();
   }
 
   loadBalances() {
@@ -30,6 +31,7 @@ export default class ListAccounts extends React.Component {
   componentDidMount() {
     // Update balances
     this.timerID = setInterval(() => this.loadBalances(), 60*60*1000);
+    this.loadBalances();
   }
 
   componentWillUnmount() {

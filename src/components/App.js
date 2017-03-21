@@ -4,15 +4,19 @@ import Button from 'muicss/lib/react/button';
 import {EventEmitter} from 'fbemitter';
 import axios from 'axios';
 import {Server} from 'stellar-sdk';
-import {assign} from 'lodash';
+import assign from 'lodash/assign';
 
 import AppBar from './AppBar';
 import AccountBalance from './AccountBalance';
+import DistributionProgress from './DistributionProgress';
 import NetworkStatus from './NetworkStatus';
 import LedgerCloseChart from './LedgerCloseChart';
 import ListAccounts from './ListAccounts';
+import LumensAvailable from './LumensAvailable';
+import LumensGivenAway from './LumensGivenAway';
 import PublicNetworkLedgersHistoryChart from './PublicNetworkLedgersHistoryChart';
 import RecentOperations from './RecentOperations';
+import TotalCoins from './TotalCoins';
 import TransactionsChart from './TransactionsChart';
 import {LIVE_NEW_LEDGER, LIVE_NEW_OPERATION, TEST_NEW_LEDGER, TEST_NEW_OPERATION} from '../events';
 
@@ -24,14 +28,15 @@ export default class App extends React.Component {
     super(props);
     this.state = {};
     this.emitter = new EventEmitter();
+    this.sleepDetector();
+  }
 
+  componentDidMount() {
     this.streamLedgers(horizonLive, LIVE_NEW_LEDGER);
     this.streamOperations(horizonLive, LIVE_NEW_OPERATION);
 
     this.streamLedgers(horizonTest, TEST_NEW_LEDGER);
     this.streamOperations(horizonTest, TEST_NEW_OPERATION);
-
-    this.sleepDetector();
   }
 
   sleepDetector() {
@@ -127,6 +132,29 @@ export default class App extends React.Component {
               </div>
             </div>
           </section>
+
+          <section>
+            <h1>Lumen distribution</h1>
+
+            <div className="mui-col-md-4">
+              <DistributionProgress />
+            </div>
+
+            <div className="mui-col-md-4">
+              <TotalCoins
+                horizonURL={horizonLive}
+                />
+            </div>
+
+            <div className="mui-col-md-4">
+              <LumensAvailable />
+            </div>
+
+            <div className="mui-col-md-4">
+              <LumensGivenAway />
+            </div>
+          </section>
+
           <section>
             <h1>Test network status</h1>
             <div className="mui-col-md-4">

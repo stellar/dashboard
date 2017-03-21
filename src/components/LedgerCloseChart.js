@@ -2,8 +2,10 @@ import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
 import {scale} from 'd3';
-import {BarChart} from 'react-d3-components';
-import {assign, each, clone} from 'lodash';
+import BarChart from 'react-d3-components/lib/BarChart';
+import assign from 'lodash/assign';
+import each from 'lodash/each';
+import clone from 'lodash/clone';
 
 export default class LedgerChartClose extends React.Component {
   constructor(props) {
@@ -11,13 +13,17 @@ export default class LedgerChartClose extends React.Component {
     this.panel = null;
     this.colorScale = scale.category10();
     this.state = {loading: true, chartWidth: 400, chartHeigth: this.props.chartHeigth || 120};
+    this.url = `${this.props.horizonURL}/ledgers?order=desc&limit=${this.props.limit}`;
+  }
+
+  componentDidMount() {
     this.getLedgers();
     // Update chart width
     setInterval(() => this.setState(assign(this.state, {chartWidth: this.panel.offsetWidth-20})), 1000);
   }
 
   getLedgers() {
-    axios.get(`${this.props.horizonURL}/ledgers?order=desc&limit=${this.props.limit}`)
+    axios.get(this.url)
       .then(response => {
         let data = [{
           label: "Ledger Close",
@@ -62,6 +68,7 @@ export default class LedgerChartClose extends React.Component {
         <Panel>
           <div className="widget-name">
             Last {this.props.limit} ledgers close times: {this.props.network}
+            <a href={this.url} target="_blank" className="api-link">API</a>
           </div>
           {this.state.loading ?
             'Loading...'
