@@ -50,8 +50,8 @@ export default class DistributionProgress extends React.Component {
         data.values.push({x: 'Bitcoin program left', y: bitcoinProgramLeft});
 
         let percentNonProfits = this.percentOf(nonProfits, 25);
-        data.values.push({x: `Non-profits program (${percentNonProfits}%)`, y: nonProfits, p: percentNonProfits});
-        data.values.push({x: 'Non-profits program left ', y: nonProfitsLeft});
+        data.values.push({x: `Funded by stellar (${percentNonProfits}%)`, y: nonProfits, p: percentNonProfits});
+        data.values.push({x: 'Funded by stellar left ', y: nonProfitsLeft});
 
         data.values.push({x: 'SDF operational costs', y: "5000000000"});
         this.setState({data, loading: false});

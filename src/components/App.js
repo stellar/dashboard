@@ -13,7 +13,7 @@ import NetworkStatus from './NetworkStatus';
 import LedgerCloseChart from './LedgerCloseChart';
 import ListAccounts from './ListAccounts';
 import LumensAvailable from './LumensAvailable';
-import LumensGivenAway from './LumensGivenAway';
+import LumensDistributed from './LumensDistributed';
 import PublicNetworkLedgersHistoryChart from './PublicNetworkLedgersHistoryChart';
 import RecentOperations from './RecentOperations';
 import TotalCoins from './TotalCoins';
@@ -151,7 +151,7 @@ export default class App extends React.Component {
             </div>
 
             <div className="mui-col-md-4">
-              <LumensGivenAway />
+              <LumensDistributed />
             </div>
           </section>
 
@@ -195,9 +195,6 @@ export default class App extends React.Component {
                 id="GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K"
                 />
             </div>
-          </section>
-          <section>
-            <div className="mui--text-center">Contribute on <a href="https://github.com/stellar/dashboard">GitHub</a>!</div>
           </section>
         </div>
       </div>

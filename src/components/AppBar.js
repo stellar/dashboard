@@ -7,6 +7,14 @@ export default class AppBar extends React.Component {
     return <div>
       <div className="mui-appbar">
         <div className="mui--text-headline">Stellar.org Dashboard</div>
+        <div className="icons">
+          <div className="icon">
+            <a href="https://github.com/stellar/dashboard" target="_blank">
+              <i className="material-icons">code</i><br />
+              GitHub
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   }

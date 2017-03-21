@@ -33,6 +33,17 @@ export function totalCoins(horizonURL) {
     .then(response => response.data._embedded.records[0].total_coins);
 }
 
+export function distributionAll() {
+  return Promise.all([
+    distributionDirectSignup(),
+    distributionBitcoinProgram(),
+    distributionNonprofitProgram()
+  ]).then(balances => {
+    var amount = reduce(balances, (sum, balance) => sum.add(balance), new BigNumber(0));
+    return amount.toString();
+  })
+}
+
 export function distributionDirectSignup() {
   return Promise.all([
     getLumenBalance(horizonLiveURL, accounts.worldGiveaway),
