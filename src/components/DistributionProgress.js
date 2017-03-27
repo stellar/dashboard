@@ -107,6 +107,9 @@ export default class DistributionProgress extends React.Component {
                     }
                   </tbody>
                 </table>
+                <div className="small gray margin-top10">
+                  Learn more about <a href="https://www.stellar.org/about/mandate/#Lumen_distribution" target="_blank">Lumen distribution</a>.
+                </div>
               </div>
           }
         </Panel>
