@@ -132,8 +132,18 @@ export default class RecentOperations extends React.Component {
         </span>;
       case 'manage_offer':
       case 'create_passive_offer':
+        let action;
+
+        if (op.amount == 0) {
+          action = "Remove offer:"
+        } else if (op.offer_id != 0) {
+          action = "Update offer: sell"
+        } else {
+          action = "Sell"
+        }
+
         return <span>
-          Sell {this.amount(op.amount, op.selling_asset_type, op.selling_asset_code)} for {op.buying_asset_type == "native" ? <i>XLM</i> : op.buying_asset_code}
+          {action} {this.amount(op.amount, op.selling_asset_type, op.selling_asset_code)} for {op.buying_asset_type == "native" ? <i>XLM</i> : op.buying_asset_code}
         </span>;
       case 'account_merge':
         return <span>&raquo; <AccountLink horizonURL={this.props.horizonURL} id={op.into} /></span>
