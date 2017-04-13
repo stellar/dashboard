@@ -27,6 +27,7 @@ const horizonTest = "https://horizon-testnet.stellar.org";
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+    this.chrome57 = navigator.userAgent.toLowerCase().indexOf('chrome/57') > -1;
     this.state = {};
     this.emitter = new EventEmitter();
     this.sleepDetector();
@@ -86,6 +87,17 @@ export default class App extends React.Component {
     return (
       <div>
         <AppBar />
+
+        {this.chrome57 ? 
+          <Panel>
+            <div className="mui--text-subhead mui--text-dark-secondary">
+              You are using Chrome 57. There is a <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=707544" target="_blank">known bug</a> that
+              makes the Dashboard app to consume extensive amounts of memory. Please switch to any other browser or wait for a fix by a Chromium team.
+            </div>
+          </Panel>
+          :
+          null
+        }
 
         {this.state.sleeping ?
           <Panel>
