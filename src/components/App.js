@@ -92,7 +92,7 @@ export default class App extends React.Component {
           <Panel>
             <div className="mui--text-subhead mui--text-dark-secondary">
               You are using Chrome 57. There is a <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=707544" target="_blank">known bug</a> that
-              makes the Dashboard app to consume extensive amounts of memory. Please switch to any other browser or wait for a fix by a Chromium team.
+              makes the Dashboard app consume extensive amounts of memory. Please switch to any other browser or wait for a fix by a Chromium team.
             </div>
           </Panel>
           :
