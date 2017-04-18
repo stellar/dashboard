@@ -65,7 +65,7 @@ export default class RecentOperations extends React.Component {
         for (let i = 0; i < operations.length; i++) {
           if (operations[i].id == op.id) {
             operations[i].createdAtMoment = moment(tx.data.created_at);
-            operations[i].ago = operations[i].createdAtMoment.fromNow(true);
+            operations[i].ago = this.ago(operations[i].createdAtMoment);
             break;
           }
         }
@@ -77,10 +77,26 @@ export default class RecentOperations extends React.Component {
     let operations = clone(this.state.operations);
     for (let i = 0; i < operations.length; i++) {
       if (operations[i].createdAtMoment) {
-        operations[i].ago = operations[i].createdAtMoment.fromNow(true);
+        operations[i].ago = this.ago(operations[i].createdAtMoment);
       }
     }
     this.setState({operations});
+  }
+
+  ago(a) {
+    let diff = moment().diff(a, 'seconds');
+    if (diff < 60) {
+      return `${diff}s`;
+    } else if (diff < 60*60) {
+      diff = moment().diff(a, 'minutes');
+      return `${diff}m`;
+    } else if (diff < 24*60*60) {
+      diff = moment().diff(a, 'hours');
+      return `${diff}h`;
+    } else {
+      diff = moment().diff(a, 'days');
+      return `${diff}d`;
+    }
   }
 
   componentDidMount() {
@@ -175,7 +191,7 @@ export default class RecentOperations extends React.Component {
                 <td><AccountLink horizonURL={this.props.horizonURL} id={op.source_account} known={this.props.account} /></td>
                 <td><a href={op._links.self.href} target="_blank">{op.type == 'create_passive_offer' ? 'passive_offer' : op.type}</a></td>
                 <td>{this.operationTypeColRender(op)}</td>
-                <td>{op.ago ? op.ago : 'Loading...'}</td>
+                <td>{op.ago ? <span title={op.createdAtMoment.format()}>{op.ago}</span> : 'Loading...'}</td>
               </tr>
             })
           }
