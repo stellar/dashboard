@@ -191,7 +191,7 @@ export default class RecentOperations extends React.Component {
                 <td><AccountLink horizonURL={this.props.horizonURL} id={op.source_account} known={this.props.account} /></td>
                 <td><a href={op._links.self.href} target="_blank">{op.type == 'create_passive_offer' ? 'passive_offer' : op.type}</a></td>
                 <td>{this.operationTypeColRender(op)}</td>
-                <td>{op.ago ? <span title={op.createdAtMoment.format()}>{op.ago}</span> : 'Loading...'}</td>
+                <td>{op.ago ? <span title={op.createdAtMoment.format()}>{op.ago}</span> : '...'}</td>
               </tr>
             })
           }
