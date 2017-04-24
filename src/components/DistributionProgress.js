@@ -18,7 +18,12 @@ export default class DistributionProgress extends React.Component {
       5*60*1000
     );
     this.updateData();
-    setInterval(() => this.setState({chartWidth: this.panel.offsetWidth-20}), 1000);
+    setInterval(() => {
+      let value = this.panel.offsetWidth-20;
+      if (this.state.chartWidth != value) {
+        this.setState({chartWidth: value});
+      }
+    }, 5000);
   }
 
   componentWillUnmount() {

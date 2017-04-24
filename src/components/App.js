@@ -4,7 +4,6 @@ import Button from 'muicss/lib/react/button';
 import {EventEmitter} from 'fbemitter';
 import axios from 'axios';
 import {Server} from 'stellar-sdk';
-import assign from 'lodash/assign';
 
 import AppBar from './AppBar';
 import Footer from './Footer';
@@ -41,6 +40,12 @@ export default class App extends React.Component {
     this.streamOperations(horizonTest, TEST_NEW_OPERATION);
   }
 
+  reloadOnConnection() {
+    return axios.get('https://s3-us-west-1.amazonaws.com/stellar-heartbeat/index.html', {timeout: 5*1000})
+      .then(() => location.reload())
+      .catch(() => setTimeout(this.reloadOnConnection, 1000));
+  }
+
   sleepDetector() {
     if (!this.lastTime) {
       this.lastTime = new Date();
@@ -49,7 +54,7 @@ export default class App extends React.Component {
     let currentTime = new Date();
     if (currentTime - this.lastTime > 20*60*1000) {
       this.setState({sleeping: true});
-      location.reload();
+      reloadOnConnection();
       return;
     }
 
@@ -101,7 +106,7 @@ export default class App extends React.Component {
 
         {this.state.sleeping ?
           <Panel>
-            <div className="mui--text-subhead mui--text-accent">System sleep detected. Reloading...</div>
+            <div className="mui--text-subhead mui--text-accent">System sleep detected. Waiting for internet connection...</div>
           </Panel>
           :
           null

@@ -3,7 +3,6 @@ import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
 import {scale} from 'd3';
 import BarChart from 'react-d3-components/lib/BarChart';
-import assign from 'lodash/assign';
 import each from 'lodash/each';
 import clone from 'lodash/clone';
 
@@ -19,7 +18,12 @@ export default class LedgerChartClose extends React.Component {
   componentDidMount() {
     this.getLedgers();
     // Update chart width
-    setInterval(() => this.setState(assign(this.state, {chartWidth: this.panel.offsetWidth-20})), 1000);
+    setInterval(() => {
+      let value = this.panel.offsetWidth-20;
+      if (this.state.chartWidth != value) {
+        this.setState({chartWidth: value});
+      }
+    }, 5000);
   }
 
   getLedgers() {
@@ -41,7 +45,7 @@ export default class LedgerChartClose extends React.Component {
           data[0].values.unshift({x: ledger.sequence.toString(), y: diff});
           this.lastLedgerClosedAt = closedAt;
         });
-        this.setState(assign(this.state, {loading: false, data}));
+        this.setState({loading: false, data});
         // Start listening to events
         this.props.emitter.addListener(this.props.newLedgerEventName, this.onNewLedger.bind(this));
       });
@@ -56,7 +60,7 @@ export default class LedgerChartClose extends React.Component {
       if (data[0].values.length > this.props.limit) {
         data[0].values.shift();
       }
-      this.setState(assign(this.state, {data}));
+      this.setState({data});
     }
 
     this.frontLedgerClosedAt = closedAt;

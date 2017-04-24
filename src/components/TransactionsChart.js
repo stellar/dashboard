@@ -3,7 +3,6 @@ import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
 import {scale, format} from 'd3';
 import BarChart from 'react-d3-components/lib/BarChart';
-import assign from 'lodash/assign';
 import clone from 'lodash/clone';
 import each from 'lodash/each';
 
@@ -17,13 +16,14 @@ export default class TransactionsChart extends React.Component {
   }
 
   componentDidMount() {
-    this.timerID = setInterval(
-      () => this.updateAmount(),
-      60*60*1000
-    );
     this.getLedgers();
     // Update chart width
-    setInterval(() => this.setState(assign(this.state, {chartWidth: this.panel.offsetWidth-20})), 1000);
+    setInterval(() => {
+      let value = this.panel.offsetWidth-20;
+      if (this.state.chartWidth != value) {
+        this.setState({chartWidth: value});
+      }
+    }, 5000);
   }
 
   onNewLedger(ledger) {
@@ -32,7 +32,7 @@ export default class TransactionsChart extends React.Component {
     data[1].values.push({x: ledger.sequence.toString(), y: ledger.operation_count-ledger.transaction_count});
     data[0].values.shift();
     data[1].values.shift();
-    this.setState(assign(this.state, {loading: false, data}));
+    this.setState({loading: false, data});
   }
 
   getLedgers() {
@@ -49,7 +49,7 @@ export default class TransactionsChart extends React.Component {
           data[0].values.unshift({x: ledger.sequence.toString(), y: ledger.transaction_count});
           data[1].values.unshift({x: ledger.sequence.toString(), y: ledger.operation_count-ledger.transaction_count});
         });
-        this.setState(assign(this.state, {loading: false, data}));
+        this.setState({loading: false, data});
         // Start listening to events
         this.props.emitter.addListener(this.props.newLedgerEventName, this.onNewLedger.bind(this));
       });
