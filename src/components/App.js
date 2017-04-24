@@ -52,7 +52,7 @@ export default class App extends React.Component {
     }
 
     let currentTime = new Date();
-    if (currentTime - this.lastTime > 20*60*1000) {
+    if (currentTime - this.lastTime > 10*60*1000) {
       this.setState({sleeping: true});
       reloadOnConnection();
       return;
