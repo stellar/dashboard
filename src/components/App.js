@@ -43,7 +43,7 @@ export default class App extends React.Component {
   reloadOnConnection() {
     return axios.get('https://s3-us-west-1.amazonaws.com/stellar-heartbeat/index.html', {timeout: 5*1000})
       .then(() => location.reload())
-      .catch(() => setTimeout(this.reloadOnConnection, 1000));
+      .catch(() => setTimeout(this.reloadOnConnection.bind(this), 1000));
   }
 
   sleepDetector() {
@@ -54,7 +54,7 @@ export default class App extends React.Component {
     let currentTime = new Date();
     if (currentTime - this.lastTime > 10*60*1000) {
       this.setState({sleeping: true});
-      reloadOnConnection();
+      this.reloadOnConnection();
       return;
     }
 
