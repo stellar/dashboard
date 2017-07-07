@@ -70,7 +70,7 @@ function updateApiLumens() {
     lumens.distributionNonprofitProgram(),
   ]).then(function(data) {
     var response = {
-      time: new Date(),
+      updatedAt: new Date(),
       totalCoins: data[0],
       availableCoins: data[1],
       distributedCoins: data[2],
