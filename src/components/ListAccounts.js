@@ -4,7 +4,7 @@ import axios from 'axios';
 import clone from 'lodash/clone';
 import find from 'lodash/find';
 import reduce from 'lodash/reduce';
-import AccountLink from './AccountLink';
+import AccountBadge from './AccountBadge';
 import BigNumber from 'bignumber.js';
 
 export default class ListAccounts extends React.Component {
@@ -59,7 +59,7 @@ export default class ListAccounts extends React.Component {
               {
                 Object.keys(this.state.balances).map(key => { 
                   return <tr key={key}>
-                    <td><AccountLink horizonURL={this.props.horizonURL} id={key} /></td>
+                    <td><AccountBadge horizonURL={this.props.horizonURL} id={key} /></td>
                     <td className="amount-column">{typeof this.state.balances[key] === "undefined" ? "Loading..." : `${this.state.balances[key].toFormat(0, BigNumber.ROUND_FLOOR)} XLM`}</td>
                   </tr>
                 })
