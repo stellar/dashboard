@@ -93,7 +93,7 @@ export default class DistributionProgress extends React.Component {
                     <tr>
                       <th>Program</th>
                       <th>Progress</th>
-                      <th>Amount Given Away</th>
+                      <th>Amount Distributed</th>
                     </tr>
                   </thead>
                   <tbody>
