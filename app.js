@@ -110,6 +110,7 @@ function checkNode(node) {
     let client = new net.Socket();
     let start = moment();
     client.setTimeout(10*1000);
+    console.log("checkNode: connecting to: "+node.host)
 
     client.connect(node.port, node.host, function() {
       client.end();
@@ -133,6 +134,7 @@ function checkNodes() {
 
   // Check uptime every 5 minutes
   if (date.minutes() % 5 != 0) {
+    console.log("checkNodes: not time "+date.format("YYYY-MM-DD HH:mm"))
     return;
   }
 
