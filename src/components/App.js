@@ -10,6 +10,7 @@ import Footer from './Footer';
 import AccountBalance from './AccountBalance';
 import DistributionProgress from './DistributionProgress';
 import NetworkStatus from './NetworkStatus';
+import Nodes from './Nodes';
 import LedgerCloseChart from './LedgerCloseChart';
 import ListAccounts from './ListAccounts';
 import LumensAvailable from './LumensAvailable';
@@ -149,6 +150,11 @@ export default class App extends React.Component {
                 <PublicNetworkLedgersHistoryChart />
               </div>
             </div>
+          </section>
+
+          <section>
+            <h1>Live network nodes</h1>
+            <Nodes />
           </section>
 
           <section>

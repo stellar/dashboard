@@ -66,6 +66,47 @@ app.get('/api/lumens', function(req, res) {
   });
 });
 
+app.get('/api/nodes', function(req, res) {
+  // Find last timestamp with minutes % 5 == 0
+  var date = moment();
+  date = date.subtract(date.minutes() % 5, 'minutes');
+
+  var dates = [];
+  var multi = redisClient.multi();
+  var measurements = 70;
+
+  for (var i = 0; i < measurements; i++) {
+    dates.push(date.format("YYYY-MM-DD HH:mm"));
+    multi.hgetall("nodes_"+date.format("YYYY-MM-DD_HH:mm"));
+    date = date.subtract(5, 'minutes')
+  }
+
+  multi.exec(function (err, redisRes) {
+    if (err) {
+      res.sendStatus(500);
+      console.error(err);
+      res.error("Error");
+      return;
+    }
+
+    var response = {};
+    for (var i = 0; i < measurements; i++) {
+      for (var key in redisRes[i]) {
+        if (!response[key]) {
+          response[key] = [];
+        }
+
+        response[key].push({
+          date: dates[i],
+          status: redisRes[i][key]
+        });
+      }
+    }
+
+    res.send(response);
+  });
+});
+
 function updateApiLumens() {
   Promise.all([
     lumens.totalCoins("https://horizon.stellar.org"),
