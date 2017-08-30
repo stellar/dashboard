@@ -40,5 +40,12 @@ module.exports = [
     host: "stellar.satoshipay.io",
     port: 11625,
     publicKey: "GC5SXLNAM3C4NMGK2PXK4R34B5GNZ47FYQ24ZIBFDFOCU6D4KBN4POAE"
+  },
+  {
+    id: "cryptomover",
+    name: "cryptomover.com",
+    host: "cryptodealer.hk",
+    port: 11625,
+    publicKey: "GCGWABAQ6OUOVUGWJVPRJ5LWBIWYN3CVOVOZYBNQQGIBRULQHYNGQ7GH"
   }
 ];
