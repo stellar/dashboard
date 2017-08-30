@@ -19,9 +19,9 @@ export default class AmountWidget extends React.Component {
       amountBig = "Loading..."
     } else {
       if (this.state.amount >= 1000000000) {
-        amountBig = Math.round(this.state.amount / 10000000)/100+"B";
+        amountBig = Math.floor(this.state.amount / 10000000)/100+"B";
       } else if (this.state.amount >= 1000000) {
-        amountBig = Math.round(this.state.amount / 10000)/100+"M";
+        amountBig = Math.floor(this.state.amount / 10000)/100+"M";
       } else if (this.state.amount < 1000000 && this.state.amount >= 100000) {
         amountBig = Math.floor(this.state.amount / 1000)+"k";
       } else {

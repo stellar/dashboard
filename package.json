@@ -26,6 +26,7 @@
     "react": "^15.4.1",
     "react-d3-components": "^0.6.5",
     "react-dom": "^15.4.1",
+    "recharts": "^0.22.1",
     "redis": "^2.6.3",
     "stellar-sdk": "^0.6.2",
     "webpack": "^1.13.3"

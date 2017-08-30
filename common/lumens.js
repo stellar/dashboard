@@ -10,7 +10,7 @@ const horizonLiveURL = "https://horizon.stellar.org";
 
 const accounts = {
   worldGiveaway:       "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
-  nonProfits:          "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
+  partnerships:        "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
   btcGiveawayCold:     "GDTNE54IWDB3UQLMIUSBKIDTMUW7FNKBU4VB2GVW4OL65BZN7W5VRNVY",
   btcGiveawayHot:      "GBVVWWN4YP76FKGO7RB42FSZDYD2PBXY2PJY3F6JJWLYU74TKUG775UP",
   invitesHot:          "GAX3BRBNB5WTJ2GNEFFH7A4CZKT2FORYABDDBZR5FIIT3P7FLS2EFOZZ",
@@ -37,7 +37,8 @@ export function distributionAll() {
   return Promise.all([
     distributionDirectSignup(),
     distributionBitcoinProgram(),
-    distributionNonprofitProgram()
+    distributionPartnershipProgram(),
+    distributionBuildChallenge()
   ]).then(balances => {
     var amount = reduce(balances, (sum, balance) => sum.add(balance), new BigNumber(0));
     return amount.toString();
@@ -57,19 +58,16 @@ export function distributionDirectSignup() {
 }
 
 export function distributionBitcoinProgram() {
-  return Promise.all([
-    getLumenBalance(horizonLiveURL, accounts.btcGiveawayHot),
-    getLumenBalance(horizonLiveURL, accounts.btcGiveawayCold),
-  ]).then(balances => {
-    var amount = new BigNumber(20*Math.pow(10, 9)); // 20B
-    amount = amount.minus(balances[0]);
-    amount = amount.minus(balances[1]);
-    return amount.toString();
-  })
+  return "2037756769.6575473";
 }
 
-export function distributionNonprofitProgram() {
-  return getLumenBalance(horizonLiveURL, accounts.nonProfits).then(balance => {
+export function distributionBuildChallenge() {
+  let sum = 49116333+30520000+7950000+62400000;
+  return sum.toString();
+}
+
+export function distributionPartnershipProgram() {
+  return getLumenBalance(horizonLiveURL, accounts.partnerships).then(balance => {
     var amount = new BigNumber(25*Math.pow(10, 9)); // 25B
     amount = amount.minus(balance);
     return amount.toString();
@@ -79,9 +77,9 @@ export function distributionNonprofitProgram() {
 export function availableCoins() {
   var balanceMap = map(accounts, id => getLumenBalance(horizonLiveURL, id));
   return Promise.all(balanceMap).then(balances => {
-    var amount = reduce(balances, (sum, balance) => sum.add(balance), new BigNumber(0));
+    var sumStellarAccounts = reduce(balances, (sum, balance) => sum.add(balance), new BigNumber(0));
     return totalCoins(horizonLiveURL)
-      .then(totalCoins => new BigNumber(totalCoins).minus(amount).toString());
+      .then(totalCoins => new BigNumber(totalCoins).minus(sumStellarAccounts).toString());
   })
 }
 

@@ -73,7 +73,8 @@ function updateApiLumens() {
     lumens.distributionAll(),
     lumens.distributionDirectSignup(),
     lumens.distributionBitcoinProgram(),
-    lumens.distributionNonprofitProgram(),
+    lumens.distributionPartnershipProgram(),
+    lumens.distributionBuildChallenge(),
   ]).then(function(data) {
     var response = {
       updatedAt: new Date(),
@@ -83,7 +84,8 @@ function updateApiLumens() {
       programs: {
         directProgram: data[3],
         bitcoinProgram: data[4],
-        nonprofitProgram: data[5]
+        partnershipProgram: data[5],
+        buildChallenge: data[6]
       }
     };
 
