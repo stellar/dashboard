@@ -74,12 +74,18 @@ export function distributionPartnershipProgram() {
   })
 }
 
-export function availableCoins() {
+export function sdfAccounts() {
   var balanceMap = map(accounts, id => getLumenBalance(horizonLiveURL, id));
   return Promise.all(balanceMap).then(balances => {
-    var sumStellarAccounts = reduce(balances, (sum, balance) => sum.add(balance), new BigNumber(0));
-    return totalCoins(horizonLiveURL)
-      .then(totalCoins => new BigNumber(totalCoins).minus(sumStellarAccounts).toString());
-  })
+    return reduce(balances, (sum, balance) => sum.add(balance), new BigNumber(0));
+  });
+}
+
+export function availableCoins() {
+  return Promise.all([totalCoins(horizonLiveURL), sdfAccounts()])
+    .then(result => {
+      let [totalCoins, sdfAccounts] = result;
+      return new BigNumber(totalCoins).minus(sdfAccounts);
+    });
 }
 

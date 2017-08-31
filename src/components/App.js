@@ -153,11 +153,6 @@ export default class App extends React.Component {
           </section>
 
           <section>
-            <h1>Live network nodes</h1>
-            <Nodes />
-          </section>
-
-          <section>
             <h1>Lumen distribution</h1>
 
             <div className="mui-col-md-4">
@@ -177,6 +172,11 @@ export default class App extends React.Component {
             <div className="mui-col-md-4">
               <LumensDistributed />
             </div>
+          </section>
+
+          <section>
+            <h1>Live network nodes</h1>
+            <Nodes />
           </section>
 
           <section>
