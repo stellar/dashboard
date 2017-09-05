@@ -30,6 +30,7 @@ export default class Node extends React.Component {
     }];
 
     let state = 'up';
+    let isNew = false;
     let countRecentDowns = 0;
     const downsToCheck = 6;
 
@@ -50,6 +51,7 @@ export default class Node extends React.Component {
         data[0].values.unshift({x: measurement.date, y: 0});
         data[1].values.unshift({x: measurement.date, y: 1});
       } else if (noData) {
+        isNew = true;
         data[0].values.unshift({x: measurement.date, y: 0});
         data[1].values.unshift({x: measurement.date, y: 0});
       }
@@ -64,14 +66,17 @@ export default class Node extends React.Component {
       state = 'down';
     }
 
-    this.setState({loading: false, data, state});
+    this.setState({loading: false, data, isNew, state});
   }
 
   render() {
     return (
       <div className="mui-col-md-3" ref={(el) => { this.panel = el; }}>
         <Panel>
-          <div className="widget-name">{this.props.data.name}</div>
+          <div className="widget-name">
+            {this.props.data.name}
+            {this.state.isNew ? <span className="new">new!</span> : null}
+          </div>
           <table className="mui-table small">
             <tbody>
               <tr>
