@@ -47,5 +47,12 @@ module.exports = [
     host: "cryptodealer.hk",
     port: 11625,
     publicKey: "GCGWABAQ6OUOVUGWJVPRJ5LWBIWYN3CVOVOZYBNQQGIBRULQHYNGQ7GH"
+  },
+  {
+    id: "umbrel",
+    name: "umbrel",
+    host: "stellar.papayame.com",
+    port: 11625,
+    publicKey: "GD7FVHL2KUTUYNOJFRUUDJPDRO2MAZJ5KP6EBCU6LKXHYGZDUFBNHXQI"
   }
 ];

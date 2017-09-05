@@ -90,10 +90,23 @@ app.get('/api/nodes', function(req, res) {
     }
 
     var response = {};
+
+    for (var node of nodes) {
+      if (!response[node.id]) {
+        response[node.id] = [];
+      }
+    }
+
     for (var i = 0; i < measurements; i++) {
-      for (var key in redisRes[i]) {
-        if (!response[key]) {
-          response[key] = [];
+      if (!redisRes[i]) {
+        continue;
+      }
+
+      for (var node of nodes) {
+        var key = node.id;
+
+        if (!redisRes[i][key]) {
+          redisRes[i][key] = '0';
         }
 
         response[key].push({

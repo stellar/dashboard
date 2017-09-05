@@ -35,18 +35,23 @@ export default class Node extends React.Component {
 
     for (let i = 0; i < props.uptime.length; i++) {
       let measurement = props.uptime[i];
-      var up = measurement.status > 0;
+      const up = measurement.status > 0;
+      const noData = measurement.status == 0;
+      const down = measurement.status < 0;
 
-      if (i < downsToCheck && !up) {
+      if (i < downsToCheck && down) {
         countRecentDowns++;
       }
 
       if (up) {
         data[0].values.unshift({x: measurement.date, y: 2});
         data[1].values.unshift({x: measurement.date, y: 0});
-      } else {
+      } else if (down) {
         data[0].values.unshift({x: measurement.date, y: 0});
         data[1].values.unshift({x: measurement.date, y: 1});
+      } else if (noData) {
+        data[0].values.unshift({x: measurement.date, y: 0});
+        data[1].values.unshift({x: measurement.date, y: 0});
       }
     }
 
@@ -54,7 +59,8 @@ export default class Node extends React.Component {
       state = 'problems';
     }
 
-    if (countRecentDowns >= downsToCheck) {
+    // If last measurement is down then node is down.
+    if (props.uptime.length > 0 && props.uptime[0].status < 0) {
       state = 'down';
     }
 
