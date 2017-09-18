@@ -400,7 +400,7 @@ function getDexVolume() {
     });
   });
 }
-setInterval(getDexVolume(), 3600000);
+setInterval(getDexVolume, 3600000);
 getDexVolume();
 
 // Stream ledgers - get last paging_token
