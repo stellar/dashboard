@@ -19,6 +19,7 @@ import PublicNetworkLedgersHistoryChart from './PublicNetworkLedgersHistoryChart
 import RecentOperations from './RecentOperations';
 import TotalCoins from './TotalCoins';
 import TransactionsChart from './TransactionsChart';
+import AssetsChart from './AssetsChart';
 import {LIVE_NEW_LEDGER, LIVE_NEW_OPERATION, TEST_NEW_LEDGER, TEST_NEW_OPERATION} from '../events';
 
 const horizonLive = "https://horizon.stellar.org";
@@ -94,7 +95,7 @@ export default class App extends React.Component {
       <div>
         <AppBar />
 
-        {this.chrome57 ? 
+        {this.chrome57 ?
           <Panel>
             <div className="mui--text-subhead mui--text-dark-secondary">
               You are using Chrome 57. There is a <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=707544" target="_blank">known bug</a> that
@@ -219,6 +220,9 @@ export default class App extends React.Component {
                 id="GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K"
                 />
             </div>
+          </section>
+          <section>
+            <AssetsChart />
           </section>
         </div>
         <Footer />

@@ -14,11 +14,19 @@ var redis = require("redis"),
     redisClient = redis.createClient(process.env.REDIS_URL);
 var lumens = require("./common/lumens.js");
 var nodes = require("./common/nodes.js");
+var axios = require("axios");
 
 const NODE_ERROR = -1;
 const NODE_TIMEOUT = -2;
 
 var app = express();
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Headers", "lumania-token, Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+  // res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+
+  next();
+});
 app.set('port', (process.env.PORT || 5000));
 app.set('json spaces', 2);
 
@@ -131,6 +139,96 @@ app.get('/api/nodes', function(req, res) {
   });
 });
 
+app.get('/api/accounts', function(req, res) {
+  var day = moment();
+  var response = [];
+
+  var multi = redisClient.multi();
+
+  var days = 90;
+
+  for (var i = 0; i < days; i++) {
+    response.push({date: day.format("DD-MM")});
+    multi.get('accounts_'+day.format("YYYY-MM-DD"));
+    day = day.subtract(1, 'days')
+  }
+
+  multi.exec(function (err, redisRes) {
+    if (err) {
+      res.sendStatus(500);
+      console.error(err);
+      res.error("Error");
+      return;
+    }
+    console.log("redisRes: ",redisRes);
+    for (var i = 0; i < days; i++) {
+      response[i].total_accounts = parseInt(redisRes[i]);
+    }
+    res.send(response);
+  });
+});
+
+app.get('/api/assets', function(req, res) {
+  var day = moment();
+  var response = [];
+
+  var multi = redisClient.multi();
+
+  var days = 90;
+
+  for (var i = 0; i < days; i++) {
+    response.push({date: day.format("DD-MMM")});
+    multi.get('assets_'+day.format("YYYY-MM-DD"));
+    day = day.subtract(1, 'days')
+  }
+
+  multi.exec(function (err, redisRes) {
+    if (err) {
+      res.sendStatus(500);
+      console.error(err);
+      res.error("Error");
+      return;
+    }
+    console.log("redisRes: ",redisRes);
+    for (var i = 0; i < days; i++) {
+      response[i].total_assets = parseInt(redisRes[i]);
+    }
+    res.send(response);
+  });
+});
+
+app.get('/api/dex/:asset_pair', function(req, res) {
+  var day = moment();
+  var response = [];
+
+  var multi = redisClient.multi();
+
+  var days = 90;
+
+  for (var i = 0; i < days; i++) {
+    response.push({date: day.format("DD-MM")});
+    multi.hmget('dex_'+day.format("YYYY-MM-DD"), req.params.asset_pair);
+    day = day.subtract(1, 'days')
+  }
+
+  multi.exec(function (err, redisRes) {
+    if (err) {
+      res.sendStatus(500);
+      console.error(err);
+      res.error("Error");
+      return;
+    }
+    console.log("redisRes: ",redisRes);
+    for (var i = 0; i < days; i++) {
+      if (redisRes[i].length > 0) {
+        response[i].dex_volume = JSON.parse(redisRes[i][0]);
+      }
+
+    }
+    res.send(response);
+  });
+});
+
 function updateApiLumens() {
   Promise.all([
     lumens.totalCoins("https://horizon.stellar.org"),
@@ -230,6 +328,80 @@ function checkNodes() {
 
 setInterval(checkNodes, 60*1000);
 checkNodes();
+
+function getAccounts() {
+  // gets accounts from core and stores it in redis
+  axios.get('http://localhost:8001/accounts').then(function(resp){
+    var day = moment();
+    let multi = redisClient.multi();
+    var key = "accounts_"+day.format("YYYY-MM-DD")
+    console.log(resp.data.accounts);
+    multi.set(key, resp.data.accounts);
+    // Expire the key after 90 days
+    multi.expire(key, 60*60*24*90);
+
+    multi.exec(function (err, res) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log("Added total accounts stats: "+key+" "+res);
+    });
+  });
+}
+setInterval(getAccounts, 3600000);
+getAccounts();
+
+
+function getAssets() {
+  // gets assets from core and stores it in redis
+  axios.get('http://localhost:8001/assets').then(function(resp){
+    var day = moment();
+    let multi = redisClient.multi();
+    var key = "assets_"+day.format("YYYY-MM-DD")
+    console.log(resp.data.assets);
+    multi.set(key, resp.data.aseets);
+    // Expire the key after 90 days
+    multi.expire(key, 60*60*24*90);
+
+    multi.exec(function (err, res) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log("Added total assets stats: "+key+" "+res);
+    });
+  });
+}
+setInterval(getAssets, 3600000);
+getAssets();
+
+function getDexVolume() {
+  // gets assets from core and stores it in redis
+  axios.get('http://ticker.stellar.org').then(function(resp){
+    var day = moment();
+    let multi = redisClient.multi();
+    var key = "dex_"+day.format("YYYY-MM-DD")
+    console.log(resp.data);
+    console.log("tradelen: ", resp.data.length);
+    console.log("tradelen: ", resp.data[0]);
+    for (var i = 0; i < resp.data.length; i++) {
+      multi.hmset(key, resp.data[i].Name, JSON.stringify(resp.data[i]));
+    }
+    // Expire the key after 90 days
+    multi.expire(key, 60*60*24*90);
+
+    multi.exec(function (err, res) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log("Added DEX volume stats: "+key+" "+res);
+    });
+  });
+}
+setInterval(getDexVolume(), 3600000);
+getDexVolume();
 
 // Stream ledgers - get last paging_token
 redisClient.get('paging_token', function(err, pagingToken) {
