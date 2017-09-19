@@ -6,7 +6,7 @@ import LineChart from 'react-d3-components/lib/LineChart';
 import clone from 'lodash/clone';
 import each from 'lodash/each';
 
-export default class AssetsChart extends React.Component {
+export default class AccountsChart extends React.Component {
   constructor(props) {
     super(props);
     this.panel = null;
@@ -15,8 +15,8 @@ export default class AssetsChart extends React.Component {
   }
 
   componentDidMount() {
-    this.getAssets();
-    setInterval(() => this.getAssets(), 1000*60*5);
+    this.getAccounts();
+    setInterval(() => this.getAccounts(), 1000*60*5);
     // Update chart width
     setInterval(() => {
       let value = this.panel.offsetWidth-20;
@@ -26,15 +26,15 @@ export default class AssetsChart extends React.Component {
     }, 5000);
   }
 
-  getAssets() {
-    axios.get('/api/assets')
+  getAccounts() {
+    axios.get('/api/accounts')
       .then(response => {
         let data = [{
-          label: "Assets",
+          label: "Accounts",
           values: []
         }];
         each(response.data, day => {
-          data[0].values.unshift({x: day.date, y: day.total_assets});
+          data[0].values.unshift({x: day.date, y: day.total_accounts});
         });
         this.setState({loading: false, data});
       });
@@ -46,7 +46,7 @@ export default class AssetsChart extends React.Component {
         <Panel>
           <div className="widget-name">
             <span style={{borderBottom: '2px solid #0074B7'}}>
-              Total Assets in the last 30 days: Live Network
+              Total Accounts in the last 30 days: Live Network
             </span>
           </div>
           {this.state.loading ?

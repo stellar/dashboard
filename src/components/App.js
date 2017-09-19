@@ -20,6 +20,8 @@ import RecentOperations from './RecentOperations';
 import TotalCoins from './TotalCoins';
 import TransactionsChart from './TransactionsChart';
 import AssetsChart from './AssetsChart';
+import AccountsChart from './AccountsChart';
+import OperationsChart from './OperationsChart';
 import {LIVE_NEW_LEDGER, LIVE_NEW_OPERATION, TEST_NEW_LEDGER, TEST_NEW_OPERATION} from '../events';
 
 const horizonLive = "https://horizon.stellar.org";
@@ -223,6 +225,8 @@ export default class App extends React.Component {
           </section>
           <section>
             <AssetsChart />
+            <AccountsChart />
+            <OperationsChart />
           </section>
         </div>
         <Footer />

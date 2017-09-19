@@ -18,15 +18,10 @@ var axios = require("axios");
 
 const NODE_ERROR = -1;
 const NODE_TIMEOUT = -2;
+const MONITOR_URL = 'http://core-mon-001.prd.stellar001.external.stellar-ops.com:8001/';
 
 var app = express();
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  // res.header("Access-Control-Allow-Headers", "lumania-token, Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
-  // res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
 
-  next();
-});
 app.set('port', (process.env.PORT || 5000));
 app.set('json spaces', 2);
 
@@ -145,7 +140,7 @@ app.get('/api/accounts', function(req, res) {
 
   var multi = redisClient.multi();
 
-  var days = 90;
+  var days = 30;
 
   for (var i = 0; i < days; i++) {
     response.push({date: day.format("DD-MM")});
@@ -160,9 +155,9 @@ app.get('/api/accounts', function(req, res) {
       res.error("Error");
       return;
     }
-    console.log("redisRes: ",redisRes);
+
     for (var i = 0; i < days; i++) {
-      response[i].total_accounts = parseInt(redisRes[i]);
+      response[i].total_accounts = parseInt(redisRes[i]) || 0;
     }
     res.send(response);
   });
@@ -174,10 +169,10 @@ app.get('/api/assets', function(req, res) {
 
   var multi = redisClient.multi();
 
-  var days = 90;
+  var days = 30;
 
   for (var i = 0; i < days; i++) {
-    response.push({date: day.format("DD-MMM")});
+    response.push({date: day.format("DD-MM")});
     multi.get('assets_'+day.format("YYYY-MM-DD"));
     day = day.subtract(1, 'days')
   }
@@ -189,9 +184,9 @@ app.get('/api/assets', function(req, res) {
       res.error("Error");
       return;
     }
-    console.log("redisRes: ",redisRes);
+
     for (var i = 0; i < days; i++) {
-      response[i].total_assets = parseInt(redisRes[i]);
+      response[i].total_assets = parseInt(redisRes[i]) || 0;
     }
     res.send(response);
   });
@@ -203,7 +198,7 @@ app.get('/api/dex/:asset_pair', function(req, res) {
 
   var multi = redisClient.multi();
 
-  var days = 90;
+  var days = 30;
 
   for (var i = 0; i < days; i++) {
     response.push({date: day.format("DD-MM")});
@@ -218,7 +213,7 @@ app.get('/api/dex/:asset_pair', function(req, res) {
       res.error("Error");
       return;
     }
-    console.log("redisRes: ",redisRes);
+
     for (var i = 0; i < days; i++) {
       if (redisRes[i].length > 0) {
         response[i].dex_volume = JSON.parse(redisRes[i][0]);
@@ -331,12 +326,11 @@ checkNodes();
 
 function getAccounts() {
   // gets accounts from core and stores it in redis
-  axios.get('http://localhost:8001/accounts').then(function(resp){
+  axios.get(MONITOR_URL+'accounts').then(function(resp){
     var day = moment();
     let multi = redisClient.multi();
     var key = "accounts_"+day.format("YYYY-MM-DD")
-    console.log(resp.data.accounts);
-    multi.set(key, resp.data.accounts);
+    multi.set(key, resp.data.count);
     // Expire the key after 90 days
     multi.expire(key, 60*60*24*90);
 
@@ -355,12 +349,12 @@ getAccounts();
 
 function getAssets() {
   // gets assets from core and stores it in redis
-  axios.get('http://localhost:8001/assets').then(function(resp){
+  axios.get(MONITOR_URL+'assets').then(function(resp){
     var day = moment();
     let multi = redisClient.multi();
     var key = "assets_"+day.format("YYYY-MM-DD")
-    console.log(resp.data.assets);
-    multi.set(key, resp.data.aseets);
+
+    multi.set(key, resp.data.count);
     // Expire the key after 90 days
     multi.expire(key, 60*60*24*90);
 
@@ -382,9 +376,7 @@ function getDexVolume() {
     var day = moment();
     let multi = redisClient.multi();
     var key = "dex_"+day.format("YYYY-MM-DD")
-    console.log(resp.data);
-    console.log("tradelen: ", resp.data.length);
-    console.log("tradelen: ", resp.data[0]);
+
     for (var i = 0; i < resp.data.length; i++) {
       multi.hmset(key, resp.data[i].Name, JSON.stringify(resp.data[i]));
     }
