@@ -21,7 +21,6 @@ const NODE_TIMEOUT = -2;
 const MONITOR_URL = 'http://core-mon-001.prd.stellar001.external.stellar-ops.com:8001/';
 
 var app = express();
-
 app.set('port', (process.env.PORT || 5000));
 app.set('json spaces', 2);
 
@@ -135,64 +134,29 @@ app.get('/api/nodes', function(req, res) {
 });
 
 app.get('/api/accounts', function(req, res) {
-  var day = moment();
-  var response = [];
-
-  var multi = redisClient.multi();
-
-  var days = 30;
-
-  for (var i = 0; i < days; i++) {
-    response.push({date: day.format("DD-MM")});
-    multi.get('accounts_'+day.format("YYYY-MM-DD"));
-    day = day.subtract(1, 'days')
-  }
-
-  multi.exec(function (err, redisRes) {
-    if (err) {
+  var response = getDailyData("accounts", 30, function(response){
+    if (response.status == 'success') {
+      res.send(response.data);
+    } else {
       res.sendStatus(500);
-      console.error(err);
       res.error("Error");
-      return;
     }
-
-    for (var i = 0; i < days; i++) {
-      response[i].total_accounts = parseInt(redisRes[i]) || 0;
-    }
-    res.send(response);
   });
 });
 
 app.get('/api/assets', function(req, res) {
-  var day = moment();
-  var response = [];
-
-  var multi = redisClient.multi();
-
-  var days = 30;
-
-  for (var i = 0; i < days; i++) {
-    response.push({date: day.format("DD-MM")});
-    multi.get('assets_'+day.format("YYYY-MM-DD"));
-    day = day.subtract(1, 'days')
-  }
-
-  multi.exec(function (err, redisRes) {
-    if (err) {
+  var response = getDailyData("assets", 30, function(response){
+    if (response.status == 'success') {
+      res.send(response.data);
+    } else {
       res.sendStatus(500);
-      console.error(err);
       res.error("Error");
-      return;
     }
-
-    for (var i = 0; i < days; i++) {
-      response[i].total_assets = parseInt(redisRes[i]) || 0;
-    }
-    res.send(response);
   });
 });
 
 app.get('/api/dex/:asset_pair', function(req, res) {
+
   var day = moment();
   var response = [];
 
@@ -223,6 +187,33 @@ app.get('/api/dex/:asset_pair', function(req, res) {
     res.send(response);
   });
 });
+
+function getDailyData(prefix, days, fn){
+  var day = moment();
+  var response = [];
+  var multi = redisClient.multi();
+
+  for (var i = 0; i < days; i++) {
+    response.push({date: day.format("DD-MM")});
+    multi.get(prefix+'_'+day.format("YYYY-MM-DD"));
+    day = day.subtract(1, 'days')
+  }
+
+  multi.exec(function (err, redisRes) {
+    if (err) {
+      console.error(err);
+      fn({"status": 'fail', "data": err});
+    }else{
+    for (var i = 0; i < days; i++) {
+      response[i][prefix] = parseInt(redisRes[i]) || 0;
+    }
+    fn({status: 'success', "data": response});
+  }
+  });
+
+
+
+}
 
 function updateApiLumens() {
   Promise.all([

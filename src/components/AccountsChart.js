@@ -34,7 +34,7 @@ export default class AccountsChart extends React.Component {
           values: []
         }];
         each(response.data, day => {
-          data[0].values.unshift({x: day.date, y: day.total_accounts});
+          data[0].values.unshift({x: day.date, y: day.accounts});
         });
         this.setState({loading: false, data});
       });

@@ -34,7 +34,7 @@ export default class AssetsChart extends React.Component {
           values: []
         }];
         each(response.data, day => {
-          data[0].values.unshift({x: day.date, y: day.total_assets});
+          data[0].values.unshift({x: day.date, y: day.assets});
         });
         this.setState({loading: false, data});
       });
