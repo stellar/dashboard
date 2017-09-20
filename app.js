@@ -5,8 +5,10 @@ require("babel-register")({
 });
 var _ = require('lodash');
 var express = require('express');
+var proxy = require('express-http-proxy');
 var stellarSdk = require('stellar-sdk');
 var moment = require('moment');
+var logger = require('morgan');
 var net = require('net');
 var redis = require("redis"),
     redisClient = redis.createClient(process.env.REDIS_URL);
@@ -20,7 +22,16 @@ var app = express();
 app.set('port', (process.env.PORT || 5000));
 app.set('json spaces', 2);
 
-app.use(express.static('dist'));
+app.use(logger('combined'));
+if (process.env.DEV) {
+  app.use('/', proxy('localhost:3000', {
+    filter: function(req, res) {
+      return req.path == "/" || req.path.indexOf(".js") >= 0 || req.path.indexOf(".html") >= 0;
+    }
+  }));
+} else {
+  app.use(express.static('dist'));
+}
 
 app.get('/ledgers/public', function(req, res) {
   var day = moment();
