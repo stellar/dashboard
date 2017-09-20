@@ -33,9 +33,13 @@ export default class OperationsChart extends React.Component {
           label: "Operations",
           values: []
         }];
-        console.log('ops data', response.data);
         each(response.data, day => {
-          data[0].values.unshift({x: day.date, y: day.operation_count});
+          if (day.operation_count == null) {
+            data[0].values.unshift({x: day.date, y: 0});
+          } else {
+            data[0].values.unshift({x: day.date, y: day.operation_count});
+          }
+
         });
         this.setState({loading: false, data});
       });

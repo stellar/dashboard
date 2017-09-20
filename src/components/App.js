@@ -230,6 +230,16 @@ export default class App extends React.Component {
             <OperationsChart />
             <TradeVolumeChart assetPair="XLM_BTC" />
             <TradeVolumeChart assetPair="XLM_CNY" />
+            <TradeVolumeChart assetPair="XLM_EUR" />
+            <TradeVolumeChart assetPair="XLM_JPY" />
+            <TradeVolumeChart assetPair="XLM_PHP" />
+            <TradeVolumeChart assetPair="XLM_XRP" />
+            <TradeVolumeChart assetPair="XLM_GFT" />
+            <TradeVolumeChart assetPair="XLM_SEED" />
+            <TradeVolumeChart assetPair="XLM_XEL" />
+            <TradeVolumeChart assetPair="XLM_LTC" />
+            <TradeVolumeChart assetPair="XLM_EQD" />
+            <TradeVolumeChart assetPair="XLM_ICN" />
           </section>
         </div>
         <Footer />
