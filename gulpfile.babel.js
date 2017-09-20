@@ -56,8 +56,13 @@ gulp.task('develop', function(done) {
     if (!bsInitialized) {
       gulp.watch(".tmp/**/*").on("change", bs.reload);
       bs.init({
+        port: 3000,
+        online: false,
         notify: false,
-        server: "./.tmp"
+        server: "./.tmp",
+        socket: {
+          domain: 'localhost:3000'
+        }
       });
       bsInitialized = true;
     }
