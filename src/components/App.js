@@ -19,6 +19,10 @@ import PublicNetworkLedgersHistoryChart from './PublicNetworkLedgersHistoryChart
 import RecentOperations from './RecentOperations';
 import TotalCoins from './TotalCoins';
 import TransactionsChart from './TransactionsChart';
+import AssetsChart from './AssetsChart';
+import AccountsChart from './AccountsChart';
+import OperationsChart from './OperationsChart';
+import TradeVolumeChart from './TradeVolumeChart';
 import {LIVE_NEW_LEDGER, LIVE_NEW_OPERATION, TEST_NEW_LEDGER, TEST_NEW_OPERATION} from '../events';
 
 const horizonLive = "https://horizon.stellar.org";
@@ -94,7 +98,7 @@ export default class App extends React.Component {
       <div>
         <AppBar />
 
-        {this.chrome57 ? 
+        {this.chrome57 ?
           <Panel>
             <div className="mui--text-subhead mui--text-dark-secondary">
               You are using Chrome 57. There is a <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=707544" target="_blank">known bug</a> that
@@ -219,6 +223,23 @@ export default class App extends React.Component {
                 id="GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K"
                 />
             </div>
+          </section>
+          <section>
+            <AssetsChart />
+            <AccountsChart />
+            <OperationsChart />
+            <TradeVolumeChart assetPair="XLM_BTC" />
+            <TradeVolumeChart assetPair="XLM_CNY" />
+            <TradeVolumeChart assetPair="XLM_EUR" />
+            <TradeVolumeChart assetPair="XLM_JPY" />
+            <TradeVolumeChart assetPair="XLM_PHP" />
+            <TradeVolumeChart assetPair="XLM_XRP" />
+            <TradeVolumeChart assetPair="XLM_GFT" />
+            <TradeVolumeChart assetPair="XLM_SEED" />
+            <TradeVolumeChart assetPair="XLM_XEL" />
+            <TradeVolumeChart assetPair="XLM_LTC" />
+            <TradeVolumeChart assetPair="XLM_EQD" />
+            <TradeVolumeChart assetPair="XLM_ICN" />
           </section>
         </div>
         <Footer />
