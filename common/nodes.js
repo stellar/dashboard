@@ -61,5 +61,12 @@ module.exports = [
     host: "stellar-core.zulucrypto.com",
     port: 11625,
     publicKey: "GCYRJSP52KIUOMXPW5XHOQ77SPQC3O55KVK6KSJO4ABPMG6X3ZOU5UU2"
+  },
+  {
+    id: "lupoex",
+    name: "lupoex",
+    host: "stellar1.lupoex.com",
+    port: 11625,
+    publicKey: "GDZT7ZGDNEGS5L2ICLCIVDOIATKDE4MM6SNUJ2FFKB5TIV5LDRIGG4T2"
   }
 ];
