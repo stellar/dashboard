@@ -77,10 +77,10 @@ export default class Node extends React.Component {
             {this.props.data.name}
             {this.state.isNew ? <span className="new">new!</span> : null}
           </div>
-          <table className="mui-table small">
+          <table className="mui-table small" style={{'tableLayout': 'fixed'}}>
             <tbody>
               <tr>
-                <td><strong>Status</strong></td>
+                <td style={{width: '10%'}}><strong>Status</strong></td>
                 <td className="amount-column">
                 {
                   !this.state.loading ?
@@ -99,6 +99,12 @@ export default class Node extends React.Component {
               <tr>
                 <td><strong>Host</strong></td>
                 <td className="amount-column">{this.props.data.host}:{this.props.data.port}</td>
+              </tr>
+              <tr>
+                <td colSpan="2"><strong>Public Key</strong></td>
+              </tr>
+              <tr>
+                <td colSpan="2" style={{wordWrap: "break-word"}}>{this.props.data.publicKey}</td>
               </tr>
             </tbody>
           </table>
