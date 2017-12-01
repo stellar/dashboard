@@ -1,5 +1,61 @@
 module.exports = [
   {
+    id: "au.ibm",
+    name: "IBM Australia",
+    host: "au.stellar.ibm.com",
+    port: 11625,
+    publicKey: "GCKWUQGSVO45ZV3QK7POYL7HMFWDKWJVMFVEGUJKCAEVUITUCTQWFSM6"
+  },
+  {
+    id: "br.ibm",
+    name: "IBM Brazil",
+    host: "br.stellar.ibm.com",
+    port: 11625,
+    publicKey: "GBUJA3Z5TLAKLI5MEH4TETLXJBQVSVW74MNEKP5UUHTP3IMLNSUPOTVA"
+  },
+  {
+    id: "ca.ibm",
+    name: "IBM Canada",
+    host: "ca.stellar.ibm.com",
+    port: 11625,
+    publicKey: "GB2HF2NHRKKFZYFDGD7MUENOYROOEK7SWYV2APYOODP6P7BUJTLILKIL"
+  },
+  {
+    id: "no.ibm",
+    name: "IBM Norway",
+    host: "no.stellar.ibm.com",
+    port: 11625,
+    publicKey: "GDRA72H7JWXAXWJKOONQOPH3JKNSH5MQ6BO5K74C3X6FO2G3OG464BPU"
+  },
+  {
+    id: "it.ibm",
+    name: "IBM Italy",
+    host: "it.stellar.ibm.com",
+    port: 11625,
+    publicKey: "GAEEH4TBR7YQQWKJ2FIT57HXZZTMK2BX5LY4POJUYFSEZ7Y2ONHPPTES"
+  },
+  {
+    id: "hk.ibm",
+    name: "IBM Hong Kong",
+    host: "hk.stellar.ibm.com",
+    port: 11625,
+    publicKey: "GBJ7T3BTLX2BP3T5Q4256PUF7JMDAB35LLO32QRDYE67TDDMN7H33GGE"
+  },
+  {
+  id: "in.ibm",
+    name: "IBM India",
+    host: "in.stellar.ibm.com",
+    port: 11625,
+    publicKey: "GCH3O5PTCZVR4G65W3B4XDKWI5V677HQB3QO7CW4YPVYDDFBE2GE7G6V"
+  },
+  {
+    id: "uk.ibm",
+    name: "IBM United Kingdom",
+    host: "uk.stellar.ibm.com",
+    port: 11625,
+    publicKey: "GAENPO2XRTTMAJXDWM3E3GAALNLG4HVMKJ4QF525TR25RI42YPEDULOW"
+  },
+  {
     id: "sdf1",
     name: "SDF validator 1",
     host: "core-live-a.stellar.org",
@@ -75,5 +131,5 @@ module.exports = [
     host: "paywith.glass",
     port: 11625,
     publicKey: "GDOQLNMARWIZWLEDKBYBOXP5LQYQQF24PS6NEQW4H766RLD4T7AUWQLB"
-  }
+  },
 ];
