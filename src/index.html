@@ -41,6 +41,24 @@
       font-size: 1em;
       font-weight: 600;
       text-shadow: 1px 1px white;
+      margin-bottom: 0;
+    }
+
+    section > h2 {
+      color: #999;
+      text-align: center;
+      font-size: 0.9em;
+      font-weight: 600;
+      text-shadow: 1px 1px white;
+      margin: 0 auto 25px auto;
+      width: 60%;
+      line-height: normal;
+    }
+
+    @media only screen and (max-width: 768px){
+      section > h2 {
+        width: 90%;
+      }
     }
 
     .mui-appbar .mui--text-headline {
@@ -99,11 +117,21 @@
       text-transform: uppercase;
     }
 
-    .widget-name .new {
+    .widget-name .tag {
       color: rgb(33, 150, 243);
       font-size: 0.7em;
       font-weight: 500;
       padding-left: 2px;
+    }
+
+    .widget-name .tag i.material-icons {
+      font-size: 1.1em;
+    }
+
+    @media only screen and (min-width: 768px) and (max-width: 1100px) {
+      .widget-name .tag .hide-narrow-panel {
+        display: none;
+      }
     }
 
     .mui-table.small {

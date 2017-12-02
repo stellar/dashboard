@@ -75,7 +75,8 @@ export default class Node extends React.Component {
         <Panel>
           <div className="widget-name">
             {this.props.data.name}
-            {this.state.isNew ? <span className="new">new!</span> : null}
+            {this.state.isNew ? <span className="tag">new!</span> : null}
+            {this.props.data.verified ? <span className="tag"><i className="material-icons">verified_user</i><span className="hide-narrow-panel"> verified entity</span></span> : null}
           </div>
           <table className="mui-table small" style={{'tableLayout': 'fixed'}}>
             <tbody>

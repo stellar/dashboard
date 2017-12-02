@@ -175,7 +175,12 @@ export default class App extends React.Component {
           </section>
 
           <section>
-            <h1>Live network nodes</h1>
+            <h1>Featured live network nodes</h1>
+            <h2>
+              None of the following validators are recommended by Stellar Development Foundation. We don't know who really controls unverified nodes.<br />
+              These are <u>not</u> the only nodes in the Stellar network. Everyone can run a validating node.<br />
+              This list is purely for informational purposes.
+            </h2>
             <Nodes />
           </section>
 
