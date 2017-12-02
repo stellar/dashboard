@@ -16,6 +16,18 @@ export default class AppBar extends React.Component {
               GitHub
             </a>
           </div>
+          {
+            this.props.forceTheme
+            ?
+            <div className="icon">
+              <a href="#" onClick={this.props.turnOffForceTheme}>
+                <i className="material-icons">star_border</i><br />
+                Turn off the Force theme
+              </a>
+            </div>
+            :
+            null
+          }
         </div>
       </div>
     </div>

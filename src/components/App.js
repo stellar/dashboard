@@ -28,9 +28,35 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.chrome57 = navigator.userAgent.toLowerCase().indexOf('chrome/57') > -1;
-    this.state = {};
     this.emitter = new EventEmitter();
     this.sleepDetector();
+
+    // forceTheme is our way to celebrate May, 4th.
+    var forceTheme = false;
+    var may4 = false;
+
+    var now = new Date();
+    var d = now.getDate();
+    var m = now.getMonth()+1;
+    var y = now.getFullYear();
+
+    if (d == 4 && m == 5) {
+      forceTheme = true;
+      may4 = true;
+    }
+
+    // TLJ
+    if (d == 9 && m == 12 && y == 2017) {
+      forceTheme = true;
+    }
+
+    // For testing
+    if (localStorage.getItem('forceTheme') != null) {
+      forceTheme = true;
+      may4 = true;
+    }
+
+    this.state = {forceTheme, may4};
   }
 
   componentDidMount() {
@@ -89,10 +115,15 @@ export default class App extends React.Component {
       });
   }
 
+  turnOffForceTheme() {
+    this.setState({forceTheme: false});
+    return false;
+  }
+
   render() {
     return (
-      <div>
-        <AppBar />
+      <div id="main" className={this.state.forceTheme ? "force" : null}>
+        <AppBar forceTheme={this.state.forceTheme} turnOffForceTheme={this.turnOffForceTheme.bind(this)} />
 
         {this.chrome57 ? 
           <Panel>
@@ -109,6 +140,12 @@ export default class App extends React.Component {
           <Panel>
             <div className="mui--text-subhead mui--text-accent">System sleep detected. Waiting for internet connection...</div>
           </Panel>
+          :
+          null
+        }
+
+        {this.state.forceTheme ?
+          <h1 className="may4">May the 4<sup>th</sup> be with you!</h1>
           :
           null
         }
