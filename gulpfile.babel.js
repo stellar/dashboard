@@ -5,6 +5,7 @@ var bs      = require('browser-sync').create();
 var gulp    = require('gulp');
 var path    = require('path');
 var webpack = require("webpack");
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 gulp.task('default', ['develop']);
 
@@ -26,10 +27,12 @@ var webpackOptions = {
       {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader', query: {presets: ['es2015', 'react']}},
       {test: /\.json$/, loader: 'json'},
       {test: /\.html$/, loader: 'file?name=[name].html'},
+      {test: /\.scss$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader")}
     ]
   },
   plugins: [
-    new webpack.IgnorePlugin(/ed25519/)
+    new webpack.IgnorePlugin(/ed25519/),
+    new ExtractTextPlugin("style.css")
   ]
 };
 
