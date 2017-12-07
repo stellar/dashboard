@@ -21,7 +21,7 @@ import TotalCoins from './TotalCoins';
 import TransactionsChart from './TransactionsChart';
 import {LIVE_NEW_LEDGER, LIVE_NEW_OPERATION, TEST_NEW_LEDGER, TEST_NEW_OPERATION} from '../events';
 
-const horizonLive = "https://horizon.stellar.org";
+const horizonLive = "https://horizon-mon.stellar-ops.com";
 const horizonTest = "https://horizon-testnet.stellar.org";
 
 export default class App extends React.Component {
@@ -193,7 +193,7 @@ export default class App extends React.Component {
             <h1>Lumen distribution</h1>
 
             <div className="mui-col-md-4">
-              <DistributionProgress />
+              <DistributionProgress horizonLiveURL={horizonLive} />
             </div>
 
             <div className="mui-col-md-4">

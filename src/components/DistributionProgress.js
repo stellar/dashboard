@@ -9,7 +9,6 @@ import PieChart from 'recharts/lib/chart/PieChart';
 import Pie from 'recharts/lib/polar/Pie';
 import * as lumens from '../../common/lumens.js';
 
-const horizonLiveURL = "https://horizon.stellar.org";
 const BILLION = Math.pow(10, 9);
 
 export default class DistributionProgress extends React.Component {
@@ -42,7 +41,7 @@ export default class DistributionProgress extends React.Component {
     let dataInner = [];
 
     Promise.all([
-      lumens.totalCoins(horizonLiveURL),
+      lumens.totalCoins(this.props.horizonLiveURL),
       lumens.sdfAccounts(),
       lumens.availableCoins(),
       lumens.distributionAll(),

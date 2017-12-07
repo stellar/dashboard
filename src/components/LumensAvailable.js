@@ -3,8 +3,6 @@ import AmountWidget from './AmountWidget';
 import Panel from 'muicss/lib/react/panel';
 import {availableCoins} from '../../common/lumens.js';
 
-const horizonURL = "https://horizon.stellar.org";
-
 export default class LumensAvailable extends AmountWidget {
   constructor(props) {
     super(props);
