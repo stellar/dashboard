@@ -144,7 +144,7 @@ export default class App extends React.Component {
           null
         }
 
-        {this.state.forceTheme ?
+        {this.state.forceTheme && this.state.may4 ?
           <h1 className="may4">May the 4<sup>th</sup> be with you!</h1>
           :
           null
