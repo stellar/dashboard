@@ -62,7 +62,7 @@ export function distributionBitcoinProgram() {
 }
 
 export function distributionBuildChallenge() {
-  let sum = 49116333+30520000+7950000+62400000;
+  let sum = 49116333+30520000+7950000+62400000+5700000;
   return sum.toString();
 }
 
