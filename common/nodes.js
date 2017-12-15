@@ -119,7 +119,7 @@ module.exports = [
     publicKey: "GCGWABAQ6OUOVUGWJVPRJ5LWBIWYN3CVOVOZYBNQQGIBRULQHYNGQ7GH"
   },
   {
-    id: "cryptomover",
+    id: "cryptomover2",
     verified: true,
     name: "cryptomover host 2",
     host: "cryptomover.org",
