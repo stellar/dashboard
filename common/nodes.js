@@ -113,10 +113,18 @@ module.exports = [
   {
     id: "cryptomover",
     verified: true,
-    name: "cryptomover.com",
+    name: "cryptomover host 1",
     host: "cryptodealer.hk",
     port: 11625,
     publicKey: "GCGWABAQ6OUOVUGWJVPRJ5LWBIWYN3CVOVOZYBNQQGIBRULQHYNGQ7GH"
+  },
+  {
+    id: "cryptomover",
+    verified: true,
+    name: "cryptomover host 2",
+    host: "cryptomover.org",
+    port: 11625,
+    publicKey: "GC7MH45NSXXPBLQJRSEVF2DFUVLGGYOJER5FRUNVCYVMXJYJT5LLQJW5"
   },
   {
     id: "umbrel",
