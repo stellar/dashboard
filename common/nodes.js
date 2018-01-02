@@ -154,12 +154,5 @@ module.exports = [
     host: "stellar1.lupoex.com",
     port: 11625,
     publicKey: "GDZT7ZGDNEGS5L2ICLCIVDOIATKDE4MM6SNUJ2FFKB5TIV5LDRIGG4T2"
-  },
-  {
-    id: "paywith.glass",
-    name: "paywith.glass",
-    host: "paywith.glass",
-    port: 11625,
-    publicKey: "GDOQLNMARWIZWLEDKBYBOXP5LQYQQF24PS6NEQW4H766RLD4T7AUWQLB"
-  },
+  }
 ];
