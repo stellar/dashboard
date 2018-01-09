@@ -11,7 +11,7 @@ module.exports = [
     id: "au.ibm",
     verified: true,
     name: "IBM Australia",
-    host: "169.57.189.8",//"au.stellar.ibm.com",
+    host: "130.198.69.152",//"au.stellar.ibm.com",
     port: 11625,
     publicKey: "GCKWUQGSVO45ZV3QK7POYL7HMFWDKWJVMFVEGUJKCAEVUITUCTQWFSM6"
   },
