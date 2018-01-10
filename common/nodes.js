@@ -11,7 +11,7 @@ module.exports = [
     id: "au.ibm",
     verified: true,
     name: "IBM Australia",
-    host: "130.198.69.152",//"au.stellar.ibm.com",
+    host: "au.stellar.ibm.com",
     port: 11625,
     publicKey: "GCKWUQGSVO45ZV3QK7POYL7HMFWDKWJVMFVEGUJKCAEVUITUCTQWFSM6"
   },
@@ -19,7 +19,7 @@ module.exports = [
     id: "br.ibm",
     verified: true,
     name: "IBM Brazil",
-    host: "169.57.189.8",//"br.stellar.ibm.com",
+    host: "br.stellar.ibm.com",
     port: 11625,
     publicKey: "GBUJA3Z5TLAKLI5MEH4TETLXJBQVSVW74MNEKP5UUHTP3IMLNSUPOTVA"
   },
@@ -27,7 +27,7 @@ module.exports = [
     id: "ca.ibm",
     verified: true,
     name: "IBM Canada",
-    host: "169.55.165.179",//"ca.stellar.ibm.com",
+    host: "ca.stellar.ibm.com",
     port: 11625,
     publicKey: "GB2HF2NHRKKFZYFDGD7MUENOYROOEK7SWYV2APYOODP6P7BUJTLILKIL"
   },
@@ -35,7 +35,7 @@ module.exports = [
     id: "no.ibm",
     verified: true,
     name: "IBM Norway",
-    host: "169.51.72.53",//"no.stellar.ibm.com",
+    host: "no.stellar.ibm.com",
     port: 11625,
     publicKey: "GDRA72H7JWXAXWJKOONQOPH3JKNSH5MQ6BO5K74C3X6FO2G3OG464BPU"
   },
@@ -43,7 +43,7 @@ module.exports = [
     id: "it.ibm",
     verified: true,
     name: "IBM Italy",
-    host: "159.122.134.146",//"it.stellar.ibm.com",
+    host: "it.stellar.ibm.com",
     port: 11625,
     publicKey: "GAEEH4TBR7YQQWKJ2FIT57HXZZTMK2BX5LY4POJUYFSEZ7Y2ONHPPTES"
   },
@@ -51,7 +51,7 @@ module.exports = [
     id: "hk.ibm",
     verified: true,
     name: "IBM Hong Kong",
-    host: "119.81.142.194",//"hk.stellar.ibm.com",
+    host: "hk.stellar.ibm.com",
     port: 11625,
     publicKey: "GBJ7T3BTLX2BP3T5Q4256PUF7JMDAB35LLO32QRDYE67TDDMN7H33GGE"
   },
@@ -59,7 +59,7 @@ module.exports = [
     id: "in.ibm",
     verified: true,
     name: "IBM India",
-    host: "169.38.100.14",//"in.stellar.ibm.com",
+    host: "in.stellar.ibm.com",
     port: 11625,
     publicKey: "GCH3O5PTCZVR4G65W3B4XDKWI5V677HQB3QO7CW4YPVYDDFBE2GE7G6V"
   },
@@ -67,7 +67,7 @@ module.exports = [
     id: "uk.ibm",
     verified: true,
     name: "IBM United Kingdom",
-    host: "158.175.83.8",//"uk.stellar.ibm.com",
+    host: "uk.stellar.ibm.com",
     port: 11625,
     publicKey: "GAENPO2XRTTMAJXDWM3E3GAALNLG4HVMKJ4QF525TR25RI42YPEDULOW"
   },
