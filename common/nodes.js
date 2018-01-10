@@ -111,12 +111,28 @@ module.exports = [
     publicKey: "GCJCSMSPIWKKPR7WEPIQG63PDF7JGGEENRC33OKVBSPUDIRL6ZZ5M7OO"
   },
   {
-    id: "satoshipay",
+    id: "satoshipay1",
     verified: true,
-    name: "satoshipay.io",
-    host: "stellar.satoshipay.io",
+    name: "SatoshiPay 1",
+    host: "stellar1.satoshipay.io",
     port: 11625,
     publicKey: "GC5SXLNAM3C4NMGK2PXK4R34B5GNZ47FYQ24ZIBFDFOCU6D4KBN4POAE"
+  },
+  {
+    id: "satoshipay2",
+    verified: true,
+    name: "SatoshiPay 2",
+    host: "stellar2.satoshipay.io",
+    port: 11625,
+    publicKey: "GBJQUIXUO4XSNPAUT6ODLZUJRV2NPXYASKUBY4G5MYP3M47PCVI55MNT"
+  },
+  {
+    id: "satoshipay3",
+    verified: true,
+    name: "SatoshiPay 3",
+    host: "stellar3.satoshipay.io",
+    port: 11625,
+    publicKey: "GAK6Z5UVGUVSEK6PEOCAYJISTT5EJBB34PN3NOLEQG2SUKXRVV2F6HZY"
   },
   {
     id: "cryptomover",
