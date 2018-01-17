@@ -158,10 +158,24 @@ module.exports = [
     publicKey: "GD7FVHL2KUTUYNOJFRUUDJPDRO2MAZJ5KP6EBCU6LKXHYGZDUFBNHXQI"
   },
   {
-    id: "lupoex",
-    name: "lupoex",
-    host: "stellar1.lupoex.com",
+    id: "ohio1.stellarport",
+    name: "Stellarport Ohio 1",
+    host: "ohio-1.stellar.stellarport.io",
     port: 11625,
-    publicKey: "GDZT7ZGDNEGS5L2ICLCIVDOIATKDE4MM6SNUJ2FFKB5TIV5LDRIGG4T2"
+    publicKey: "GBB32UXWEXGZUE7H7LUVNNZRT3ZMZ3YH7SP3V5EFBILUVL3NCTSSK3IZ"
+  },
+  {
+    id: "ohio2.stellarport",
+    name: "Stellarport Ohio 2",
+    host: "ohio-2.stellar.stellarport.io",
+    port: 11625,
+    publicKey: "GC5A5WKAPZU5ASNMLNCAMLW7CVHMLJJAKHSZZHE2KWGAJHZ4EW6TQ7PB"
+  },
+  {
+    id: "ohio3.stellarport",
+    name: "Stellarport Ohio 3",
+    host: "ohio-3.stellar.stellarport.io",
+    port: 11625,
+    publicKey: "GBRILQP7RHIEBJPLGZ5XP6YWTYFSOQARAKECACMEMGXR53X6IX75E2L5"
   }
 ];
