@@ -50,7 +50,7 @@ export default class PublicNetworkLedgersHistoryChart extends React.Component {
         <Panel>
           <div className="widget-name">
             <span style={{borderBottom: '2px solid #0074B7'}}>Txs
-            </span> &amp; <span style={{borderBottom: '2px solid #FF6F00'}}>Ops</span> in the last 30 days: Live Network
+            </span> &amp; <span style={{borderBottom: '2px solid #FF6F00'}}>Ops</span> in the last 20 days: Live Network
           </div>
           {this.state.loading ?
             'Loading...'

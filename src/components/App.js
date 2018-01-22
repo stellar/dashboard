@@ -184,6 +184,7 @@ export default class App extends React.Component {
                   newLedgerEventName={LIVE_NEW_LEDGER}
                   emitter={this.emitter}
                   />
+                <PublicNetworkLedgersHistoryChart />
               </div>
             </div>
           </section>
