@@ -33,7 +33,8 @@ export default class RecentOperations extends React.Component {
       }
     }
     let operations = clone(this.state.operations);
-    operation.createdAtMoment = moment(); // now
+    operation.createdAtMoment = moment(operation.created_at); // now
+    operation.ago = this.ago(operation.createdAtMoment);
     operations.unshift(operation);
     operations.pop();
     this.setState({operations});
@@ -48,29 +49,13 @@ export default class RecentOperations extends React.Component {
           if (!this.pagingToken) {
             this.pagingToken = operation.paging_token;
           }
+          operation.createdAtMoment = moment(operation.created_at);
+          operation.ago = this.ago(operation.createdAtMoment);
           this.state.operations.push(operation);
         })
         this.setState({operations});
-        for (let i = 0; i < operations.length; i++) {
-          this.getTransactionTime(operations[i]);
-        }
         // Start listening to events
         this.props.emitter.addListener(this.props.newOperationEventName, this.onNewOperation.bind(this))
-      });
-  }
-
-  getTransactionTime(op) {
-    axios.get(op._links.transaction.href)
-      .then(tx => {
-        let operations = clone(this.state.operations);
-        for (let i = 0; i < operations.length; i++) {
-          if (operations[i].id == op.id) {
-            operations[i].createdAtMoment = moment(tx.data.created_at);
-            operations[i].ago = this.ago(operations[i].createdAtMoment);
-            break;
-          }
-        }
-        this.setState({operations});
       });
   }
 
@@ -109,7 +94,7 @@ export default class RecentOperations extends React.Component {
 
   componentDidMount() {
     // Update seconds ago
-    this.timerID = setInterval(() => this.updateAgo(), 10*1000);
+    this.timerID = setInterval(() => this.updateAgo(), 5*1000);
     this.getRecentOperations();
   }
 
