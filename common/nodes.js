@@ -72,6 +72,14 @@ module.exports = [
     publicKey: "GAENPO2XRTTMAJXDWM3E3GAALNLG4HVMKJ4QF525TR25RI42YPEDULOW"
   },
   {
+    id: "us.ibm",
+    verified: true,
+    name: "IBM United States",
+    host: "us.stellar.ibm.com",
+    port: 11625,
+    publicKey: "GARBCBH4YSHUJLYEPKEPMVYZIJ3ZSQR3QCJ245CWGY64X72JLN4A6RSG"
+  },
+  {
     id: "sdf1",
     verified: true,
     name: "SDF validator 1",
