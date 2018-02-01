@@ -39,7 +39,7 @@ app.get('/ledgers/public', function(req, res) {
 
   var multi = redisClient.multi();
 
-  var days = 20;
+  var days = 30;
 
   for (var i = 0; i < days; i++) {
     response.push({date: day.format("DD-MM")});
