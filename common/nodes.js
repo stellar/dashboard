@@ -1,5 +1,45 @@
 module.exports = [
   {
+    id: "validator1.stronghold",
+    verified: true,
+    name: "Stronghold 1 (Australia)",
+    host: "validator1.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GDIQKLQVOCD5UD6MUI5D5PTPVX7WTP5TAPP5OBMOLENBBD5KG434KYQ2"
+  },
+  {
+    id: "validator2.stronghold",
+    verified: true,
+    name: "Stronghold 2 (Asia)",
+    host: "validator2.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GA7MREQ7673YDVANF4WBPN7LBQM4BSH4BQUFUTC4YLSSQCQUQTXRVBZN"
+  },
+  {
+    id: "validator3.stronghold",
+    verified: true,
+    name: "Stronghold 3 (Europe)",
+    host: "validator3.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GDHV7FL7JP6LUEWWYUOA4C3QAFQ4LZ6OHFBWFIL6IFIS3AOBI2DHV62F"
+  },
+  {
+    id: "validator4.stronghold",
+    verified: true,
+    name: "Stronghold 4 (South America)",
+    host: "validator4.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GBGDBLFKR3LORWOI65LVC7ES5OGZ4GHILEHCBVKPW2PMP2OL43F6B2JJ"
+  },
+  {
+    id: "validator5.stronghold",
+    verified: true,
+    name: "Stronghold 5 (United States)",
+    host: "validator5.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GCBXBCIKCCVUIHAZ5QFWK6CKSX4AESOJ33IQNUE42BP7J66X23TM6WPF"
+  },  
+  {
     id: "uswest.fairx",
     verified: true,
     name: "FairX LLC US West",
