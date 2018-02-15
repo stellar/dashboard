@@ -178,12 +178,5 @@ module.exports = [
     host: "ohio-2.stellar.stellarport.io",
     port: 11625,
     publicKey: "GC5A5WKAPZU5ASNMLNCAMLW7CVHMLJJAKHSZZHE2KWGAJHZ4EW6TQ7PB"
-  },
-  {
-    id: "ohio3.stellarport",
-    name: "Stellarport Ohio 3",
-    host: "ohio-3.stellar.stellarport.io",
-    port: 11625,
-    publicKey: "GBRILQP7RHIEBJPLGZ5XP6YWTYFSOQARAKECACMEMGXR53X6IX75E2L5"
   }
 ];
