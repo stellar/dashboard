@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "heroku-postbuild": "gulp build"
+    "heroku-postbuild": "gulp build",
+    "test": "jest"
   },
   "author": "Stellar.org",
   "dependencies": {
@@ -25,19 +26,22 @@
     "fbemitter": "^2.1.1",
     "file-loader": "^0.9.0",
     "gulp": "^3.9.1",
+    "jest": "^22.3.0",
     "lodash": "^4.17.2",
     "moment": "^2.17.1",
     "morgan": "^1.8.2",
     "muicss": "^0.9.5",
     "node-sass": "^4.7.2",
-    "react": "^15.4.1",
+    "react": "16.2.0",
     "react-d3-components": "^0.6.5",
     "react-dom": "^15.4.1",
+    "react-test-renderer": "^16.2.0",
     "recharts": "^0.22.1",
     "redis": "^2.6.3",
     "sass-loader": "^6.0.6",
     "stellar-sdk": "^0.6.2",
     "style-loader": "^0.19.0",
     "webpack": "^1.13.3"
-  }
+  },
+  "babel": { "presets": [ "react", "es2015" ] }
 }
