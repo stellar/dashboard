@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AmountWidget renders component: loaded, 0 amount 1`] = `
+<div
+  className="mui-panel "
+>
+  <div
+    className="widget-name"
+  />
+  <div
+    className="mui--text-display3 mui--text-center"
+  >
+    0
+  </div>
+  <div
+    className="mui--text-caption mui--text-center"
+  >
+    <span>
+      0.0000000
+       
+    </span>
+  </div>
+</div>
+`;
+
+exports[`AmountWidget renders component: loaded, 100000 amount 1`] = `
+<div
+  className="mui-panel "
+>
+  <div
+    className="widget-name"
+  />
+  <div
+    className="mui--text-display3 mui--text-center"
+  >
+    100k
+  </div>
+  <div
+    className="mui--text-caption mui--text-center"
+  >
+    <span>
+      100,000.0000000
+       
+    </span>
+  </div>
+</div>
+`;
+
+exports[`AmountWidget renders component: loaded, 1000000 amount 1`] = `
+<div
+  className="mui-panel "
+>
+  <div
+    className="widget-name"
+  />
+  <div
+    className="mui--text-display3 mui--text-center"
+  >
+    1M
+  </div>
+  <div
+    className="mui--text-caption mui--text-center"
+  >
+    <span>
+      1,000,000.0000000
+       
+    </span>
+  </div>
+</div>
+`;
+
+exports[`AmountWidget renders component: loaded, 1000000000 amount 1`] = `
+<div
+  className="mui-panel "
+>
+  <div
+    className="widget-name"
+  />
+  <div
+    className="mui--text-display3 mui--text-center"
+  >
+    1B
+  </div>
+  <div
+    className="mui--text-caption mui--text-center"
+  >
+    <span>
+      1,000,000,000.0000000
+       
+    </span>
+  </div>
+</div>
+`;
+
+exports[`AmountWidget renders component: loading 1`] = `
+<div
+  className="mui-panel "
+>
+  <div
+    className="widget-name"
+  />
+  <div
+    className="mui--text-display3 mui--text-center"
+  >
+    Loading...
+  </div>
+  <div
+    className="mui--text-caption mui--text-center"
+  >
+    
+  </div>
+</div>
+`;

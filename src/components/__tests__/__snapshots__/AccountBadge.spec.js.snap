@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AccountBadge renders component 1`] = `
+<span
+  className="account"
+>
+  <code>
+    <a
+      href="horizon_url_stub/accounts/id_stub"
+      target="_blank"
+    >
+      id_s
+    </a>
+  </code>
+  
+</span>
+`;
+
+exports[`AccountBadge renders component: known 1`] = `
+<span
+  className="account"
+>
+  <code>
+    <a
+      href="horizon_url_stub/accounts/GCKX3XVTPVNFXQWLQCIBZX6OOPOIUT7FOAZVNOFCNEIXEZFRFSPNZKZT"
+      target="_blank"
+    >
+      GCKX
+    </a>
+  </code>
+  <span
+    className="account-tag"
+  >
+    Coins base
+  </span>
+</span>
+`;
+
+exports[`AccountBadge renders component: known object 1`] = `
+<span
+  className="account"
+>
+  <code>
+    <a
+      href="horizon_url_stub/accounts/GDCIUCGL7VEMMF6VYJOW75KQ5ZCLHAQBRM6EPFTKCRWUYVUOOYQCKC5A"
+      target="_blank"
+    >
+      GDCI
+    </a>
+  </code>
+  <a
+    href="https://mobius.network"
+    target="_blank"
+    title="Mobius.network"
+  >
+    <img
+      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAICAYAAAAftBSpAAABp0lEQVR42mWRu2sUURTG5x+xjX0aIUgKbcTCRrBIihSCyIJIMEQsBNPkoUFcEWwkplCCgogsGIzBQIKIhKyiRHQX8zK7M7uZTOZxJzPXmXt/3h0NBv3gFPc8vu/c71iA7kSgtK4nuV6Lcy0yrQ/y/4bMtU5NXR/KWZ2HpxTlIOHKekSp6jO45DP9QeCKnKLdwAzz3kmZ+igYnfcpv/ax/ayoWa7pui9TrrkxQ7WIvsU9Tsy0OVa26R1v8sAMrLYklUbC1BfB7Xchwy88Tk/anLtp40U51mJL6kqQ4uWKIFPUDfuE2aR7tEnXpU2O9K/Tc32byTcBjTAjTBV7seJrQzL02KW28xPr1UqsT11tMP8p5oeX0TJfcOKMufo+Z+84dJ3f4OjlLbrHmvQ926WymVATGTWZ8yiRtI2w5QulL9x1OH5jm9JTl4m3IQ+/CZZ20oJw5XtKySj23HM4+aTNmYVdBlZDLrYFzzOJ8RmrcNywzZpNppcjZtf22TBrHxjagTkcVVtyqxox/DlkZCvmZfyboDD2z5kKFHf7O/sfOsSp0kgTh0V+ARai44A02yZhAAAAAElFTkSuQmCC"
+    />
+  </a>
+</span>
+`;
+
+exports[`AccountBadge renders component: known2 1`] = `
+<span
+  className="account"
+>
+  <code>
+    <a
+      href="horizon_url_stub/accounts/GCKX3XVTPVNFXQWLQCIBZX6OOPOIUT7FOAZVNOFCNEIXEZFRFSPNZKZT"
+      target="_blank"
+    >
+      GCKX
+    </a>
+  </code>
+  <span
+    className="account-tag"
+  >
+    Coins base
+  </span>
+</span>
+`;
