@@ -185,5 +185,12 @@ module.exports = [
     host: "ohio-3.stellar.stellarport.io",
     port: 11625,
     publicKey: "GBRILQP7RHIEBJPLGZ5XP6YWTYFSOQARAKECACMEMGXR53X6IX75E2L5"
+  },
+  {
+    id: "noonic",
+    name: "Noonic",
+    host: "stellar.nooniclab.com",
+    port: 11625,
+    publicKey: "GDA6XBGM5KINCCWR6RTQ7OAONOQQJEA2S5PU4BDFAY6CGKW6O5P5HRFQ"
   }
 ];
