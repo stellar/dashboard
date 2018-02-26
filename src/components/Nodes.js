@@ -24,11 +24,9 @@ export default class Nodes extends React.Component {
 
   render() {
     return (
-      <div className="row">
+      <div className="mui-col-md-12">
         {
-          Object.values(list).map(node => {
-            return <Node key={node.id} data={node} uptime={this.state.uptimeData[node.id]} />
-          })
+          Object.values(list).map(node => <Node key={node.id} data={node} uptime={this.state.uptimeData[node.id]} />)
         }
       </div>
     );

@@ -241,3 +241,101 @@ section {
 .arc text {
   font-size: 10px;
 }
+
+.node-panel {
+  padding: 0px !important;
+  padding-top: 5px !important;
+  margin-bottom: 5px;
+}
+
+.node-circle-container {
+  display: flex;
+  align-items: center;
+}
+
+.node-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  padding: 0 !important;
+  margin-right: 10px;
+}
+
+.node-circle.blue {
+  background-color: #2196f3;
+}
+
+.node-circle.orange {
+  background-color: orange;
+}
+
+.node-circle.red {
+  background-color: red;
+}
+
+.node-barchart-container {
+  display: flex;
+  justify-content:flex-end;
+  align-items: center;
+  position: relative;
+}
+
+.node-barchart-container .domain {
+  display: none;
+  visibility: hidden;
+}
+
+.node-barchart {
+  visibility: visible;
+  opacity: 1;
+  transition: all ease-in 100ms;
+}
+
+.node-hovered-container {
+  display: flex;
+  align-items: center;
+  visibility: hidden;
+  z-index: 10;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  transition: all ease-out 100ms;
+}
+
+.node-pubkey {
+  text-align: center;
+  background-color: white;
+  width: 85%;
+  padding-top: 8px;
+}
+
+.node-panel:hover .node-hovered-container {
+  visibility: visible;
+  transition: all ease-in 100ms;
+}
+
+.node-dropdown-button {
+  cursor: pointer;
+}
+
+.node-dropdown {
+  padding: 0px 10px;
+}
+
+@media only screen and (min-width: 400px) and (max-width: 560px) {
+  .node-panel {
+    font-size: 7pt;
+  }
+}
+
+@media only screen and (min-width: 360px) and (max-width: 400px) {
+  .node-panel {
+    font-size: 6pt;
+  }
+}
+
+@media only screen and (max-width: 360px){
+  .node-panel {
+    font-size: 5pt;
+  }
+}

@@ -84,7 +84,7 @@ app.get('/api/nodes', function(req, res) {
 
   var dates = [];
   var multi = redisClient.multi();
-  var measurements = 70;
+  var measurements = 150;
 
   for (var i = 0; i < measurements; i++) {
     dates.push(date.format("YYYY-MM-DD HH:mm"));
