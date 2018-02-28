@@ -26,7 +26,7 @@ app.use(logger('combined'));
 if (process.env.DEV) {
   app.use('/', proxy('localhost:3000', {
     filter: function(req, res) {
-      return req.path == "/" || req.path.indexOf(".js") >= 0 || req.path.indexOf(".html") >= 0;
+      return req.path == "/" || req.path.indexOf(".js") >= 0 || req.path.indexOf(".html") >= 0 || req.path.indexOf(".css") >= 0;
     }
   }));
 } else {
@@ -90,6 +90,32 @@ app.get('/api/nodes', function(req, res) {
     dates.push(date.format("YYYY-MM-DD HH:mm"));
     multi.hgetall("nodes_"+date.format("YYYY-MM-DD_HH:mm"));
     date = date.subtract(5, 'minutes')
+  }
+
+  if (process.env.DEV) {
+    // Generate some random data
+    var response = {};
+
+    for (var node of nodes) {
+      response[node.id] = [];
+      for (var i = 0; i < measurements; i++) {
+        var status;
+        var rand = Math.floor(Math.random() * 2);
+        if (Math.floor(Math.random() * 10) < 7) {
+          status = 1;
+        } else {
+          status = NODE_ERROR;
+        }
+
+        response[node.id].push({
+          date: dates[i],
+          status: status
+        });
+      }
+    }
+
+    res.send(response);
+    return;
   }
 
   multi.exec(function (err, redisRes) {
