@@ -241,3 +241,107 @@ section {
 .arc text {
   font-size: 10px;
 }
+
+.node-panel {
+  padding: 0px !important;
+  margin-bottom: 5px;
+  height: 100%;
+}
+
+.node-panel-large {
+  display: flex;
+  align-items: center;
+}
+
+.node-circle-container {
+  display: flex;
+  align-items: center;
+}
+
+.node-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  padding: 0 !important;
+  margin-right: 10px;
+}
+
+.node-circle.blue {
+  background-color: #2196f3;
+}
+
+.node-circle.orange {
+  background-color: orange;
+}
+
+.node-circle.red {
+  background-color: red;
+}
+
+.node-barchart-container {
+  display: flex;
+  justify-content:flex-end;
+  align-items: center;
+  position: relative;
+}
+
+.node-barchart-container .domain {
+  display: none;
+  visibility: hidden;
+}
+
+.node-barchart {
+  padding-top: 5px !important;
+}
+
+.node-hovered-container {
+  visibility: hidden;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  transition: all ease-out 100ms;
+}
+
+.node-pubkey {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  width: 85%;
+  height: 100%;
+  font-size: 9pt;
+  box-shadow: 5px 0px 7px 0px white;
+}
+
+.node-panel:hover .node-hovered-container {
+  visibility: visible;
+  transition: all ease-in 100ms;
+}
+
+.node-dropdown-button {
+  cursor: pointer;
+}
+
+.node-dropdown {
+  padding: 0px 10px;
+}
+
+@media only screen and (min-width: 400px) and (max-width: 560px) {
+  .node-panel {
+    font-size: 7pt;
+  }
+}
+
+@media only screen and (min-width: 360px) and (max-width: 400px) {
+  .node-panel {
+    font-size: 6pt;
+  }
+}
+
+@media only screen and (max-width: 360px){
+  .node-panel {
+    font-size: 5pt;
+  }
+}

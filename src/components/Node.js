@@ -7,15 +7,23 @@ export default class Node extends React.Component {
   constructor(props) {
     super(props);
     this.colorScale = scale.category10();
-    this.state = {loading: true, chartWidth: 300, chartHeigth: this.props.chartHeigth || 50};
+    this.state = {
+      loading: true,
+      chartWidth: 400,
+      chartHeigth: 20,
+      expanded : false,
+      small: false,
+    };
   }
 
   componentDidMount() {
-    // Update chart width
+    //Update chart width
     setInterval(() => {
-      let value = this.panel.offsetWidth-50;
-      if (this.state.chartWidth != value) {
-        this.setState({chartWidth: value});
+      let panelWidth = this.panel.offsetWidth;
+      if (window.innerWidth < 1150 && !this.state.small) {
+        this.setState({small: true, chartWidth: panelWidth/20});
+      } else if (window.innerWidth >= 1150 && (this.state.small || this.state.chartWidth != panelWidth/2)) {
+        this.setState({small: false, expanded: false, chartWidth: panelWidth/2});
       }
     }, 5000);
   }
@@ -69,60 +77,96 @@ export default class Node extends React.Component {
     this.setState({loading: false, data, isNew, state});
   }
 
+  renderData() {
+    if (this.state.small) {
+      return this.state.data.map(x => ({
+        label: x.label,
+        values: x.values.slice(x.values.length-5),
+      }));
+    }
+    return this.state.data;
+  }
+
+  renderColor() {
+    if (this.state.loading) {
+      return "node-circle";
+    } else if (this.state.state === "up") {
+      return "node-circle blue";
+    } else if (this.state.state === "problems") {
+      return "node-circle orange";
+    } else {
+      return "node-circle red";
+    }
+  }
+
   render() {
     return (
-      <div className="mui-col-md-3" ref={(el) => { this.panel = el; }}>
-        <Panel>
-          <div className="widget-name">
-            {this.props.data.name}
-            {this.state.isNew ? <span className="tag">new!</span> : null}
-            {this.props.data.verified ? <span className="tag"><i className="material-icons">verified_user</i><span className="hide-narrow-panel"> verified entity</span></span> : null}
-          </div>
-          <table className="mui-table small" style={{'tableLayout': 'fixed'}}>
-            <tbody>
-              <tr>
-                <td style={{width: '10%'}}><strong>Status</strong></td>
-                <td className="amount-column">
-                {
-                  !this.state.loading ?
-                    this.state.state == 'up' ?
-                      <strong style={{color: "#2196f3"}}>Up!</strong>
-                      :
-                    this.state.state == 'problems' ?
-                      <strong style={{color: "orange"}}>Problems...</strong>
-                      :
-                      <strong style={{color: "red"}}>Down!</strong>
-                    :
-                    <span>Loading...</span>
-                }
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Host</strong></td>
-                <td className="amount-column">{this.props.data.host}:{this.props.data.port}</td>
-              </tr>
-              <tr>
-                <td colSpan="2"><strong>Public Key</strong></td>
-              </tr>
-              <tr>
-                <td colSpan="2" style={{wordWrap: "break-word"}}>{this.props.data.publicKey}</td>
-              </tr>
-            </tbody>
-          </table>
-          {this.state.loading ?
-            'Loading...'
-            :
-            <div>
-              <BarChart
-                data={this.state.data}
-                width={this.state.chartWidth}
-                colorScale={this.colorScale}
-                height={this.state.chartHeigth}
-                margin={{top: 10, bottom: 8, left: -18, right: -15}} />
-              <div className="small gray margin-top10">
-                Checked every 5 mins. Last: {this.props.uptime[0].date} UTC
+      <div ref={(el) => { this.panel = el; }}>
+        <Panel className="mui-col-md-12 node-panel">
+          <div className="node-panel-large">
+            <div className="mui-col-md-3 mui-col-xs-4 node-circle-container">
+              <div className={this.renderColor()} />
+                {this.props.data.name}
               </div>
+              <div className={"mui-col-md-3 mui-col-xs-4"}>
+                {this.props.data.host}:{this.props.data.port}
+              </div>
+              {this.state.loading ?
+                'Loading...' :
+                <div className={"mui-col-md-6 mui-col-xs-4 node-barchart-container"}>
+                  {
+                    this.state.small ? "" :
+                    <div className="node-hovered-container">
+                      <p className={"node-pubkey"}>{this.props.data.publicKey} </p>
+                    </div>
+                  }
+                  <div className={"node-barchart"}>
+                    <BarChart
+                      data={this.renderData()}
+                      width={this.state.chartWidth}
+                      colorScale={this.colorScale}
+                      height={this.state.chartHeigth} />
+                  </div>
+                  {
+                    this.state.small ? <i className="material-icons node-dropdown-button" onClick={() => this.setState({expanded : !this.state.expanded})}>expand_more</i> : ""
+                  }
+                </div>
+              }
             </div>
+            {this.state.expanded && this.state.small ?
+              <div className="node-dropdown">
+                <table className="mui-table small" style={{'tableLayout': 'fixed'}}>
+                  <tbody>
+                    <tr>
+                      <td style={{width: '10%'}}><strong>Status</strong></td>
+                      <td className="amount-column">
+                      {
+                        !this.state.loading ?
+                          this.state.state == 'up' ?
+                            <strong style={{color: "#2196f3"}}>Up!</strong>
+                            :
+                          this.state.state == 'problems' ?
+                            <strong style={{color: "orange"}}>Problems...</strong>
+                            :
+                            <strong style={{color: "red"}}>Down!</strong>
+                          :
+                          <span>Loading...</span>
+                      }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan="2"><strong>Public Key</strong></td>
+                    </tr>
+                    <tr>
+                      <td colSpan="2" style={{wordWrap: "break-word"}}>{this.props.data.publicKey}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="small gray margin-top10">
+                  Checked every 5 mins. Last: {this.props.uptime[0].date} UTC
+                </div>
+              </div>
+              :""
           }
         </Panel>
       </div>
