@@ -1,5 +1,13 @@
 module.exports = [
   {
+    id: "validator1.stronghold",
+    verified: true,
+    name: "Stronghold 1 (AU)",
+    host: "validator1.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GDIQKLQVOCD5UD6MUI5D5PTPVX7WTP5TAPP5OBMOLENBBD5KG434KYQ2"
+  },
+  {
     id: "uswest.fairx",
     verified: true,
     name: "FairX LLC US West",
