@@ -245,6 +245,9 @@ section {
 .node-panel {
   padding: 0px !important;
   margin-bottom: 5px;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .node-circle-container {
