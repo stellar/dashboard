@@ -246,6 +246,9 @@ section {
   padding: 0px !important;
   margin-bottom: 5px;
   height: 100%;
+}
+
+.node-panel-large {
   display: flex;
   align-items: center;
 }
@@ -288,10 +291,7 @@ section {
 }
 
 .node-barchart {
-  padding-top: 5px;
-  visibility: visible;
-  opacity: 1;
-  transition: all ease-in 100ms;
+  padding-top: 5px !important;
 }
 
 .node-hovered-container {

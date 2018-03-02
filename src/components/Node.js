@@ -103,34 +103,36 @@ export default class Node extends React.Component {
     return (
       <div ref={(el) => { this.panel = el; }}>
         <Panel className="mui-col-md-12 node-panel">
-          <div className="mui-col-md-3 mui-col-xs-4 node-circle-container">
-            <div className={this.renderColor()} />
-              {this.props.data.name}
-            </div>
-            <div className={"mui-col-md-3 mui-col-xs-4"}>
-              {this.props.data.host}:{this.props.data.port}
-            </div>
-            {this.state.loading ?
-              'Loading...' :
-              <div className={"mui-col-md-6 mui-col-xs-4 node-barchart-container"}>
-                {
-                  this.state.small ? "" :
-                  <div className="node-hovered-container">
-                    <p className={"node-pubkey"}>{this.props.data.publicKey} </p>
-                  </div>
-                }
-                <div className={this.state.small ? "" : "node-barchart"}>
-                  <BarChart
-                    data={this.renderData()}
-                    width={this.state.chartWidth}
-                    colorScale={this.colorScale}
-                    height={this.state.chartHeigth} />
-                </div>
-                {
-                  this.state.small ? <i className="material-icons node-dropdown-button" onClick={() => this.setState({expanded : !this.state.expanded})}>expand_more</i> : ""
-                }
+          <div className="node-panel-large">
+            <div className="mui-col-md-3 mui-col-xs-4 node-circle-container">
+              <div className={this.renderColor()} />
+                {this.props.data.name}
               </div>
-            }
+              <div className={"mui-col-md-3 mui-col-xs-4"}>
+                {this.props.data.host}:{this.props.data.port}
+              </div>
+              {this.state.loading ?
+                'Loading...' :
+                <div className={"mui-col-md-6 mui-col-xs-4 node-barchart-container"}>
+                  {
+                    this.state.small ? "" :
+                    <div className="node-hovered-container">
+                      <p className={"node-pubkey"}>{this.props.data.publicKey} </p>
+                    </div>
+                  }
+                  <div className={"node-barchart"}>
+                    <BarChart
+                      data={this.renderData()}
+                      width={this.state.chartWidth}
+                      colorScale={this.colorScale}
+                      height={this.state.chartHeigth} />
+                  </div>
+                  {
+                    this.state.small ? <i className="material-icons node-dropdown-button" onClick={() => this.setState({expanded : !this.state.expanded})}>expand_more</i> : ""
+                  }
+                </div>
+              }
+            </div>
             {this.state.expanded && this.state.small ?
               <div className="node-dropdown">
                 <table className="mui-table small" style={{'tableLayout': 'fixed'}}>
