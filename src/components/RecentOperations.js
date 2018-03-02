@@ -22,58 +22,24 @@ export default class RecentOperations extends React.Component {
     this.url = `${this.url}?order=desc&limit=${this.props.limit}`;
   }
 
-  onNewOperation(operation) {
-    if (this.props.account) {
-      if (this.props.account !== operation.source_account &&
-        // payment/path_payment
-        this.props.account !== operation.to &&
-        // change_trust/allow_trust
-        this.props.account !== operation.trustee) {
-        return;
-      }
-    }
-    let operations = clone(this.state.operations);
-    operation.createdAtMoment = moment(operation.created_at); // now
-    operation.ago = this.ago(operation.createdAtMoment);
-    operations.unshift(operation);
-    operations.pop();
-    this.setState({operations});
-  }
-
   getRecentOperations() {
+    if (this.operationsLoading) {
+      return;
+    }
+    this.operationsLoading = true;
+
     axios.get(this.url)
       .then(response => {
         let records = response.data._embedded.records;
-        let operations = this.state.operations;
+        let operations = [];
         each(records, operation => {
-          if (!this.pagingToken) {
-            this.pagingToken = operation.paging_token;
-          }
           operation.createdAtMoment = moment(operation.created_at);
           operation.ago = this.ago(operation.createdAtMoment);
-          this.state.operations.push(operation);
+          operations.push(operation);
         })
         this.setState({operations});
-        // Start listening to events
-        this.props.emitter.addListener(this.props.newOperationEventName, this.onNewOperation.bind(this))
+        this.operationsLoading = false;
       });
-  }
-
-  updateAgo() {
-    let operations = clone(this.state.operations);
-    let updateState = false;
-    for (let i = 0; i < operations.length; i++) {
-      if (operations[i].createdAtMoment) {
-        let newVal = this.ago(operations[i].createdAtMoment);
-        if (operations[i].ago != newVal) {
-          operations[i].ago = newVal;
-          updateState = true;
-        }
-      }
-    }
-    if (updateState) {
-      this.setState({operations});
-    }
   }
 
   ago(a) {
@@ -93,9 +59,8 @@ export default class RecentOperations extends React.Component {
   }
 
   componentDidMount() {
-    // Update seconds ago
-    this.timerID = setInterval(() => this.updateAgo(), 5*1000);
     this.getRecentOperations();
+    this.timerID = setInterval(() => this.getRecentOperations(), 10*1000);
   }
 
   componentWillUnmount() {
