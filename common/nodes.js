@@ -1,5 +1,12 @@
 module.exports = [
   {
+    id: "noonic",
+    name: "Noonic",
+    host: "stellar.nooniclab.com",
+    port: 11625,
+    publicKey: "GDA6XBGM5KINCCWR6RTQ7OAONOQQJEA2S5PU4BDFAY6CGKW6O5P5HRFQ"
+  },
+  {
     id: "validator1.stronghold",
     verified: true,
     name: "Stronghold 1 (Australia)",
