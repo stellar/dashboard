@@ -17,15 +17,18 @@ export default class Node extends React.Component {
   }
 
   componentDidMount() {
-    //Update chart width
-    setInterval(() => {
-      let panelWidth = this.panel.offsetWidth;
-      if (window.innerWidth < 1150 && !this.state.small) {
-        this.setState({small: true, chartWidth: panelWidth/20});
-      } else if (window.innerWidth >= 1150 && (this.state.small || this.state.chartWidth != panelWidth/2)) {
-        this.setState({small: false, expanded: false, chartWidth: panelWidth/2});
-      }
-    }, 5000);
+    // Update chart width
+    this.updateSize();
+    setInterval(() => this.updateSize(), 5000);
+  }
+
+  updateSize() {
+    let panelWidth = this.panel.offsetWidth;
+    if (window.innerWidth < 1150 && !this.state.small) {
+      this.setState({small: true, chartWidth: panelWidth/20});
+    } else if (window.innerWidth >= 1150 && (this.state.small || this.state.chartWidth != panelWidth/2)) {
+      this.setState({small: false, expanded: false, chartWidth: panelWidth/2});
+    }
   }
 
   componentWillReceiveProps(props) {
