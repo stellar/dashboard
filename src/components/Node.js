@@ -104,16 +104,18 @@ export default class Node extends React.Component {
       <div ref={(el) => { this.panel = el; }}>
         <Panel className="mui-col-md-12 node-panel">
           <div className="node-panel-large">
-            <div className="mui-col-md-3 mui-col-xs-4 node-circle-container">
+            <div className="mui-col-md-3 mui-col-sm-6 mui-col-xs-6 node-circle-container">
               <div className={this.renderColor()} />
                 {this.props.data.name}
               </div>
-              <div className={"mui-col-md-3 mui-col-xs-4"}>
-                {this.props.data.host}:{this.props.data.port}
+              <div className={"mui-col-md-3"}>
+                 {
+                   this.state.small ? "" : `${this.props.data.host}:${this.props.data.port}`
+                 }
               </div>
               {this.state.loading ?
                 'Loading...' :
-                <div className={"mui-col-md-6 mui-col-xs-4 node-barchart-container"}>
+                <div className={"mui-col-md-6 mui-col-sm-6 mui-col-xs-6 node-barchart-container"}>
                   {
                     this.state.small ? "" :
                     <div className="node-hovered-container">
@@ -155,6 +157,10 @@ export default class Node extends React.Component {
                       </td>
                     </tr>
                     <tr>
+                      <td><strong>Host</strong></td>
+                      <td className="amount-column">{this.props.data.host}:{this.props.data.port}</td>
+                    </tr>
+                    <tr>
                       <td colSpan="2"><strong>Public Key</strong></td>
                     </tr>
                     <tr>
@@ -162,7 +168,7 @@ export default class Node extends React.Component {
                     </tr>
                   </tbody>
                 </table>
-                <div className="small gray margin-top10">
+                <div className="small gray margin-top10 node-update-interval-container">
                   Checked every 5 mins. Last: {this.props.uptime[0].date} UTC
                 </div>
               </div>
