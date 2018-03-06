@@ -331,21 +331,3 @@ section {
 .node-update-interval-container {
   padding-bottom: 5px;
 }
-
-@media only screen and (min-width: 400px) and (max-width: 560px) {
-  .node-panel {
-    font-size: 7pt;
-  }
-}
-
-@media only screen and (min-width: 360px) and (max-width: 400px) {
-  .node-panel {
-    font-size: 6pt;
-  }
-}
-
-@media only screen and (max-width: 360px){
-  .node-panel {
-    font-size: 5pt;
-  }
-}

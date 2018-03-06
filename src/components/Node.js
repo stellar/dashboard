@@ -107,18 +107,16 @@ export default class Node extends React.Component {
       <div ref={(el) => { this.panel = el; }}>
         <Panel className="mui-col-md-12 node-panel">
           <div className="node-panel-large">
-            <div className="mui-col-md-3 mui-col-sm-6 mui-col-xs-6 node-circle-container">
+            <div className="mui-col-md-3 mui-col-sm-11 mui-col-xs-9 node-circle-container">
               <div className={this.renderColor()} />
                 {this.props.data.name}
               </div>
-              <div className={"mui-col-md-3"}>
-                 {
-                   this.state.small ? "" : `${this.props.data.host}:${this.props.data.port}`
-                 }
+              <div className="mui-col-md-3 mui--hidden-sm mui--hidden-xs">
+                {this.props.data.host}:{this.props.data.port}
               </div>
               {this.state.loading ?
                 'Loading...' :
-                <div className={"mui-col-md-6 mui-col-sm-6 mui-col-xs-6 node-barchart-container"}>
+                <div className={"mui-col-md-6 mui-col-sm-1 mui-col-xs-3 node-barchart-container"}>
                   {
                     this.state.small ? "" :
                     <div className="node-hovered-container">
