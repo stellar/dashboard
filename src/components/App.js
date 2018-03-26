@@ -239,14 +239,7 @@ export default class App extends React.Component {
             <div className="mui-col-md-4">
               <AccountBalance
                 horizonURL={horizonTest}
-                name="Friendbot 1"
-                id="GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K"
-                />
-            </div>
-            <div className="mui-col-md-4">
-              <AccountBalance
-                horizonURL={horizonTest}
-                name="Friendbot 2"
+                name="Friendbot"
                 id="GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR"
                 />
             </div>
