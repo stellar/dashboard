@@ -5,17 +5,21 @@ var bs      = require('browser-sync').create();
 var gulp    = require('gulp');
 var path    = require('path');
 var webpack = require("webpack");
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 gulp.task('default', ['develop']);
 
 var webpackOptions = {
   entry: {
     app: "./src/app.js",
-    vendor: ["react", "react-dom", "lodash", "muicss", "stellar-sdk", "axios", "d3", "react-d3-components", "fbemitter"]
+    vendor: ["react", "react-dom", "muicss", "stellar-sdk", "axios", "d3", "fbemitter"]
   },
   devtool: "source-map",
   resolve: {
-    root: ['src'],
+    root: [
+      path.resolve('src'),
+      path.resolve('common')
+    ],
     modulesDirectories: ["node_modules"]
   },
   module: {
@@ -23,29 +27,23 @@ var webpackOptions = {
       {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader', query: {presets: ['es2015', 'react']}},
       {test: /\.json$/, loader: 'json'},
       {test: /\.html$/, loader: 'file?name=[name].html'},
+      {test: /\.scss$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader")}
     ]
   },
   plugins: [
-    new webpack.IgnorePlugin(/ed25519/)
+    new webpack.IgnorePlugin(/ed25519/),
+    new ExtractTextPlugin("style.css")
   ]
 };
 
 gulp.task('develop', function(done) {
-  var mixpanelSecret = '7d6b4a91f04cd8228ff3e2387f26277d' // empty project
-  if (process.env.MIXPANEL_SECRET) {
-    mixpanelSecret = process.env.MIXPANEL_SECRET;
-  }
-
   var options = merge(webpackOptions, {
     output: {
       filename: "[name].js",
       path: './.tmp'
     },
     plugins: [
-      new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.js"),
-      new webpack.DefinePlugin({
-        'MIXPANEL_SECRET': JSON.stringify(mixpanelSecret)
-      }),
+      new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.js")
     ]
   });
 
@@ -61,8 +59,13 @@ gulp.task('develop', function(done) {
     if (!bsInitialized) {
       gulp.watch(".tmp/**/*").on("change", bs.reload);
       bs.init({
+        port: 3000,
+        online: false,
         notify: false,
-        server: "./.tmp"
+        server: "./.tmp",
+        socket: {
+          domain: 'localhost:3000'
+        }
       });
       bsInitialized = true;
     }
@@ -91,8 +94,7 @@ gulp.task('build', function(done) {
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: JSON.stringify('production'),
-        },
-        'MIXPANEL_SECRET': JSON.stringify(process.env.MIXPANEL_SECRET)
+        }
       }),
       new webpack.optimize.UglifyJsPlugin()
     ]

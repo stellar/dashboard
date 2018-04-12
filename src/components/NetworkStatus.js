@@ -1,7 +1,7 @@
 import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
-import _ from 'lodash';
+import round from 'lodash/round';
 
 // ledgersInAverageCalculation defines how many last ledgers should be
 // considered when calculating average ledger length.
@@ -11,7 +11,6 @@ export default class NetworkStatus extends React.Component {
   constructor(props) {
     super(props);
     this.state = {loading: true};
-    this.getLastLedgers();
   }
 
   // This method will be called when a new ledger is created.
@@ -61,6 +60,7 @@ export default class NetworkStatus extends React.Component {
 
       this.setState({closedAgo});
     }, 1000);
+    this.getLastLedgers();
   }
 
   componentWillUnmount() {
@@ -76,7 +76,7 @@ export default class NetworkStatus extends React.Component {
       statusText = <strong className="mui--text-body2">Loading...</strong>
     } else if (this.state.closedAgo >= 90) { // If last ledger closed more than 90 seconds ago it means network is down.
       statusClass = "down";
-      statusText = <strong className="mui--text-body2" style={{color: "#666"}}>Network down!</strong>
+      statusText = <strong className="mui--text-body2" style={{color: "#666"}}>Network (or monitoring node) down!</strong>
     } else {
       // Now we check the average close time but we also need to check the latest ledger
       // close time because if there are no new ledgers it means that network is slow or down.
@@ -108,7 +108,7 @@ export default class NetworkStatus extends React.Component {
           {!this.state.loading ?
             <div>
             Last ledger: #{this.state.lastLedgerSequence}<br />
-            Average ledger close time in the last {ledgersInAverageCalculation} ledgers: {_.round(averageLedgerLength, 2)} sec.<br />
+            Average ledger close time in the last {ledgersInAverageCalculation} ledgers: {round(averageLedgerLength, 2)} sec.<br />
             Last ledger closed at: {this.state.closedAt.toString()} in {this.state.lastLedgerLength/1000} sec.
             </div>
           : ''}

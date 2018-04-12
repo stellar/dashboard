@@ -1,15 +1,16 @@
 import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
-import {clone, find, reduce} from 'lodash';
-import AccountLink from './AccountLink';
+import clone from 'lodash/clone';
+import find from 'lodash/find';
+import reduce from 'lodash/reduce';
+import AccountBadge from './AccountBadge';
 import BigNumber from 'bignumber.js';
 
 export default class ListAccounts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {balances: {}};
-    this.loadBalances();
   }
 
   loadBalances() {
@@ -30,6 +31,7 @@ export default class ListAccounts extends React.Component {
   componentDidMount() {
     // Update balances
     this.timerID = setInterval(() => this.loadBalances(), 60*60*1000);
+    this.loadBalances();
   }
 
   componentWillUnmount() {
@@ -57,7 +59,7 @@ export default class ListAccounts extends React.Component {
               {
                 Object.keys(this.state.balances).map(key => { 
                   return <tr key={key}>
-                    <td><AccountLink horizonURL={this.props.horizonURL} id={key} /></td>
+                    <td><AccountBadge horizonURL={this.props.horizonURL} id={key} /></td>
                     <td className="amount-column">{typeof this.state.balances[key] === "undefined" ? "Loading..." : `${this.state.balances[key].toFormat(0, BigNumber.ROUND_FLOOR)} XLM`}</td>
                   </tr>
                 })

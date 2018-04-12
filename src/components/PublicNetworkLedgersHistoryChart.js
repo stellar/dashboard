@@ -2,8 +2,9 @@ import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
 import {scale, format} from 'd3';
-import {BarChart} from 'react-d3-components';
-import {assign, clone, each} from 'lodash';
+import BarChart from 'react-d3-components/lib/BarChart';
+import clone from 'lodash/clone';
+import each from 'lodash/each';
 
 export default class PublicNetworkLedgersHistoryChart extends React.Component {
   constructor(props) {
@@ -11,12 +12,21 @@ export default class PublicNetworkLedgersHistoryChart extends React.Component {
     this.panel = null;
     this.colorScale = scale.category10();
     this.state = {loading: true, chartWidth: 400, chartHeight: this.props.chartHeight || 120};
+  }
 
+  componentDidMount() {
     this.getLedgers();
     setInterval(() => this.getLedgers(), 1000*60*5);
-
     // Update chart width
-    setInterval(() => this.setState(assign(this.state, {chartWidth: this.panel.offsetWidth-20})), 1000);
+    this.updateSize();
+    setInterval(() => this.updateSize(), 5000);
+  }
+
+  updateSize() {
+    let value = this.panel.offsetWidth-20;
+    if (this.state.chartWidth != value) {
+      this.setState({chartWidth: value});
+    }
   }
 
   getLedgers() {
@@ -33,7 +43,7 @@ export default class PublicNetworkLedgersHistoryChart extends React.Component {
           data[0].values.unshift({x: day.date, y: day.transaction_count});
           data[1].values.unshift({x: day.date, y: day.operation_count});
         });
-        this.setState(assign(this.state, {loading: false, data}));
+        this.setState({loading: false, data});
       });
   }
 
