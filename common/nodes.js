@@ -38,7 +38,7 @@ module.exports = [
     host: "validator5.stellar.stronghold.co",
     port: 11625,
     publicKey: "GCBXBCIKCCVUIHAZ5QFWK6CKSX4AESOJ33IQNUE42BP7J66X23TM6WPF"
-  },  
+  },
   {
     id: "uswest.fairx",
     verified: true,
@@ -218,5 +218,12 @@ module.exports = [
     host: "ohio-2.stellar.stellarport.io",
     port: 11625,
     publicKey: "GC5A5WKAPZU5ASNMLNCAMLW7CVHMLJJAKHSZZHE2KWGAJHZ4EW6TQ7PB"
+  },
+  {
+    id: "us1.knackforge",
+    name: "KnackForge LLC US 1",
+    host: "us1.stellar.knackforge.com",
+    port: 11625,
+    publicKey: "GAMWPPFIO2ZRR2W2KF73U5M4ONURKLJFAQSE5K5RKQ3LD6FDHNI7SPDI"
   }
 ];
