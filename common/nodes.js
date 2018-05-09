@@ -1,7 +1,6 @@
 module.exports = [
   {
     id: "validator1.stronghold",
-    verified: true,
     name: "Stronghold 1 (Australia)",
     host: "validator1.stellar.stronghold.co",
     port: 11625,
@@ -9,7 +8,6 @@ module.exports = [
   },
   {
     id: "validator2.stronghold",
-    verified: true,
     name: "Stronghold 2 (Asia)",
     host: "validator2.stellar.stronghold.co",
     port: 11625,
@@ -17,7 +15,6 @@ module.exports = [
   },
   {
     id: "validator3.stronghold",
-    verified: true,
     name: "Stronghold 3 (Europe)",
     host: "validator3.stellar.stronghold.co",
     port: 11625,
@@ -25,7 +22,6 @@ module.exports = [
   },
   {
     id: "validator4.stronghold",
-    verified: true,
     name: "Stronghold 4 (South America)",
     host: "validator4.stellar.stronghold.co",
     port: 11625,
@@ -33,7 +29,6 @@ module.exports = [
   },
   {
     id: "validator5.stronghold",
-    verified: true,
     name: "Stronghold 5 (United States)",
     host: "validator5.stellar.stronghold.co",
     port: 11625,
@@ -41,7 +36,6 @@ module.exports = [
   },  
   {
     id: "uswest.fairx",
-    verified: true,
     name: "FairX LLC US West",
     host: "uswest.stellar.fairx.io",
     port: 11625,
@@ -49,7 +43,6 @@ module.exports = [
   },
   {
     id: "au.ibm",
-    verified: true,
     name: "IBM Australia",
     host: "au.stellar.ibm.com",
     port: 11625,
@@ -57,7 +50,6 @@ module.exports = [
   },
   {
     id: "br.ibm",
-    verified: true,
     name: "IBM Brazil",
     host: "br.stellar.ibm.com",
     port: 11625,
@@ -65,7 +57,6 @@ module.exports = [
   },
   {
     id: "ca.ibm",
-    verified: true,
     name: "IBM Canada",
     host: "ca.stellar.ibm.com",
     port: 11625,
@@ -73,7 +64,6 @@ module.exports = [
   },
   {
     id: "no.ibm",
-    verified: true,
     name: "IBM Norway",
     host: "no.stellar.ibm.com",
     port: 11625,
@@ -81,7 +71,6 @@ module.exports = [
   },
   {
     id: "it.ibm",
-    verified: true,
     name: "IBM Italy",
     host: "it.stellar.ibm.com",
     port: 11625,
@@ -89,7 +78,6 @@ module.exports = [
   },
   {
     id: "hk.ibm",
-    verified: true,
     name: "IBM Hong Kong",
     host: "hk.stellar.ibm.com",
     port: 11625,
@@ -97,7 +85,6 @@ module.exports = [
   },
   {
     id: "in.ibm",
-    verified: true,
     name: "IBM India",
     host: "in.stellar.ibm.com",
     port: 11625,
@@ -105,7 +92,6 @@ module.exports = [
   },
   {
     id: "uk.ibm",
-    verified: true,
     name: "IBM United Kingdom",
     host: "uk.stellar.ibm.com",
     port: 11625,
@@ -113,7 +99,6 @@ module.exports = [
   },
   {
     id: "us.ibm",
-    verified: true,
     name: "IBM United States",
     host: "us.stellar.ibm.com",
     port: 11625,
@@ -121,7 +106,6 @@ module.exports = [
   },
   {
     id: "sdf1",
-    verified: true,
     name: "SDF validator 1",
     host: "core-live-a.stellar.org",
     port: 11625,
@@ -129,7 +113,6 @@ module.exports = [
   },
   {
     id: "sdf2",
-    verified: true,
     name: "SDF validator 2",
     host: "core-live-b.stellar.org",
     port: 11625,
@@ -137,7 +120,6 @@ module.exports = [
   },
   {
     id: "sdf3",
-    verified: true,
     name: "SDF validator 3",
     host: "core-live-c.stellar.org",
     port: 11625,
@@ -152,7 +134,6 @@ module.exports = [
   },
   {
     id: "tempo",
-    verified: true,
     name: "Tempo",
     host: "stellar1.tempo.eu.com",
     port: 11625,
@@ -160,7 +141,6 @@ module.exports = [
   },
   {
     id: "satoshipay1",
-    verified: true,
     name: "SatoshiPay 1",
     host: "stellar1.satoshipay.io",
     port: 11625,
@@ -168,7 +148,6 @@ module.exports = [
   },
   {
     id: "satoshipay2",
-    verified: true,
     name: "SatoshiPay 2",
     host: "stellar2.satoshipay.io",
     port: 11625,
@@ -176,7 +155,6 @@ module.exports = [
   },
   {
     id: "satoshipay3",
-    verified: true,
     name: "SatoshiPay 3",
     host: "stellar3.satoshipay.io",
     port: 11625,
@@ -184,7 +162,6 @@ module.exports = [
   },
   {
     id: "cryptomover",
-    verified: true,
     name: "cryptomover host 1",
     host: "cryptodealer.hk",
     port: 11625,
@@ -192,7 +169,6 @@ module.exports = [
   },
   {
     id: "cryptomover2",
-    verified: true,
     name: "cryptomover host 2",
     host: "cryptomover.org",
     port: 11625,
