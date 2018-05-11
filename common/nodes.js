@@ -201,5 +201,11 @@ module.exports = [
     host: "stellar3.clic.world",
     port: 11625,
     publicKey: "GBB5SVPMROHPI4Z3LDBYBLANECR222LGREPN53UVA4KXMG5W42D3XFY5"
+  },
+    id: "clic.world.2.africa",
+    name: "Clic.World 2 (East Africa)",
+    host: "stellar2.clic.world",
+    port: 11625,
+    publicKey: "GDKST4M2OPDPNDZFIZ7CYYFR3SUP4N3GOZIWNVUBAY5VX25X7ZT4RICB"
   }
 ];
