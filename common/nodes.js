@@ -105,6 +105,20 @@ module.exports = [
     publicKey: "GARBCBH4YSHUJLYEPKEPMVYZIJ3ZSQR3QCJ245CWGY64X72JLN4A6RSG"
   },
   {
+    id: "ie.paywith.glass",
+    name: "paywith.glass (Ireland)",
+    host: "ie.paywith.glass",
+    port: 11625,
+    publicKey: "GDOQLNMARWIZWLEDKBYBOXP5LQYQQF24PS6NEQW4H766RLD4T7AUWQLB"
+  },
+  {
+    id: "localstellarassets",
+    name: "Local Stellar Assets",
+    host: "localstellarassets.com",
+    port: 11625,
+    publicKey: "GA4UHKRQNTYNOI7TMP6ZK2I52UEIBBHAW3LVLBUTSKVRTGDEDTJVKLI3"
+  },
+  {
     id: "sdf1",
     name: "SDF validator 1",
     host: "core-live-a.stellar.org",
