@@ -201,5 +201,12 @@ module.exports = [
     host: "stellar3.clic.world",
     port: 11625,
     publicKey: "GBB5SVPMROHPI4Z3LDBYBLANECR222LGREPN53UVA4KXMG5W42D3XFY5"
+  },
+  {
+    id: "cowrie.exchange",
+    name: "Cowrie Exchange",
+    host: "stellar.cowriesys.com",
+    port: 11625,
+    publicKey: "GDAXAGWQNTOUIGTAJDYIL4QCM3Q6HM67SKEAJNSOW6G2Z3QPPKGAVJFW"
   }
 ];
