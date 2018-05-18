@@ -14,6 +14,11 @@ var redis = require("redis"),
     redisClient = redis.createClient(process.env.REDIS_URL);
 var lumens = require("./common/lumens.js");
 var nodes = require("./common/nodes.js");
+const Sequelize = require('sequelize');
+
+const postgres = require('./postgres');
+// Create schema if doesn't exist
+postgres.sequelize.sync();
 
 const NODE_ERROR = -1;
 const NODE_TIMEOUT = -2;
@@ -79,26 +84,24 @@ app.get('/api/lumens', function(req, res) {
 
 app.get('/api/nodes', function(req, res) {
   // Find last timestamp with minutes % 5 == 0
-  var date = moment();
+  var date = moment().utc();
   date = date.subtract(date.minutes() % 5, 'minutes');
+  const measurementsCount = 150;
 
-  var dates = [];
-  var multi = redisClient.multi();
-  var measurements = 150;
+  if (process.env.RANDOM_NODES_MEASUREMENTS) {
+    var dates = [];
 
-  for (var i = 0; i < measurements; i++) {
-    dates.push(date.format("YYYY-MM-DD HH:mm"));
-    multi.hgetall("nodes_"+date.format("YYYY-MM-DD_HH:mm"));
-    date = date.subtract(5, 'minutes')
-  }
+    for (var i = 0; i < measurementsCount; i++) {
+      dates.push(date.format("YYYY-MM-DD HH:mm"));
+      date = date.subtract(5, 'minutes')
+    }
 
-  if (process.env.DEV) {
     // Generate some random data
     var response = {};
 
     for (var node of nodes) {
       response[node.id] = [];
-      for (var i = 0; i < measurements; i++) {
+      for (var i = 0; i < measurementsCount; i++) {
         var status;
         var rand = Math.floor(Math.random() * 2);
         if (Math.floor(Math.random() * 10) < 7) {
@@ -118,39 +121,28 @@ app.get('/api/nodes', function(req, res) {
     return;
   }
 
-  multi.exec(function (err, redisRes) {
-    if (err) {
-      res.sendStatus(500);
-      console.error(err);
-      res.error("Error");
-      return;
-    }
+  // We want to return the latest 150 measurements (measurements every 5 minutes so from the last 750-1 minutes).
+  // We also want to return `0` value for recently added nodes or nodes with no data for a given timestamp.
+  // So first we cross join dates and node names and then left join measurements for given nodes and date.
+  var latestMeasurement = date.format("YYYY-MM-DD HH:mm");
+  var nodeNames = _(nodes).map(node => `('${node.id}')`).join();
+  var query = "select n.node_id as node_id, d.day as date, coalesce(m.status, 0) as status "+
+    "from (select generate_series(timestamp '"+latestMeasurement+"', timestamp '"+latestMeasurement+"' - interval '"+(measurementsCount*5-1)+" minute', interval '-5 minute')) d(day) "+
+    "cross join (select * from (values "+nodeNames+") as node_names) as n(node_id) "+
+    "left join node_measurements m ON n.node_id = m.node_id and m.date = d.day order by d.day desc;"
 
+  postgres.sequelize.query(query, {model: postgres.NodeMeasurement}).then(measurements => {
     var response = {};
 
-    for (var node of nodes) {
-      if (!response[node.id]) {
-        response[node.id] = [];
+    for (let measurement of measurements) {
+      let node_id = measurement.get('node_id');
+      if (response[node_id] === undefined) {
+        response[node_id] = [];
       }
-    }
-
-    for (var i = 0; i < measurements; i++) {
-      if (!redisRes[i]) {
-        continue;
-      }
-
-      for (var node of nodes) {
-        var key = node.id;
-
-        if (!redisRes[i][key]) {
-          redisRes[i][key] = '0';
-        }
-
-        response[key].push({
-          date: dates[i],
-          status: redisRes[i][key]
-        });
-      }
+      response[node_id].push({
+        date: measurement.get('date'),
+        status: measurement.get('status'),
+      });
     }
 
     res.send(response);
@@ -223,7 +215,7 @@ function checkNode(node) {
 }
 
 function checkNodes() {
-  let date = moment();
+  let date = moment().seconds(0).milliseconds(0);
 
   // Check uptime every 5 minutes
   if (date.minutes() % 5 != 0) {
@@ -233,24 +225,18 @@ function checkNodes() {
 
   Promise.all(_.map(nodes, checkNode))
     .then(results => {
-      let multi = redisClient.multi();
-      var key = "nodes_"+date.format("YYYY-MM-DD_HH:mm")
-
+      var instances = [];
       for (let result of results) {
-        multi.hset(key, result.id, result.connectedIn);
+        instances.push({
+          node_id: result.id,
+          date: date,
+          status: result.connectedIn
+        })
       }
 
-      // Expire the key after 32 days
-      multi.expire(key, 60*60*24*32);
-
-      multi.exec(function (err, res) {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        console.log("Added nodes uptime stats: "+key+" "+res);
+      return postgres.NodeMeasurement.bulkCreate(instances).then(() => {
+        console.log(`Added nodes uptime stats for ${date}!`);
       });
-
     });
 }
 
