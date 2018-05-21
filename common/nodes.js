@@ -196,13 +196,6 @@ module.exports = [
     publicKey: "GC5A5WKAPZU5ASNMLNCAMLW7CVHMLJJAKHSZZHE2KWGAJHZ4EW6TQ7PB"
   },
   {
-    id: "clic.world.3.africa",
-    name: "Clic.World 3 (Southern Africa)",
-    host: "stellar3.clic.world",
-    port: 11625,
-    publicKey: "GBB5SVPMROHPI4Z3LDBYBLANECR222LGREPN53UVA4KXMG5W42D3XFY5"
-  },
-  {
     id: "cowrie.exchange",
     name: "Cowrie Exchange",
     host: "stellar.cowriesys.com",
