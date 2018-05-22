@@ -30,7 +30,7 @@ export default class PublicNetworkLedgersHistoryChart extends React.Component {
   }
 
   getLedgers() {
-    axios.get('/ledgers/public')
+    axios.get('/api/ledgers/public')
       .then(response => {
         let data = [{
           label: "Transactions",

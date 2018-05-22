@@ -12,7 +12,7 @@ gulp
 If you wish to use backend server API start this command in another terminal window:
 
 ```
-DEV=true node app.js
+DEV=true node ./backend/app.js
 ```
 
 It will create a proxy to `browser-sync` server started by gulp at:
