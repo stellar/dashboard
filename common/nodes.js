@@ -236,5 +236,12 @@ module.exports = [
     host: "stellar.cowriesys.com",
     port: 11625,
     publicKey: "GDAXAGWQNTOUIGTAJDYIL4QCM3Q6HM67SKEAJNSOW6G2Z3QPPKGAVJFW"
+  },
+  {
+    id: "clic.world.2.africa",
+    name: "Clic.World 2 (East Africa)",
+    host: "stellar2.clic.world",
+    port: 11625,
+    publicKey: "GDKST4M2OPDPNDZFIZ7CYYFR3SUP4N3GOZIWNVUBAY5VX25X7ZT4RICB"
   }
 ];
