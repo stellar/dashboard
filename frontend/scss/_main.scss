@@ -245,7 +245,33 @@ section {
 .node-panel {
   padding: 0px !important;
   margin-bottom: 5px;
-  height: 100%;
+
+  i.dicon {
+    position: absolute;
+    color: #777;
+    font-size: 18px;
+  }
+
+  .afterI {
+    margin-left: 22px;
+  }
+
+  .uptime-great {
+    font-weight: bold;
+    color: #2196f3;
+  }
+
+  .uptime-good {
+    color: #2196f3;
+  }
+
+  .uptime-normal {
+    color: #ff6f00;
+  }
+
+  .uptime-bad {
+    color: #cc0000;
+  }
 }
 
 .node-panel-large {
@@ -311,8 +337,9 @@ section {
   background-color: white;
   width: 85%;
   height: 100%;
-  font-size: 9pt;
-  box-shadow: 5px 0px 7px 0px white;
+  font-family: monospace;
+  font-size: 8pt;
+  box-shadow: 1px 0px 7px 0px white;
 }
 
 .node-panel:hover .node-hovered-container {

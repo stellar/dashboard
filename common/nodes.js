@@ -1,5 +1,12 @@
 module.exports = [
   {
+    id: "noonic",
+    name: "Noonic",
+    host: "stellar.nooniclab.com",
+    port: 11625,
+    publicKey: "GDA6XBGM5KINCCWR6RTQ7OAONOQQJEA2S5PU4BDFAY6CGKW6O5P5HRFQ"
+  },
+  {
     id: "validator1.stronghold",
     name: "Stronghold 1 (Australia)",
     host: "validator1.stellar.stronghold.co",
@@ -105,6 +112,20 @@ module.exports = [
     publicKey: "GARBCBH4YSHUJLYEPKEPMVYZIJ3ZSQR3QCJ245CWGY64X72JLN4A6RSG"
   },
   {
+    id: "ie.paywith.glass",
+    name: "paywith.glass (Ireland)",
+    host: "ie.paywith.glass",
+    port: 11625,
+    publicKey: "GDOQLNMARWIZWLEDKBYBOXP5LQYQQF24PS6NEQW4H766RLD4T7AUWQLB"
+  },
+  {
+    id: "localstellarassets",
+    name: "Local Stellar Assets",
+    host: "localstellarassets.com",
+    port: 11625,
+    publicKey: "GA4UHKRQNTYNOI7TMP6ZK2I52UEIBBHAW3LVLBUTSKVRTGDEDTJVKLI3"
+  },
+  {
     id: "sdf1",
     name: "SDF validator 1",
     host: "core-live-a.stellar.org",
@@ -202,10 +223,18 @@ module.exports = [
     port: 11625,
     publicKey: "GAMWPPFIO2ZRR2W2KF73U5M4ONURKLJFAQSE5K5RKQ3LD6FDHNI7SPDI"
   },
-    id: "clic.world.3.africa",
-    name: "Clic.World 3 (Southern Africa)",
-    host: "stellar3.clic.world",
+  {
+    id: "tontinetrust",
+    name: "Tontine Trust",
+    host: "ton.money.by.tontinetrust.com",
     port: 11625,
-    publicKey: "GBB5SVPMROHPI4Z3LDBYBLANECR222LGREPN53UVA4KXMG5W42D3XFY5"
+    publicKey: "GB4J5VHX4NXUNLWJ6NS3WDAUVIMDMSOXNOHIHANBEFKH6E52765IIJAS"
+  },
+  {
+    id: "cowrie.exchange",
+    name: "Cowrie Exchange",
+    host: "stellar.cowriesys.com",
+    port: 11625,
+    publicKey: "GDAXAGWQNTOUIGTAJDYIL4QCM3Q6HM67SKEAJNSOW6G2Z3QPPKGAVJFW"
   }
 ];

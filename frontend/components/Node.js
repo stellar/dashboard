@@ -19,19 +19,27 @@ export default class Node extends React.Component {
   componentDidMount() {
     // Update chart width
     this.updateSize();
-    setInterval(() => this.updateSize(), 5000);
+    this.interval = setInterval(() => this.updateSize(), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   updateSize() {
     let panelWidth = this.panel.offsetWidth;
     if (window.innerWidth < 1150 && !this.state.small) {
       this.setState({small: true, chartWidth: panelWidth/20});
-    } else if (window.innerWidth >= 1150 && (this.state.small || this.state.chartWidth != panelWidth/2)) {
-      this.setState({small: false, expanded: false, chartWidth: panelWidth/2});
+    } else if (window.innerWidth >= 1150 && (this.state.small || this.state.chartWidth != panelWidth/3)) {
+      this.setState({small: false, expanded: false, chartWidth: panelWidth/3});
     }
   }
 
-  componentWillReceiveProps(props) {
+  static getDerivedStateFromProps(props) {
+    if (props.uptime === undefined) {
+      return null;
+    }
+
     let data = [{
       label: "Ups",
       values: []
@@ -45,8 +53,8 @@ export default class Node extends React.Component {
     let countRecentDowns = 0;
     const downsToCheck = 6;
 
-    for (let i = 0; i < props.uptime.length; i++) {
-      let measurement = props.uptime[i];
+    for (let i = 0; i < props.uptime.latest.length; i++) {
+      let measurement = props.uptime.latest[i];
       const up = measurement.status > 0;
       const noData = measurement.status == 0;
       const down = measurement.status < 0;
@@ -73,11 +81,14 @@ export default class Node extends React.Component {
     }
 
     // If last measurement is down then node is down.
-    if (props.uptime.length > 0 && props.uptime[0].status < 0) {
+    if (props.uptime.latest.length > 0 && props.uptime.latest[0].status < 0) {
       state = 'down';
     }
 
-    this.setState({loading: false, data, isNew, state});
+    let uptime_24h = props.uptime.uptime_24h;
+    let uptime_30d = props.uptime.uptime_30d;
+
+    return {loading: false, data, isNew, state, uptime_24h, uptime_30d};
   }
 
   renderData() {
@@ -103,6 +114,35 @@ export default class Node extends React.Component {
   }
 
   render() {
+    let style_24h;
+    let style_30d;
+
+    if (!this.state.loading) {
+      if (this.state.uptime_24h === undefined) {
+        style_24h = "";
+      } else if (this.state.uptime_24h >= 99) {
+        style_24h = "uptime-great";
+      } else if (this.state.uptime_24h >= 95) {
+        style_24h = "uptime-good";
+      } else if (this.state.uptime_24h >= 80) {
+        style_24h = "uptime-normal";
+      } else {
+        style_24h = "uptime-bad";
+      }
+
+      if (this.state.uptime_30d === undefined) {
+        style_30d = "";
+      } else if (this.state.uptime_30d >= 99) {
+        style_30d = "uptime-great";
+      } else if (this.state.uptime_30d >= 95) {
+        style_30d = "uptime-good";
+      } else if (this.state.uptime_30d >= 80) {
+        style_30d = "uptime-normal";
+      } else {
+        style_30d = "uptime-bad";
+      }
+    }
+
     return (
       <div ref={(el) => { this.panel = el; }}>
         <Panel className="mui-col-md-12 node-panel">
@@ -112,11 +152,21 @@ export default class Node extends React.Component {
                 {this.props.data.name}
               </div>
               <div className="mui-col-md-3 mui--hidden-sm mui--hidden-xs">
-                {this.props.data.host}:{this.props.data.port}
+                <i className="material-icons dicon">domain</i>
+                <div className="afterI">{this.props.data.host}:{this.props.data.port}</div>
               </div>
               {this.state.loading ?
+                null :
+                <div className="mui-col-md-2 mui--hidden-sm mui--hidden-xs">
+                  <i className="material-icons dicon">av_timer</i>
+                  <div className="afterI">
+                    24H <span className={style_24h}>{this.state.uptime_24h === undefined ? 'n/d' : `${this.state.uptime_24h}%`}</span>&nbsp;
+                  </div>
+                </div>
+              }
+              {this.state.loading ?
                 'Loading...' :
-                <div className={"mui-col-md-6 mui-col-sm-1 mui-col-xs-3 node-barchart-container"}>
+                <div className={"mui-col-md-4 mui-col-sm-1 mui-col-xs-3 node-barchart-container"}>
                   {
                     this.state.small ? "" :
                     <div className="node-hovered-container">
@@ -141,7 +191,7 @@ export default class Node extends React.Component {
                 <table className="mui-table small" style={{'tableLayout': 'fixed'}}>
                   <tbody>
                     <tr>
-                      <td style={{width: '10%'}}><strong>Status</strong></td>
+                      <td style={{width: '15%'}}><strong>Status</strong></td>
                       <td className="amount-column">
                       {
                         !this.state.loading ?
@@ -162,6 +212,10 @@ export default class Node extends React.Component {
                       <td className="amount-column">{this.props.data.host}:{this.props.data.port}</td>
                     </tr>
                     <tr>
+                      <td><strong>Uptime 24H</strong></td>
+                      <td className="amount-column"><span className={style_24h}>{this.state.uptime_24h === undefined ? 'n/d' : `${this.state.uptime_24h}%`}</span></td>
+                    </tr>
+                    <tr>
                       <td colSpan="2"><strong>Public Key</strong></td>
                     </tr>
                     <tr>
@@ -170,7 +224,7 @@ export default class Node extends React.Component {
                   </tbody>
                 </table>
                 <div className="small gray margin-top10 node-update-interval-container">
-                  Checked every 5 mins. Last: {this.props.uptime[0].date} UTC
+                  Checked every 5 mins. Last: {this.props.uptime.latest[0].date} UTC
                 </div>
               </div>
               :""
