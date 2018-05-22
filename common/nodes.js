@@ -1,12 +1,5 @@
 module.exports = [
   {
-    id: "noonic",
-    name: "Noonic",
-    host: "stellar.nooniclab.com",
-    port: 11625,
-    publicKey: "GDA6XBGM5KINCCWR6RTQ7OAONOQQJEA2S5PU4BDFAY6CGKW6O5P5HRFQ"
-  },
-  {
     id: "validator1.stronghold",
     name: "Stronghold 1 (Australia)",
     host: "validator1.stellar.stronghold.co",
@@ -215,13 +208,6 @@ module.exports = [
     host: "ohio-2.stellar.stellarport.io",
     port: 11625,
     publicKey: "GC5A5WKAPZU5ASNMLNCAMLW7CVHMLJJAKHSZZHE2KWGAJHZ4EW6TQ7PB"
-  },
-  {
-    id: "ohio3.stellarport",
-    name: "Stellarport Ohio 3",
-    host: "ohio-3.stellar.stellarport.io",
-    port: 11625,
-    publicKey: "GBRILQP7RHIEBJPLGZ5XP6YWTYFSOQARAKECACMEMGXR53X6IX75E2L5"
   },
   {
     id: "us1.knackforge",
