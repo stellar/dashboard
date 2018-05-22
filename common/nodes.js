@@ -217,6 +217,13 @@ module.exports = [
     publicKey: "GC5A5WKAPZU5ASNMLNCAMLW7CVHMLJJAKHSZZHE2KWGAJHZ4EW6TQ7PB"
   },
   {
+    id: "tontinetrust",
+    name: "Tontine Trust",
+    host: "ton.money.by.tontinetrust.com",
+    port: 11625,
+    publicKey: "GB4J5VHX4NXUNLWJ6NS3WDAUVIMDMSOXNOHIHANBEFKH6E52765IIJAS"
+  },
+  {
     id: "cowrie.exchange",
     name: "Cowrie Exchange",
     host: "stellar.cowriesys.com",
