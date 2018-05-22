@@ -19,7 +19,11 @@ export default class Node extends React.Component {
   componentDidMount() {
     // Update chart width
     this.updateSize();
-    setInterval(() => this.updateSize(), 5000);
+    this.interval = setInterval(() => this.updateSize(), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   updateSize() {
@@ -31,7 +35,11 @@ export default class Node extends React.Component {
     }
   }
 
-  componentWillReceiveProps(props) {
+  static getDerivedStateFromProps(props) {
+    if (props.uptime === undefined) {
+      return null;
+    }
+
     let data = [{
       label: "Ups",
       values: []
@@ -80,7 +88,7 @@ export default class Node extends React.Component {
     let uptime_24h = props.uptime.uptime_24h;
     let uptime_30d = props.uptime.uptime_30d;
 
-    this.setState({loading: false, data, isNew, state, uptime_24h, uptime_30d});
+    return {loading: false, data, isNew, state, uptime_24h, uptime_30d};
   }
 
   renderData() {
