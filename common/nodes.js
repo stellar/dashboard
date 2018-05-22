@@ -201,5 +201,12 @@ module.exports = [
     host: "ohio-2.stellar.stellarport.io",
     port: 11625,
     publicKey: "GC5A5WKAPZU5ASNMLNCAMLW7CVHMLJJAKHSZZHE2KWGAJHZ4EW6TQ7PB"
+  },
+  {
+    id: "cowrie.exchange",
+    name: "Cowrie Exchange",
+    host: "stellar.cowriesys.com",
+    port: 11625,
+    publicKey: "GDAXAGWQNTOUIGTAJDYIL4QCM3Q6HM67SKEAJNSOW6G2Z3QPPKGAVJFW"
   }
 ];
