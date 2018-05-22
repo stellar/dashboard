@@ -217,6 +217,13 @@ module.exports = [
     publicKey: "GC5A5WKAPZU5ASNMLNCAMLW7CVHMLJJAKHSZZHE2KWGAJHZ4EW6TQ7PB"
   },
   {
+    id: "ohio3.stellarport",
+    name: "Stellarport Ohio 3",
+    host: "ohio-3.stellar.stellarport.io",
+    port: 11625,
+    publicKey: "GBRILQP7RHIEBJPLGZ5XP6YWTYFSOQARAKECACMEMGXR53X6IX75E2L5"
+  },
+  {
     id: "us1.knackforge",
     name: "KnackForge LLC US 1",
     host: "us1.stellar.knackforge.com",
@@ -243,5 +250,40 @@ module.exports = [
     host: "stellar2.clic.world",
     port: 11625,
     publicKey: "GDKST4M2OPDPNDZFIZ7CYYFR3SUP4N3GOZIWNVUBAY5VX25X7ZT4RICB"
+  },
+  {
+    id: "republic.co",
+    name: "republic.co",
+    host: "validator.stellar.republic.co",
+    port: 11625,
+    publicKey: "GDEP5ASQQT4LKZLK6POEQKPTL7SXWQ66QW3WIRXFN4WXFL5JBG3K5GKQ"
+  },
+  {
+    id: "de.goodx",
+    name: "GoodX Network",
+    host: "de.stellar.goodx.network",
+    port: 11625,
+    publicKey: "GASN57EFNZWME73BJXYZUTCD34EPX4KIIZQTQDTMBWWVH6JIZJUCBGQX"
+  },
+  {
+    id: "v1.stellar.smoove.net",
+    name: "smoove.net 1",
+    host: "v1.stellar.smoove.net",
+    port: 11625,
+    publicKey: "GDCAQY2Q5VMMI4ZOX35GTL7X43LMP3RA5W4VCP6V2BB6IFOO76GACXZU"
+  },
+  {
+    id: "v2.stellar.smoove.net",
+    name: "smoove.net 2",
+    host: "v2.stellar.smoove.net",
+    port: 11625,
+    publicKey: "GCXEKMPY6TDNNI2VBWFOEA23V22OZW2INSCGTKNEHIHJDPG2C53PURBG"
+  },
+  {
+    id: "keybase",
+    name: "keybase.io",
+    host: "stellar0.keybase.io",
+    port: 11625,
+    publicKey: "GCWJKM4EGTGJUVSWUJDPCQEOEP5LHSOFKSA4HALBTOO4T4H3HCHOM6UX"
   }
 ];
