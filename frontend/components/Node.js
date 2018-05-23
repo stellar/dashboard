@@ -7,10 +7,11 @@ export default class Node extends React.Component {
   constructor(props) {
     super(props);
     this.colorScale = scale.category10();
+    this.yAxisScale = scale.ordinal().domain([0, 1, 2]).rangePoints([20, 0]);
     this.state = {
       loading: true,
       chartWidth: 400,
-      chartHeigth: 20,
+      chartHeight: 20,
       expanded : false,
       small: false,
     };
@@ -177,8 +178,9 @@ export default class Node extends React.Component {
                     <BarChart
                       data={this.renderData()}
                       width={this.state.chartWidth}
+                      yScale={this.yAxisScale}
                       colorScale={this.colorScale}
-                      height={this.state.chartHeigth} />
+                      height={this.state.chartHeight} />
                   </div>
                   {
                     this.state.small ? <i className="material-icons node-dropdown-button" onClick={() => this.setState({expanded : !this.state.expanded})}>expand_more</i> : ""
