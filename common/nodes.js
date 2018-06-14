@@ -1,13 +1,5 @@
 module.exports = [
   {
-    id: "uswest.fairx",
-    verified: true,
-    name: "FairX LLC US West",
-    host: "uswest.stellar.fairx.io",
-    port: 11625,
-    publicKey: "GAXEJOMEVVD5OAAGOOZ4SXTTNR46C4V23XROHWRNVEGOTGOABO3ZVH7Z"
-  },
-  {
     id: "au.ibm",
     verified: true,
     name: "IBM Australia",
