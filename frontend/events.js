@@ -1,0 +1,2 @@
+export const LIVE_NEW_LEDGER = 'LIVE_NEW_LEDGER';
+export const TEST_NEW_LEDGER = 'TEST_NEW_LEDGER';

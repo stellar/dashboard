@@ -1,12 +1,12 @@
 import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
-import {scale} from 'd3';
+import {scale, format} from 'd3';
 import BarChart from 'react-d3-components/lib/BarChart';
-import each from 'lodash/each';
 import clone from 'lodash/clone';
+import each from 'lodash/each';
 
-export default class LedgerChartClose extends React.Component {
+export default class TransactionsChart extends React.Component {
   constructor(props) {
     super(props);
     this.panel = null;
@@ -18,32 +18,39 @@ export default class LedgerChartClose extends React.Component {
   componentDidMount() {
     this.getLedgers();
     // Update chart width
-    setInterval(() => {
-      let value = this.panel.offsetWidth-20;
-      if (this.state.chartWidth != value) {
-        this.setState({chartWidth: value});
-      }
-    }, 5000);
+    this.updateSize()
+    setInterval(() => this.updateSize(), 5000);
+  }
+
+  updateSize() {
+    let value = this.panel.offsetWidth-20;
+    if (this.state.chartWidth != value) {
+      this.setState({chartWidth: value});
+    }
+  }
+
+  onNewLedger(ledger) {
+    let data = clone(this.state.data);
+    data[0].values.push({x: ledger.sequence.toString(), y: ledger.transaction_count});
+    data[1].values.push({x: ledger.sequence.toString(), y: ledger.operation_count-ledger.transaction_count});
+    data[0].values.shift();
+    data[1].values.shift();
+    this.setState({loading: false, data});
   }
 
   getLedgers() {
     axios.get(this.url)
       .then(response => {
         let data = [{
-          label: "Ledger Close",
+          label: "Transactions",
+          values: []
+        }, {
+          label: "Operations",
           values: []
         }];
-        this.lastLedgerClosedAt = null;
         each(response.data._embedded.records, ledger => {
-          let closedAt = new Date(ledger.closed_at);
-          if (this.lastLedgerClosedAt == null) {
-            this.lastLedgerClosedAt = closedAt;
-            this.frontLedgerClosedAt = closedAt; // used in onNewLedger
-            return;
-          }
-          let diff = (this.lastLedgerClosedAt - closedAt)/1000;
-          data[0].values.unshift({x: ledger.sequence.toString(), y: diff});
-          this.lastLedgerClosedAt = closedAt;
+          data[0].values.unshift({x: ledger.sequence.toString(), y: ledger.transaction_count});
+          data[1].values.unshift({x: ledger.sequence.toString(), y: ledger.operation_count-ledger.transaction_count});
         });
         this.setState({loading: false, data});
         // Start listening to events
@@ -51,33 +58,21 @@ export default class LedgerChartClose extends React.Component {
       });
   }
 
-  onNewLedger(ledger) {
-    let closedAt = new Date(ledger.closed_at);
-    if (this.frontLedgerClosedAt) {
-      let data = clone(this.state.data);
-      let diff = (closedAt - this.frontLedgerClosedAt)/1000;
-      data[0].values.push({x: ledger.sequence.toString(), y: diff});
-      if (data[0].values.length > this.props.limit) {
-        data[0].values.shift();
-      }
-      this.setState({data});
-    }
-
-    this.frontLedgerClosedAt = closedAt;
-  }
-
   render() {
     return (
       <div ref={(el) => { this.panel = el; }}>
         <Panel>
           <div className="widget-name">
-            Last {this.props.limit} ledgers close times: {this.props.network}
+            <span style={{borderBottom: '2px solid #0074B7'}}>Txs
+            </span> &amp; <span style={{borderBottom: '2px solid #0074B7'}}>Op</span><span style={{borderBottom: '2px solid #FF6F00'}}>s</span> in the last {this.props.limit} ledgers: {this.props.network}
+
             <a href={this.url} target="_blank" className="api-link">API</a>
           </div>
           {this.state.loading ?
             'Loading...'
             :
             <BarChart
+              tickFormat={d3.format("d")}
               data={this.state.data}
               width={this.state.chartWidth}
               colorScale={this.colorScale}

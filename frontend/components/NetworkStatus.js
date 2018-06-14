@@ -76,7 +76,7 @@ export default class NetworkStatus extends React.Component {
       statusText = <strong className="mui--text-body2">Loading...</strong>
     } else if (this.state.closedAgo >= 90) { // If last ledger closed more than 90 seconds ago it means network is down.
       statusClass = "down";
-      statusText = <strong className="mui--text-body2" style={{color: "#666"}}>Network down!</strong>
+      statusText = <strong className="mui--text-body2" style={{color: "#666"}}>Network (or monitoring node) down!</strong>
     } else {
       // Now we check the average close time but we also need to check the latest ledger
       // close time because if there are no new ledgers it means that network is slow or down.

@@ -1,7 +1,41 @@
 module.exports = [
   {
+    id: "validator1.stronghold",
+    name: "Stronghold 1 (Australia)",
+    host: "validator1.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GDIQKLQVOCD5UD6MUI5D5PTPVX7WTP5TAPP5OBMOLENBBD5KG434KYQ2"
+  },
+  {
+    id: "validator2.stronghold",
+    name: "Stronghold 2 (Asia)",
+    host: "validator2.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GA7MREQ7673YDVANF4WBPN7LBQM4BSH4BQUFUTC4YLSSQCQUQTXRVBZN"
+  },
+  {
+    id: "validator3.stronghold",
+    name: "Stronghold 3 (Europe)",
+    host: "validator3.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GDHV7FL7JP6LUEWWYUOA4C3QAFQ4LZ6OHFBWFIL6IFIS3AOBI2DHV62F"
+  },
+  {
+    id: "validator4.stronghold",
+    name: "Stronghold 4 (South America)",
+    host: "validator4.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GBGDBLFKR3LORWOI65LVC7ES5OGZ4GHILEHCBVKPW2PMP2OL43F6B2JJ"
+  },
+  {
+    id: "validator5.stronghold",
+    name: "Stronghold 5 (United States)",
+    host: "validator5.stellar.stronghold.co",
+    port: 11625,
+    publicKey: "GCBXBCIKCCVUIHAZ5QFWK6CKSX4AESOJ33IQNUE42BP7J66X23TM6WPF"
+  },
+  {
     id: "au.ibm",
-    verified: true,
     name: "IBM Australia",
     host: "au.stellar.ibm.com",
     port: 11625,
@@ -9,7 +43,6 @@ module.exports = [
   },
   {
     id: "br.ibm",
-    verified: true,
     name: "IBM Brazil",
     host: "br.stellar.ibm.com",
     port: 11625,
@@ -17,7 +50,6 @@ module.exports = [
   },
   {
     id: "ca.ibm",
-    verified: true,
     name: "IBM Canada",
     host: "ca.stellar.ibm.com",
     port: 11625,
@@ -25,7 +57,6 @@ module.exports = [
   },
   {
     id: "no.ibm",
-    verified: true,
     name: "IBM Norway",
     host: "no.stellar.ibm.com",
     port: 11625,
@@ -33,7 +64,6 @@ module.exports = [
   },
   {
     id: "it.ibm",
-    verified: true,
     name: "IBM Italy",
     host: "it.stellar.ibm.com",
     port: 11625,
@@ -41,7 +71,6 @@ module.exports = [
   },
   {
     id: "hk.ibm",
-    verified: true,
     name: "IBM Hong Kong",
     host: "hk.stellar.ibm.com",
     port: 11625,
@@ -49,7 +78,6 @@ module.exports = [
   },
   {
     id: "in.ibm",
-    verified: true,
     name: "IBM India",
     host: "in.stellar.ibm.com",
     port: 11625,
@@ -57,15 +85,34 @@ module.exports = [
   },
   {
     id: "uk.ibm",
-    verified: true,
     name: "IBM United Kingdom",
     host: "uk.stellar.ibm.com",
     port: 11625,
     publicKey: "GAENPO2XRTTMAJXDWM3E3GAALNLG4HVMKJ4QF525TR25RI42YPEDULOW"
   },
   {
+    id: "us.ibm",
+    name: "IBM United States",
+    host: "us.stellar.ibm.com",
+    port: 11625,
+    publicKey: "GARBCBH4YSHUJLYEPKEPMVYZIJ3ZSQR3QCJ245CWGY64X72JLN4A6RSG"
+  },
+  {
+    id: "ie.paywith.glass",
+    name: "paywith.glass (Ireland)",
+    host: "ie.paywith.glass",
+    port: 11625,
+    publicKey: "GDOQLNMARWIZWLEDKBYBOXP5LQYQQF24PS6NEQW4H766RLD4T7AUWQLB"
+  },
+  {
+    id: "localstellarassets",
+    name: "Local Stellar Assets",
+    host: "localstellarassets.com",
+    port: 11625,
+    publicKey: "GA4UHKRQNTYNOI7TMP6ZK2I52UEIBBHAW3LVLBUTSKVRTGDEDTJVKLI3"
+  },
+  {
     id: "sdf1",
-    verified: true,
     name: "SDF validator 1",
     host: "core-live-a.stellar.org",
     port: 11625,
@@ -73,7 +120,6 @@ module.exports = [
   },
   {
     id: "sdf2",
-    verified: true,
     name: "SDF validator 2",
     host: "core-live-b.stellar.org",
     port: 11625,
@@ -81,7 +127,6 @@ module.exports = [
   },
   {
     id: "sdf3",
-    verified: true,
     name: "SDF validator 3",
     host: "core-live-c.stellar.org",
     port: 11625,
@@ -96,23 +141,34 @@ module.exports = [
   },
   {
     id: "tempo",
-    verified: true,
     name: "Tempo",
     host: "stellar1.tempo.eu.com",
     port: 11625,
     publicKey: "GCJCSMSPIWKKPR7WEPIQG63PDF7JGGEENRC33OKVBSPUDIRL6ZZ5M7OO"
   },
   {
-    id: "satoshipay",
-    verified: true,
-    name: "satoshipay.io",
-    host: "stellar.satoshipay.io",
+    id: "satoshipay1",
+    name: "SatoshiPay 1",
+    host: "stellar1.satoshipay.io",
     port: 11625,
     publicKey: "GC5SXLNAM3C4NMGK2PXK4R34B5GNZ47FYQ24ZIBFDFOCU6D4KBN4POAE"
   },
   {
+    id: "satoshipay2",
+    name: "SatoshiPay 2",
+    host: "stellar2.satoshipay.io",
+    port: 11625,
+    publicKey: "GBJQUIXUO4XSNPAUT6ODLZUJRV2NPXYASKUBY4G5MYP3M47PCVI55MNT"
+  },
+  {
+    id: "satoshipay3",
+    name: "SatoshiPay 3",
+    host: "stellar3.satoshipay.io",
+    port: 11625,
+    publicKey: "GAK6Z5UVGUVSEK6PEOCAYJISTT5EJBB34PN3NOLEQG2SUKXRVV2F6HZY"
+  },
+  {
     id: "cryptomover",
-    verified: true,
     name: "cryptomover host 1",
     host: "cryptodealer.hk",
     port: 11625,
@@ -120,7 +176,6 @@ module.exports = [
   },
   {
     id: "cryptomover2",
-    verified: true,
     name: "cryptomover host 2",
     host: "cryptomover.org",
     port: 11625,
@@ -134,24 +189,80 @@ module.exports = [
     publicKey: "GD7FVHL2KUTUYNOJFRUUDJPDRO2MAZJ5KP6EBCU6LKXHYGZDUFBNHXQI"
   },
   {
-    id: "zulucrypto",
-    name: "zulucrypto",
-    host: "stellar-core.zulucrypto.com",
+    id: "ohio1.stellarport",
+    name: "Stellarport Ohio 1",
+    host: "ohio-1.stellar.stellarport.io",
     port: 11625,
-    publicKey: "GCYRJSP52KIUOMXPW5XHOQ77SPQC3O55KVK6KSJO4ABPMG6X3ZOU5UU2"
+    publicKey: "GBB32UXWEXGZUE7H7LUVNNZRT3ZMZ3YH7SP3V5EFBILUVL3NCTSSK3IZ"
   },
   {
-    id: "lupoex",
-    name: "lupoex",
-    host: "stellar1.lupoex.com",
+    id: "ohio2.stellarport",
+    name: "Stellarport Ohio 2",
+    host: "ohio-2.stellar.stellarport.io",
     port: 11625,
-    publicKey: "GDZT7ZGDNEGS5L2ICLCIVDOIATKDE4MM6SNUJ2FFKB5TIV5LDRIGG4T2"
+    publicKey: "GC5A5WKAPZU5ASNMLNCAMLW7CVHMLJJAKHSZZHE2KWGAJHZ4EW6TQ7PB"
   },
   {
-    id: "paywith.glass",
-    name: "paywith.glass",
-    host: "paywith.glass",
+    id: "us1.knackforge",
+    name: "KnackForge LLC US 1",
+    host: "us1.stellar.knackforge.com",
     port: 11625,
-    publicKey: "GDOQLNMARWIZWLEDKBYBOXP5LQYQQF24PS6NEQW4H766RLD4T7AUWQLB"
+    publicKey: "GAMWPPFIO2ZRR2W2KF73U5M4ONURKLJFAQSE5K5RKQ3LD6FDHNI7SPDI"
   },
+  {
+    id: "tontinetrust",
+    name: "Tontine Trust",
+    host: "ton.money.by.tontinetrust.com",
+    port: 11625,
+    publicKey: "GB4J5VHX4NXUNLWJ6NS3WDAUVIMDMSOXNOHIHANBEFKH6E52765IIJAS"
+  },
+  {
+    id: "cowrie.exchange",
+    name: "Cowrie Exchange",
+    host: "stellar.cowriesys.com",
+    port: 11625,
+    publicKey: "GDAXAGWQNTOUIGTAJDYIL4QCM3Q6HM67SKEAJNSOW6G2Z3QPPKGAVJFW"
+  },
+  {
+    id: "clic.world.2.africa",
+    name: "Clic.World 2 (East Africa)",
+    host: "stellar2.clic.world",
+    port: 11625,
+    publicKey: "GDKST4M2OPDPNDZFIZ7CYYFR3SUP4N3GOZIWNVUBAY5VX25X7ZT4RICB"
+  },
+  {
+    id: "republic.co",
+    name: "republic.co",
+    host: "validator.stellar.republic.co",
+    port: 11625,
+    publicKey: "GDEP5ASQQT4LKZLK6POEQKPTL7SXWQ66QW3WIRXFN4WXFL5JBG3K5GKQ"
+  },
+  {
+    id: "de.goodx",
+    name: "GoodX Network",
+    host: "de.stellar.goodx.network",
+    port: 11625,
+    publicKey: "GASN57EFNZWME73BJXYZUTCD34EPX4KIIZQTQDTMBWWVH6JIZJUCBGQX"
+  },
+  {
+    id: "v1.stellar.smoove.net",
+    name: "smoove.net 1",
+    host: "v1.stellar.smoove.net",
+    port: 11625,
+    publicKey: "GDCAQY2Q5VMMI4ZOX35GTL7X43LMP3RA5W4VCP6V2BB6IFOO76GACXZU"
+  },
+  {
+    id: "v2.stellar.smoove.net",
+    name: "smoove.net 2",
+    host: "v2.stellar.smoove.net",
+    port: 11625,
+    publicKey: "GCXEKMPY6TDNNI2VBWFOEA23V22OZW2INSCGTKNEHIHJDPG2C53PURBG"
+  },
+  {
+    id: "keybase",
+    name: "keybase.io",
+    host: "stellar0.keybase.io",
+    port: 11625,
+    publicKey: "GCWJKM4EGTGJUVSWUJDPCQEOEP5LHSOFKSA4HALBTOO4T4H3HCHOM6UX"
+  }
 ];

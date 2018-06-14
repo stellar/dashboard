@@ -11,13 +11,13 @@ gulp.task('default', ['develop']);
 
 var webpackOptions = {
   entry: {
-    app: "./src/app.js",
+    app: "./frontend/app.js",
     vendor: ["react", "react-dom", "muicss", "stellar-sdk", "axios", "d3", "fbemitter"]
   },
   devtool: "source-map",
   resolve: {
     root: [
-      path.resolve('src'),
+      path.resolve('frontend'),
       path.resolve('common')
     ],
     modulesDirectories: ["node_modules"]

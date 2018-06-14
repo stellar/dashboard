@@ -19,7 +19,7 @@ import PublicNetworkLedgersHistoryChart from './PublicNetworkLedgersHistoryChart
 import RecentOperations from './RecentOperations';
 import TotalCoins from './TotalCoins';
 import TransactionsChart from './TransactionsChart';
-import {LIVE_NEW_LEDGER, LIVE_NEW_OPERATION, TEST_NEW_LEDGER, TEST_NEW_OPERATION} from '../events';
+import {LIVE_NEW_LEDGER, TEST_NEW_LEDGER} from '../events';
 
 const horizonLive = "https://horizon-mon.stellar-ops.com";
 const horizonTest = "https://horizon-testnet.stellar.org";
@@ -61,10 +61,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.streamLedgers(horizonLive, LIVE_NEW_LEDGER);
-    this.streamOperations(horizonLive, LIVE_NEW_OPERATION);
-
     this.streamLedgers(horizonTest, TEST_NEW_LEDGER);
-    this.streamOperations(horizonTest, TEST_NEW_OPERATION);
   }
 
   reloadOnConnection() {
@@ -98,19 +95,6 @@ export default class App extends React.Component {
         new Server(horizonURL).ledgers().cursor(lastLedger.paging_token)
           .stream({
             onmessage: ledger => this.emitter.emit(eventName, ledger)
-          });
-      });
-  }
-
-  streamOperations(horizonURL, eventName) {
-    // Get last operation
-    axios.get(`${horizonURL}/operations?order=desc&limit=1`)
-      .then(response => {
-        let lastOperation = response.data._embedded.records[0];
-
-        new Server(horizonURL).operations().cursor(lastOperation.paging_token)
-          .stream({
-            onmessage: operation => this.emitter.emit(eventName, operation)
           });
       });
   }
@@ -165,7 +149,6 @@ export default class App extends React.Component {
                   limit="20"
                   label="Live network"
                   horizonURL={horizonLive}
-                  newOperationEventName={LIVE_NEW_OPERATION}
                   emitter={this.emitter}
                   />
               </div>
@@ -234,7 +217,6 @@ export default class App extends React.Component {
                 limit="20"
                 label="Test network"
                 horizonURL={horizonTest}
-                newOperationEventName={TEST_NEW_OPERATION}
                 emitter={this.emitter}
                 />
             </div>
@@ -258,7 +240,7 @@ export default class App extends React.Component {
               <AccountBalance
                 horizonURL={horizonTest}
                 name="Friendbot"
-                id="GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K"
+                id="GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR"
                 />
             </div>
           </section>

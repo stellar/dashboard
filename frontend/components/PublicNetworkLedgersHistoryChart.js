@@ -18,16 +18,19 @@ export default class PublicNetworkLedgersHistoryChart extends React.Component {
     this.getLedgers();
     setInterval(() => this.getLedgers(), 1000*60*5);
     // Update chart width
-    setInterval(() => {
-      let value = this.panel.offsetWidth-20;
-      if (this.state.chartWidth != value) {
-        this.setState({chartWidth: value});
-      }
-    }, 5000);
+    this.updateSize();
+    setInterval(() => this.updateSize(), 5000);
+  }
+
+  updateSize() {
+    let value = this.panel.offsetWidth-20;
+    if (this.state.chartWidth != value) {
+      this.setState({chartWidth: value});
+    }
   }
 
   getLedgers() {
-    axios.get('/ledgers/public')
+    axios.get('/api/ledgers/public')
       .then(response => {
         let data = [{
           label: "Transactions",
