@@ -35,13 +35,6 @@ module.exports = [
     publicKey: "GCBXBCIKCCVUIHAZ5QFWK6CKSX4AESOJ33IQNUE42BP7J66X23TM6WPF"
   },
   {
-    id: "uswest.fairx",
-    name: "FairX LLC US West",
-    host: "uswest.stellar.fairx.io",
-    port: 11625,
-    publicKey: "GAXEJOMEVVD5OAAGOOZ4SXTTNR46C4V23XROHWRNVEGOTGOABO3ZVH7Z"
-  },
-  {
     id: "au.ibm",
     name: "IBM Australia",
     host: "au.stellar.ibm.com",
