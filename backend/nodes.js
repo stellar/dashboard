@@ -43,7 +43,7 @@ function randomNodesHandler(req, res) {
   // Generate some random data
   var response = {};
 
-  for (var node of nodes) {
+  for (var node of commonNodes) {
     response[node.id] = {
       latest: []
     };
