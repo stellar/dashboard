@@ -56,8 +56,8 @@ function randomNodesHandler(req, res) {
         status = NODE_ERROR;
       }
 
-      response[node.id].uptime_24h = Math.round(Math.random() * 100);
-      response[node.id].uptime_30d = Math.round(Math.random() * 100);
+      response[node.id].uptime_24h = Math.round(Math.random() * 10000)/100;
+      response[node.id].uptime_30d = Math.round(Math.random() * 10000)/100;
 
       response[node.id].latest.push({
         date: dates[i],
@@ -167,11 +167,11 @@ function checkNodes() {
         return postgres.sequelize.query(query, {type: postgres.sequelize.QueryTypes.SELECT}).then(stats => {
           for (let stat of stats) {
             if (stat.all_24h >= requiredMeasurements24h) {
-              response[stat.node_id].uptime_24h = Math.round(stat.up_24h/stat.all_24h*100);
+              response[stat.node_id].uptime_24h = Math.round(stat.up_24h/stat.all_24h*10000)/100;
             }
 
             if (stat.all_30d >= requiredMeasurements30d) {
-              response[stat.node_id].uptime_30d = Math.round(stat.up_30d/stat.all_30d*100);
+              response[stat.node_id].uptime_30d = Math.round(stat.up_30d/stat.all_30d*10000)/100;
             }
           }
         });
