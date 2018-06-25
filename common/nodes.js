@@ -272,4 +272,11 @@ module.exports = [
     port: 11625,
     publicKey: "GB7H5CNUNVCM6KGG6P2LAQE4YZP4D6CHFJRSSS34VNEPDDVIFAWRJ7ZA"
   }
+  {
+    id: "v1.collegecoin.org",
+    name: "collegecoin.org",
+    host: "v1.stellar.collegecoin.org",
+    port: 11625,
+    publicKey: "GBATJAZRLNDUIJZEHM3EDRDOT5BUNQ5V3AGEYDOQLHSQXRLYLMK4LXCL"
+  }
 ];
