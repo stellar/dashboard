@@ -264,5 +264,12 @@ module.exports = [
     host: "stellar0.keybase.io",
     port: 11625,
     publicKey: "GCWJKM4EGTGJUVSWUJDPCQEOEP5LHSOFKSA4HALBTOO4T4H3HCHOM6UX"
+  },
+  {
+    id: "us.mobius",
+    name: "Mobius (United States)",
+    host: "us.stellar.mobius.network",
+    port: 11625,
+    publicKey: "GB7H5CNUNVCM6KGG6P2LAQE4YZP4D6CHFJRSSS34VNEPDDVIFAWRJ7ZA"
   }
 ];
