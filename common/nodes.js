@@ -266,6 +266,13 @@ module.exports = [
     publicKey: "GCWJKM4EGTGJUVSWUJDPCQEOEP5LHSOFKSA4HALBTOO4T4H3HCHOM6UX"
   },
   {
+    id: "fv1.intrastellar.io",
+    name: "intrastellar one (France)",
+    host: "hoedic.intrastellar.io",
+    port: 11625,
+    publicKey: "GA6YSMP3DQHG6V3O2M6GDWVOA6OBTVTGUNSJ7UIFDITDW7YZEJVW2MZF"
+  },
+  {
     id: "us.mobius",
     name: "Mobius (United States)",
     host: "us.stellar.mobius.network",
