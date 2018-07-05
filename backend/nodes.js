@@ -127,6 +127,8 @@ function checkNodes() {
       // Find last timestamp with minutes % 5 == 0
       var date = moment().utc();
       var latestMeasurement = date.subtract(date.minutes() % 5, 'minutes').format("YYYY-MM-DD HH:mm");
+      // map: node.id => node
+      var nodeData = _.mapKeys(commonNodes, node => node.id);
       var nodeNames = _(commonNodes).map(node => `('${node.id}')`).join();
       var query = "select n.node_id as node_id, d.day as date, coalesce(m.status, 0) as status "+
         "from (select generate_series(timestamp '"+latestMeasurement+"', timestamp '"+latestMeasurement+"' - interval '"+(measurementsCount*5-1)+" minute', interval '-5 minute')) d(day) "+
@@ -140,6 +142,10 @@ function checkNodes() {
           let node_id = measurement.get('node_id');
           if (response[node_id] === undefined) {
             response[node_id] = {
+              name: nodeData[node_id].name,
+              host: nodeData[node_id].host,
+              port: nodeData[node_id].port,
+              publicKey: nodeData[node_id].publicKey,
               latest: []
             };
           }
