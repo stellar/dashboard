@@ -266,6 +266,13 @@ module.exports = [
     publicKey: "GCWJKM4EGTGJUVSWUJDPCQEOEP5LHSOFKSA4HALBTOO4T4H3HCHOM6UX"
   },
   {
+    id: "smartlands",
+    name: "Smartlands Platform",
+    host: "stellar.smartlands.io",
+    port: 11625,
+    publicKey: "GCBAQCWXKIIOQOEDIW6EB7GY6UREHPTKK26NZFLVK63ZTRFSXDVX2AHV"
+  },
+  {
     id: "us.mobius",
     name: "Mobius (United States)",
     host: "us.stellar.mobius.network",
