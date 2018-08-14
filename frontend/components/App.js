@@ -6,7 +6,6 @@ import axios from 'axios';
 import {Server} from 'stellar-sdk';
 
 import AppBar from './AppBar';
-import Footer from './Footer';
 import AccountBalance from './AccountBalance';
 import DistributionProgress from './DistributionProgress';
 import NetworkStatus from './NetworkStatus';
@@ -245,7 +244,6 @@ export default class App extends React.Component {
             </div>
           </section>
         </div>
-        <Footer />
       </div>
     );
   }
