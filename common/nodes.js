@@ -278,5 +278,5 @@ module.exports = [
     host: "stellar.smartlands.io",
     port: 11625,
     publicKey: "GCBAQCWXKIIOQOEDIW6EB7GY6UREHPTKK26NZFLVK63ZTRFSXDVX2AHV"
-  }
+  },
 ];
