@@ -8,6 +8,7 @@ import defaults from 'lodash/defaults';
 import AccountBadge from './AccountBadge';
 import AssetLink from './AssetLink';
 import BigNumber from 'bignumber.js';
+import {ago} from '../common/time';
 
 export default class RecentOperations extends React.Component {
   constructor(props) {
@@ -34,28 +35,12 @@ export default class RecentOperations extends React.Component {
         let operations = [];
         each(records, operation => {
           operation.createdAtMoment = moment(operation.created_at);
-          operation.ago = this.ago(operation.createdAtMoment);
+          operation.ago = ago(operation.createdAtMoment);
           operations.push(operation);
         })
         this.setState({operations});
         this.operationsLoading = false;
       });
-  }
-
-  ago(a) {
-    let diff = moment().diff(a, 'seconds');
-    if (diff < 60) {
-      return `${diff}s`;
-    } else if (diff < 60*60) {
-      diff = moment().diff(a, 'minutes');
-      return `${diff}m`;
-    } else if (diff < 24*60*60) {
-      diff = moment().diff(a, 'hours');
-      return `${diff}h`;
-    } else {
-      diff = moment().diff(a, 'days');
-      return `${diff}d`;
-    }
   }
 
   componentDidMount() {

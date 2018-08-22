@@ -2,6 +2,7 @@ import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
 import round from 'lodash/round';
+import {ago} from '../common/time';
 
 // ledgersInAverageCalculation defines how many last ledgers should be
 // considered when calculating average ledger length.
@@ -107,9 +108,8 @@ export default class NetworkStatus extends React.Component {
           {statusText}<br />
           {!this.state.loading ?
             <div>
-            Last ledger: #{this.state.lastLedgerSequence}<br />
-            Average ledger close time in the last {ledgersInAverageCalculation} ledgers: {round(averageLedgerLength, 2)} sec.<br />
-            Last ledger closed at: {this.state.closedAt.toString()} in {this.state.lastLedgerLength/1000} sec.
+            Last ledger: #{this.state.lastLedgerSequence} closed ~{ago(this.state.closedAt)} ago in {this.state.lastLedgerLength/1000}s.<br />
+            Average ledger close time in the last {ledgersInAverageCalculation} ledgers: {round(averageLedgerLength, 2)}s.
             </div>
           : ''}
         </div>
