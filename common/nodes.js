@@ -182,6 +182,20 @@ module.exports = [
     publicKey: "GC7MH45NSXXPBLQJRSEVF2DFUVLGGYOJER5FRUNVCYVMXJYJT5LLQJW5"
   },
   {
+    id: "cryptomover3",
+    name: "cryptomover host 3",
+    host: "cryptomover.net",
+    port: 11625,
+    publicKey: "GCX7S2QY2VXRFDDVVGKRVSMIVGQZQ4NEDYZ3WB7ZUYIVJKMQ4FVVHVR6"
+  },
+  {
+    id: "cryptomover4",
+    name: "cryptomover host 4",
+    host: "koinbros.org",
+    port: 11625,
+    publicKey: "GAE72U4C4MWPG6WAB2XW2EEHPQE3VMG7WRSET5FFDUAMBFR7P462QBC4"
+  },
+  {
     id: "umbrel",
     name: "umbrel",
     host: "stellar.papayame.com",
