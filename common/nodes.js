@@ -168,22 +168,22 @@ module.exports = [
     publicKey: "GAK6Z5UVGUVSEK6PEOCAYJISTT5EJBB34PN3NOLEQG2SUKXRVV2F6HZY"
   },
   {
-    id: "cryptomover",
-    name: "cryptomover host 1",
+    id: "cryptomover1",
+    name: "Cryptomover host 1",
     host: "cryptodealer.hk",
     port: 11625,
     publicKey: "GCGWABAQ6OUOVUGWJVPRJ5LWBIWYN3CVOVOZYBNQQGIBRULQHYNGQ7GH"
   },
   {
     id: "cryptomover2",
-    name: "cryptomover host 2",
+    name: "Cryptomover host 2",
     host: "cryptomover.org",
     port: 11625,
     publicKey: "GC7MH45NSXXPBLQJRSEVF2DFUVLGGYOJER5FRUNVCYVMXJYJT5LLQJW5"
   },
   {
     id: "cryptomover3",
-    name: "cryptomover host 3",
+    name: "Cryptomover host 3",
     host: "cryptomover.net",
     port: 11625,
     publicKey: "GCX7S2QY2VXRFDDVVGKRVSMIVGQZQ4NEDYZ3WB7ZUYIVJKMQ4FVVHVR6"
