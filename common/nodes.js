@@ -172,7 +172,7 @@ module.exports = [
     name: "Cryptomover host 1",
     host: "cryptodealer.hk",
     port: 11625,
-    publicKey: "GCGWABAQ6OUOVUGWJVPRJ5LWBIWYN3CVOVOZYBNQQGIBRULQHYNGQ7GH"
+    publicKey: "GBX7KXY43NOGLCV7TMFFM7UPNM5VGQ52W4IAZNTVMXZ44BHYFESA67N3"
   },
   {
     id: "cryptomover2",
