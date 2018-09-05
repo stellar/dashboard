@@ -168,18 +168,32 @@ module.exports = [
     publicKey: "GAK6Z5UVGUVSEK6PEOCAYJISTT5EJBB34PN3NOLEQG2SUKXRVV2F6HZY"
   },
   {
-    id: "cryptomover",
-    name: "cryptomover host 1",
+    id: "cryptomover1",
+    name: "Cryptomover host 1",
     host: "cryptodealer.hk",
     port: 11625,
-    publicKey: "GCGWABAQ6OUOVUGWJVPRJ5LWBIWYN3CVOVOZYBNQQGIBRULQHYNGQ7GH"
+    publicKey: "GBX7KXY43NOGLCV7TMFFM7UPNM5VGQ52W4IAZNTVMXZ44BHYFESA67N3"
   },
   {
     id: "cryptomover2",
-    name: "cryptomover host 2",
+    name: "Cryptomover host 2",
     host: "cryptomover.org",
     port: 11625,
     publicKey: "GC7MH45NSXXPBLQJRSEVF2DFUVLGGYOJER5FRUNVCYVMXJYJT5LLQJW5"
+  },
+  {
+    id: "cryptomover3",
+    name: "Cryptomover host 3",
+    host: "cryptomover.net",
+    port: 11625,
+    publicKey: "GCX7S2QY2VXRFDDVVGKRVSMIVGQZQ4NEDYZ3WB7ZUYIVJKMQ4FVVHVR6"
+  },
+  {
+    id: "koinbros",
+    name: "Koinbros host 1",
+    host: "koinbros.org",
+    port: 11625,
+    publicKey: "GAE72U4C4MWPG6WAB2XW2EEHPQE3VMG7WRSET5FFDUAMBFR7P462QBC4"
   },
   {
     id: "umbrel",
