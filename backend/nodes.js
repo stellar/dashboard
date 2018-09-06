@@ -172,6 +172,11 @@ function checkNodes() {
 
         return postgres.sequelize.query(query, {type: postgres.sequelize.QueryTypes.SELECT}).then(stats => {
           for (let stat of stats) {
+            // Nodes can be removed
+            if (!response[stat.node_id]) {
+              continue;
+            }
+
             if (stat.all_24h >= requiredMeasurements24h) {
               response[stat.node_id].uptime_24h = Math.round(stat.up_24h/stat.all_24h*10000)/100;
             }
