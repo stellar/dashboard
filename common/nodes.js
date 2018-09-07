@@ -301,9 +301,9 @@ module.exports = [
     publicKey: "GCBAQCWXKIIOQOEDIW6EB7GY6UREHPTKK26NZFLVK63ZTRFSXDVX2AHV"
   },
   {
-    id: "auskunft.de",
+    id: "v1.auskunft.de",
     name: "auskunft.de",
-    host: "stellar.aukunft.de",
+    host: "stellar.auskunft.de",
     port: 11625,
     publicKey: "GBR7I4XGCWLSTKLPYY4IY4QUGW5LYFCMPZOF7OJBMBLLJH5FQVNHWCTD"
   },
