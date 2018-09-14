@@ -108,6 +108,12 @@ export default class App extends React.Component {
       <div id="main" className={this.state.forceTheme ? "force" : null}>
         <AppBar forceTheme={this.state.forceTheme} turnOffForceTheme={this.turnOffForceTheme.bind(this)} />
 
+        <Panel className="mui--bg-accent-light">
+          <div className="mui--text-subhead mui--text-light">
+            The network was upgraded to protocol version 10 on 9/13/2018 @ 4pm UTC. <a href="https://www.reddit.com/r/Stellar/comments/9dkpur/announcement_protocol_10_public_network_rollout/">Read more &raquo;</a>
+          </div>
+        </Panel>
+
         {this.chrome57 ? 
           <Panel>
             <div className="mui--text-subhead mui--text-dark-secondary">
