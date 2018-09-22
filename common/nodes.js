@@ -300,4 +300,18 @@ module.exports = [
     port: 11625,
     publicKey: "GCBAQCWXKIIOQOEDIW6EB7GY6UREHPTKK26NZFLVK63ZTRFSXDVX2AHV"
   },
+  {
+    id: "v1.lobstr",
+    name: "LOBSTR 1 (Europe)",
+    host: "v1.stellar.lobstr.co",
+    port: 11625,
+    publicKey: "GCFONE23AB7Y6C5YZOMKUKGETPIAJA4QOYLS5VNS4JHBGKRZCPYHDLW7"
+  },
+  {
+    id: "v2.lobstr",
+    name: "LOBSTR 2 (Europe)",
+    host: "v2.stellar.lobstr.co",
+    port: 11625,
+    publicKey: "GDXQB3OMMQ6MGG43PWFBZWBFKBBDUZIVSUDAZZTRAWQZKES2CDSE5HKJ"
+  },
 ];
