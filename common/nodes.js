@@ -314,4 +314,11 @@ module.exports = [
     port: 11625,
     publicKey: "GDXQB3OMMQ6MGG43PWFBZWBFKBBDUZIVSUDAZZTRAWQZKES2CDSE5HKJ"
   },
+  {
+    id: "stellar.sonicwallet.com",
+    name: "Sonic Wallet",
+    host: "stellar.sonicwallet.com",
+    port: 11625,
+    publicKey: "GDHDAHSHNXQV3EXHFK76CYIYBEVVBTOFTTJHGNXQ6Z5JMQRJTFKFYSB4"
+  },
 ];
