@@ -314,4 +314,18 @@ module.exports = [
     port: 11625,
     publicKey: "GDXQB3OMMQ6MGG43PWFBZWBFKBBDUZIVSUDAZZTRAWQZKES2CDSE5HKJ"
   },
+  {
+    id: "coinqvest-fi",
+    name: "COINQVEST (Finland)",
+    host: "finland.stellar.coinqvest.com",
+    port: 11625,
+    publicKey: "GADLA6BJK6VK33EM2IDQM37L5KGVCY5MSHSHVJA4SCNGNUIEOTCR6J5T"
+  },
+  {
+    id: "coinqvest-de",
+    name: "COINQVEST (Germany)",
+    host: "germany.stellar.coinqvest.com",
+    port: 11625,
+    publicKey: "GD6SZQV3WEJUH352NTVLKEV2JM2RH266VPEM7EH5QLLI7ZZAALMLNUVN"
+  },
 ];
