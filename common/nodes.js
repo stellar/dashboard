@@ -327,5 +327,5 @@ module.exports = [
     host: "germany.stellar.coinqvest.com",
     port: 11625,
     publicKey: "GD6SZQV3WEJUH352NTVLKEV2JM2RH266VPEM7EH5QLLI7ZZAALMLNUVN"
-  }
+  },
 ];
