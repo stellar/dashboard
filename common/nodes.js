@@ -148,22 +148,22 @@ module.exports = [
   },
   {
     id: "satoshipay1",
-    name: "SatoshiPay 1",
-    host: "stellar1.satoshipay.io",
+    name: "SatoshiPay (DE, Frankfurt)",
+    host: "stellar-de-fra.satoshipay.io",
     port: 11625,
     publicKey: "GC5SXLNAM3C4NMGK2PXK4R34B5GNZ47FYQ24ZIBFDFOCU6D4KBN4POAE"
   },
   {
     id: "satoshipay2",
-    name: "SatoshiPay 2",
-    host: "stellar2.satoshipay.io",
+    name: "SatoshiPay (SG, Singapore)",
+    host: "stellar-sg-sin.satoshipay.io",
     port: 11625,
     publicKey: "GBJQUIXUO4XSNPAUT6ODLZUJRV2NPXYASKUBY4G5MYP3M47PCVI55MNT"
   },
   {
     id: "satoshipay3",
-    name: "SatoshiPay 3",
-    host: "stellar3.satoshipay.io",
+    name: "SatoshiPay (US, Iowa)",
+    host: "stellar-us-iowa.satoshipay.io",
     port: 11625,
     publicKey: "GAK6Z5UVGUVSEK6PEOCAYJISTT5EJBB34PN3NOLEQG2SUKXRVV2F6HZY"
   },
