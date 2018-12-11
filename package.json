@@ -36,7 +36,6 @@
     "react-d3-components": "^0.9.1",
     "react-dom": "^16.3.2",
     "recharts": "^0.22.1",
-    "redis": "^2.8.0",
     "sass-loader": "^6.0.6",
     "sequelize": "^4.37.7",
     "stellar-sdk": "^0.6.2",
