@@ -188,7 +188,7 @@ function updateMeasurements() {
 
 // Wait for schema sync
 postgres.sequelize.addHook('afterBulkSync', () => {
-  if (process.env.UPDATE_DATA) {
+  if (process.env.UPDATE_DATA == "true") {
     setInterval(checkNodes, 60*1000);
     checkNodes();
   } else {

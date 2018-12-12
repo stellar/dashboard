@@ -37,7 +37,7 @@ postgres.sequelize.addHook('afterBulkSync', () => {
   setInterval(updateResults, 60*1000);
   updateResults();
 
-  if (process.env.UPDATE_DATA) {
+  if (process.env.UPDATE_DATA == "true") {
     // Stream ledgers - get last paging_token/
     postgres.LedgerStats.findOne({order: [['sequence', 'DESC']]}).then(lastLedger => {
       let pagingToken;
