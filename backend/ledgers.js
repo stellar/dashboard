@@ -21,7 +21,15 @@ function updateResults() {
     order by 1 desc`;
 
   postgres.sequelize.query(query, {type: postgres.sequelize.QueryTypes.SELECT})
-    .then(results => cachedData = results);
+    .then(results => cachedData = _.each(results, convertFieldsToNumeric));
+}
+
+function convertFieldsToNumeric(ledger) {
+  const fields = ['transaction_count', 'operation_count'];
+  for (let field of fields) {
+    ledger[field] = parseInt(ledger[field]);
+  }
+  return ledger;
 }
 
 // Wait for schema sync
