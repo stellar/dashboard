@@ -37,23 +37,25 @@ postgres.sequelize.addHook('afterBulkSync', () => {
   setInterval(updateResults, 60*1000);
   updateResults();
 
-  // Stream ledgers - get last paging_token/
-  postgres.LedgerStats.findOne({order: [['sequence', 'DESC']]}).then(lastLedger => {
-    let pagingToken;
-    if (!lastLedger) {
-      pagingToken = 'now';
-    } else {
-      pagingToken = lastLedger.paging_token;
-    }
-
-    var horizon = new stellarSdk.Server('https://horizon.stellar.org');
-    horizon.ledgers().cursor(pagingToken).stream({
-      onmessage: ledger => {
-        postgres.LedgerStats.create(_.pick(ledger, ['sequence', 'closed_at', 'paging_token', 'transaction_count', 'operation_count']))
-          .then(() => {
-            console.log("Added Ledger:"+ledger.sequence+" "+ledger.closed_at);
-          });
+  if (process.env.UPDATE_DATA) {
+    // Stream ledgers - get last paging_token/
+    postgres.LedgerStats.findOne({order: [['sequence', 'DESC']]}).then(lastLedger => {
+      let pagingToken;
+      if (!lastLedger) {
+        pagingToken = 'now';
+      } else {
+        pagingToken = lastLedger.paging_token;
       }
+
+      var horizon = new stellarSdk.Server('https://horizon.stellar.org');
+      horizon.ledgers().cursor(pagingToken).stream({
+        onmessage: ledger => {
+          postgres.LedgerStats.create(_.pick(ledger, ['sequence', 'closed_at', 'paging_token', 'transaction_count', 'operation_count']))
+            .then(() => {
+              console.log("Added Ledger:"+ledger.sequence+" "+ledger.closed_at);
+            });
+        }
+      });
     });
-  });
+  }
 });
