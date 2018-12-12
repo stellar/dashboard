@@ -12,12 +12,12 @@ export const handler = function(req, res) {
 function updateResults() {
   let query =
     `select
-      to_char(closed_at, 'DD-MM') as date,
+      to_char(closed_at, 'MM-DD') as date,
       sum(transaction_count) as transaction_count,
       sum(operation_count) as operation_count
     from ledger_stats
-    where closed_at >= current_date - interval '30' day
-    group by to_char(closed_at, 'DD-MM')
+    where closed_at >= current_date - interval '29' day
+    group by to_char(closed_at, 'MM-DD')
     order by 1 desc`;
 
   postgres.sequelize.query(query, {type: postgres.sequelize.QueryTypes.SELECT})
