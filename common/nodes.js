@@ -1,40 +1,5 @@
 module.exports = [
   {
-    id: "validator1.stronghold",
-    name: "Stronghold 1 (Australia)",
-    host: "validator1.stellar.stronghold.co",
-    port: 11625,
-    publicKey: "GDIQKLQVOCD5UD6MUI5D5PTPVX7WTP5TAPP5OBMOLENBBD5KG434KYQ2"
-  },
-  {
-    id: "validator2.stronghold",
-    name: "Stronghold 2 (Asia)",
-    host: "validator2.stellar.stronghold.co",
-    port: 11625,
-    publicKey: "GA7MREQ7673YDVANF4WBPN7LBQM4BSH4BQUFUTC4YLSSQCQUQTXRVBZN"
-  },
-  {
-    id: "validator3.stronghold",
-    name: "Stronghold 3 (Europe)",
-    host: "validator3.stellar.stronghold.co",
-    port: 11625,
-    publicKey: "GDHV7FL7JP6LUEWWYUOA4C3QAFQ4LZ6OHFBWFIL6IFIS3AOBI2DHV62F"
-  },
-  {
-    id: "validator4.stronghold",
-    name: "Stronghold 4 (South America)",
-    host: "validator4.stellar.stronghold.co",
-    port: 11625,
-    publicKey: "GBGDBLFKR3LORWOI65LVC7ES5OGZ4GHILEHCBVKPW2PMP2OL43F6B2JJ"
-  },
-  {
-    id: "validator5.stronghold",
-    name: "Stronghold 5 (United States)",
-    host: "validator5.stellar.stronghold.co",
-    port: 11625,
-    publicKey: "GCBXBCIKCCVUIHAZ5QFWK6CKSX4AESOJ33IQNUE42BP7J66X23TM6WPF"
-  },
-  {
     id: "au.ibm",
     name: "IBM Australia",
     host: "au.stellar.ibm.com",
@@ -61,20 +26,6 @@ module.exports = [
     host: "no.stellar.ibm.com",
     port: 11625,
     publicKey: "GDRA72H7JWXAXWJKOONQOPH3JKNSH5MQ6BO5K74C3X6FO2G3OG464BPU"
-  },
-  {
-    id: "it.ibm",
-    name: "IBM Italy",
-    host: "it.stellar.ibm.com",
-    port: 11625,
-    publicKey: "GAEEH4TBR7YQQWKJ2FIT57HXZZTMK2BX5LY4POJUYFSEZ7Y2ONHPPTES"
-  },
-  {
-    id: "hk.ibm",
-    name: "IBM Hong Kong",
-    host: "hk.stellar.ibm.com",
-    port: 11625,
-    publicKey: "GBJ7T3BTLX2BP3T5Q4256PUF7JMDAB35LLO32QRDYE67TDDMN7H33GGE"
   },
   {
     id: "in.ibm",
@@ -224,13 +175,6 @@ module.exports = [
     publicKey: "GAMWPPFIO2ZRR2W2KF73U5M4ONURKLJFAQSE5K5RKQ3LD6FDHNI7SPDI"
   },
   {
-    id: "tontinetrust",
-    name: "Tontine Trust",
-    host: "ton.money.by.tontinetrust.com",
-    port: 11625,
-    publicKey: "GB4J5VHX4NXUNLWJ6NS3WDAUVIMDMSOXNOHIHANBEFKH6E52765IIJAS"
-  },
-  {
     id: "cowrie.exchange",
     name: "Cowrie Exchange",
     host: "stellar.cowriesys.com",
@@ -278,13 +222,6 @@ module.exports = [
     host: "stellar0.keybase.io",
     port: 11625,
     publicKey: "GCWJKM4EGTGJUVSWUJDPCQEOEP5LHSOFKSA4HALBTOO4T4H3HCHOM6UX"
-  },
-  {
-    id: "fv1.intrastellar.io",
-    name: "intrastellar one (France)",
-    host: "hoedic.intrastellar.io",
-    port: 11625,
-    publicKey: "GA6YSMP3DQHG6V3O2M6GDWVOA6OBTVTGUNSJ7UIFDITDW7YZEJVW2MZF"
   },
   {
     id: "us.mobius",
