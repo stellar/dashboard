@@ -12,23 +12,27 @@ export const handler = function(req, res) {
 function updateResults() {
   let query =
     `select
-      to_char(closed_at, 'MM-DD') as date,
+      to_char(closed_at, 'YYYY-MM-DD') as date,
       sum(transaction_count) as transaction_count,
       sum(operation_count) as operation_count
     from ledger_stats
     where closed_at >= current_date - interval '29' day
-    group by to_char(closed_at, 'MM-DD')
+    group by to_char(closed_at, 'YYYY-MM-DD')
     order by 1 desc`;
 
   postgres.sequelize.query(query, {type: postgres.sequelize.QueryTypes.SELECT})
-    .then(results => cachedData = _.each(results, convertFieldsToNumeric));
+    .then(results => cachedData = _.each(results, convertFields));
 }
 
-function convertFieldsToNumeric(ledger) {
+function convertFields(ledger) {
+  // String to int fields
   const fields = ['transaction_count', 'operation_count'];
   for (let field of fields) {
     ledger[field] = parseInt(ledger[field]);
   }
+
+  // Remove year from date
+  ledger['date'] = ledger['date'].substring(5);
   return ledger;
 }
 
