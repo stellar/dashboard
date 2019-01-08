@@ -265,4 +265,11 @@ module.exports = [
     port: 11625,
     publicKey: "GD6SZQV3WEJUH352NTVLKEV2JM2RH266VPEM7EH5QLLI7ZZAALMLNUVN"
   },
+  {
+    id: "ocyan_1",
+    name: "Ocyan 1",
+    host: "stellar.ocyan.com",
+    port: 11625,
+    publicKey: "GA5MLJBI3PP4I66XZMZZDGOD4NFL3QM7B6EYHEWBWY67FYD3ZO4UZRWV"
+  },
 ];
