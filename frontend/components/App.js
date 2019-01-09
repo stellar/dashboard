@@ -108,7 +108,13 @@ export default class App extends React.Component {
       <div id="main" className={this.state.forceTheme ? "force" : null}>
         <AppBar forceTheme={this.state.forceTheme} turnOffForceTheme={this.turnOffForceTheme.bind(this)} />
 
-        {this.chrome57 ? 
+        <Panel className="mui--bg-accent-light">
+          <div className="mui--text-subhead mui--text-light">
+            The test network will be reset on January 30th, 2019. Please see our <a href="https://www.stellar.org/developers/guides/concepts/test-net.html#best-practices-for-using-testnet">testnet best practices</a> for more information.
+          </div>
+        </Panel>
+
+        {this.chrome57 ?
           <Panel>
             <div className="mui--text-subhead mui--text-dark-secondary">
               You are using Chrome 57. There is a <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=707544" target="_blank">known bug</a> that
