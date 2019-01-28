@@ -110,7 +110,7 @@ export default class App extends React.Component {
 
         <Panel className="mui--bg-accent-light">
           <div className="mui--text-subhead mui--text-light">
-            The test network will be reset on January 30th, 2019. Please see our <a href="https://www.stellar.org/developers/guides/concepts/test-net.html#best-practices-for-using-testnet">testnet best practices</a> for more information.
+            The test network will be reset on February 27th, 2019. Please see our <a href="https://www.stellar.org/developers/guides/concepts/test-net.html#best-practices-for-using-testnet">testnet best practices</a> for more information.
           </div>
         </Panel>
 
