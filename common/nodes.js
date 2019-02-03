@@ -272,4 +272,11 @@ module.exports = [
     port: 11625,
     publicKey: "GA5MLJBI3PP4I66XZMZZDGOD4NFL3QM7B6EYHEWBWY67FYD3ZO4UZRWV"
   },
+  {
+    id: "sui",
+    name: "stellar.sui.li",
+    host: "stellar.sui.li",
+    port: 11625,
+    publicKey: "GBHMXTHDK7R2IJFUIDIUWMR7VAKKDSIPC6PT5TDKLACEAU3FBAR2XSUI"
+  },
 ];
