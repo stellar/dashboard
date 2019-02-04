@@ -292,5 +292,5 @@ module.exports = [
     host: "sg.sakkex.network",
     port: 11625,
     publicKey: "GDNIGSBNHLXT2HDCEZQUDQU2TPATEXKF5SSPF3UBW4EBHACDOG7IY3PX"
-  }
+  },
 ];
