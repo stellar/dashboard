@@ -272,4 +272,25 @@ module.exports = [
     port: 11625,
     publicKey: "GA5MLJBI3PP4I66XZMZZDGOD4NFL3QM7B6EYHEWBWY67FYD3ZO4UZRWV"
   },
+  {
+    id: "de.sakkex",
+    name: "Sakkex Germany",
+    host: "de.sakkex.network",
+    port: 11625,
+    publicKey: "GBTNFYOZ4O5QMFEZ4FCP32VYG4GSGWOUVW3NQI3JMCKCRSDTF7CFA4VW"
+  },
+  {
+    id: "uk.sakkex",
+    name: "Sakkex United Kingdom",
+    host: "uk.sakkex.network",
+    port: 11625,
+    publicKey: "GCYAK2RA24YPJKVGFGQY2FWD5VLMBQ3JOY27ZOUVNC3CR7ZETTDLPV7B"
+  },
+  {
+    id: "sg.sakkex",
+    name: "Sakkex Singapore",
+    host: "sg.sakkex.network",
+    port: 11625,
+    publicKey: "GDNIGSBNHLXT2HDCEZQUDQU2TPATEXKF5SSPF3UBW4EBHACDOG7IY3PX"
+  },
 ];
