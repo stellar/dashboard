@@ -189,13 +189,6 @@ module.exports = [
     publicKey: "GDKST4M2OPDPNDZFIZ7CYYFR3SUP4N3GOZIWNVUBAY5VX25X7ZT4RICB"
   },
   {
-    id: "republic.co",
-    name: "republic.co",
-    host: "validator.stellar.republic.co",
-    port: 11625,
-    publicKey: "GDEP5ASQQT4LKZLK6POEQKPTL7SXWQ66QW3WIRXFN4WXFL5JBG3K5GKQ"
-  },
-  {
     id: "de.goodx",
     name: "GoodX Network",
     host: "de.stellar.goodx.network",
