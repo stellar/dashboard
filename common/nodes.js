@@ -189,13 +189,6 @@ module.exports = [
     publicKey: "GDKST4M2OPDPNDZFIZ7CYYFR3SUP4N3GOZIWNVUBAY5VX25X7ZT4RICB"
   },
   {
-    id: "republic.co",
-    name: "republic.co",
-    host: "validator.stellar.republic.co",
-    port: 11625,
-    publicKey: "GDEP5ASQQT4LKZLK6POEQKPTL7SXWQ66QW3WIRXFN4WXFL5JBG3K5GKQ"
-  },
-  {
     id: "de.goodx",
     name: "GoodX Network",
     host: "de.stellar.goodx.network",
@@ -278,5 +271,26 @@ module.exports = [
     host: "stellar.sui.li",
     port: 11625,
     publicKey: "GBHMXTHDK7R2IJFUIDIUWMR7VAKKDSIPC6PT5TDKLACEAU3FBAR2XSUI"
+  },
+  {
+    id: "de.sakkex",
+    name: "Sakkex Germany",
+    host: "de.sakkex.network",
+    port: 11625,
+    publicKey: "GBTNFYOZ4O5QMFEZ4FCP32VYG4GSGWOUVW3NQI3JMCKCRSDTF7CFA4VW"
+  },
+  {
+    id: "uk.sakkex",
+    name: "Sakkex United Kingdom",
+    host: "uk.sakkex.network",
+    port: 11625,
+    publicKey: "GCYAK2RA24YPJKVGFGQY2FWD5VLMBQ3JOY27ZOUVNC3CR7ZETTDLPV7B"
+  },
+  {
+    id: "sg.sakkex",
+    name: "Sakkex Singapore",
+    host: "sg.sakkex.network",
+    port: 11625,
+    publicKey: "GDNIGSBNHLXT2HDCEZQUDQU2TPATEXKF5SSPF3UBW4EBHACDOG7IY3PX"
   },
 ];
