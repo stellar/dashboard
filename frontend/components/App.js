@@ -18,6 +18,7 @@ import PublicNetworkLedgersHistoryChart from './PublicNetworkLedgersHistoryChart
 import RecentOperations from './RecentOperations';
 import TotalCoins from './TotalCoins';
 import TransactionsChart from './TransactionsChart';
+import FailedTransactionsChart from './FailedTransactionsChart';
 import {LIVE_NEW_LEDGER, TEST_NEW_LEDGER} from '../events';
 
 const horizonLive = "https://horizon-mon.stellar-ops.com";
@@ -169,6 +170,13 @@ export default class App extends React.Component {
                   network="Live network"
                   horizonURL={horizonLive}
                   limit="200"
+                  newLedgerEventName={LIVE_NEW_LEDGER}
+                  emitter={this.emitter}
+                  />
+                <FailedTransactionsChart
+                  network="Live network"
+                  horizonURL={horizonLive}
+                  limit="100"
                   newLedgerEventName={LIVE_NEW_LEDGER}
                   emitter={this.emitter}
                   />
