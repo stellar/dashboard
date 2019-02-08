@@ -32,7 +32,7 @@ export default class TransactionsChart extends React.Component {
   onNewLedger(ledger) {
     let data = clone(this.state.data);
     data[0].values.push({x: ledger.sequence.toString(), y: ledger.transaction_count});
-    data[1].values.push({x: ledger.sequence.toString(), y: ledger.operation_count});
+    data[1].values.push({x: ledger.sequence.toString(), y: ledger.operation_count-ledger.transaction_count});
     data[0].values.shift();
     data[1].values.shift();
     this.setState({loading: false, data});
@@ -50,7 +50,7 @@ export default class TransactionsChart extends React.Component {
         }];
         each(response.data._embedded.records, ledger => {
           data[0].values.unshift({x: ledger.sequence.toString(), y: ledger.transaction_count});
-          data[1].values.unshift({x: ledger.sequence.toString(), y: ledger.operation_count});
+          data[1].values.unshift({x: ledger.sequence.toString(), y: ledger.operation_count-ledger.transaction_count});
         });
         this.setState({loading: false, data});
         // Start listening to events
