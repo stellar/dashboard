@@ -162,14 +162,14 @@ export default class App extends React.Component {
                 <LedgerCloseChart
                   network="Live network"
                   horizonURL={horizonLive}
-                  limit="200"
+                  limit="100"
                   newLedgerEventName={LIVE_NEW_LEDGER}
                   emitter={this.emitter}
                   />
                 <TransactionsChart
                   network="Live network"
                   horizonURL={horizonLive}
-                  limit="200"
+                  limit="100"
                   newLedgerEventName={LIVE_NEW_LEDGER}
                   emitter={this.emitter}
                   />
@@ -237,14 +237,14 @@ export default class App extends React.Component {
               <LedgerCloseChart
                 network="Test network"
                 horizonURL={horizonTest}
-                limit="200"
+                limit="100"
                 newLedgerEventName={TEST_NEW_LEDGER}
                 emitter={this.emitter}
                 />
               <TransactionsChart
                 network="Test network"
                 horizonURL={horizonTest}
-                limit="200"
+                limit="100"
                 newLedgerEventName={TEST_NEW_LEDGER}
                 emitter={this.emitter}
                 />
