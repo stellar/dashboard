@@ -248,6 +248,13 @@ export default class App extends React.Component {
                 newLedgerEventName={TEST_NEW_LEDGER}
                 emitter={this.emitter}
                 />
+                <FailedTransactionsChart
+                  network="Test network"
+                  horizonURL={horizonTest}
+                  limit="100"
+                  newLedgerEventName={TEST_NEW_LEDGER}
+                  emitter={this.emitter}
+                />                
             </div>
             <div className="mui-col-md-4">
               <AccountBalance
