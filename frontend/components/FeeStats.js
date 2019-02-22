@@ -104,7 +104,7 @@ export default class FeeStats extends React.Component {
               let displayVal = this.state.stats[field.id];
               if (field.id == 'ledger_capacity_usage') {
                 styleFn = this.capacityStyle;
-                displayVal = `${val*100}%`;
+                displayVal = `${Math.round(val*100)}%`;
               }
 
               return <tr key={field.id}>
