@@ -7,6 +7,7 @@ import {Server} from 'stellar-sdk';
 
 import AppBar from './AppBar';
 import AccountBalance from './AccountBalance';
+import FeeStats from './FeeStats';
 import DistributionProgress from './DistributionProgress';
 import NetworkStatus from './NetworkStatus';
 import Nodes from './Nodes';
@@ -150,6 +151,9 @@ export default class App extends React.Component {
                   horizonURL={horizonLive}
                   newLedgerEventName={LIVE_NEW_LEDGER}
                   emitter={this.emitter}
+                  />
+                <FeeStats
+                  horizonURL={horizonLive}
                   />
                 <RecentOperations
                   limit="20"
