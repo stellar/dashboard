@@ -17,6 +17,7 @@ const accounts = {
   vestingPool:         "GANOI26P6VAUL4NFVA4FAIOIBOR46NORONBIWUPRIGAMP7T5W5MOY4O6",
   cashAccount:         "GAYOCVRRNXGQWREOZBDP4UEW475NKZKLA4EIEIBKBSJN2PQQWUQ5KGUH",
   inflationDest:       "GDWNY2POLGK65VVKIH5KQSH7VWLKRTQ5M6ADLJAYC2UEHEBEARCZJWWI",
+  worldHot:            "GB76DZDZQRUGK3KEINZM6YDZI5OPVAP6UTIZKZIFNTRMG5T7UC5IRVRE",
 }
 
 export function getLumenBalance(horizonURL, accountId) {
@@ -61,7 +62,7 @@ export function distributionBitcoinProgram() {
 }
 
 export function distributionBuildChallenge() {
-  let sum = 49116333+30520000+7950000+62400000+5700000+2599000;
+  let sum = 49116333+30520000+7950000+62400000+5700000+2599000+3522250;
   return sum.toString();
 }
 

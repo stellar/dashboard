@@ -77,6 +77,11 @@ section {
   }
 }
 
+.mui--bg-accent-light a {
+  color: #FFF;
+  text-decoration: underline;
+}
+
 .widget-name {
   text-transform: uppercase;
 
@@ -101,6 +106,10 @@ section {
 .mui-table.small {
   font-size: 0.8em;
   margin-bottom: 0px;
+}
+
+.mui-table.small tbody>tr:hover {
+  background-color: #f0f0f0;
 }
 
 .chart-labels {
