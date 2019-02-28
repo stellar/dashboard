@@ -7,6 +7,7 @@ import {Server} from 'stellar-sdk';
 
 import AppBar from './AppBar';
 import AccountBalance from './AccountBalance';
+import FeeStats from './FeeStats';
 import DistributionProgress from './DistributionProgress';
 import NetworkStatus from './NetworkStatus';
 import Nodes from './Nodes';
@@ -18,6 +19,7 @@ import PublicNetworkLedgersHistoryChart from './PublicNetworkLedgersHistoryChart
 import RecentOperations from './RecentOperations';
 import TotalCoins from './TotalCoins';
 import TransactionsChart from './TransactionsChart';
+import FailedTransactionsChart from './FailedTransactionsChart';
 import {LIVE_NEW_LEDGER, TEST_NEW_LEDGER} from '../events';
 
 const horizonLive = "https://horizon-mon.stellar-ops.com";
@@ -110,11 +112,11 @@ export default class App extends React.Component {
 
         <Panel className="mui--bg-accent-light">
           <div className="mui--text-subhead mui--text-light">
-            The network was upgraded to protocol version 10 on 9/13/2018 @ 4pm UTC. <a href="https://www.reddit.com/r/Stellar/comments/9dkpur/announcement_protocol_10_public_network_rollout/">Read more &raquo;</a>
+            The test network will be reset on February 27th, 2019 at 0900 UTC. Please see our <a href="https://www.stellar.org/developers/guides/concepts/test-net.html#best-practices-for-using-testnet">testnet best practices</a> for more information.
           </div>
         </Panel>
 
-        {this.chrome57 ? 
+        {this.chrome57 ?
           <Panel>
             <div className="mui--text-subhead mui--text-dark-secondary">
               You are using Chrome 57. There is a <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=707544" target="_blank">known bug</a> that
@@ -150,6 +152,9 @@ export default class App extends React.Component {
                   newLedgerEventName={LIVE_NEW_LEDGER}
                   emitter={this.emitter}
                   />
+                <FeeStats
+                  horizonURL={horizonLive}
+                  />
                 <RecentOperations
                   limit="20"
                   label="Live network"
@@ -161,14 +166,21 @@ export default class App extends React.Component {
                 <LedgerCloseChart
                   network="Live network"
                   horizonURL={horizonLive}
-                  limit="200"
+                  limit="100"
                   newLedgerEventName={LIVE_NEW_LEDGER}
                   emitter={this.emitter}
                   />
                 <TransactionsChart
                   network="Live network"
                   horizonURL={horizonLive}
-                  limit="200"
+                  limit="100"
+                  newLedgerEventName={LIVE_NEW_LEDGER}
+                  emitter={this.emitter}
+                  />
+                <FailedTransactionsChart
+                  network="Live network"
+                  horizonURL={horizonLive}
+                  limit="100"
                   newLedgerEventName={LIVE_NEW_LEDGER}
                   emitter={this.emitter}
                   />
@@ -229,17 +241,24 @@ export default class App extends React.Component {
               <LedgerCloseChart
                 network="Test network"
                 horizonURL={horizonTest}
-                limit="200"
+                limit="100"
                 newLedgerEventName={TEST_NEW_LEDGER}
                 emitter={this.emitter}
                 />
               <TransactionsChart
                 network="Test network"
                 horizonURL={horizonTest}
-                limit="200"
+                limit="100"
                 newLedgerEventName={TEST_NEW_LEDGER}
                 emitter={this.emitter}
                 />
+                <FailedTransactionsChart
+                  network="Test network"
+                  horizonURL={horizonTest}
+                  limit="100"
+                  newLedgerEventName={TEST_NEW_LEDGER}
+                  emitter={this.emitter}
+                />                
             </div>
             <div className="mui-col-md-4">
               <AccountBalance
