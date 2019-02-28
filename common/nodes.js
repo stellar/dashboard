@@ -300,4 +300,11 @@ module.exports = [
     port: 11625,
     publicKey: "GBR7I4XGCWLSTKLPYY4IY4QUGW5LYFCMPZOF7OJBMBLLJH5FQVNHWCTD"
   },
+  {
+    id: "validator1.whitewallet",
+    name: "WHITE WALLET 1 (USA)",
+    host: "validator1.thewwallet.com",
+    port: 11625,
+    publicKey: "GBH42X7GG5TQLBMKY2KNYQ6KY7XOUALQCUUZQH5EOLVNULDJMLCNUNJP"
+  },
 ];
