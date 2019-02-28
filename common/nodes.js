@@ -307,4 +307,11 @@ module.exports = [
     port: 11625,
     publicKey: "GBH42X7GG5TQLBMKY2KNYQ6KY7XOUALQCUUZQH5EOLVNULDJMLCNUNJP"
   },
+  {
+    id: "stellar.tylervault",
+    name: "Tyler Vault, Texas",
+    host: "stellar.tylervault.com",
+    port: 11625,
+    publicKey: "GA5UB6D64SV4OLDNCHJJH7YZT2IGKVCPNJVMG5EX5FOIM7WFYRSJLV7B"
+  },
 ];
