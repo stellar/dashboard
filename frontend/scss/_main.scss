@@ -108,6 +108,10 @@ section {
   margin-bottom: 0px;
 }
 
+.mui-table.small tbody>tr:hover {
+  background-color: #f0f0f0;
+}
+
 .chart-labels {
   font-size: 0.8em;
 }
