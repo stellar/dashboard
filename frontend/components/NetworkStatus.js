@@ -2,6 +2,7 @@ import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
 import round from 'lodash/round';
+import {ago} from '../common/time';
 
 // ledgersInAverageCalculation defines how many last ledgers should be
 // considered when calculating average ledger length.
@@ -16,6 +17,7 @@ export default class NetworkStatus extends React.Component {
   // This method will be called when a new ledger is created.
   onNewLedger(ledger) {
     let lastLedgerSequence = ledger.sequence;
+    let protocolVersion = ledger.protocol_version;
     let closedAt = new Date(ledger.closed_at);
     let lastLedgerLength = closedAt - this.state.closedAt;
     // Update last ${ledgersInAverageCalculation} ledgers length sum by subtracting
@@ -25,7 +27,7 @@ export default class NetworkStatus extends React.Component {
       - (new Date(this.records[this.records.length-2].closed_at) - new Date(this.records[this.records.length-1].closed_at))/1000
       + (new Date(this.records[0].closed_at) - new Date(this.records[1].closed_at))/1000;
     this.records.pop();
-    this.setState({closedAt, lastLedgerSequence, lastLedgerLength, ledgerLengthSum});
+    this.setState({closedAt, lastLedgerSequence, lastLedgerLength, ledgerLengthSum, protocolVersion});
   }
 
   getLastLedgers() {
@@ -33,6 +35,7 @@ export default class NetworkStatus extends React.Component {
       .then(response => {
         let ledger = response.data._embedded.records[0];
         let lastLedgerSequence = ledger.sequence;
+        let protocolVersion = ledger.protocol_version;
         let prevLedger = response.data._embedded.records[1];
         let closedAt = new Date(ledger.closed_at);
         let lastLedgerLength = new Date(ledger.closed_at) - new Date(prevLedger.closed_at);
@@ -43,7 +46,7 @@ export default class NetworkStatus extends React.Component {
           ledgerLengthSum += (new Date(this.records[i].closed_at) - new Date(this.records[i+1].closed_at))/1000;
         };
 
-        this.setState({closedAt, lastLedgerLength, lastLedgerSequence, ledgerLengthSum, loading: false});
+        this.setState({closedAt, lastLedgerLength, lastLedgerSequence, ledgerLengthSum, protocolVersion, loading: false});
         // Start listening to events
         this.props.emitter.addListener(this.props.newLedgerEventName, this.onNewLedger.bind(this))
       });
@@ -107,9 +110,9 @@ export default class NetworkStatus extends React.Component {
           {statusText}<br />
           {!this.state.loading ?
             <div>
-            Last ledger: #{this.state.lastLedgerSequence}<br />
-            Average ledger close time in the last {ledgersInAverageCalculation} ledgers: {round(averageLedgerLength, 2)} sec.<br />
-            Last ledger closed at: {this.state.closedAt.toString()} in {this.state.lastLedgerLength/1000} sec.
+            Protocol version: {this.state.protocolVersion}<br />
+            Last ledger: #{this.state.lastLedgerSequence} closed ~{ago(this.state.closedAt)} ago in {this.state.lastLedgerLength/1000}s.<br />
+            Average ledger close time in the last {ledgersInAverageCalculation} ledgers: {round(averageLedgerLength, 2)}s.
             </div>
           : ''}
         </div>

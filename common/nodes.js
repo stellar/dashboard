@@ -1,40 +1,5 @@
 module.exports = [
   {
-    id: "validator1.stronghold",
-    name: "Stronghold 1 (Australia)",
-    host: "validator1.stellar.stronghold.co",
-    port: 11625,
-    publicKey: "GDIQKLQVOCD5UD6MUI5D5PTPVX7WTP5TAPP5OBMOLENBBD5KG434KYQ2"
-  },
-  {
-    id: "validator2.stronghold",
-    name: "Stronghold 2 (Asia)",
-    host: "validator2.stellar.stronghold.co",
-    port: 11625,
-    publicKey: "GA7MREQ7673YDVANF4WBPN7LBQM4BSH4BQUFUTC4YLSSQCQUQTXRVBZN"
-  },
-  {
-    id: "validator3.stronghold",
-    name: "Stronghold 3 (Europe)",
-    host: "validator3.stellar.stronghold.co",
-    port: 11625,
-    publicKey: "GDHV7FL7JP6LUEWWYUOA4C3QAFQ4LZ6OHFBWFIL6IFIS3AOBI2DHV62F"
-  },
-  {
-    id: "validator4.stronghold",
-    name: "Stronghold 4 (South America)",
-    host: "validator4.stellar.stronghold.co",
-    port: 11625,
-    publicKey: "GBGDBLFKR3LORWOI65LVC7ES5OGZ4GHILEHCBVKPW2PMP2OL43F6B2JJ"
-  },
-  {
-    id: "validator5.stronghold",
-    name: "Stronghold 5 (United States)",
-    host: "validator5.stellar.stronghold.co",
-    port: 11625,
-    publicKey: "GCBXBCIKCCVUIHAZ5QFWK6CKSX4AESOJ33IQNUE42BP7J66X23TM6WPF"
-  },
-  {
     id: "au.ibm",
     name: "IBM Australia",
     host: "au.stellar.ibm.com",
@@ -61,20 +26,6 @@ module.exports = [
     host: "no.stellar.ibm.com",
     port: 11625,
     publicKey: "GDRA72H7JWXAXWJKOONQOPH3JKNSH5MQ6BO5K74C3X6FO2G3OG464BPU"
-  },
-  {
-    id: "it.ibm",
-    name: "IBM Italy",
-    host: "it.stellar.ibm.com",
-    port: 11625,
-    publicKey: "GAEEH4TBR7YQQWKJ2FIT57HXZZTMK2BX5LY4POJUYFSEZ7Y2ONHPPTES"
-  },
-  {
-    id: "hk.ibm",
-    name: "IBM Hong Kong",
-    host: "hk.stellar.ibm.com",
-    port: 11625,
-    publicKey: "GBJ7T3BTLX2BP3T5Q4256PUF7JMDAB35LLO32QRDYE67TDDMN7H33GGE"
   },
   {
     id: "in.ibm",
@@ -148,38 +99,52 @@ module.exports = [
   },
   {
     id: "satoshipay1",
-    name: "SatoshiPay 1",
-    host: "stellar1.satoshipay.io",
+    name: "SatoshiPay (DE, Frankfurt)",
+    host: "stellar-de-fra.satoshipay.io",
     port: 11625,
     publicKey: "GC5SXLNAM3C4NMGK2PXK4R34B5GNZ47FYQ24ZIBFDFOCU6D4KBN4POAE"
   },
   {
     id: "satoshipay2",
-    name: "SatoshiPay 2",
-    host: "stellar2.satoshipay.io",
+    name: "SatoshiPay (SG, Singapore)",
+    host: "stellar-sg-sin.satoshipay.io",
     port: 11625,
     publicKey: "GBJQUIXUO4XSNPAUT6ODLZUJRV2NPXYASKUBY4G5MYP3M47PCVI55MNT"
   },
   {
     id: "satoshipay3",
-    name: "SatoshiPay 3",
-    host: "stellar3.satoshipay.io",
+    name: "SatoshiPay (US, Iowa)",
+    host: "stellar-us-iowa.satoshipay.io",
     port: 11625,
     publicKey: "GAK6Z5UVGUVSEK6PEOCAYJISTT5EJBB34PN3NOLEQG2SUKXRVV2F6HZY"
   },
   {
-    id: "cryptomover",
-    name: "cryptomover host 1",
+    id: "cryptomover1",
+    name: "Cryptomover host 1",
     host: "cryptodealer.hk",
     port: 11625,
-    publicKey: "GCGWABAQ6OUOVUGWJVPRJ5LWBIWYN3CVOVOZYBNQQGIBRULQHYNGQ7GH"
+    publicKey: "GBX7KXY43NOGLCV7TMFFM7UPNM5VGQ52W4IAZNTVMXZ44BHYFESA67N3"
   },
   {
     id: "cryptomover2",
-    name: "cryptomover host 2",
+    name: "Cryptomover host 2",
     host: "cryptomover.org",
     port: 11625,
     publicKey: "GC7MH45NSXXPBLQJRSEVF2DFUVLGGYOJER5FRUNVCYVMXJYJT5LLQJW5"
+  },
+  {
+    id: "cryptomover3",
+    name: "Cryptomover host 3",
+    host: "cryptomover.net",
+    port: 11625,
+    publicKey: "GCX7S2QY2VXRFDDVVGKRVSMIVGQZQ4NEDYZ3WB7ZUYIVJKMQ4FVVHVR6"
+  },
+  {
+    id: "koinbros",
+    name: "Koinbros host 1",
+    host: "koinbros.org",
+    port: 11625,
+    publicKey: "GAE72U4C4MWPG6WAB2XW2EEHPQE3VMG7WRSET5FFDUAMBFR7P462QBC4"
   },
   {
     id: "umbrel",
@@ -210,13 +175,6 @@ module.exports = [
     publicKey: "GAMWPPFIO2ZRR2W2KF73U5M4ONURKLJFAQSE5K5RKQ3LD6FDHNI7SPDI"
   },
   {
-    id: "tontinetrust",
-    name: "Tontine Trust",
-    host: "ton.money.by.tontinetrust.com",
-    port: 11625,
-    publicKey: "GB4J5VHX4NXUNLWJ6NS3WDAUVIMDMSOXNOHIHANBEFKH6E52765IIJAS"
-  },
-  {
     id: "cowrie.exchange",
     name: "Cowrie Exchange",
     host: "stellar.cowriesys.com",
@@ -229,13 +187,6 @@ module.exports = [
     host: "stellar2.clic.world",
     port: 11625,
     publicKey: "GDKST4M2OPDPNDZFIZ7CYYFR3SUP4N3GOZIWNVUBAY5VX25X7ZT4RICB"
-  },
-  {
-    id: "republic.co",
-    name: "republic.co",
-    host: "validator.stellar.republic.co",
-    port: 11625,
-    publicKey: "GDEP5ASQQT4LKZLK6POEQKPTL7SXWQ66QW3WIRXFN4WXFL5JBG3K5GKQ"
   },
   {
     id: "de.goodx",
@@ -271,12 +222,103 @@ module.exports = [
     host: "us.stellar.mobius.network",
     port: 11625,
     publicKey: "GB7H5CNUNVCM6KGG6P2LAQE4YZP4D6CHFJRSSS34VNEPDDVIFAWRJ7ZA"
-  }
+  },
+  {
+    id: "smartlands",
+    name: "Smartlands Platform",
+    host: "stellar.smartlands.io",
+    port: 11625,
+    publicKey: "GCBAQCWXKIIOQOEDIW6EB7GY6UREHPTKK26NZFLVK63ZTRFSXDVX2AHV"
+  },
+  {
+    id: "v1.lobstr",
+    name: "LOBSTR 1 (Europe)",
+    host: "v1.stellar.lobstr.co",
+    port: 11625,
+    publicKey: "GCFONE23AB7Y6C5YZOMKUKGETPIAJA4QOYLS5VNS4JHBGKRZCPYHDLW7"
+  },
+  {
+    id: "v2.lobstr",
+    name: "LOBSTR 2 (Europe)",
+    host: "v2.stellar.lobstr.co",
+    port: 11625,
+    publicKey: "GDXQB3OMMQ6MGG43PWFBZWBFKBBDUZIVSUDAZZTRAWQZKES2CDSE5HKJ"
+  },
+  {
+    id: "coinqvest-fi",
+    name: "COINQVEST (Finland)",
+    host: "finland.stellar.coinqvest.com",
+    port: 11625,
+    publicKey: "GADLA6BJK6VK33EM2IDQM37L5KGVCY5MSHSHVJA4SCNGNUIEOTCR6J5T"
+  },
+  {
+    id: "coinqvest-de",
+    name: "COINQVEST (Germany)",
+    host: "germany.stellar.coinqvest.com",
+    port: 11625,
+    publicKey: "GD6SZQV3WEJUH352NTVLKEV2JM2RH266VPEM7EH5QLLI7ZZAALMLNUVN"
+  },
+  {
+    id: "ocyan_1",
+    name: "Ocyan 1",
+    host: "stellar.ocyan.com",
+    port: 11625,
+    publicKey: "GA5MLJBI3PP4I66XZMZZDGOD4NFL3QM7B6EYHEWBWY67FYD3ZO4UZRWV"
+  },
+  {
+    id: "sui",
+    name: "stellar.sui.li",
+    host: "stellar.sui.li",
+    port: 11625,
+    publicKey: "GBHMXTHDK7R2IJFUIDIUWMR7VAKKDSIPC6PT5TDKLACEAU3FBAR2XSUI"
+  },
+  {
+    id: "de.sakkex",
+    name: "Sakkex Germany",
+    host: "de.sakkex.network",
+    port: 11625,
+    publicKey: "GBTNFYOZ4O5QMFEZ4FCP32VYG4GSGWOUVW3NQI3JMCKCRSDTF7CFA4VW"
+  },
+  {
+    id: "uk.sakkex",
+    name: "Sakkex United Kingdom",
+    host: "uk.sakkex.network",
+    port: 11625,
+    publicKey: "GCYAK2RA24YPJKVGFGQY2FWD5VLMBQ3JOY27ZOUVNC3CR7ZETTDLPV7B"
+  },
+  {
+    id: "sg.sakkex",
+    name: "Sakkex Singapore",
+    host: "sg.sakkex.network",
+    port: 11625,
+    publicKey: "GDNIGSBNHLXT2HDCEZQUDQU2TPATEXKF5SSPF3UBW4EBHACDOG7IY3PX"
+  },
+  {
+    id: "auskunft.de",
+    name: "auskunft.de",
+    host: "stellar.auskunft.de",
+    port: 11625,
+    publicKey: "GBR7I4XGCWLSTKLPYY4IY4QUGW5LYFCMPZOF7OJBMBLLJH5FQVNHWCTD"
+  },
+  {
+    id: "validator1.whitewallet",
+    name: "WHITE WALLET 1 (USA)",
+    host: "validator1.thewwallet.com",
+    port: 11625,
+    publicKey: "GBH42X7GG5TQLBMKY2KNYQ6KY7XOUALQCUUZQH5EOLVNULDJMLCNUNJP"
+  },
+  {
+    id: "stellar.tylervault",
+    name: "Tyler Vault, Texas",
+    host: "stellar.tylervault.com",
+    port: 11625,
+    publicKey: "GA5UB6D64SV4OLDNCHJJH7YZT2IGKVCPNJVMG5EX5FOIM7WFYRSJLV7B"
+  },
   {
     id: "v1.collegecoin.org",
     name: "collegecoin.org",
     host: "v1.stellar.collegecoin.org",
     port: 11625,
     publicKey: "GBATJAZRLNDUIJZEHM3EDRDOT5BUNQ5V3AGEYDOQLHSQXRLYLMK4LXCL"
-  }
+  },
 ];

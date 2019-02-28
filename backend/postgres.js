@@ -29,5 +29,29 @@ export const NodeMeasurement = sequelize.define('node_measurement', {
   ]
 });
 
+export const LedgerStats = sequelize.define('ledger_stats', {
+  sequence: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+  },
+  closed_at: {
+    type: Sequelize.DATE,
+    allowNull: false
+  },
+  paging_token: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  transaction_count: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  operation_count: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+});
+
 // Create schema if doesn't exist
-sequelize.sync();
+sequelize.sync({hooks: true});
