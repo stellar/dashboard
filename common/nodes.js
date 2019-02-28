@@ -189,12 +189,19 @@ module.exports = [
     publicKey: "GDKST4M2OPDPNDZFIZ7CYYFR3SUP4N3GOZIWNVUBAY5VX25X7ZT4RICB"
   },
   {
-    id: "de.goodx",
-    name: "GoodX Network",
+    id: "de.stellar.goodx.network",
+    name: "GoodX Network [DE]",
     host: "de.stellar.goodx.network",
     port: 11625,
     publicKey: "GASN57EFNZWME73BJXYZUTCD34EPX4KIIZQTQDTMBWWVH6JIZJUCBGQX"
   },
+    {
+    id: "us.stellar.goodx.network",
+    name: "GoodX Network [US]",
+    host: "us.stellar.goodx.network",
+    port: 11625,
+    publicKey: "GB7ESEJVQQVNE5DOXVX6UUIF4LDH7E5OVKTIVJ72FPU3AL7XGTY4A6MH"
+  },                     
   {
     id: "v1.stellar.smoove.net",
     name: "smoove.net 1",
