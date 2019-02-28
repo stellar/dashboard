@@ -1,19 +1,9 @@
 import * as commonLumens from "../common/lumens.js";
-import {redisClient} from './redis.js';
 
-const REDIS_KEY = 'api_lumens';
+let cachedData;
 
 export const handler = function(req, res) {
-  redisClient.get(REDIS_KEY, function(err, data) {
-    if (err) {
-      console.error(err);
-      res.sendStatus(500);
-      return;
-    }
-
-    data = JSON.parse(data);
-    res.send(data);
-  });
+  res.send(cachedData);
 }
 
 function updateApiLumens() {
@@ -39,14 +29,8 @@ function updateApiLumens() {
       }
     };
 
-    redisClient.set(REDIS_KEY, JSON.stringify(response), function(err, data) {
-      if (err) {
-        console.error(err);
-        return;
-      }
-
-      console.log("/api/lumens data saved!");
-    });
+    cachedData = response;
+    console.log("/api/lumens data saved!");
   })
   .catch(function(err) {
     console.error(err);

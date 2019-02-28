@@ -162,6 +162,7 @@ export default class Node extends React.Component {
                   <i className="material-icons dicon">av_timer</i>
                   <div className="afterI">
                     24H <span className={style_24h}>{this.state.uptime_24h === undefined ? 'n/d' : `${this.state.uptime_24h}%`}</span>&nbsp;
+                    30D <span className={style_30d}>{this.state.uptime_30d === undefined ? 'n/d' : `${this.state.uptime_30d}%`}</span>&nbsp;
                   </div>
                 </div>
               }
@@ -216,6 +217,10 @@ export default class Node extends React.Component {
                     <tr>
                       <td><strong>Uptime 24H</strong></td>
                       <td className="amount-column"><span className={style_24h}>{this.state.uptime_24h === undefined ? 'n/d' : `${this.state.uptime_24h}%`}</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Uptime 30D</strong></td>
+                      <td className="amount-column"><span className={style_30d}>{this.state.uptime_30d === undefined ? 'n/d' : `${this.state.uptime_30d}%`}</span></td>
                     </tr>
                     <tr>
                       <td colSpan="2"><strong>Public Key</strong></td>

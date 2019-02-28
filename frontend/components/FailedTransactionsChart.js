@@ -6,7 +6,7 @@ import BarChart from 'react-d3-components/lib/BarChart';
 import clone from 'lodash/clone';
 import each from 'lodash/each';
 
-export default class TransactionsChart extends React.Component {
+export default class FailedTransactionsChart extends React.Component {
   constructor(props) {
     super(props);
     this.panel = null;
@@ -31,8 +31,14 @@ export default class TransactionsChart extends React.Component {
 
   onNewLedger(ledger) {
     let data = clone(this.state.data);
-    data[0].values.push({x: ledger.sequence.toString(), y: ledger.successful_transaction_count});
-    data[1].values.push({x: ledger.sequence.toString(), y: ledger.operation_count-ledger.successful_transaction_count});
+    data[0].values.push({
+      x: ledger.sequence.toString(),
+      y: ledger.successful_transaction_count
+    });
+    data[1].values.push({
+      x: ledger.sequence.toString(),
+      y: ledger.failed_transaction_count
+    });
     data[0].values.shift();
     data[1].values.shift();
     this.setState({loading: false, data});
@@ -42,15 +48,21 @@ export default class TransactionsChart extends React.Component {
     axios.get(this.url)
       .then(response => {
         let data = [{
-          label: "Transactions",
+          label: "Success",
           values: []
         }, {
-          label: "Operations",
+          label: "Fail",
           values: []
         }];
         each(response.data._embedded.records, ledger => {
-          data[0].values.unshift({x: ledger.sequence.toString(), y: ledger.successful_transaction_count});
-          data[1].values.unshift({x: ledger.sequence.toString(), y: ledger.operation_count-ledger.successful_transaction_count});
+          data[0].values.unshift({
+            x: ledger.sequence.toString(),
+            y: ledger.successful_transaction_count
+          });
+          data[1].values.unshift({
+            x: ledger.sequence.toString(),
+            y: ledger.failed_transaction_count
+          });
         });
         this.setState({loading: false, data});
         // Start listening to events
@@ -63,8 +75,9 @@ export default class TransactionsChart extends React.Component {
       <div ref={(el) => { this.panel = el; }}>
         <Panel>
           <div className="widget-name">
-            Successful <span style={{borderBottom: '2px solid #0074B7'}}>Txs
-            </span> &amp; <span style={{borderBottom: '2px solid #FF6F00'}}>Ops</span> in the last {this.props.limit} ledgers: {this.props.network}
+            <span style={{borderBottom: '2px solid #0074B7'}}>Successful
+            </span> &amp; <span style={{borderBottom: '2px solid #FF6F00'}}>Failed</span> Txs in the last {this.props.limit} ledgers: {this.props.network}
+
             <a href={this.url} target="_blank" className="api-link">API</a>
           </div>
           {this.state.loading ?
