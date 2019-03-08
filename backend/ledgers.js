@@ -52,9 +52,11 @@ postgres.sequelize.addHook('afterBulkSync', () => {
       }
 
       var horizon = new stellarSdk.Server('https://horizon.stellar.org');
-      horizon.ledgers().cursor(pagingToken).stream({
+      horizon.ledgers().cursor(pagingToken).limit(200).stream({
         onmessage: ledger => {
-          postgres.LedgerStats.create(_.pick(ledger, ['sequence', 'closed_at', 'paging_token', 'transaction_count', 'operation_count']))
+          let newLedger = _.pick(ledger, ['sequence', 'closed_at', 'paging_token', 'operation_count']);
+          newLedger['transaction_count'] = ledger.successful_transaction_count + ledger.failed_transaction_count;
+          postgres.LedgerStats.create(newLedger)
             .then(() => {
               console.log("Added Ledger:"+ledger.sequence+" "+ledger.closed_at);
             });
