@@ -53,7 +53,7 @@ export function distributionDirectSignup() {
     var amount = new BigNumber(50*Math.pow(10, 9)); // 50B
     amount = amount.minus(balances[0]);
     amount = amount.minus(balances[1]);
-    amount = amount.plus(1000000000); 
+    amount = amount.minus(1000000000); 
     return amount.toString();
   })
 }
@@ -86,7 +86,7 @@ export function availableCoins() {
   return Promise.all([totalCoins(horizonLiveURL), sdfAccounts()])
     .then(result => {
       let [totalCoins, sdfAccounts] = result;
-      return new BigNumber(totalCoins).minus(sdfAccounts);
+      return new BigNumber(totalCoins).minus(sdfAccounts).minus(1000000000);
     });
 }
 
