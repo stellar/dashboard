@@ -53,6 +53,7 @@ export function distributionDirectSignup() {
     var amount = new BigNumber(50*Math.pow(10, 9)); // 50B
     amount = amount.minus(balances[0]);
     amount = amount.minus(balances[1]);
+    amount = amount.plus(1000000000); 
     return amount.toString();
   })
 }
