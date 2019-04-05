@@ -56,9 +56,9 @@ module.exports = [
     publicKey: "GDOQLNMARWIZWLEDKBYBOXP5LQYQQF24PS6NEQW4H766RLD4T7AUWQLB"
   },
   {
-    id: "localstellarassets",
-    name: "Local Stellar Assets",
-    host: "localstellarassets.com",
+    id: "tradedirect.io",
+    name: "Trade Direct",
+    host: "tradedirect.io",
     port: 11625,
     publicKey: "GA4UHKRQNTYNOI7TMP6ZK2I52UEIBBHAW3LVLBUTSKVRTGDEDTJVKLI3"
   },
