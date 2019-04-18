@@ -335,4 +335,25 @@ module.exports = [
     port: 11625,
     publicKey: "GDHDAHSHNXQV3EXHFK76CYIYBEVVBTOFTTJHGNXQ6Z5JMQRJTFKFYSB4"
   },
+    {
+    id: "uk.wirex",
+    name: "Wirex United Kingdom",
+    host: "uk.stellar.wirexapp.com",
+    port: 11625,
+    publicKey: "GBBQQT3EIUSXRJC6TGUCGVA3FVPXVZLGG3OJYACWBEWYBHU46WJLWXEU"
+  },
+  {
+    id: "us.wirex",
+    name: "Wirex United States",
+    host: "us.stellar.wirexapp.com",
+    port: 11625,
+    publicKey: "GDXUKFGG76WJC7ACEH3JUPLKM5N5S76QSMNDBONREUXPCZYVPOLFWXUS"
+  },
+  {
+    id: "sg.wirex",
+    name: "Wirex Singapore",
+    host: "sg.stellar.wirexapp.com",
+    port: 11625,
+    publicKey: "GAB3GZIE6XAYWXGZUDM4GMFFLJBFMLE2JDPUCWUZXMOMT3NHXDHEWXAS"
+  }
 ];
