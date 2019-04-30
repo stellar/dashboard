@@ -8,6 +8,7 @@
   },
   "author": "Stellar.org",
   "dependencies": {
+    "@nivo/bar": "^0.56.2",
     "axios": "^0.15.3",
     "babel-core": "^6.23.0",
     "babel-loader": "^6.3.2",
