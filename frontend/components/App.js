@@ -132,7 +132,7 @@ export default class App extends React.Component {
               return <Panel key={m.id} className="mui--bg-accent">
                 <div className="mui--text-subhead mui--text-light">
                   <a href={"https://stellarorg.statuspage.io/incidents/"+m.id}><strong>{m.name}</strong></a> (started: {moment(m.started_at).fromNow()}{m.incident_updates.length > 0 ? ", last update: "+moment(m.incident_updates[0].created_at).fromNow() : null})<br />
-                  <small>Components: {m.components.map(c => c.name).join(", ")}</small><br />
+                  <small>Affected: {m.components.map(c => c.name).join(", ")}</small><br />
                   {m.incident_updates.length > 0 ? <span dangerouslySetInnerHTML={{__html: m.incident_updates[0].body}} /> : null}
                 </div>
               </Panel>
