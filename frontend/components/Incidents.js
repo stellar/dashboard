@@ -2,13 +2,6 @@ import React from 'react';
 import Panel from 'muicss/lib/react/panel';
 import axios from 'axios';
 import moment from 'moment';
-import clone from 'lodash/clone';
-import each from 'lodash/each';
-import defaults from 'lodash/defaults';
-import AccountBadge from './AccountBadge';
-import AssetLink from './AssetLink';
-import BigNumber from 'bignumber.js';
-import {ago} from '../common/time';
 
 export default class Incidents extends React.Component {
   constructor(props) {
