@@ -3,6 +3,7 @@ import Panel from 'muicss/lib/react/panel';
 import Button from 'muicss/lib/react/button';
 import {EventEmitter} from 'fbemitter';
 import axios from 'axios';
+import moment from 'moment';
 import {Server} from 'stellar-sdk';
 
 import AppBar from './AppBar';
@@ -11,6 +12,7 @@ import FeeStats from './FeeStats';
 import DistributionProgress from './DistributionProgress';
 import NetworkStatus from './NetworkStatus';
 import Nodes from './Nodes';
+import Incidents from './Incidents';
 import LedgerCloseChart from './LedgerCloseChart';
 import ListAccounts from './ListAccounts';
 import LumensAvailable from './LumensAvailable';
@@ -63,6 +65,20 @@ export default class App extends React.Component {
   componentDidMount() {
     this.streamLedgers(horizonLive, LIVE_NEW_LEDGER);
     this.streamLedgers(horizonTest, TEST_NEW_LEDGER);
+
+    this.getStatusPageData();
+    this.statusPageUpdateInterval = setInterval(() => this.getStatusPageData(), 30*1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.statusPageUpdateInterval);
+  }
+
+  getStatusPageData() {
+    axios.get("https://9sl3dhr1twv1.statuspage.io/api/v2/summary.json")
+      .then(response => {
+        this.setState({statusPage: response.data});
+      });
   }
 
   reloadOnConnection() {
@@ -93,7 +109,7 @@ export default class App extends React.Component {
       .then(response => {
         let lastLedger = response.data._embedded.records[0];
 
-        new Server(horizonURL).ledgers().cursor(lastLedger.paging_token)
+        new Server(horizonURL).ledgers().cursor(lastLedger.paging_token).limit(200)
           .stream({
             onmessage: ledger => this.emitter.emit(eventName, ledger)
           });
@@ -110,11 +126,32 @@ export default class App extends React.Component {
       <div id="main" className={this.state.forceTheme ? "force" : null}>
         <AppBar forceTheme={this.state.forceTheme} turnOffForceTheme={this.turnOffForceTheme.bind(this)} />
 
-        <Panel className="mui--bg-accent-light">
-          <div className="mui--text-subhead mui--text-light">
-            The test network will be reset on July 31st, 2019 at 0900 UTC. Please see our <a href="https://www.stellar.org/developers/guides/concepts/test-net.html#best-practices-for-using-testnet">testnet best practices</a> for more information.
-          </div>
-        </Panel>
+        { /* Incidents */
+          this.state.statusPage ?
+            this.state.statusPage.incidents.map(m => {
+              return <Panel key={m.id} className="mui--bg-accent">
+                <div className="mui--text-subhead mui--text-light">
+                  <a href={"https://stellarorg.statuspage.io/incidents/"+m.id}><strong>{m.name}</strong></a> (started: {moment(m.started_at).fromNow()}{m.incident_updates.length > 0 ? ", last update: "+moment(m.incident_updates[0].created_at).fromNow() : null})<br />
+                  <small>Affected: {m.components.map(c => c.name).join(", ")}</small><br />
+                  {m.incident_updates.length > 0 ? <span dangerouslySetInnerHTML={{__html: m.incident_updates[0].body}} /> : null}
+                </div>
+              </Panel>
+            }) :
+            null
+        }
+
+        { /* Scheduled maintenances */
+          this.state.statusPage ?
+            this.state.statusPage.scheduled_maintenances.map(m => {
+              return <Panel key={m.id} className="mui--bg-accent-light">
+                <div className="mui--text-subhead mui--text-light">
+                  Scheduled Maintenance: <a href={"https://stellarorg.statuspage.io/incidents/"+m.id}><strong>{m.name}</strong></a> ({ moment(m.scheduled_for).format("dddd, MMMM Do YYYY, h:mm:ss a") })<br />
+                  {m.incident_updates.length > 0 ? <span dangerouslySetInnerHTML={{__html: m.incident_updates[0].body}} /> : null}<br />
+                </div>
+              </Panel>
+            }) :
+            null
+        }
 
         {this.chrome57 ?
           <Panel>
@@ -152,6 +189,7 @@ export default class App extends React.Component {
                   newLedgerEventName={LIVE_NEW_LEDGER}
                   emitter={this.emitter}
                   />
+                <Incidents />
                 <FeeStats
                   horizonURL={horizonLive}
                   />

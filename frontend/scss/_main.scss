@@ -77,9 +77,26 @@ section {
   }
 }
 
-.mui--bg-accent-light a {
-  color: #FFF;
-  text-decoration: underline;
+.mui--bg-accent-light {
+  &.mui-panel {
+    margin-bottom: 0;
+  }
+
+  a {
+    color: #FFF;
+    text-decoration: underline;
+  }
+}
+
+.mui--bg-accent {
+  &.mui-panel {
+    margin-bottom: 0;
+  }
+
+  a {
+    color: #FFF;
+    text-decoration: underline;
+  }
 }
 
 .widget-name {
@@ -367,4 +384,11 @@ section {
 
 .node-update-interval-container {
   padding-bottom: 5px;
+}
+
+ul.incidents {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  font-size: 12px;
 }
