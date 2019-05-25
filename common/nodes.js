@@ -252,6 +252,27 @@ module.exports = [
     publicKey: "GDXQB3OMMQ6MGG43PWFBZWBFKBBDUZIVSUDAZZTRAWQZKES2CDSE5HKJ"
   },
   {
+    id: "v3.lobstr",
+    name: "LOBSTR 3 (North America)",
+    host: "v3.stellar.lobstr.co",
+    port: 11625,
+    publicKey: "GD5QWEVV4GZZTQP46BRXV5CUMMMLP4JTGFD7FWYJJWRL54CELY6JGQ63"
+  },
+  {
+    id: "v4.lobstr",
+    name: "LOBSTR 4 (Asia)",
+    host: "v4.stellar.lobstr.co",
+    port: 11625,
+    publicKey: "GA7TEPCBDQKI7JQLQ34ZURRMK44DVYCIGVXQQWNSWAEQR6KB4FMCBT7J"
+  },
+  {
+    id: "v5.lobstr",
+    name: "LOBSTR 5 (Australia)",
+    host: "v5.stellar.lobstr.co",
+    port: 11625,
+    publicKey: "GA5STBMV6QDXFDGD62MEHLLHZTPDI77U3PFOD2SELU5RJDHQWBR5NNK7"
+  },
+  {
     id: "coinqvest-fi",
     name: "COINQVEST (Finland)",
     host: "finland.stellar.coinqvest.com",
