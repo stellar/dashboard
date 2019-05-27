@@ -266,6 +266,13 @@ module.exports = [
     publicKey: "GD6SZQV3WEJUH352NTVLKEV2JM2RH266VPEM7EH5QLLI7ZZAALMLNUVN"
   },
   {
+    id: "coinqvest-hk",
+    name: "COINQVEST (Hong Kong)",
+    host: "hongkong.stellar.coinqvest.com",
+    port: 11625,
+    publicKey: "GAZ437J46SCFPZEDLVGDMKZPLFO77XJ4QVAURSJVRZK2T5S7XUFHXI2Z"
+  },
+  {
     id: "ocyan_1",
     name: "Ocyan 1",
     host: "stellar.ocyan.com",
