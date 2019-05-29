@@ -392,3 +392,10 @@ ul.incidents {
   list-style-type: none;
   font-size: 12px;
 }
+
+.mui--text-subhead {
+  @media screen and (max-width: 500px) {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
