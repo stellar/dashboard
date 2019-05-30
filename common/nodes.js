@@ -362,5 +362,12 @@ module.exports = [
     host: "sg.stellar.wirexapp.com",
     port: 11625,
     publicKey: "GAB3GZIE6XAYWXGZUDM4GMFFLJBFMLE2JDPUCWUZXMOMT3NHXDHEWXAS"
+  },
+  {
+    id: "armajeddon",
+    name: "ARMAJEDDON",
+    host: "armajeddon.com",
+    port: 11625,
+    publicKey: "GD6GXA2I2FNREL534ZQASLV3U3YJK56KX4V7D5MDX6VIHFBHYVT574PZ"
   }
 ];
