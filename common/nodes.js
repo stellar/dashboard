@@ -56,6 +56,13 @@ module.exports = [
     publicKey: "GDOQLNMARWIZWLEDKBYBOXP5LQYQQF24PS6NEQW4H766RLD4T7AUWQLB"
   },
   {
+    id: "eastus.aworld.org",
+    name: "AWorld.org   EastUS",
+    host: "stellar.aworld.org",
+    port: 11625,
+    publicKey: "GC3Q7I44RBNNCAYNIKG3G55HGRGIFCFSXUCEH7NF3XV3C43Y52QLSPZN"
+  },
+  {
     id: "localstellarassets",
     name: "Local Stellar Assets",
     host: "localstellarassets.com",
