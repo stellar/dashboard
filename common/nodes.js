@@ -390,5 +390,12 @@ module.exports = [
     host: "armajeddon.com",
     port: 11625,
     publicKey: "GD6GXA2I2FNREL534ZQASLV3U3YJK56KX4V7D5MDX6VIHFBHYVT574PZ"
+  },
+  {
+    id: "stellarswitzerland",
+    name: "Stellar Switzerland Group",
+    host: "node.stellarswitzerland.ch",
+    port: 11625,
+    publicKey: "GCTI5PJ3IARLH67N4SJC7P3S3VQWS5PKEGA564WNYBYTPX54FGDAYFFO"
   }
 ];
