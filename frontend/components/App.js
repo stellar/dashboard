@@ -90,7 +90,7 @@ export default class App extends React.Component {
       .get("https://s3-us-west-1.amazonaws.com/stellar-heartbeat/index.html", {
         timeout: 5 * 1000,
       })
-      .then(() => location.reload())
+      .then(() => window.location.reload())
       .catch(() => setTimeout(this.reloadOnConnection.bind(this), 1000));
   }
 
