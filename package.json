@@ -6,8 +6,25 @@
   "scripts": {
     "heroku-postbuild": "gulp build"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "prettier --write",
+      "git add"
+    ],
+    "src/**/*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "prettier": "@stellar/prettier-config",
   "author": "Stellar.org",
   "dependencies": {
+    "@stellar/prettier-config": "^1.0.1",
     "axios": "^0.15.3",
     "babel-core": "^6.23.0",
     "babel-loader": "^6.3.2",
@@ -42,5 +59,10 @@
     "stellar-sdk": "^2.0.0-beta.7",
     "style-loader": "^0.19.0",
     "webpack": "^1.13.3"
+  },
+  "devDependencies": {
+    "husky": "^3.0.1",
+    "lint-staged": "^9.2.1",
+    "prettier": "^1.18.2"
   }
 }
