@@ -188,11 +188,12 @@ export default class App extends React.Component {
                     >
                       <strong>{m.name}</strong>
                     </a>{" "}
-                    (
+                    at{" "}
                     {moment(m.scheduled_for).format(
-                      "dddd, MMMM Do YYYY, h:mm:ss a",
-                    )}
-                    )<br />
+                      "dddd, MMMM Do YYYY, h:mm:ssa",
+                    )}{" "}
+                    (your local time)
+                    <br />
                     {m.incident_updates.length > 0 ? (
                       <span
                         dangerouslySetInnerHTML={{
