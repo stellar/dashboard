@@ -4,7 +4,7 @@ let cachedData;
 
 export const handler = function(req, res) {
   res.send(cachedData);
-}
+};
 
 function updateApiLumens() {
   Promise.all([
@@ -15,28 +15,29 @@ function updateApiLumens() {
     commonLumens.distributionBitcoinProgram(),
     commonLumens.distributionPartnershipProgram(),
     commonLumens.distributionBuildChallenge(),
-  ]).then(function(data) {
-    var response = {
-      updatedAt: new Date(),
-      totalCoins: data[0],
-      availableCoins: data[1],
-      distributedCoins: data[2],
-      programs: {
-        directProgram: data[3],
-        bitcoinProgram: data[4],
-        partnershipProgram: data[5],
-        buildChallenge: data[6]
-      }
-    };
+  ])
+    .then(function(data) {
+      var response = {
+        updatedAt: new Date(),
+        totalCoins: data[0],
+        availableCoins: data[1],
+        distributedCoins: data[2],
+        programs: {
+          directProgram: data[3],
+          bitcoinProgram: data[4],
+          partnershipProgram: data[5],
+          buildChallenge: data[6],
+        },
+      };
 
-    cachedData = response;
-    console.log("/api/lumens data saved!");
-  })
-  .catch(function(err) {
-    console.error(err);
-    res.sendStatus(500);
-  });
+      cachedData = response;
+      console.log("/api/lumens data saved!");
+    })
+    .catch(function(err) {
+      console.error(err);
+      res.sendStatus(500);
+    });
 }
 
-setInterval(updateApiLumens, 10*60*1000);
+setInterval(updateApiLumens, 10 * 60 * 1000);
 updateApiLumens();

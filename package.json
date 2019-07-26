@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "heroku-postbuild": "gulp build"
+    "heroku-postbuild": "gulp build",
+    "lint:prettier": "prettier --config --write '**/*.js'"
   },
   "husky": {
     "hooks": {
@@ -12,11 +13,7 @@
     }
   },
   "lint-staged": {
-    "src/**/*.js": [
-      "prettier --write",
-      "git add"
-    ],
-    "src/**/*.json": [
+    "**/*.js": [
       "prettier --write",
       "git add"
     ]

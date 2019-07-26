@@ -1,7 +1,7 @@
-import React from 'react';
-import AmountWidget from './AmountWidget';
-import Panel from 'muicss/lib/react/panel';
-import {availableCoins} from '../../common/lumens.js';
+import React from "react";
+import AmountWidget from "./AmountWidget";
+import Panel from "muicss/lib/react/panel";
+import { availableCoins } from "../../common/lumens.js";
 
 export default class LumensAvailable extends AmountWidget {
   constructor(props) {
@@ -9,10 +9,7 @@ export default class LumensAvailable extends AmountWidget {
   }
 
   componentDidMount() {
-    this.timerID = setInterval(
-      () => this.updateAmount(),
-      60*60*1000
-    );
+    this.timerID = setInterval(() => this.updateAmount(), 60 * 60 * 1000);
     this.updateAmount();
   }
 
@@ -21,15 +18,19 @@ export default class LumensAvailable extends AmountWidget {
   }
 
   updateAmount() {
-    availableCoins().then(amount => {
-      this.setState({amount, code: "XLM", loading: false});
+    availableCoins().then((amount) => {
+      this.setState({ amount, code: "XLM", loading: false });
     });
   }
 
   renderName() {
-    return <div>
-      <span>Lumens Available (not held by SDF)</span>
-      <a href="/api/lumens" target="_blank" className="api-link">API</a>
-    </div>
+    return (
+      <div>
+        <span>Lumens Available (not held by SDF)</span>
+        <a href="/api/lumens" target="_blank" className="api-link">
+          API
+        </a>
+      </div>
+    );
   }
 }
