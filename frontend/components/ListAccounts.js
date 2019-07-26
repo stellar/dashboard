@@ -45,8 +45,7 @@ export default class ListAccounts extends React.Component {
   }
 
   render() {
-    let sum = _.reduce(
-      this.state.balances,
+    let sum = this.state.balances.reduce(
       (sum, balance) => sum.add(balance),
       new BigNumber(0),
     );

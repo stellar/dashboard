@@ -3,7 +3,7 @@ import Panel from "muicss/lib/react/panel";
 import Button from "muicss/lib/react/button";
 import Node from "./Node";
 import axios from "axios";
-import commonNodes from "../../common/nodes.js";
+import commonNodes from "../dashboardCommon/nodes.js";
 import sortBy from "lodash/sortBy";
 import shuffle from "lodash/shuffle";
 

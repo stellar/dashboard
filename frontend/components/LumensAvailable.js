@@ -1,7 +1,7 @@
 import React from "react";
 import AmountWidget from "./AmountWidget";
 import Panel from "muicss/lib/react/panel";
-import { availableCoins } from "../../common/lumens.js";
+import { availableCoins } from "../dashboardCommon/lumens.js";
 
 export default class LumensAvailable extends AmountWidget {
   constructor(props) {

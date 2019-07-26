@@ -102,7 +102,7 @@ export default class FailedTransactionsChart extends React.Component {
             "Loading..."
           ) : (
             <BarChart
-              tickFormat={d3.format("d")}
+              tickFormat={format("d")}
               data={this.state.data}
               width={this.state.chartWidth}
               colorScale={this.colorScale}

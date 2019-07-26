@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "heroku-postbuild": "gulp build",
-    "lint:prettier": "prettier --config --write '**/*.js'"
+    "heroku-postbuild": "yarn build",
+    "lint:prettier": "prettier --config --write '**/*.js'",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "eject": "react-app-rewired eject"
   },
   "husky": {
     "hooks": {
@@ -23,23 +26,13 @@
   "dependencies": {
     "@stellar/prettier-config": "^1.0.1",
     "axios": "^0.19.0",
-    "babel-core": "^6.23.0",
-    "babel-loader": "^6.3.2",
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-react": "^6.23.0",
-    "babel-register": "^6.24.0",
     "bignumber.js": "^3.0.1",
     "bourbon": "^4.3.4",
     "bourbon-neat": "^2.0.0",
-    "browser-sync": "^2.18.2",
-    "css-loader": "2.1.1",
     "express": "^4.14.0",
     "express-http-proxy": "^1.0.6",
     "extract-text-webpack-plugin": "^0.7.0",
     "fbemitter": "^2.1.1",
-    "file-loader": "^0.9.0",
-    "gulp": "^3.9.1",
-    "json-loader": "^0.5.1",
     "lodash": "^4.17.15",
     "moment": "^2.17.1",
     "morgan": "^1.8.2",
@@ -47,19 +40,33 @@
     "node-sass": "^4.12.0",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
-    "react": "^16.3.2",
+    "react": "^16.8.6",
+    "react-app-rewired": "^2.1.3",
     "react-d3-components": "^0.9.1",
-    "react-dom": "^16.3.2",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1",
     "recharts": "^0.22.1",
     "sass-loader": "^6.0.6",
     "sequelize": "^5.3.0",
     "stellar-sdk": "^2.0.0-beta.7",
-    "style-loader": "^0.19.0",
-    "webpack": "^1.13.3"
+    "style-loader": "^0.19.0"
   },
   "devDependencies": {
+    "@stellar/eslint-config": "^1.0.0",
     "husky": "^3.0.1",
     "lint-staged": "^9.2.1",
     "prettier": "^1.18.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

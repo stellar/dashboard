@@ -7,7 +7,7 @@ import BigNumber from "bignumber.js";
 import Cell from "recharts/lib/component/Cell";
 import PieChart from "recharts/lib/chart/PieChart";
 import Pie from "recharts/lib/polar/Pie";
-import * as lumens from "../../common/lumens.js";
+import * as lumens from "../dashboardCommon/lumens.js";
 
 const BILLION = Math.pow(10, 9);
 
