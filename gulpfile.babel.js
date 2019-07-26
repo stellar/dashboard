@@ -1,54 +1,68 @@
-'use strict';
+"use strict";
 
-var _       = require('lodash');
-var bs      = require('browser-sync').create();
-var gulp    = require('gulp');
-var path    = require('path');
+var _ = require("lodash");
+var bs = require("browser-sync").create();
+var gulp = require("gulp");
+var path = require("path");
 var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-gulp.task('default', ['develop']);
+gulp.task("default", ["develop"]);
 
 var webpackOptions = {
   entry: {
     app: "./frontend/app.js",
-    vendor: ["react", "react-dom", "muicss", "stellar-sdk", "axios", "d3", "fbemitter"]
+    vendor: [
+      "react",
+      "react-dom",
+      "muicss",
+      "stellar-sdk",
+      "axios",
+      "d3",
+      "fbemitter",
+    ],
   },
   devtool: "source-map",
   resolve: {
-    root: [
-      path.resolve('frontend'),
-      path.resolve('common')
-    ],
-    modulesDirectories: ["node_modules"]
+    root: [path.resolve("frontend"), path.resolve("common")],
+    modulesDirectories: ["node_modules"],
   },
   module: {
     loaders: [
-      {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader', query: {presets: ['es2015', 'react']}},
-      {test: /\.json$/, loader: 'json-loader'},
-      {test: /\.html$/, loader: 'file?name=[name].html'},
-      {test: /\.scss$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader")}
-    ]
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader",
+        query: { presets: ["es2015", "react"] },
+      },
+      { test: /\.json$/, loader: "json-loader" },
+      { test: /\.html$/, loader: "file?name=[name].html" },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract(
+          "style-loader",
+          "css-loader!sass-loader",
+        ),
+      },
+    ],
   },
   plugins: [
     new webpack.IgnorePlugin(/ed25519/),
-    new ExtractTextPlugin("style.css")
-  ]
+    new ExtractTextPlugin("style.css"),
+  ],
 };
 
-gulp.task('develop', function(done) {
+gulp.task("develop", function(done) {
   var options = merge(webpackOptions, {
     output: {
       filename: "[name].js",
-      path: './.tmp'
+      path: "./.tmp",
     },
-    plugins: [
-      new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.js")
-    ]
+    plugins: [new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.js")],
   });
 
   var watchOptions = {
-    aggregateTimeout: 300
+    aggregateTimeout: 300,
   };
 
   var bsInitialized = false;
@@ -64,47 +78,48 @@ gulp.task('develop', function(done) {
         notify: false,
         server: "./.tmp",
         socket: {
-          domain: 'localhost:3000'
-        }
+          domain: "localhost:3000",
+        },
       });
       bsInitialized = true;
     }
-    console.log(stats.toString({
-      hash: false,
-      version: false,
-      timings: true,
-      chunks: false,
-      colors: true
-    }));
+    console.log(
+      stats.toString({
+        hash: false,
+        version: false,
+        timings: true,
+        chunks: false,
+        colors: true,
+      }),
+    );
   });
 });
 
-gulp.task('build', function(done) {
+gulp.task("build", function(done) {
   var options = merge(webpackOptions, {
     bail: true,
     output: {
       // TODO chunkhash
-      filename: "[name].js",//"[name]-[chunkhash].js",
-      path: './dist'
+      filename: "[name].js", //"[name]-[chunkhash].js",
+      path: "./dist",
     },
     plugins: [
       new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.js"),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.OccurenceOrderPlugin(),
       new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('production'),
-        }
+        "process.env": {
+          NODE_ENV: JSON.stringify("production"),
+        },
       }),
-      new webpack.optimize.UglifyJsPlugin()
-    ]
+      new webpack.optimize.UglifyJsPlugin(),
+    ],
   });
 
   var compiler = webpack(options);
   compiler.purgeInputFileSystem();
   compiler.run(done);
 });
-
 
 function merge(object1, object2) {
   return _.mergeWith(object1, object2, function(a, b) {

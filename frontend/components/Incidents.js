@@ -1,12 +1,12 @@
-import React from 'react';
-import Panel from 'muicss/lib/react/panel';
-import axios from 'axios';
-import moment from 'moment';
+import React from "react";
+import Panel from "muicss/lib/react/panel";
+import axios from "axios";
+import moment from "moment";
 
 export default class Incidents extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true};
+    this.state = { loading: true };
   }
 
   getIncidents() {
@@ -15,16 +15,17 @@ export default class Incidents extends React.Component {
     }
     this.loading = true;
 
-    axios.get("https://9sl3dhr1twv1.statuspage.io/api/v2/incidents.json?limit=10")
-      .then(response => {
-        this.setState({loading: false, incidents: response.data.incidents});
+    axios
+      .get("https://9sl3dhr1twv1.statuspage.io/api/v2/incidents.json?limit=10")
+      .then((response) => {
+        this.setState({ loading: false, incidents: response.data.incidents });
         this.loading = false;
       });
   }
 
   componentDidMount() {
     this.getIncidents();
-    this.timerID = setInterval(() => this.getIncidents(), 60*1000);
+    this.timerID = setInterval(() => this.getIncidents(), 60 * 1000);
   }
 
   componentWillUnmount() {
@@ -34,19 +35,25 @@ export default class Incidents extends React.Component {
   render() {
     return (
       <Panel>
-        <div className="widget-name">
-          Incidents
-        </div>
-        {
-            this.state.loading ?
-              <span>Loading...</span>
-            :
-            <ul className="incidents">
-            {this.state.incidents.map(m => {
-              return <li key={m.id}><a href={"https://stellarorg.statuspage.io/incidents/"+m.id}>{m.name}</a> ({moment(m.started_at).fromNow()})</li>
+        <div className="widget-name">Incidents</div>
+        {this.state.loading ? (
+          <span>Loading...</span>
+        ) : (
+          <ul className="incidents">
+            {this.state.incidents.map((m) => {
+              return (
+                <li key={m.id}>
+                  <a
+                    href={"https://stellarorg.statuspage.io/incidents/" + m.id}
+                  >
+                    {m.name}
+                  </a>{" "}
+                  ({moment(m.started_at).fromNow()})
+                </li>
+              );
             })}
-            </ul>
-          }
+          </ul>
+        )}
       </Panel>
     );
   }

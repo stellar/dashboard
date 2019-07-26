@@ -1,5 +1,5 @@
 require("babel-register")({
-  "presets": ["es2015"]
+  presets: ["es2015"],
 });
 
-require('./backend/app.js');
+require("./backend/app.js");
