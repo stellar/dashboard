@@ -189,10 +189,19 @@ export default class App extends React.Component {
                       <strong>{m.name}</strong>
                     </a>{" "}
                     at{" "}
+                    {moment(m.scheduled_for)
+                      .utc()
+                      .format("dddd, MMMM Do YYYY, h:mma")}{" "}
+                    UTC (
                     {moment(m.scheduled_for).format(
-                      "dddd, MMMM Do YYYY, h:mm:ssa",
+                      moment(m.scheduled_for)
+                        .utc()
+                        .format("dddd") ===
+                        moment(m.scheduled_for).format("dddd")
+                        ? "h:mma"
+                        : "MMMM Do YYYY, h:mma",
                     )}{" "}
-                    (your local time)
+                    local time)
                     <br />
                     {m.incident_updates.length > 0 ? (
                       <span
