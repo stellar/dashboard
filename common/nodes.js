@@ -203,20 +203,6 @@ module.exports = [
     publicKey: "GB7ESEJVQQVNE5DOXVX6UUIF4LDH7E5OVKTIVJ72FPU3AL7XGTY4A6MH",
   },
   {
-    id: "v1.stellar.smoove.net",
-    name: "smoove.net 1",
-    host: "v1.stellar.smoove.net",
-    port: 11625,
-    publicKey: "GDCAQY2Q5VMMI4ZOX35GTL7X43LMP3RA5W4VCP6V2BB6IFOO76GACXZU",
-  },
-  {
-    id: "v2.stellar.smoove.net",
-    name: "smoove.net 2",
-    host: "v2.stellar.smoove.net",
-    port: 11625,
-    publicKey: "GCXEKMPY6TDNNI2VBWFOEA23V22OZW2INSCGTKNEHIHJDPG2C53PURBG",
-  },
-  {
     id: "keybase",
     name: "keybase.io",
     host: "stellar0.keybase.io",
