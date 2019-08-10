@@ -391,4 +391,11 @@ module.exports = [
     port: 11625,
     publicKey: "GD6GXA2I2FNREL534ZQASLV3U3YJK56KX4V7D5MDX6VIHFBHYVT574PZ",
   },
+  {
+    id: "aldana.cz",
+    name: "Aldana.cz",
+    host: "aldana.cz",
+    port: 11625,
+    publicKey: "GBTOJCBAE2VCBC7E7AZX45CD5IAFAIMGCISAWNKFTAZMOJ5UGZ6MTOS7",
+  },
 ];
