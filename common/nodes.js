@@ -387,8 +387,8 @@ module.exports = [
   {
     id: "armajeddon",
     name: "ARMAJEDDON",
-    host: "armajeddon.com",
+    host: "the.armajeddon.com",
     port: 11625,
-    publicKey: "GD6GXA2I2FNREL534ZQASLV3U3YJK56KX4V7D5MDX6VIHFBHYVT574PZ",
+    publicKey: "GCSV537N26ZASPREJ3WEMHD46KU7Z7FU4OUPFHTR7MKCGAU5JB3FJPIR",
   },
 ];
