@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "gulp",
     "heroku-postbuild": "gulp build",
     "lint:prettier": "prettier --config --write '**/*.js'"
   },
