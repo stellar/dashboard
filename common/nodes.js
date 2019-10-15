@@ -119,6 +119,13 @@ module.exports = [
     publicKey: "GAK6Z5UVGUVSEK6PEOCAYJISTT5EJBB34PN3NOLEQG2SUKXRVV2F6HZY",
   },
   {
+    id: "lapo",
+    name: "LAPO BLOCKCHAIN",
+    host: "ch.stellar.lapo.io",
+    port: 11625,
+    publicKey: "GBEQN7BMSW3667C5JIN3FMQLESW6G7QY7V73RFBERB2KWQGW67HKSRX7",
+  },
+  {
     id: "cryptomover1",
     name: "Cryptomover host 1",
     host: "cryptodealer.hk",
