@@ -146,7 +146,7 @@ export default class App extends React.Component {
                   <div className="mui--text-subhead mui--text-light">
                     <a
                       href={
-                        "https://stellarorg.statuspage.io/incidents/" + m.id
+                        "https://status.stellar.org/incidents/" + m.id
                       }
                     >
                       <strong>{m.name}</strong>
@@ -183,7 +183,7 @@ export default class App extends React.Component {
                     Scheduled Maintenance:{" "}
                     <a
                       href={
-                        "https://stellarorg.statuspage.io/incidents/" + m.id
+                        "https://status.stellar.org/incidents/" + m.id
                       }
                     >
                       <strong>{m.name}</strong>

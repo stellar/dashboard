@@ -44,7 +44,7 @@ export default class Incidents extends React.Component {
               return (
                 <li key={m.id}>
                   <a
-                    href={"https://stellarorg.statuspage.io/incidents/" + m.id}
+                    href={"https://status.stellar.org/incidents/" + m.id}
                   >
                     {m.name}
                   </a>{" "}
