@@ -53,6 +53,11 @@ export default class App extends React.Component {
       forceTheme = true;
     }
 
+    // TRS
+    if (d == 20 && m == 12 && y == 2019) {
+      forceTheme = true;
+    }
+
     // For testing
     if (localStorage.getItem("forceTheme") != null) {
       forceTheme = true;
