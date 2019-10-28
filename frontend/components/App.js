@@ -193,10 +193,10 @@ export default class App extends React.Component {
                     >
                       <strong>{m.name}</strong>
                     </a>{" "}
-                    at{" "}
+                    on{" "}
                     {moment(m.scheduled_for)
                       .utc()
-                      .format("dddd, MMMM Do YYYY, h:mma")}{" "}
+                      .format("dddd, MMMM Do YYYY, [at] h:mma")}{" "}
                     UTC (
                     {moment(m.scheduled_for).format(
                       moment(m.scheduled_for)
