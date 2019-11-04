@@ -39,5 +39,5 @@ function updateApiLumens() {
     });
 }
 
-setInterval(updateApiLumens, 10 * 60 * 1000);
+// setInterval(updateApiLumens, 10 * 60 * 1000);
 updateApiLumens();
