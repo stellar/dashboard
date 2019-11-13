@@ -11,14 +11,31 @@ const horizonLiveURL = "https://horizon.stellar.org";
 const accounts = {
   worldGiveaway: "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
   partnerships: "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
-  btcGiveawayCold: "GDTNE54IWDB3UQLMIUSBKIDTMUW7FNKBU4VB2GVW4OL65BZN7W5VRNVY",
+  // btcGiveawayCold: "GDTNE54IWDB3UQLMIUSBKIDTMUW7FNKBU4VB2GVW4OL65BZN7W5VRNVY",
   invitesHot: "GAX3BRBNB5WTJ2GNEFFH7A4CZKT2FORYABDDBZR5FIIT3P7FLS2EFOZZ",
   sdfOperationalFunds:
     "GB6NVEN5HSUBKMYCE5ZOWSK5K23TBWRUQLZY3KNMXUZ3AQ2ESC4MY4AQ",
   vestingPool: "GANOI26P6VAUL4NFVA4FAIOIBOR46NORONBIWUPRIGAMP7T5W5MOY4O6",
   cashAccount: "GCEZYB47RSSSR6RMHQDTBWL4L6RY5CY2SPJU3QHP3YPB6ALPVRLPN7OQ",
-  inflationDest: "GDWNY2POLGK65VVKIH5KQSH7VWLKRTQ5M6ADLJAYC2UEHEBEARCZJWWI",
+  // inflationDest: "GDWNY2POLGK65VVKIH5KQSH7VWLKRTQ5M6ADLJAYC2UEHEBEARCZJWWI",
   worldHot: "GB76DZDZQRUGK3KEINZM6YDZI5OPVAP6UTIZKZIFNTRMG5T7UC5IRVRE",
+  ecosystemSupport: {
+    infrastructureGrants:
+      "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
+    currencySupport: "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
+  },
+  useCaseInvestment: {
+    enterpriseFund: "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
+    newProducts: "GCPWKVQNLDPD4RNP5CAXME4BEDTKSSYRR4MMEL4KG65NEGCOGNJW7QI2",
+  },
+  userAcquisition: {
+    inAppDistribution:
+      "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
+    inAppDistributionHot:
+      "GAX3BRBNB5WTJ2GNEFFH7A4CZKT2FORYABDDBZR5FIIT3P7FLS2EFOZZ",
+    marketingSupport:
+      "GBEVKAYIPWC5AQT6D4N7FC3XGKRRBMPCAMTO3QZWMHHACLHTMAHAM2TP",
+  },
 };
 
 export function getLumenBalance(horizonURL, accountId) {
@@ -84,6 +101,33 @@ export function distributionPartnershipProgram() {
       return amount.toString();
     },
   );
+}
+
+function sumRelevantAccounts(accountsObj) {
+  return Promise.all(
+    Object.values(accountsObj).map((acct) =>
+      getLumenBalance(horizonLiveURL, acct),
+    ),
+  ).then((data) =>
+    data
+      .reduce(
+        (sum, currentBalance) => new BigNumber(currentBalance).add(sum),
+        new BigNumber(0),
+      )
+      .toString(),
+  );
+}
+
+export function distributionEcosystemSupport() {
+  return sumRelevantAccounts(accounts.ecosystemSupport);
+}
+
+export function distributionUseCaseInvestment() {
+  return sumRelevantAccounts(accounts.useCaseInvestment);
+}
+
+export function distributionUserAcquisition() {
+  return sumRelevantAccounts(accounts.userAcquisition);
 }
 
 export function sdfAccounts() {

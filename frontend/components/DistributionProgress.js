@@ -43,24 +43,32 @@ export default class DistributionProgress extends React.Component {
 
     Promise.all([
       lumens.totalCoins(this.props.horizonLiveURL),
-      lumens.sdfAccounts(),
-      lumens.availableCoins(),
+      // lumens.sdfAccounts(),
+      // lumens.availableCoins(),
       lumens.distributionAll(),
       lumens.distributionDirectSignup(),
       lumens.distributionBitcoinProgram(),
       lumens.distributionPartnershipProgram(),
       lumens.distributionBuildChallenge(),
+      lumens.distributionEcosystemSupport(),
+      lumens.distributionUseCaseInvestment(),
+      lumens.distributionUserAcquisition(),
     ]).then((results) => {
       const [
         totalCoins,
-        sdfAccounts,
-        availableCoins,
+        // sdfAccounts,
+        // availableCoins,
         distributionAll,
         directSignup,
         bitcoinProgram,
         partnershipProgram,
         buildChallenge,
+        ecosystemSupport,
+        useCaseInvestment,
+        userAcquisition,
       ] = results;
+      const sdfAccounts = 1000000;
+      const availableCoins = 1000000;
 
       const directSignupLeft = new BigNumber(50 * BILLION).minus(directSignup);
       const partnershipProgramLeft = new BigNumber(25 * BILLION).minus(
@@ -99,37 +107,19 @@ export default class DistributionProgress extends React.Component {
         color: distributedColor,
       });
       dataOuter.push({
-        name: "Bitcoin program",
-        value: parseInt(bitcoinProgram),
+        name: "Ecosystem Support",
+        value: parseInt(ecosystemSupport),
         color: distributedColor,
       });
       dataOuter.push({
-        name: "Stellar Build Challenge",
-        value: parseInt(buildChallenge),
+        name: "Use-Case Investment",
+        value: parseInt(useCaseInvestment),
         color: distributedColor,
       });
       dataOuter.push({
-        name: "Partnership program",
-        value: parseInt(partnershipProgram),
+        name: "User Acquisition",
+        value: parseInt(userAcquisition),
         color: distributedColor,
-      });
-
-      let other = new BigNumber(availableCoins).minus(distributionAll);
-      dataOuter.push({
-        name: "Other",
-        value: other.toNumber(),
-        color: distributedColor,
-      });
-
-      dataOuter.push({
-        name: "Direct signup program left",
-        value: parseInt(directSignupLeft),
-        color: toDistributeColor,
-      });
-      dataOuter.push({
-        name: "Partnership program left",
-        value: parseInt(partnershipProgramLeft),
-        color: toDistributeColor,
       });
 
       let sdfDiscretionary = new BigNumber(sdfAccounts)
