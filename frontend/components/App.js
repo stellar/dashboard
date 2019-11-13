@@ -306,10 +306,6 @@ export default class App extends React.Component {
               <LumensAvailable />
             </div>
 
-            <div className="mui-col-md-4">
-              <LumensDistributed />
-            </div>
-
             <h2>
               11/4/2019: Updates to Lumen Distribution are currently paused. We
               will release an updated version of the Dashboard soon.
@@ -317,16 +313,11 @@ export default class App extends React.Component {
           </section>
 
           <section>
-            <h1>Featured live network nodes</h1>
+            <h1>Network Nodes</h1>
             <h2>
-              None of the following validators are recommended by Stellar
-              Development Foundation. We don't know who really controls
-              unverified nodes.
+              View network nodes on Stellarbeat and visualize consensus.
               <br />
-              These are <u>not</u> the only nodes in the Stellar network.
-              Everyone can run a validating node.
-              <br />
-              This list is purely for informational purposes.
+              <a href="https://stellarbeat.io">Explore Nodes</a>
             </h2>
             <Nodes />
           </section>

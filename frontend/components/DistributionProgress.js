@@ -80,29 +80,25 @@ export default class DistributionProgress extends React.Component {
 
       // Programs - used in a table below the pie chart
       programs.push({
-        name: "Direct signup program",
+        name: "Direct Development",
         value: directSignup,
-        p: this.percentOf(directSignup, 50),
       });
       programs.push({
-        name: "Bitcoin program",
-        value: bitcoinProgram,
-        p: "100%" /* BTC/XRP Giveaway are over */,
+        name: "Ecosystem Support",
+        value: ecosystemSupport,
       });
       programs.push({
-        name: "Stellar Build Challenge",
-        value: buildChallenge,
-        p: "N/A",
+        name: "Use-Case Investment",
+        value: useCaseInvestment,
       });
       programs.push({
-        name: "Partnership program",
-        value: partnershipProgram,
-        p: this.percentOf(partnershipProgram, 25),
+        name: "User Acquisition",
+        value: userAcquisition,
       });
 
       // Outer Pie
       dataOuter.push({
-        name: "Direct signup program",
+        name: "Direct Development",
         value: parseInt(directSignup),
         color: distributedColor,
       });
@@ -259,22 +255,16 @@ export default class DistributionProgress extends React.Component {
                 <thead>
                   <tr>
                     <th>Program</th>
-                    <th>Progress</th>
-                    <th>Amount Distributed</th>
+                    <th>Amount Remaining</th>
                   </tr>
                 </thead>
                 <tbody>
                   {Object.keys(this.state.programs).map((key) => {
                     let row = this.state.programs[key];
-                    if (!row.p) {
-                      return;
-                    }
+
                     return (
                       <tr key={key}>
                         <td>{row.name}</td>
-                        <td className="amount-column">
-                          {row.p ? `${row.p}` : null}
-                        </td>
                         <td className="amount-column">
                           {new BigNumber(row.value).toFormat(
                             0,
