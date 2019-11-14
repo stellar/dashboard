@@ -8,17 +8,24 @@ import find from "lodash/find";
 
 const horizonLiveURL = "https://horizon.stellar.org";
 
+const voidAccount = "GALAXYVOIDAOPZTDLHILAJQKCVVFMD4IKLXLSZV5YHO7VY74IWZILUTO";
 const accounts = {
-  worldGiveaway: "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
-  partnerships: "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
-  btcGiveawayCold: "GDTNE54IWDB3UQLMIUSBKIDTMUW7FNKBU4VB2GVW4OL65BZN7W5VRNVY",
-  invitesHot: "GAX3BRBNB5WTJ2GNEFFH7A4CZKT2FORYABDDBZR5FIIT3P7FLS2EFOZZ",
-  sdfOperationalFunds:
-    "GB6NVEN5HSUBKMYCE5ZOWSK5K23TBWRUQLZY3KNMXUZ3AQ2ESC4MY4AQ",
-  vestingPool: "GANOI26P6VAUL4NFVA4FAIOIBOR46NORONBIWUPRIGAMP7T5W5MOY4O6",
-  cashAccount: "GCEZYB47RSSSR6RMHQDTBWL4L6RY5CY2SPJU3QHP3YPB6ALPVRLPN7OQ",
-  inflationDest: "GDWNY2POLGK65VVKIH5KQSH7VWLKRTQ5M6ADLJAYC2UEHEBEARCZJWWI",
-  worldHot: "GB76DZDZQRUGK3KEINZM6YDZI5OPVAP6UTIZKZIFNTRMG5T7UC5IRVRE",
+  directDevelopment: "GB6NVEN5HSUBKMYCE5ZOWSK5K23TBWRUQLZY3KNMXUZ3AQ2ESC4MY4AQ",
+  directDevelopmentHot1:
+    "GCEZYB47RSSSR6RMHQDTBWL4L6RY5CY2SPJU3QHP3YPB6ALPVRLPN7OQ",
+  directDevelopmentHot2:
+    "GB6D7BSIOPC7FTRLVMVRFPBQRFXWWDU3XXFU5YFSOPN4PQALNMQC7ANB",
+  directDevelopmentHot3:
+    "GCVLWV5B3L3YE6DSCCMHLCK7QIB365NYOLQLW3ZKHI5XINNMRLJ6YHVX",
+  infrastructureGrants:
+    "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
+  currencySupport: "GAMGGUQKKJ637ILVDOSCT5X7HYSZDUPGXSUW67B2UKMG2HEN5TPWN3LQ",
+  enterpriseFund: "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
+  newProducts: "GCPWKVQNLDPD4RNP5CAXME4BEDTKSSYRR4MMEL4KG65NEGCOGNJW7QI2",
+  inAppDistribution: "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
+  inAppDistributionHot:
+    "GAX3BRBNB5WTJ2GNEFFH7A4CZKT2FORYABDDBZR5FIIT3P7FLS2EFOZZ",
+  marketingSupport: "GBEVKAYIPWC5AQT6D4N7FC3XGKRRBMPCAMTO3QZWMHHACLHTMAHAM2TP",
 };
 
 export function getLumenBalance(horizonURL, accountId) {
@@ -31,59 +38,97 @@ export function getLumenBalance(horizonURL, accountId) {
   });
 }
 
+function sumRelevantAccounts(accounts) {
+  return Promise.all(
+    accounts.map((acct) => getLumenBalance(horizonLiveURL, acct)),
+  ).then((data) =>
+    data
+      .reduce(
+        (sum, currentBalance) => new BigNumber(currentBalance).add(sum),
+        new BigNumber(0),
+      )
+      .toString(),
+  );
+}
+
 export function totalCoins(horizonURL) {
   return axios
     .get(`${horizonURL}/ledgers/?order=desc&limit=1`)
-    .then((response) => response.data._embedded.records[0].total_coins);
+    .then((response) => {
+      return response.data._embedded.records[0].total_coins;
+    });
 }
 
-export function distributionAll() {
-  return Promise.all([
-    distributionDirectSignup(),
-    distributionBitcoinProgram(),
-    distributionPartnershipProgram(),
-    distributionBuildChallenge(),
-  ]).then((balances) => {
-    var amount = reduce(
-      balances,
-      (sum, balance) => sum.add(balance),
-      new BigNumber(0),
+export function feePool(horizonURL) {
+  return axios
+    .get(`${horizonURL}/ledgers/?order=desc&limit=1`)
+    .then((response) => {
+      return response.data._embedded.records[0].fee_pool;
+    });
+}
+
+export function burnedCoins(horizonURL) {
+  return axios.get(`${horizonURL}/accounts/${voidAccount}`).then((response) => {
+    var xlmBalance = find(
+      response.data.balances,
+      (b) => b.asset_type == "native",
     );
-    return amount.toString();
+    return xlmBalance.balance;
   });
 }
 
-export function distributionDirectSignup() {
+export function postBurnTotalCoins(horizonURL) {
   return Promise.all([
-    getLumenBalance(horizonLiveURL, accounts.worldGiveaway),
-    getLumenBalance(horizonLiveURL, accounts.invitesHot),
+    totalCoins(horizonURL),
+    burnedCoins(horizonURL),
+    feePool(horizonURL),
   ]).then((balances) => {
-    var amount = new BigNumber(50 * Math.pow(10, 9)); // 50B
-    amount = amount.minus(balances[0]);
-    amount = amount.minus(balances[1]);
-    amount = amount.minus(1000000000);
-    return amount.toString();
+    const [totalCoinsAmount, burnedCoinsAmount, feePoolAmount] = balances;
+    const amount = new BigNumber(totalCoinsAmount)
+      .minus(burnedCoinsAmount)
+      .minus(feePoolAmount);
+
+    return amount;
   });
 }
 
-export function distributionBitcoinProgram() {
-  return "2037756769.6575473";
+export function directDevelopmentAll() {
+  const {
+    directDevelopment,
+    directDevelopmentHot1,
+    directDevelopmentHot2,
+    directDevelopmentHot3,
+  } = accounts;
+  return sumRelevantAccounts([
+    directDevelopment,
+    directDevelopmentHot1,
+    directDevelopmentHot2,
+    directDevelopmentHot3,
+  ]);
 }
 
-export function distributionBuildChallenge() {
-  let sum =
-    49116333 + 30520000 + 7950000 + 62400000 + 5700000 + 2599000 + 3522250;
-  return sum.toString();
+export function distributionEcosystemSupport() {
+  const { infrastructureGrants, currencySupport } = accounts;
+  return sumRelevantAccounts([infrastructureGrants, currencySupport]);
 }
 
-export function distributionPartnershipProgram() {
-  return getLumenBalance(horizonLiveURL, accounts.partnerships).then(
-    (balance) => {
-      var amount = new BigNumber(25 * Math.pow(10, 9)); // 25B
-      amount = amount.minus(balance);
-      return amount.toString();
-    },
-  );
+export function distributionUseCaseInvestment() {
+  const { enterpriseFund, newProducts } = accounts;
+  return sumRelevantAccounts([enterpriseFund, newProducts]);
+}
+
+export function distributionUserAcquisition() {
+  const {
+    inAppDistribution,
+    inAppDistributionHot,
+    marketingSupport,
+  } = accounts;
+
+  return sumRelevantAccounts([
+    inAppDistribution,
+    inAppDistributionHot,
+    marketingSupport,
+  ]);
 }
 
 export function sdfAccounts() {
@@ -98,10 +143,11 @@ export function sdfAccounts() {
 }
 
 export function availableCoins() {
-  return Promise.all([totalCoins(horizonLiveURL), sdfAccounts()]).then(
+  return Promise.all([postBurnTotalCoins(horizonLiveURL), sdfAccounts()]).then(
     (result) => {
       let [totalCoins, sdfAccounts] = result;
-      return new BigNumber(totalCoins).minus(sdfAccounts).minus(1000000000);
+
+      return new BigNumber(totalCoins).minus(sdfAccounts);
     },
   );
 }

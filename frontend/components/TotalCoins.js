@@ -1,8 +1,6 @@
 import React from "react";
 import AmountWidget from "./AmountWidget";
-import Panel from "muicss/lib/react/panel";
-import axios from "axios";
-import { totalCoins } from "../../common/lumens.js";
+import { postBurnTotalCoins } from "../../common/lumens.js";
 
 export default class TotalCoins extends AmountWidget {
   constructor(props) {
@@ -19,7 +17,7 @@ export default class TotalCoins extends AmountWidget {
   }
 
   updateAmount() {
-    totalCoins(this.props.horizonURL).then((amount) => {
+    postBurnTotalCoins(this.props.horizonURL).then((amount) => {
       let code = "XLM";
       this.setState({ amount, code, loading: false });
     });

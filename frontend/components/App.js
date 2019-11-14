@@ -1,6 +1,5 @@
 import React from "react";
 import Panel from "muicss/lib/react/panel";
-import Button from "muicss/lib/react/button";
 import { EventEmitter } from "fbemitter";
 import axios from "axios";
 import moment from "moment";
@@ -9,17 +8,14 @@ import { Server } from "stellar-sdk";
 import AppBar from "./AppBar";
 import AccountBalance from "./AccountBalance";
 import FeeStats from "./FeeStats";
-// import DistributionProgress from "./DistributionProgress";
+import DistributionProgress from "./DistributionProgress";
 import NetworkStatus from "./NetworkStatus";
-import Nodes from "./Nodes";
 import Incidents from "./Incidents";
 import LedgerCloseChart from "./LedgerCloseChart";
-import ListAccounts from "./ListAccounts";
-// import LumensAvailable from "./LumensAvailable";
-// import LumensDistributed from "./LumensDistributed";
+import LumensAvailable from "./LumensAvailable";
 import PublicNetworkLedgersHistoryChart from "./PublicNetworkLedgersHistoryChart";
 import RecentOperations from "./RecentOperations";
-// import TotalCoins from "./TotalCoins";
+import TotalCoins from "./TotalCoins";
 import TransactionsChart from "./TransactionsChart";
 import FailedTransactionsChart from "./FailedTransactionsChart";
 import { LIVE_NEW_LEDGER, TEST_NEW_LEDGER } from "../events";
@@ -149,11 +145,7 @@ export default class App extends React.Component {
               return (
                 <Panel key={m.id} className="mui--bg-accent">
                   <div className="mui--text-subhead mui--text-light">
-                    <a
-                      href={
-                        "https://status.stellar.org/incidents/" + m.id
-                      }
-                    >
+                    <a href={"https://status.stellar.org/incidents/" + m.id}>
                       <strong>{m.name}</strong>
                     </a>{" "}
                     (started: {moment(m.started_at).fromNow()}
@@ -186,11 +178,7 @@ export default class App extends React.Component {
                 <Panel key={m.id} className="mui--bg-accent-light">
                   <div className="mui--text-subhead mui--text-light">
                     Scheduled Maintenance:{" "}
-                    <a
-                      href={
-                        "https://status.stellar.org/incidents/" + m.id
-                      }
-                    >
+                    <a href={"https://status.stellar.org/incidents/" + m.id}>
                       <strong>{m.name}</strong>
                     </a>{" "}
                     on{" "}
@@ -302,25 +290,28 @@ export default class App extends React.Component {
 
           <section>
             <h1>Lumen distribution</h1>
+            <div className="mui-col-md-4">
+              <DistributionProgress horizonLiveURL={horizonLive} />
+            </div>
 
-            <h2>
-              11/4/2019: Updates to Lumen Distribution are currently paused. We will release an updated version of the Dashboard soon.
-            </h2>
+            <div className="mui-col-md-4">
+              <TotalCoins horizonURL={horizonLive} />
+            </div>
+
+            <div className="mui-col-md-4">
+              <LumensAvailable />
+            </div>
           </section>
 
           <section>
-            <h1>Featured live network nodes</h1>
+            <h1>Network Nodes</h1>
             <h2>
-              None of the following validators are recommended by Stellar
-              Development Foundation. We don't know who really controls
-              unverified nodes.
+              View network nodes on Stellarbeat and visualize consensus.
               <br />
-              These are <u>not</u> the only nodes in the Stellar network.
-              Everyone can run a validating node.
-              <br />
-              This list is purely for informational purposes.
+              <a href="https://stellarbeat.io" target="_blank">
+                Explore Nodes
+              </a>
             </h2>
-            <Nodes />
           </section>
 
           <section>
