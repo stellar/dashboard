@@ -33,7 +33,7 @@ section {
     width: 60%;
     line-height: normal;
 
-    @media only screen and (max-width: 768px){
+    @media only screen and (max-width: 768px) {
       width: 90%;
     }
   }
@@ -83,7 +83,7 @@ section {
   }
 
   a {
-    color: #FFF;
+    color: #fff;
     text-decoration: underline;
   }
 }
@@ -94,7 +94,7 @@ section {
   }
 
   a {
-    color: #FFF;
+    color: #fff;
     text-decoration: underline;
   }
 }
@@ -125,7 +125,7 @@ section {
   margin-bottom: 0px;
 }
 
-.mui-table.small tbody>tr:hover {
+.mui-table.small tbody > tr:hover {
   background-color: #f0f0f0;
 }
 
@@ -133,7 +133,8 @@ section {
   font-size: 0.8em;
 }
 
-.mui-table.small td, .mui-table.small th {
+.mui-table.small td,
+.mui-table.small th {
   padding: 0px;
 }
 
@@ -178,7 +179,7 @@ section {
 }
 
 .amount-column {
-  text-align: right;
+  text-align: left;
 }
 
 .account {
@@ -200,8 +201,13 @@ section {
 }
 
 @keyframes anim_pulse {
-  0%, 100% {transform: scale(0)}
-  50% {transform: scale(1.0)}
+  0%,
+  100% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
 }
 
 .pulse-container {
@@ -213,7 +219,8 @@ section {
 
   .pulse {
     background-color: rgb(33, 150, 243);
-    width: 60px; height: 60px;
+    width: 60px;
+    height: 60px;
     border-radius: 100%;
     opacity: 0.6;
     position: absolute;
@@ -333,7 +340,7 @@ section {
 
 .node-barchart-container {
   display: flex;
-  justify-content:flex-end;
+  justify-content: flex-end;
   align-items: center;
   position: relative;
 }

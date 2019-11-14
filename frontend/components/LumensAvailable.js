@@ -26,7 +26,7 @@ export default class LumensAvailable extends AmountWidget {
   renderName() {
     return (
       <div>
-        <span>Lumens Available (not held by SDF)</span>
+        <span>Circulating Supply</span>
         <a href="/api/lumens" target="_blank" className="api-link">
           API
         </a>

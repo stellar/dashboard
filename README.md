@@ -1,4 +1,4 @@
-# dashboard
+# Dashboard
 
 ```sh
 yarn
@@ -10,11 +10,31 @@ yarn
 yarn start
 ```
 
-If you wish to use backend server API start this command in another terminal
-window:
+If you wish to use backend server API, you need a postgres db running with
+dashboard database
+
+(If you do not have postgres installed) Install postgres using homebrew
 
 ```sh
-DEV=true node ./app.js
+brew install postgres
+```
+
+Run postgres
+
+```sh
+pg_ctl -D /usr/local/var/postgres start
+```
+
+Create dashboard db
+
+```sh
+createdb dashboard
+```
+
+Once you have postgres installed, start this command
+
+```sh
+UPDATE_DATA=true DEV=true node app.js
 ```
 
 It will create a proxy to `browser-sync` server started by gulp at
