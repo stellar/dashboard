@@ -1,18 +1,5 @@
 import * as commonLumens from "../common/lumens.js";
 
-// let cachedData = {
-//   updatedAt: "2019-11-04T19:03:21.898Z",
-//   totalCoins: "105443902087.3472865",
-//   availableCoins: "20054779553.6822807",
-//   distributedCoins: "8772645809.0519286",
-//   programs: {
-//     directProgram: "5435066959.8964838",
-//     bitcoinProgram: "2037756769.6575473",
-//     partnershipProgram: "1138014496.4978975",
-//     buildChallenge: "161807583",
-//   },
-// };
-
 let cachedData;
 
 export const handler = function(req, res) {
