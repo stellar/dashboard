@@ -259,8 +259,8 @@ export default class DistributionProgress extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.keys(this.state.programs).map((key) => {
-                    let row = this.state.programs[key];
+                  {Object.keys(this.state.dataOuter).map((key) => {
+                    let row = this.state.dataOuter[key];
 
                     return (
                       <tr key={key}>

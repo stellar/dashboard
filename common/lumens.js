@@ -19,23 +19,15 @@ const accounts = {
   cashAccount: "GCEZYB47RSSSR6RMHQDTBWL4L6RY5CY2SPJU3QHP3YPB6ALPVRLPN7OQ",
   // inflationDest: "GDWNY2POLGK65VVKIH5KQSH7VWLKRTQ5M6ADLJAYC2UEHEBEARCZJWWI",
   worldHot: "GB76DZDZQRUGK3KEINZM6YDZI5OPVAP6UTIZKZIFNTRMG5T7UC5IRVRE",
-  ecosystemSupport: {
-    infrastructureGrants:
-      "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
-    currencySupport: "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
-  },
-  useCaseInvestment: {
-    enterpriseFund: "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
-    newProducts: "GCPWKVQNLDPD4RNP5CAXME4BEDTKSSYRR4MMEL4KG65NEGCOGNJW7QI2",
-  },
-  userAcquisition: {
-    inAppDistribution:
-      "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
-    inAppDistributionHot:
-      "GAX3BRBNB5WTJ2GNEFFH7A4CZKT2FORYABDDBZR5FIIT3P7FLS2EFOZZ",
-    marketingSupport:
-      "GBEVKAYIPWC5AQT6D4N7FC3XGKRRBMPCAMTO3QZWMHHACLHTMAHAM2TP",
-  },
+  infrastructureGrants:
+    "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
+  currencySupport: "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
+  enterpriseFund: "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
+  newProducts: "GCPWKVQNLDPD4RNP5CAXME4BEDTKSSYRR4MMEL4KG65NEGCOGNJW7QI2",
+  inAppDistribution: "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
+  inAppDistributionHot:
+    "GAX3BRBNB5WTJ2GNEFFH7A4CZKT2FORYABDDBZR5FIIT3P7FLS2EFOZZ",
+  marketingSupport: "GBEVKAYIPWC5AQT6D4N7FC3XGKRRBMPCAMTO3QZWMHHACLHTMAHAM2TP",
 };
 
 export function getLumenBalance(horizonURL, accountId) {
@@ -103,11 +95,9 @@ export function distributionPartnershipProgram() {
   );
 }
 
-function sumRelevantAccounts(accountsObj) {
+function sumRelevantAccounts(accounts) {
   return Promise.all(
-    Object.values(accountsObj).map((acct) =>
-      getLumenBalance(horizonLiveURL, acct),
-    ),
+    accounts.map((acct) => getLumenBalance(horizonLiveURL, acct)),
   ).then((data) =>
     data
       .reduce(
@@ -119,15 +109,26 @@ function sumRelevantAccounts(accountsObj) {
 }
 
 export function distributionEcosystemSupport() {
-  return sumRelevantAccounts(accounts.ecosystemSupport);
+  const { infrastructureGrants, currencySupport } = accounts;
+  return sumRelevantAccounts([infrastructureGrants, currencySupport]);
 }
 
 export function distributionUseCaseInvestment() {
-  return sumRelevantAccounts(accounts.useCaseInvestment);
+  const { enterpriseFund, newProducts } = accounts;
+  return sumRelevantAccounts([enterpriseFund, newProducts]);
 }
 
 export function distributionUserAcquisition() {
-  return sumRelevantAccounts(accounts.userAcquisition);
+  const {
+    inAppDistribution,
+    inAppDistributionHot,
+    marketingSupport,
+  } = accounts;
+  return sumRelevantAccounts([
+    inAppDistribution,
+    inAppDistributionHot,
+    marketingSupport,
+  ]);
 }
 
 export function sdfAccounts() {
