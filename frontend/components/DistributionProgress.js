@@ -1,7 +1,5 @@
 import React from "react";
 import Panel from "muicss/lib/react/panel";
-import axios from "axios";
-import reduce from "lodash/reduce";
 import filter from "lodash/filter";
 import BigNumber from "bignumber.js";
 import Cell from "recharts/lib/component/Cell";
@@ -17,7 +15,7 @@ export default class DistributionProgress extends React.Component {
     this.state = {
       loading: true,
       chartWidth: 400,
-      chartHeigth: this.props.chartHeigth || 200,
+      chartHeight: this.props.chartHeight || 200,
     };
   }
 
@@ -38,8 +36,6 @@ export default class DistributionProgress extends React.Component {
 
   updateData() {
     let programs = [];
-    let dataOuter = [];
-    let dataInner = [];
 
     Promise.all([
       lumens.totalCoins(this.props.horizonLiveURL),
@@ -78,41 +74,23 @@ export default class DistributionProgress extends React.Component {
       const distributedColor = "#0C7EC2";
       const toDistributeColor = "#C2DAF1";
 
-      // Programs - used in a table below the pie chart
+      // Pie chart and table
       programs.push({
-        name: "Direct Development",
-        value: directSignup,
-      });
-      programs.push({
-        name: "Ecosystem Support",
-        value: ecosystemSupport,
-      });
-      programs.push({
-        name: "Use-Case Investment",
-        value: useCaseInvestment,
-      });
-      programs.push({
-        name: "User Acquisition",
-        value: userAcquisition,
-      });
-
-      // Outer Pie
-      dataOuter.push({
         name: "Direct Development",
         value: parseInt(directSignup),
         color: distributedColor,
       });
-      dataOuter.push({
+      programs.push({
         name: "Ecosystem Support",
         value: parseInt(ecosystemSupport),
         color: distributedColor,
       });
-      dataOuter.push({
+      programs.push({
         name: "Use-Case Investment",
         value: parseInt(useCaseInvestment),
         color: distributedColor,
       });
-      dataOuter.push({
+      programs.push({
         name: "User Acquisition",
         value: parseInt(userAcquisition),
         color: distributedColor,
@@ -121,33 +99,16 @@ export default class DistributionProgress extends React.Component {
       let sdfDiscretionary = new BigNumber(sdfAccounts)
         .minus(directSignupLeft)
         .minus(partnershipProgramLeft);
-      dataOuter.push({
+      programs.push({
         name: "SDF discretionary",
         value: sdfDiscretionary.toNumber(),
         color: toDistributeColor,
       });
 
       // Hide programs with less than 2B distributed, their labels overlap in the pie chart.
-      dataOuter = filter(dataOuter, (p) => p.value >= 0.9 * BILLION);
+      programs = filter(programs, (p) => p.value >= 0.9 * BILLION);
 
-      // Inner Pie
-      var sumDistributed = reduce(
-        programs,
-        (sum, program) => (sum += program.value),
-        0,
-      );
-      dataInner.push({
-        name: "Distributed",
-        value: sumDistributed,
-        color: distributedColor,
-      });
-      dataInner.push({
-        name: "To Distribute",
-        value: 100 * BILLION - 5 * BILLION - sumDistributed,
-        color: toDistributeColor,
-      });
-
-      this.setState({ programs, dataOuter, dataInner, loading: false });
+      this.setState({ programs, loading: false });
     });
   }
 
@@ -169,8 +130,6 @@ export default class DistributionProgress extends React.Component {
       midAngle,
       innerRadius,
       outerRadius,
-      percent,
-      index,
       payload,
     }) => {
       const RADIAN = Math.PI / 180;
@@ -201,6 +160,8 @@ export default class DistributionProgress extends React.Component {
       );
     };
 
+    const { chartHeight, chartWidth, loading, programs } = this.state;
+
     return (
       <div
         ref={(el) => {
@@ -214,29 +175,13 @@ export default class DistributionProgress extends React.Component {
               API
             </a>
           </div>
-          {this.state.loading ? (
+          {loading ? (
             "Loading..."
           ) : (
             <div>
-              <PieChart
-                width={this.state.chartWidth}
-                height={this.state.chartHeigth}
-              >
+              <PieChart width={chartWidth} height={chartHeight}>
                 <Pie
-                  data={this.state.dataInner}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={25}
-                  startAngle={90}
-                  endAngle={-270}
-                  isAnimationActive={false}
-                >
-                  {this.state.dataInner.map((entry, index) => (
-                    <Cell key={index} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Pie
-                  data={this.state.dataOuter}
+                  data={programs}
                   label={renderCustomizedLabel}
                   cx="50%"
                   cy="50%"
@@ -246,7 +191,7 @@ export default class DistributionProgress extends React.Component {
                   endAngle={-270}
                   isAnimationActive={false}
                 >
-                  {this.state.dataOuter.map((entry, index) => (
+                  {programs.map((entry, index) => (
                     <Cell key={index} fill={entry.color} />
                   ))}
                 </Pie>
@@ -259,8 +204,8 @@ export default class DistributionProgress extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.keys(this.state.dataOuter).map((key) => {
-                    let row = this.state.dataOuter[key];
+                  {Object.keys(programs).map((key) => {
+                    let row = programs[key];
 
                     return (
                       <tr key={key}>
