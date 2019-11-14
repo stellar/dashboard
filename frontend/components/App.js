@@ -10,7 +10,6 @@ import AccountBalance from "./AccountBalance";
 import FeeStats from "./FeeStats";
 import DistributionProgress from "./DistributionProgress";
 import NetworkStatus from "./NetworkStatus";
-import Nodes from "./Nodes";
 import Incidents from "./Incidents";
 import LedgerCloseChart from "./LedgerCloseChart";
 import LumensAvailable from "./LumensAvailable";
@@ -313,7 +312,6 @@ export default class App extends React.Component {
                 Explore Nodes
               </a>
             </h2>
-            <Nodes />
           </section>
 
           <section>
