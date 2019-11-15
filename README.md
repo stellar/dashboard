@@ -1,5 +1,14 @@
 # Dashboard
 
+## Dependencies
+
+To build this project, you must have the following dependencies installed:
+
+- node 10.16.3
+- yarn
+
+## Installation
+
 ```sh
 yarn
 ```
@@ -10,8 +19,7 @@ yarn
 yarn start
 ```
 
-If you wish to use backend server API, you need a postgres db running with
-dashboard database
+### If you wish to use backend server API, you need a postgres db running with dashboard database
 
 (If you do not have postgres installed) Install postgres using homebrew
 
