@@ -27,11 +27,7 @@ export default class TotalCoins extends AmountWidget {
     return (
       <div>
         <span>Total Lumens</span>
-        <a
-          href={`${this.props.horizonURL}/ledgers/?order=desc&limit=1`}
-          target="_blank"
-          className="api-link"
-        >
+        <a href="/api/lumens" target="_blank" className="api-link">
           API
         </a>
       </div>
