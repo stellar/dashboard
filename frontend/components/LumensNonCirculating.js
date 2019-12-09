@@ -1,8 +1,9 @@
 import React from "react";
 import AmountWidget from "./AmountWidget";
-import { postBurnTotalCoins } from "../../common/lumens.js";
+import Panel from "muicss/lib/react/panel";
+import { noncirculatingSupply } from "../../common/lumens.js";
 
-export default class TotalCoins extends AmountWidget {
+export default class LumensNonCirculating extends AmountWidget {
   constructor(props) {
     super(props);
   }
@@ -17,16 +18,15 @@ export default class TotalCoins extends AmountWidget {
   }
 
   updateAmount() {
-    postBurnTotalCoins(this.props.horizonURL).then((amount) => {
-      let code = "XLM";
-      this.setState({ amount, code, loading: false });
+    noncirculatingSupply().then((amount) => {
+      this.setState({ amount, code: "XLM", loading: false });
     });
   }
 
   renderName() {
     return (
       <div>
-        <span>Total Lumens</span>
+        <span>Non-Circulating Supply</span>
         <a href="/api/v2/lumens/" target="_blank" className="api-link">
           API
         </a>

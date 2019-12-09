@@ -8,11 +8,11 @@ import { Server } from "stellar-sdk";
 import AppBar from "./AppBar";
 import AccountBalance from "./AccountBalance";
 import FeeStats from "./FeeStats";
-import DistributionProgress from "./DistributionProgress";
 import NetworkStatus from "./NetworkStatus";
 import Incidents from "./Incidents";
 import LedgerCloseChart from "./LedgerCloseChart";
-import LumensAvailable from "./LumensAvailable";
+import LumensCirculating from "./LumensCirculating";
+import LumensNonCirculating from "./LumensNonCirculating";
 import PublicNetworkLedgersHistoryChart from "./PublicNetworkLedgersHistoryChart";
 import RecentOperations from "./RecentOperations";
 import TotalCoins from "./TotalCoins";
@@ -289,18 +289,26 @@ export default class App extends React.Component {
           </section>
 
           <section>
-            <h1>Lumen distribution</h1>
-            <div className="mui-col-md-4">
-              <DistributionProgress horizonLiveURL={horizonLive} />
-            </div>
-
+            <h1>LUMEN SUPPLY</h1>
             <div className="mui-col-md-4">
               <TotalCoins horizonURL={horizonLive} />
             </div>
 
             <div className="mui-col-md-4">
-              <LumensAvailable />
+              <LumensNonCirculating />
             </div>
+
+            <div className="mui-col-md-4">
+              <LumensCirculating horizonURL={horizonLive} />
+            </div>
+            <h2>
+              <a
+                href="https://www.stellar.org/foundation/mandate/"
+                target="_blank"
+              >
+                SDF Mandate and Supply Methodology
+              </a>
+            </h2>
           </section>
 
           <section>

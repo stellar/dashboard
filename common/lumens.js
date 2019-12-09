@@ -9,6 +9,8 @@ import find from "lodash/find";
 const horizonLiveURL = "https://horizon.stellar.org";
 
 const voidAccount = "GALAXYVOIDAOPZTDLHILAJQKCVVFMD4IKLXLSZV5YHO7VY74IWZILUTO";
+const networkUpgradeReserveAccount =
+  "GBEZOC5U4TVH7ZY5N3FLYHTCZSI6VFGTULG7PBITLF5ZEBPJXFT46YZM";
 const accounts = {
   directDevelopment: "GB6NVEN5HSUBKMYCE5ZOWSK5K23TBWRUQLZY3KNMXUZ3AQ2ESC4MY4AQ",
   directDevelopmentHot1:
@@ -150,4 +152,33 @@ export function availableCoins() {
       return new BigNumber(totalCoins).minus(sdfAccounts);
     },
   );
+}
+
+// TEMPORARY FOR VERSION 2
+export function noncirculatingSupply() {
+  const networkUpgradeReserve = getLumenBalance(
+    horizonLiveURL,
+    networkUpgradeReserveAccount,
+  );
+
+  return Promise.all([networkUpgradeReserve, sdfAccounts()]).then(
+    (balances) => {
+      return reduce(
+        balances,
+        (sum, balance) => sum.add(balance),
+        new BigNumber(0),
+      );
+    },
+  );
+}
+
+export function circulatingSupply() {
+  return Promise.all([
+    postBurnTotalCoins(horizonLiveURL),
+    noncirculatingSupply(),
+  ]).then((result) => {
+    let [totalCoins, noncirculatingSupply] = result;
+
+    return new BigNumber(totalCoins).minus(noncirculatingSupply);
+  });
 }
