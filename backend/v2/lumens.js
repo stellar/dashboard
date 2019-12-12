@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 
 let cachedData;
 const LUMEN_SUPPLY_METRICS_URL =
-  "https://www.stellar.org/developers/guides/concepts/lumen-supply-metrics.html";
+  "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
 /* For CoinMarketCap */
 let totalSupplyData;
 let circulatingSupplyData;
