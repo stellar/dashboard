@@ -73,22 +73,24 @@ export function inflationLumens() {
   });
 }
 
-export function feePool(horizonURL) {
+export function feePool() {
   return axios
-    .get(`${horizonURL}/ledgers/?order=desc&limit=1`)
+    .get(`${horizonLiveURL}/ledgers/?order=desc&limit=1`)
     .then((response) => {
       return response.data._embedded.records[0].fee_pool;
     });
 }
 
-export function burnedLumens(horizonURL) {
-  return axios.get(`${horizonURL}/accounts/${voidAccount}`).then((response) => {
-    var xlmBalance = find(
-      response.data.balances,
-      (b) => b.asset_type == "native",
-    );
-    return xlmBalance.balance;
-  });
+export function burnedLumens() {
+  return axios
+    .get(`${horizonLiveURL}/accounts/${voidAccount}`)
+    .then((response) => {
+      var xlmBalance = find(
+        response.data.balances,
+        (b) => b.asset_type == "native",
+      );
+      return xlmBalance.balance;
+    });
 }
 
 export function directDevelopmentAll() {
@@ -146,29 +148,25 @@ export function sdfAccounts() {
 }
 
 export function totalSupply() {
-  return Promise.all([inflationLumens(), burnedLumens(horizonLiveURL)]).then(
-    (result) => {
-      let [inflationLumens, burnedLumens] = result;
+  return Promise.all([inflationLumens(), burnedLumens()]).then((result) => {
+    let [inflationLumens, burnedLumens] = result;
 
-      return new BigNumber(ORIGINAL_SUPPLY_AMOUNT)
-        .plus(inflationLumens)
-        .minus(burnedLumens);
-    },
-  );
+    return new BigNumber(ORIGINAL_SUPPLY_AMOUNT)
+      .plus(inflationLumens)
+      .minus(burnedLumens);
+  });
 }
 
 export function noncirculatingSupply() {
-  return Promise.all([
-    getUpgradeReserve(),
-    feePool(horizonLiveURL),
-    sdfAccounts(),
-  ]).then((balances) => {
-    return reduce(
-      balances,
-      (sum, balance) => sum.add(balance),
-      new BigNumber(0),
-    );
-  });
+  return Promise.all([getUpgradeReserve(), feePool(), sdfAccounts()]).then(
+    (balances) => {
+      return reduce(
+        balances,
+        (sum, balance) => sum.add(balance),
+        new BigNumber(0),
+      );
+    },
+  );
 }
 
 export function circulatingSupply() {

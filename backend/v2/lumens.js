@@ -24,10 +24,10 @@ function updateApiLumens() {
   Promise.all([
     commonLumens.ORIGINAL_SUPPLY_AMOUNT,
     commonLumens.inflationLumens(),
-    commonLumens.burnedLumens("https://horizon.stellar.org"),
+    commonLumens.burnedLumens(),
     commonLumens.totalSupply(),
     commonLumens.getUpgradeReserve(),
-    commonLumens.feePool("https://horizon.stellar.org"),
+    commonLumens.feePool(),
     commonLumens.sdfAccounts(),
     commonLumens.circulatingSupply(),
   ])
