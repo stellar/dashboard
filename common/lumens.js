@@ -9,7 +9,14 @@ import find from "lodash/find";
 const horizonLiveURL = "https://horizon.stellar.org";
 
 const voidAccount = "GALAXYVOIDAOPZTDLHILAJQKCVVFMD4IKLXLSZV5YHO7VY74IWZILUTO";
+const networkUpgradeReserveAccount =
+  "GBEZOC5U4TVH7ZY5N3FLYHTCZSI6VFGTULG7PBITLF5ZEBPJXFT46YZM";
 const accounts = {
+  escrowJan2021: "GBA6XT7YBQOERXT656T74LYUVJ6MEIOC5EUETGAQNHQHEPUFPKCW5GYM",
+  escrowJan2022: "GD2D6JG6D3V52ZMPIYSVHYFKVNIMXGYVLYJQ3HYHG5YDPGJ3DCRGPLTP",
+  escrowJan2023: "GA2VRL65L3ZFEDDJ357RGI3MAOKPJZ2Z3IJTPSC24I4KDTNFSVEQURRA",
+  developerSupportHot:
+    "GCKJZ2YVECFGLUDJ5T7NZMJPPWERBNYHCXT2MZPXKELFHUSYQR5TVHJQ",
   directDevelopment: "GB6NVEN5HSUBKMYCE5ZOWSK5K23TBWRUQLZY3KNMXUZ3AQ2ESC4MY4AQ",
   directDevelopmentHot1:
     "GCEZYB47RSSSR6RMHQDTBWL4L6RY5CY2SPJU3QHP3YPB6ALPVRLPN7OQ",
@@ -27,6 +34,8 @@ const accounts = {
     "GAX3BRBNB5WTJ2GNEFFH7A4CZKT2FORYABDDBZR5FIIT3P7FLS2EFOZZ",
   marketingSupport: "GBEVKAYIPWC5AQT6D4N7FC3XGKRRBMPCAMTO3QZWMHHACLHTMAHAM2TP",
 };
+
+export const ORIGINAL_SUPPLY_AMOUNT = "100000000000";
 
 export function getLumenBalance(horizonURL, accountId) {
   return axios.get(`${horizonURL}/accounts/${accountId}`).then((response) => {
@@ -51,7 +60,7 @@ function sumRelevantAccounts(accounts) {
   );
 }
 
-export function totalCoins(horizonURL) {
+export function totalLumens(horizonURL) {
   return axios
     .get(`${horizonURL}/ledgers/?order=desc&limit=1`)
     .then((response) => {
@@ -59,37 +68,34 @@ export function totalCoins(horizonURL) {
     });
 }
 
-export function feePool(horizonURL) {
+export function inflationLumens() {
+  return Promise.all([
+    totalLumens(horizonLiveURL),
+    ORIGINAL_SUPPLY_AMOUNT,
+  ]).then((result) => {
+    let [totalLumens, originalSupply] = result;
+    return new BigNumber(totalLumens).minus(originalSupply);
+  });
+}
+
+export function feePool() {
   return axios
-    .get(`${horizonURL}/ledgers/?order=desc&limit=1`)
+    .get(`${horizonLiveURL}/ledgers/?order=desc&limit=1`)
     .then((response) => {
       return response.data._embedded.records[0].fee_pool;
     });
 }
 
-export function burnedCoins(horizonURL) {
-  return axios.get(`${horizonURL}/accounts/${voidAccount}`).then((response) => {
-    var xlmBalance = find(
-      response.data.balances,
-      (b) => b.asset_type == "native",
-    );
-    return xlmBalance.balance;
-  });
-}
-
-export function postBurnTotalCoins(horizonURL) {
-  return Promise.all([
-    totalCoins(horizonURL),
-    burnedCoins(horizonURL),
-    feePool(horizonURL),
-  ]).then((balances) => {
-    const [totalCoinsAmount, burnedCoinsAmount, feePoolAmount] = balances;
-    const amount = new BigNumber(totalCoinsAmount)
-      .minus(burnedCoinsAmount)
-      .minus(feePoolAmount);
-
-    return amount;
-  });
+export function burnedLumens() {
+  return axios
+    .get(`${horizonLiveURL}/accounts/${voidAccount}`)
+    .then((response) => {
+      var xlmBalance = find(
+        response.data.balances,
+        (b) => b.asset_type == "native",
+      );
+      return xlmBalance.balance;
+    });
 }
 
 export function directDevelopmentAll() {
@@ -131,6 +137,10 @@ export function distributionUserAcquisition() {
   ]);
 }
 
+export function getUpgradeReserve() {
+  return getLumenBalance(horizonLiveURL, networkUpgradeReserveAccount);
+}
+
 export function sdfAccounts() {
   var balanceMap = map(accounts, (id) => getLumenBalance(horizonLiveURL, id));
   return Promise.all(balanceMap).then((balances) => {
@@ -142,12 +152,32 @@ export function sdfAccounts() {
   });
 }
 
-export function availableCoins() {
-  return Promise.all([postBurnTotalCoins(horizonLiveURL), sdfAccounts()]).then(
-    (result) => {
-      let [totalCoins, sdfAccounts] = result;
+export function totalSupply() {
+  return Promise.all([inflationLumens(), burnedLumens()]).then((result) => {
+    let [inflationLumens, burnedLumens] = result;
 
-      return new BigNumber(totalCoins).minus(sdfAccounts);
+    return new BigNumber(ORIGINAL_SUPPLY_AMOUNT)
+      .plus(inflationLumens)
+      .minus(burnedLumens);
+  });
+}
+
+export function noncirculatingSupply() {
+  return Promise.all([getUpgradeReserve(), feePool(), sdfAccounts()]).then(
+    (balances) => {
+      return reduce(
+        balances,
+        (sum, balance) => sum.add(balance),
+        new BigNumber(0),
+      );
     },
   );
+}
+
+export function circulatingSupply() {
+  return Promise.all([totalSupply(), noncirculatingSupply()]).then((result) => {
+    let [totalLumens, noncirculatingSupply] = result;
+
+    return new BigNumber(totalLumens).minus(noncirculatingSupply);
+  });
 }

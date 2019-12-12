@@ -8,8 +8,8 @@ export const handler = function(req, res) {
 
 function updateApiLumens() {
   Promise.all([
-    commonLumens.postBurnTotalCoins("https://horizon.stellar.org"),
-    commonLumens.availableCoins(),
+    commonLumens.totalSupply(),
+    commonLumens.circulatingSupply(),
     commonLumens.directDevelopmentAll(),
     commonLumens.distributionEcosystemSupport(),
     commonLumens.distributionUseCaseInvestment(),
