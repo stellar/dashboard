@@ -291,7 +291,7 @@ export default class App extends React.Component {
           <section>
             <h1>LUMEN SUPPLY</h1>
             <div className="mui-col-md-4">
-              <TotalCoins horizonURL={horizonLive} />
+              <TotalCoins />
             </div>
 
             <div className="mui-col-md-4">
@@ -299,7 +299,7 @@ export default class App extends React.Component {
             </div>
 
             <div className="mui-col-md-4">
-              <LumensCirculating horizonURL={horizonLive} />
+              <LumensCirculating />
             </div>
             <h2>
               <a
