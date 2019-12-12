@@ -2,7 +2,8 @@ import * as commonLumens from "../../common/lumens.js";
 import BigNumber from "bignumber.js";
 
 let cachedData;
-
+const LUMEN_SUPPLY_METRICS_URL =
+  "https://www.stellar.org/developers/guides/concepts/lumen-supply-metrics.html";
 /* For CoinMarketCap */
 let totalSupplyData;
 let circulatingSupplyData;
@@ -21,24 +22,43 @@ export const circulatingSupplyHandler = function(req, res) {
 
 function updateApiLumens() {
   Promise.all([
-    commonLumens.postBurnTotalCoins("https://horizon.stellar.org"),
-    commonLumens.noncirculatingSupply(),
+    commonLumens.ORIGINAL_SUPPLY_AMOUNT,
+    commonLumens.inflationLumens(),
+    commonLumens.burnedLumens("https://horizon.stellar.org"),
+    commonLumens.totalSupply(),
+    commonLumens.getUpgradeReserve(),
+    commonLumens.feePool("https://horizon.stellar.org"),
+    commonLumens.sdfAccounts(),
     commonLumens.circulatingSupply(),
   ])
-    .then(function([totalSupply, noncirculatingSupply, circulatingSupply]) {
+    .then(function([
+      originalSupply,
+      inflationLumens,
+      burnedLumens,
+      totalSupply,
+      upgradeReserve,
+      feePool,
+      sdfMandate,
+      circulatingSupply,
+    ]) {
       var response = {
         updatedAt: new Date(),
+        originalSupply,
+        inflationLumens,
+        burnedLumens,
         totalSupply,
-        noncirculatingSupply,
+        upgradeReserve,
+        feePool,
+        sdfMandate,
         circulatingSupply,
-        methodology: "https://www.stellar.org/foundation/mandate/",
+        _details: LUMEN_SUPPLY_METRICS_URL,
       };
 
       cachedData = response;
 
       /* For CoinMarketCap */
-      totalSupplyData = parseFloat(response.totalSupply);
-      circulatingSupplyData = parseFloat(response.circulatingSupply);
+      totalSupplyData = response.totalSupply * 1;
+      circulatingSupplyData = response.circulatingSupply * 1;
 
       console.log("/api/lumens data saved!");
     })

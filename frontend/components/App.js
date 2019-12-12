@@ -303,10 +303,10 @@ export default class App extends React.Component {
             </div>
             <h2>
               <a
-                href="https://www.stellar.org/foundation/mandate/"
+                href="https://www.stellar.org/developers/guides/lumen-supply-metrics.html"
                 target="_blank"
               >
-                SDF Mandate and Supply Methodology
+                Lumen Supply Metrics
               </a>
             </h2>
           </section>
