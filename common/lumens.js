@@ -18,8 +18,8 @@ const accounts = {
   developerSupportHot:
     "GCKJZ2YVECFGLUDJ5T7NZMJPPWERBNYHCXT2MZPXKELFHUSYQR5TVHJQ",
   directDevelopment: "GB6NVEN5HSUBKMYCE5ZOWSK5K23TBWRUQLZY3KNMXUZ3AQ2ESC4MY4AQ",
-  directDevelopmentHot1:
-    "GCEZYB47RSSSR6RMHQDTBWL4L6RY5CY2SPJU3QHP3YPB6ALPVRLPN7OQ",
+  // directDevelopmentHot1:
+  //   "GCEZYB47RSSSR6RMHQDTBWL4L6RY5CY2SPJU3QHP3YPB6ALPVRLPN7OQ",
   directDevelopmentHot2:
     "GATL3ETTZ3XDGFXX2ELPIKCZL7S5D2HY3VK4T7LRPD6DW5JOLAEZSZBA",
   directDevelopmentHot3:
@@ -101,13 +101,13 @@ export function burnedLumens() {
 export function directDevelopmentAll() {
   const {
     directDevelopment,
-    directDevelopmentHot1,
+    // directDevelopmentHot1,
     directDevelopmentHot2,
     directDevelopmentHot3,
   } = accounts;
   return sumRelevantAccounts([
     directDevelopment,
-    directDevelopmentHot1,
+    // directDevelopmentHot1,
     directDevelopmentHot2,
     directDevelopmentHot3,
   ]);
