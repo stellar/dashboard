@@ -22,8 +22,8 @@ const accounts = {
   //   "GCEZYB47RSSSR6RMHQDTBWL4L6RY5CY2SPJU3QHP3YPB6ALPVRLPN7OQ",
   directDevelopmentHot2:
     "GATL3ETTZ3XDGFXX2ELPIKCZL7S5D2HY3VK4T7LRPD6DW5JOLAEZSZBA",
-  directDevelopmentHot3:
-    "GCVLWV5B3L3YE6DSCCMHLCK7QIB365NYOLQLW3ZKHI5XINNMRLJ6YHVX",
+  // directDevelopmentHot3:
+  //   "GCVLWV5B3L3YE6DSCCMHLCK7QIB365NYOLQLW3ZKHI5XINNMRLJ6YHVX",
   infrastructureGrants:
     "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
   currencySupport: "GAMGGUQKKJ637ILVDOSCT5X7HYSZDUPGXSUW67B2UKMG2HEN5TPWN3LQ",
@@ -103,13 +103,13 @@ export function directDevelopmentAll() {
     directDevelopment,
     // directDevelopmentHot1,
     directDevelopmentHot2,
-    directDevelopmentHot3,
+    // directDevelopmentHot3,
   } = accounts;
   return sumRelevantAccounts([
     directDevelopment,
     // directDevelopmentHot1,
     directDevelopmentHot2,
-    directDevelopmentHot3,
+    // directDevelopmentHot3,
   ]);
 }
 
