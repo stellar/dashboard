@@ -20,7 +20,7 @@ import TransactionsChart from "./TransactionsChart";
 import FailedTransactionsChart from "./FailedTransactionsChart";
 import { LIVE_NEW_LEDGER, TEST_NEW_LEDGER } from "../events";
 
-const horizonLive = "https://horizon-mon.stellar-ops.com";
+const horizonLive = "https://horizon.stellar.org";
 const horizonTest = "https://horizon-testnet.stellar.org";
 
 export default class App extends React.Component {
