@@ -5,6 +5,7 @@ import moment from "moment";
 import clone from "lodash/clone";
 import each from "lodash/each";
 import defaults from "lodash/defaults";
+import get from "lodash/get";
 import AccountBadge from "./AccountBadge";
 import AssetLink from "./AssetLink";
 import BigNumber from "bignumber.js";
@@ -103,18 +104,10 @@ export default class FeeStats extends React.Component {
             ) : (
               this.nameMap.map((field) => {
                 let styleFn = this.feeStyle;
-                let stats = this.state.stats;
-                let id = field.id;
+                let val = get(this.state.stats, field.id);
+                let displayVal = get(this.state.stats, field.id);
 
-                if (field.id.indexOf("max_fee.") === 0) {
-                  id = field.id.split(".")[1];
-                  stats = this.state.stats["max_fee"];
-                }
-
-                let val = stats[id];
-                let displayVal = stats[id];
-
-                if (id === "ledger_capacity_usage") {
+                if (field.id === "ledger_capacity_usage") {
                   styleFn = this.capacityStyle;
                   displayVal = `${Math.round(val * 100)}%`;
                 }
