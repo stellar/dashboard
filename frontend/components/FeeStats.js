@@ -17,19 +17,20 @@ export default class FeeStats extends React.Component {
     this.url = `${this.props.horizonURL}/fee_stats`;
     this.nameMap = [
       { id: "ledger_capacity_usage", name: "Capacity Usage" },
-      { id: "min_accepted_fee", name: "Min Accepted Fee" },
-      { id: "mode_accepted_fee", name: "Mode Accepted Fee" },
-      { id: "p10_accepted_fee", name: "10th Percentile Accepted Fee" },
-      { id: "p20_accepted_fee", name: "20th Percentile Accepted Fee" },
-      { id: "p30_accepted_fee", name: "30th Percentile Accepted Fee" },
-      { id: "p40_accepted_fee", name: "40th Percentile Accepted Fee" },
-      { id: "p50_accepted_fee", name: "50th Percentile Accepted Fee" },
-      { id: "p60_accepted_fee", name: "60th Percentile Accepted Fee" },
-      { id: "p70_accepted_fee", name: "70th Percentile Accepted Fee" },
-      { id: "p80_accepted_fee", name: "80th Percentile Accepted Fee" },
-      { id: "p90_accepted_fee", name: "90th Percentile Accepted Fee" },
-      { id: "p95_accepted_fee", name: "95th Percentile Accepted Fee" },
-      { id: "p99_accepted_fee", name: "99th Percentile Accepted Fee" },
+      { id: "max_fee.max", name: "Max Accepted Fee" },
+      { id: "max_fee.min", name: "Min Accepted Fee" },
+      { id: "max_fee.mode", name: "Mode Accepted Fee" },
+      { id: "max_fee.p10", name: "10th Percentile Accepted Fee" },
+      { id: "max_fee.p20", name: "20th Percentile Accepted Fee" },
+      { id: "max_fee.p30", name: "30th Percentile Accepted Fee" },
+      { id: "max_fee.p40", name: "40th Percentile Accepted Fee" },
+      { id: "max_fee.p50", name: "50th Percentile Accepted Fee" },
+      { id: "max_fee.p60", name: "60th Percentile Accepted Fee" },
+      { id: "max_fee.p70", name: "70th Percentile Accepted Fee" },
+      { id: "max_fee.p80", name: "80th Percentile Accepted Fee" },
+      { id: "max_fee.p90", name: "90th Percentile Accepted Fee" },
+      { id: "max_fee.p95", name: "95th Percentile Accepted Fee" },
+      { id: "max_fee.p99", name: "99th Percentile Accepted Fee" },
     ];
   }
 
@@ -102,9 +103,18 @@ export default class FeeStats extends React.Component {
             ) : (
               this.nameMap.map((field) => {
                 let styleFn = this.feeStyle;
-                let val = this.state.stats[field.id];
-                let displayVal = this.state.stats[field.id];
-                if (field.id == "ledger_capacity_usage") {
+                let stats = this.state.stats;
+                let id = field.id;
+
+                if (field.id.indexOf("max_fee.") === 0) {
+                  id = field.id.split(".")[1];
+                  stats = this.state.stats["max_fee"];
+                }
+
+                let val = stats[id];
+                let displayVal = stats[id];
+
+                if (id === "ledger_capacity_usage") {
                   styleFn = this.capacityStyle;
                   displayVal = `${Math.round(val * 100)}%`;
                 }
