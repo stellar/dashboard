@@ -103,7 +103,7 @@ export default class RecentOperations extends React.Component {
             />
           </span>
         );
-      case "path_payment":
+      case "path_payment_strict_receive":
         return (
           <span>
             max{" "}
@@ -161,8 +161,8 @@ export default class RecentOperations extends React.Component {
             />
           </span>
         );
-      case "manage_offer":
-      case "create_passive_offer":
+      case "manage_sell_offer":
+      case "create_passive_sell_offer":
         let action;
 
         if (op.amount == 0) {
