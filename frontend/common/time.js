@@ -12,7 +12,7 @@ export function agoSeconds(ts) {
   return moment().diff(ts, "seconds") - _offset;
 }
 
-// calculate and format the time delta between now and ts
+// calculate and format the human-readable time delta between now and ts
 export function ago(a) {
   let diff = moment().diff(a, "seconds") - _offset;
   if (diff < 60) {
