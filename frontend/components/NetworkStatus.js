@@ -2,7 +2,7 @@ import React from "react";
 import Panel from "muicss/lib/react/panel";
 import axios from "axios";
 import round from "lodash/round";
-import { ago } from "../common/time";
+import { ago, agoSeconds } from "../common/time";
 
 // ledgersInAverageCalculation defines how many last ledgers should be
 // considered when calculating average ledger length.
@@ -86,7 +86,7 @@ export default class NetworkStatus extends React.Component {
       let closedAgo = null;
 
       if (this.state.closedAt) {
-        closedAgo = (new Date() - this.state.closedAt) / 1000;
+        closedAgo = agoSeconds(this.state.closedAt);
       }
 
       this.setState({ closedAgo });

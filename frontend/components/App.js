@@ -19,6 +19,7 @@ import TotalCoins from "./TotalCoins";
 import TransactionsChart from "./TransactionsChart";
 import FailedTransactionsChart from "./FailedTransactionsChart";
 import { LIVE_NEW_LEDGER, TEST_NEW_LEDGER } from "../events";
+import { setTimeOffset } from "../common/time";
 
 const horizonLive = "https://horizon-mon.stellar-ops.com";
 const horizonTest = "https://horizon-testnet.stellar.org";
@@ -29,6 +30,24 @@ export default class App extends React.Component {
     this.chrome57 = navigator.userAgent.toLowerCase().indexOf("chrome/57") > -1;
     this.emitter = new EventEmitter();
     this.sleepDetector();
+
+    // Add an axios response interceptor to setup a timestamp offset between
+    // local time and horizon time if a date header is present
+    // this will be used to settle clock discrepancies
+    axios.interceptors.response.use(
+      function(response) {
+        let headerDate = response.headers.date;
+        if (headerDate) {
+          setTimeOffset(
+            Math.round((new Date() - new Date(response.headers.date)) / 1000),
+          );
+        }
+        return response;
+      },
+      function(error) {
+        return Promise.reject(error);
+      },
+    );
 
     // forceTheme is our way to celebrate May, 4th.
     var forceTheme = false;
