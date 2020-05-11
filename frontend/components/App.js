@@ -20,6 +20,7 @@ import TransactionsChart from "./TransactionsChart";
 import FailedTransactionsChart from "./FailedTransactionsChart";
 import { LIVE_NEW_LEDGER, TEST_NEW_LEDGER } from "../events";
 import { setTimeOffset } from "../common/time";
+import { ScheduledMaintenance } from "./ScheduledMaintenance";
 
 const horizonLive = "https://horizon-mon.stellar-ops.com";
 const horizonTest = "https://horizon-testnet.stellar.org";
@@ -191,43 +192,11 @@ export default class App extends React.Component {
           : null}
 
         {/* Scheduled maintenances */
-        this.state.statusPage
-          ? this.state.statusPage.scheduled_maintenances.map((m) => {
-              return (
-                <Panel key={m.id} className="mui--bg-accent-light">
-                  <div className="mui--text-subhead mui--text-light">
-                    Scheduled Maintenance:{" "}
-                    <a href={"https://status.stellar.org/incidents/" + m.id}>
-                      <strong>{m.name}</strong>
-                    </a>{" "}
-                    on{" "}
-                    {moment(m.scheduled_for)
-                      .utc()
-                      .format("dddd, MMMM Do YYYY, [at] h:mma")}{" "}
-                    UTC (
-                    {moment(m.scheduled_for).format(
-                      moment(m.scheduled_for)
-                        .utc()
-                        .format("dddd") ===
-                        moment(m.scheduled_for).format("dddd")
-                        ? "h:mma"
-                        : "MMMM Do YYYY, h:mma",
-                    )}{" "}
-                    local time)
-                    <br />
-                    {m.incident_updates.length > 0 ? (
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: m.incident_updates[0].body,
-                        }}
-                      />
-                    ) : null}
-                    <br />
-                  </div>
-                </Panel>
-              );
-            })
-          : null}
+        this.state.statusPage ? (
+          <ScheduledMaintenance
+            scheduledMaintenances={this.state.statusPage.scheduled_maintenances}
+          />
+        ) : null}
 
         {this.chrome57 ? (
           <Panel>
