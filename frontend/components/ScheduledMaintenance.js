@@ -5,7 +5,7 @@ import moment from "moment";
 export const ScheduledMaintenance = ({ scheduledMaintenances }) => {
   const sortedMaintenances = scheduledMaintenances
     .slice()
-    .sort((a, b) => (moment(a).isSameOrBefore(b) ? -1 : 1));
+    .sort((a, b) => (moment(a).isSameOrBefore(b) ? 1 : -1));
   const {
     id,
     name,
