@@ -22,7 +22,7 @@ import { LIVE_NEW_LEDGER, TEST_NEW_LEDGER } from "../events";
 import { setTimeOffset } from "../common/time";
 import { ScheduledMaintenance } from "./ScheduledMaintenance";
 
-const horizonLive = "https://horizon-mon.stellar-ops.com";
+const horizonLive = "https://horizon.stellar.org";
 const horizonTest = "https://horizon-testnet.stellar.org";
 
 export default class App extends React.Component {
