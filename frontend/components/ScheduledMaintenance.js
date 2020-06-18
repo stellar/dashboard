@@ -21,9 +21,15 @@ export const ScheduledMaintenance = ({ scheduledMaintenances }) => {
         <a href={"https://status.stellar.org/incidents/" + id}>
           <strong>{name}</strong>
         </a>{" "}
-        on {scheduledFor.utc().format("dddd, MMMM Do YYYY, [at] h:mma")} UTC (
-        {scheduledFor.format(
-          scheduledFor.utc().format("dddd") === scheduledFor.format("dddd")
+        on{" "}
+        {moment(scheduled_for)
+          .utc()
+          .format("dddd, MMMM Do YYYY, [at] h:mma")}{" "}
+        UTC (
+        {moment(scheduled_for).format(
+          moment(scheduled_for)
+            .utc()
+            .format("dddd") === moment(scheduled_for).format("dddd")
             ? "h:mma"
             : "MMMM Do YYYY, h:mma",
         )}{" "}
