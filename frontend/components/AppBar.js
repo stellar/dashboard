@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "muicss/lib/react/button";
 
 export default class AppBar extends React.Component {
   render() {
@@ -14,9 +13,20 @@ export default class AppBar extends React.Component {
           </div>
           <div className="icons">
             <div className="icon">
+              <a href="https://www.stellar.org/privacy-policy" target="_blank">
+                Privacy Policy
+              </a>
+            </div>
+            <div className="icon">
+              <a
+                href="https://www.stellar.org/terms-of-service"
+                target="_blank"
+              >
+                Terms of Service
+              </a>
+            </div>
+            <div className="icon">
               <a href="https://github.com/stellar/dashboard" target="_blank">
-                <i className="material-icons">code</i>
-                <br />
                 GitHub
               </a>
             </div>

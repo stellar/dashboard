@@ -40,6 +40,9 @@ section {
 }
 
 .mui-appbar {
+  display: flex;
+  justify-content: space-between;
+
   .mui--text-headline {
     margin-left: 20px;
     float: left;
@@ -65,14 +68,12 @@ section {
   }
 
   .icons {
-    float: right;
-    margin-top: 8px;
-    line-height: 15px;
+    display: flex;
+    align-items: center;
 
     .icon {
-      float: left;
+      margin-right: 20px;
       text-align: center;
-      width: 100px;
     }
   }
 }
