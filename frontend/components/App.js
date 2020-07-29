@@ -190,14 +190,13 @@ export default class App extends React.Component {
               );
             })
           : null}
-
         {/* Scheduled maintenances */
-        this.state.statusPage ? (
+        this.state.statusPage &&
+        this.state.statusPage.scheduled_maintenances.length ? (
           <ScheduledMaintenance
             scheduledMaintenances={this.state.statusPage.scheduled_maintenances}
           />
         ) : null}
-
         {this.chrome57 ? (
           <Panel>
             <div className="mui--text-subhead mui--text-dark-secondary">
@@ -214,7 +213,6 @@ export default class App extends React.Component {
             </div>
           </Panel>
         ) : null}
-
         {this.state.sleeping ? (
           <Panel>
             <div className="mui--text-subhead mui--text-accent">
@@ -222,13 +220,11 @@ export default class App extends React.Component {
             </div>
           </Panel>
         ) : null}
-
         {this.state.forceTheme && this.state.may4 ? (
           <h1 className="may4">
             May the 4<sup>th</sup> be with you!
           </h1>
         ) : null}
-
         <div id="main" className="mui-container-fluid">
           <section>
             <h1>Live network status</h1>
