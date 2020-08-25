@@ -1,8 +1,6 @@
-import React from 'react';
-import AmountWidget from './AmountWidget';
-import Panel from 'muicss/lib/react/panel';
-import axios from 'axios';
-import {totalCoins} from '../../common/lumens.js';
+import React from "react";
+import AmountWidget from "./AmountWidget";
+import { totalSupply } from "../../common/lumens.js";
 
 export default class TotalCoins extends AmountWidget {
   constructor(props) {
@@ -10,10 +8,7 @@ export default class TotalCoins extends AmountWidget {
   }
 
   componentDidMount() {
-    this.timerID = setInterval(
-      () => this.updateAmount(),
-      60*60*1000
-    );
+    this.timerID = setInterval(() => this.updateAmount(), 60 * 60 * 1000);
     this.updateAmount();
   }
 
@@ -22,17 +17,20 @@ export default class TotalCoins extends AmountWidget {
   }
 
   updateAmount() {
-    totalCoins(this.props.horizonURL)
-      .then(amount => {
-        let code = "XLM";
-        this.setState({amount, code, loading: false});
-      });
+    totalSupply().then((amount) => {
+      let code = "XLM";
+      this.setState({ amount, code, loading: false });
+    });
   }
 
   renderName() {
-    return <div>
-      <span>Total Lumens</span>
-      <a href={`${this.props.horizonURL}/ledgers/?order=desc&limit=1`} target="_blank" className="api-link">API</a>
-    </div>
+    return (
+      <div>
+        <span>Total Supply</span>
+        <a href="/api/v2/lumens/" target="_blank" className="api-link">
+          API
+        </a>
+      </div>
+    );
   }
 }

@@ -1,22 +1,49 @@
-# dashboard
+# Dashboard
 
-TODO
+## Dependencies
 
-## Building
+To build this project, you must have the following dependencies installed:
 
-```
-npm install
-gulp
-```
+- node 10.16.3
+- yarn
 
-If you wish to use backend server API start this command in another terminal window:
+## Installation
 
-```
-DEV=true node ./backend/app.js
+```sh
+yarn
 ```
 
-It will create a proxy to `browser-sync` server started by gulp at:
+## Developing
 
+```sh
+yarn start
 ```
-http://localhost:5000
+
+### If you wish to use backend server API, you need a postgres db running with dashboard database
+
+(If you do not have postgres installed) Install postgres using homebrew
+
+```sh
+brew install postgres
 ```
+
+Run postgres
+
+```sh
+pg_ctl -D /usr/local/var/postgres start
+```
+
+Create dashboard db
+
+```sh
+createdb dashboard
+```
+
+Once you have postgres installed, start this command
+
+```sh
+UPDATE_DATA=true DEV=true node app.js
+```
+
+It will create a proxy to `browser-sync` server started by gulp at
+`http://localhost:5000`
