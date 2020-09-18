@@ -17,6 +17,8 @@ const accounts = {
   escrowJan2023: "GA2VRL65L3ZFEDDJ357RGI3MAOKPJZ2Z3IJTPSC24I4KDTNFSVEQURRA",
   developerSupportHot:
     "GCKJZ2YVECFGLUDJ5T7NZMJPPWERBNYHCXT2MZPXKELFHUSYQR5TVHJQ",
+  developerSupportHot2:
+    "GC3ITNZSVVPOWZ5BU7S64XKNI5VPTRSBEXXLS67V4K6LEUETWBMTE7IH",
   directDevelopment: "GB6NVEN5HSUBKMYCE5ZOWSK5K23TBWRUQLZY3KNMXUZ3AQ2ESC4MY4AQ",
   // directDevelopmentHot1:
   //   "GCEZYB47RSSSR6RMHQDTBWL4L6RY5CY2SPJU3QHP3YPB6ALPVRLPN7OQ",
@@ -24,9 +26,15 @@ const accounts = {
     "GATL3ETTZ3XDGFXX2ELPIKCZL7S5D2HY3VK4T7LRPD6DW5JOLAEZSZBA",
   // directDevelopmentHot3:
   //   "GCVLWV5B3L3YE6DSCCMHLCK7QIB365NYOLQLW3ZKHI5XINNMRLJ6YHVX",
+  directDevelopmentHot4:
+    "GAKGC35HMNB7A3Q2V5SQU6VJC2JFTZB6I7ZW77SJSMRCOX2ZFBGJOCHH",
+  directDevelopmentHot5:
+    "GAPV2C4BTHXPL2IVYDXJ5PUU7Q3LAXU7OAQDP7KVYHLCNM2JTAJNOQQI",
   infrastructureGrants:
     "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
   currencySupport: "GAMGGUQKKJ637ILVDOSCT5X7HYSZDUPGXSUW67B2UKMG2HEN5TPWN3LQ",
+  currencySupportHot:
+    "GANII5Y2LABEBK74NWNKS4NREX2T52YTBGQDRDKVBFRIIF5VE4ORYOVY",
   enterpriseFund: "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
   newProducts: "GCPWKVQNLDPD4RNP5CAXME4BEDTKSSYRR4MMEL4KG65NEGCOGNJW7QI2",
   inAppDistribution: "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
@@ -104,18 +112,34 @@ export function directDevelopmentAll() {
     // directDevelopmentHot1,
     directDevelopmentHot2,
     // directDevelopmentHot3,
+    directDevelopmentHot4,
+    directDevelopmentHot5,
   } = accounts;
   return sumRelevantAccounts([
     directDevelopment,
     // directDevelopmentHot1,
     directDevelopmentHot2,
     // directDevelopmentHot3,
+    directDevelopmentHot4,
+    directDevelopmentHot5,
   ]);
 }
 
 export function distributionEcosystemSupport() {
-  const { infrastructureGrants, currencySupport } = accounts;
-  return sumRelevantAccounts([infrastructureGrants, currencySupport]);
+  const {
+    infrastructureGrants,
+    currencySupport,
+    currencySupportHot,
+    developerSupportHot,
+    developerSupportHot2,
+  } = accounts;
+  return sumRelevantAccounts([
+    infrastructureGrants,
+    currencySupport,
+    currencySupportHot,
+    developerSupportHot,
+    developerSupportHot2,
+  ]);
 }
 
 export function distributionUseCaseInvestment() {
