@@ -40,7 +40,11 @@ const accounts = {
   inAppDistribution: "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
   inAppDistributionHot:
     "GAX3BRBNB5WTJ2GNEFFH7A4CZKT2FORYABDDBZR5FIIT3P7FLS2EFOZZ",
+  inAppDistributionHot2:
+    "GDWXQOTIIDO2EUK4DIGIBLEHLME2IAJRNU6JDFS5B2ZTND65P7J36WQZ",
   marketingSupport: "GBEVKAYIPWC5AQT6D4N7FC3XGKRRBMPCAMTO3QZWMHHACLHTMAHAM2TP",
+  marketingSupportHot:
+    "GBI5PADO5TEDY3R6WFAO2HEKBTTZS4LGR77XM4AHGN52H45ENBWGDFOH",
 };
 
 export const ORIGINAL_SUPPLY_AMOUNT = "100000000000";
@@ -151,13 +155,17 @@ export function distributionUserAcquisition() {
   const {
     inAppDistribution,
     inAppDistributionHot,
+    inAppDistributionHot2,
     marketingSupport,
+    marketingSupportHot,
   } = accounts;
 
   return sumRelevantAccounts([
     inAppDistribution,
     inAppDistributionHot,
+    inAppDistributionHot2,
     marketingSupport,
+    marketingSupportHot,
   ]);
 }
 
