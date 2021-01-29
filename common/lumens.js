@@ -50,13 +50,20 @@ const accounts = {
 export const ORIGINAL_SUPPLY_AMOUNT = "100000000000";
 
 export function getLumenBalance(horizonURL, accountId) {
-  return axios.get(`${horizonURL}/accounts/${accountId}`).then((response) => {
-    var xlmBalance = find(
-      response.data.balances,
-      (b) => b.asset_type == "native",
-    );
-    return xlmBalance.balance;
-  });
+  return axios
+    .get(`${horizonURL}/accounts/${accountId}`)
+    .then((response) => {
+      var xlmBalance = find(
+        response.data.balances,
+        (b) => b.asset_type == "native",
+      );
+      return xlmBalance.balance;
+    })
+    .catch((error) => {
+      if (error.response && error.response.status == 404) {
+        return "0.0"; // consider the balance of an account zero if the account does not exist or has been deleted from the network
+      } else throw error; // something else happened, and at this point we shouldn't trust the computed balance
+    });
 }
 
 function sumRelevantAccounts(accounts) {
