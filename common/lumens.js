@@ -61,7 +61,7 @@ export function getLumenBalance(horizonURL, accountId) {
     })
     .catch((error) => {
       if (error.response && error.response.status == 404) {
-        return "0.0"; // disconsider the balance of an account if there's an error with the request
+        return "0.0"; // consider the balance of an account zero if the account does not exist or has been deleted from the network
       } else throw error; // something else happened, and at this point we shouldn't trust the computed balance
     });
 }
