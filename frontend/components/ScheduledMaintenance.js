@@ -1,6 +1,7 @@
 import React from "react";
 import Panel from "muicss/lib/react/panel";
 import moment from "moment";
+import sanitizeHtml from "../utilities/sanitizeHtml.js";
 
 export const ScheduledMaintenance = ({ scheduledMaintenances }) => {
   const sortedMaintenances = scheduledMaintenances
@@ -36,11 +37,7 @@ export const ScheduledMaintenance = ({ scheduledMaintenances }) => {
         local time)
         <br />
         {updates.length > 0 ? (
-          <span
-            dangerouslySetInnerHTML={{
-              __html: updates[0].body,
-            }}
-          />
+          <span>{sanitizeHtml(updates[0].body)}</span>
         ) : null}
         <br />
       </div>

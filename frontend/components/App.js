@@ -21,6 +21,7 @@ import FailedTransactionsChart from "./FailedTransactionsChart";
 import { LIVE_NEW_LEDGER, TEST_NEW_LEDGER } from "../events";
 import { setTimeOffset } from "../common/time";
 import { ScheduledMaintenance } from "./ScheduledMaintenance";
+import sanitizeHtml from "../utilities/sanitizeHtml.js";
 
 const horizonLive = "https://horizon.stellar.org";
 const horizonTest = "https://horizon-testnet.stellar.org";
@@ -179,11 +180,7 @@ export default class App extends React.Component {
                     </small>
                     <br />
                     {m.incident_updates.length > 0 ? (
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: m.incident_updates[0].body,
-                        }}
-                      />
+                      <span>{sanitizeHtml(m.incident_updates[0].body)}</span>
                     ) : null}
                   </div>
                 </Panel>
