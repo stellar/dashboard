@@ -7,7 +7,7 @@ TAG ?= stellar/stellar-dashboard:$(shell git rev-parse --short HEAD)$(and $(shel
 BUILD_DATE := $(shell date --utc --rfc-3339=seconds)
 
 docker-build:
-	$(SUDO) docker build --label org.opencontainers.image.created="$(BUILD_DATE)" -t $(TAG) .
+	$(SUDO) docker build --pull --label org.opencontainers.image.created="$(BUILD_DATE)" -t $(TAG) .
 
 docker-push:
 	$(SUDO) docker push $(TAG)
