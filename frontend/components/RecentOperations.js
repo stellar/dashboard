@@ -2,10 +2,10 @@ import React from "react";
 import Panel from "muicss/lib/react/panel";
 import axios from "axios";
 import moment from "moment";
-import clone from "lodash/clone";
 import each from "lodash/each";
 import defaults from "lodash/defaults";
 import AccountBadge from "./AccountBadge";
+import LiquidityPoolBadge from "./LiquidityPoolBadge";
 import AssetLink from "./AssetLink";
 import BigNumber from "bignumber.js";
 import { ago } from "../common/time";
@@ -129,6 +129,18 @@ export default class RecentOperations extends React.Component {
           </span>
         );
       case "change_trust":
+        if (op.asset_type === "liquidity_pool_shares") {
+          return (
+            <span>
+              Liquidity pool{" "}
+              <LiquidityPoolBadge
+                horizonURL={this.props.horizonURL}
+                id={op.liquidity_pool_id}
+              />
+            </span>
+          );
+        }
+
         return (
           <span>
             <AssetLink
@@ -210,6 +222,10 @@ export default class RecentOperations extends React.Component {
             </code>
           </span>
         );
+      case "liquidity_pool_deposit":
+        return <span>Shares received: {op.shares_received}</span>;
+      case "liquidity_pool_withdraw":
+        return <span>Shares sold: {op.shares}</span>;
     }
   }
 
