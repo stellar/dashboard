@@ -23,6 +23,9 @@
       "git add"
     ]
   },
+  "resolutions": {
+    "**/ua-parser-js": "0.7.28"
+  },
   "prettier": "@stellar/prettier-config",
   "author": "Stellar.org",
   "dependencies": {
