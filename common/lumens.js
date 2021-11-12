@@ -227,11 +227,11 @@ export function totalSupplySum() {
     feePool(),
     sdfAccounts(),
     circulatingSupply(),
-  ]).then((balances) => {
-    return reduce(
-      balances,
-      (sum, balance) => sum.add(balance),
-      new BigNumber(0),
-    );
+  ]).then((result) => {
+    let [upgradeReserve, feePool, sdfAccounts, circulatingSupply] = result;
+    return new BigNumber(upgradeReserve)
+      .plus(feePool)
+      .plus(sdfAccounts)
+      .plus(circulatingSupply);
   });
 }
