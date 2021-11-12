@@ -8,9 +8,6 @@ const LUMEN_SUPPLY_METRICS_URL =
 let totalSupplyData;
 let circulatingSupplyData;
 
-let totalSupplySumData;
-let totalSupplyFullData;
-
 export const handler = function(req, res) {
   res.send(cachedData);
 };
@@ -23,14 +20,6 @@ export const circulatingSupplyHandler = function(req, res) {
   res.json(circulatingSupplyData);
 };
 
-export const totalSupplySumHandler = function(req, res) {
-  res.json(totalSupplySumData);
-};
-
-export const totalSupplyFullDataHandler = function(req, res) {
-  res.json(totalSupplyFullData);
-};
-
 function updateApiLumens() {
   Promise.all([
     commonLumens.ORIGINAL_SUPPLY_AMOUNT,
@@ -41,7 +30,6 @@ function updateApiLumens() {
     commonLumens.feePool(),
     commonLumens.sdfAccounts(),
     commonLumens.circulatingSupply(),
-    commonLumens.totalSupplySum(),
   ])
     .then(function([
       originalSupply,
@@ -52,7 +40,6 @@ function updateApiLumens() {
       feePool,
       sdfMandate,
       circulatingSupply,
-      totalSupplySum,
     ]) {
       var response = {
         updatedAt: new Date(),
@@ -72,10 +59,6 @@ function updateApiLumens() {
       /* For CoinMarketCap */
       totalSupplyData = response.totalSupply * 1;
       circulatingSupplyData = response.circulatingSupply * 1;
-
-      totalSupplySumData = totalSupplySum.toString();
-
-      totalSupplyFullData = response.totalSupply.toString();
 
       console.log("/api/lumens data saved!");
     })

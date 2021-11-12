@@ -4,6 +4,7 @@ import logger from "morgan";
 
 import * as lumens from "./lumens.js";
 import * as lumensV2 from "./v2/lumens.js";
+import * as lumensV3 from "./v3/lumens.js";
 import * as ledgers from "./ledgers.js";
 
 var app = express();
@@ -38,13 +39,9 @@ app.get("/api/v2/lumens", lumensV2.handler);
 app.get("/api/v2/lumens/total-supply", lumensV2.totalSupplyHandler);
 app.get("/api/v2/lumens/circulating-supply", lumensV2.circulatingSupplyHandler);
 
-app.get("/api/v2/lumens/total-supply-check", lumensV2.totalSupplySumHandler);
+app.get("/api/v3/lumens/total-supply-check", lumensV3.totalSupplySumHandler);
 
-// Temporary endpoint, returning string instead of number for precision
-app.get(
-  "/api/v2/lumens/total-supply-full",
-  lumensV2.totalSupplyFullDataHandler,
-);
+app.get("/api/v3/lumens/total-supply", lumensV3.totalSupplyDataHandler);
 
 app.listen(app.get("port"), function() {
   console.log("Listening on port", app.get("port"));
