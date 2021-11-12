@@ -40,6 +40,12 @@ app.get("/api/v2/lumens/circulating-supply", lumensV2.circulatingSupplyHandler);
 
 app.get("/api/v2/lumens/total-supply-check", lumensV2.totalSupplySumHandler);
 
+// Temporary endpoint, returning string instead of number for precision
+app.get(
+  "/api/v2/lumens/total-supply-full",
+  lumensV2.totalSupplyFullDataHandler,
+);
+
 app.listen(app.get("port"), function() {
   console.log("Listening on port", app.get("port"));
 });

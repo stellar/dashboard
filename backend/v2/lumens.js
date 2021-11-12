@@ -9,6 +9,7 @@ let totalSupplyData;
 let circulatingSupplyData;
 
 let totalSupplySumData;
+let totalSupplyFullData;
 
 export const handler = function(req, res) {
   res.send(cachedData);
@@ -24,6 +25,10 @@ export const circulatingSupplyHandler = function(req, res) {
 
 export const totalSupplySumHandler = function(req, res) {
   res.json(totalSupplySumData);
+};
+
+export const totalSupplyFullDataHandler = function(req, res) {
+  res.json(totalSupplyFullData);
 };
 
 function updateApiLumens() {
@@ -65,10 +70,12 @@ function updateApiLumens() {
       cachedData = response;
 
       /* For CoinMarketCap */
-      totalSupplyData = response.totalSupply.toString();
-      circulatingSupplyData = response.circulatingSupply.toString();
+      totalSupplyData = response.totalSupply * 1;
+      circulatingSupplyData = response.circulatingSupply * 1;
 
       totalSupplySumData = totalSupplySum.toString();
+
+      totalSupplyFullData = response.totalSupply.toString();
 
       console.log("/api/lumens data saved!");
     })
