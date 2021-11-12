@@ -4,6 +4,7 @@ import logger from "morgan";
 
 import * as lumens from "./lumens.js";
 import * as lumensV2 from "./v2/lumens.js";
+import * as lumensV3 from "./v3/lumens.js";
 import * as ledgers from "./ledgers.js";
 
 var app = express();
@@ -32,11 +33,17 @@ if (process.env.DEV) {
 
 app.get("/api/ledgers/public", ledgers.handler);
 app.get("/api/lumens", lumens.handler);
-app.get("/api/v2/lumens", lumensV2.handler);
 
+app.get("/api/v2/lumens", lumensV2.handler);
 /* For CoinMarketCap */
 app.get("/api/v2/lumens/total-supply", lumensV2.totalSupplyHandler);
 app.get("/api/v2/lumens/circulating-supply", lumensV2.circulatingSupplyHandler);
+
+app.get("/api/v3/lumens", lumensV3.handler);
+app.get("/api/v3/lumens/total-supply-check", lumensV3.totalSupplySumHandler);
+/* For CoinMarketCap */
+app.get("/api/v3/lumens/total-supply", lumensV3.totalSupplyHandler);
+app.get("/api/v3/lumens/circulating-supply", lumensV3.circulatingSupplyHandler);
 
 app.listen(app.get("port"), function() {
   console.log("Listening on port", app.get("port"));
