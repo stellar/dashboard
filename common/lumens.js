@@ -220,3 +220,18 @@ export function circulatingSupply() {
     return new BigNumber(totalLumens).minus(noncirculatingSupply);
   });
 }
+
+export function totalSupplySum() {
+  return Promise.all([
+    getUpgradeReserve(),
+    feePool(),
+    sdfAccounts(),
+    circulatingSupply(),
+  ]).then((balances) => {
+    return reduce(
+      balances,
+      (sum, balance) => sum.add(balance),
+      new BigNumber(0),
+    );
+  });
+}

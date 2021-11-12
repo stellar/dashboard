@@ -38,6 +38,8 @@ app.get("/api/v2/lumens", lumensV2.handler);
 app.get("/api/v2/lumens/total-supply", lumensV2.totalSupplyHandler);
 app.get("/api/v2/lumens/circulating-supply", lumensV2.circulatingSupplyHandler);
 
+app.get("/api/v2/lumens/total-supply-check", lumensV2.totalSupplySumHandler);
+
 app.listen(app.get("port"), function() {
   console.log("Listening on port", app.get("port"));
 });
