@@ -1,9 +1,19 @@
 import * as commonLumens from "../../common/lumens.js";
 import BigNumber from "bignumber.js";
 
+let cachedData;
+const LUMEN_SUPPLY_METRICS_URL =
+  "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
+
+/* For CoinMarketCap */
 let totalSupplyData;
 let circulatingSupplyData;
+
 let totalSupplySumData;
+
+export const handler = function(req, res) {
+  res.send(cachedData);
+};
 
 export const totalSupplyHandler = function(req, res) {
   res.json(totalSupplyData);
@@ -19,11 +29,42 @@ export const totalSupplySumHandler = function(req, res) {
 
 function updateApiLumens() {
   Promise.all([
+    commonLumens.ORIGINAL_SUPPLY_AMOUNT,
+    commonLumens.inflationLumens(),
+    commonLumens.burnedLumens(),
     commonLumens.totalSupply(),
-    commonLumens.totalSupplySum(),
+    commonLumens.getUpgradeReserve(),
+    commonLumens.feePool(),
+    commonLumens.sdfAccounts(),
     commonLumens.circulatingSupply(),
+    commonLumens.totalSupplySum(),
   ])
-    .then(function([totalSupply, totalSupplySum, circulatingSupply]) {
+    .then(function([
+      originalSupply,
+      inflationLumens,
+      burnedLumens,
+      totalSupply,
+      upgradeReserve,
+      feePool,
+      sdfMandate,
+      circulatingSupply,
+      totalSupplySum,
+    ]) {
+      var response = {
+        updatedAt: new Date(),
+        originalSupply,
+        inflationLumens,
+        burnedLumens,
+        totalSupply,
+        upgradeReserve,
+        feePool,
+        sdfMandate,
+        circulatingSupply,
+        _details: LUMEN_SUPPLY_METRICS_URL,
+      };
+
+      cachedData = response;
+
       totalSupplyData = totalSupply.toString();
       circulatingSupplyData = circulatingSupply.toString();
       totalSupplySumData = totalSupplySum.toString();
