@@ -65,10 +65,10 @@ function updateApiLumens() {
       cachedData = response;
 
       /* For CoinMarketCap */
-      totalSupplyData = response.totalSupply * 1;
-      circulatingSupplyData = response.circulatingSupply * 1;
+      totalSupplyData = response.totalSupply.toString();
+      circulatingSupplyData = response.circulatingSupply.toString();
 
-      totalSupplySumData = totalSupplySum * 1;
+      totalSupplySumData = totalSupplySum.toString();
 
       console.log("/api/lumens data saved!");
     })
