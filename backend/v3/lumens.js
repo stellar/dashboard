@@ -5,7 +5,7 @@ let totalSupplyData;
 let circulatingSupplyData;
 let totalSupplySumData;
 
-export const totalSupplyDataHandler = function(req, res) {
+export const totalSupplyHandler = function(req, res) {
   res.json(totalSupplyData);
 };
 
