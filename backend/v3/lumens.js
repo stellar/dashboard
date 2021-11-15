@@ -9,7 +9,7 @@ const LUMEN_SUPPLY_METRICS_URL =
 let totalSupplyData;
 let circulatingSupplyData;
 
-let totalSupplySumData;
+let totalSupplyCheckResponse;
 
 export const handler = function(req, res) {
   res.send(cachedData);
@@ -23,8 +23,8 @@ export const circulatingSupplyHandler = function(req, res) {
   res.json(circulatingSupplyData);
 };
 
-export const totalSupplySumHandler = function(req, res) {
-  res.json(totalSupplySumData);
+export const totalSupplyCheckHandler = function(req, res) {
+  res.json(totalSupplyCheckResponse);
 };
 
 function updateApiLumens() {
@@ -67,7 +67,18 @@ function updateApiLumens() {
 
       totalSupplyData = totalSupply.toString();
       circulatingSupplyData = circulatingSupply.toString();
-      totalSupplySumData = totalSupplySum.toString();
+
+      totalSupplyCheckResponse = {
+        updatedAt: new Date(),
+        totalSupply: totalSupply.toString(),
+        inflationLumens,
+        burnedLumens,
+        totalSupplySum: totalSupplySum.toString(),
+        upgradeReserve,
+        feePool,
+        sdfMandate,
+        circulatingSupply,
+      };
 
       console.log("/api/lumens data saved!");
     })
@@ -77,5 +88,5 @@ function updateApiLumens() {
     });
 }
 
-setInterval(updateApiLumens, 10 * 60 * 1000);
+setInterval(updateApiLumens, 1 * 60 * 1000);
 updateApiLumens();
