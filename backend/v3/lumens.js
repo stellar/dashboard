@@ -65,6 +65,7 @@ function updateApiLumens() {
 
       cachedData = response;
 
+      totalSupplyData = totalSupply.toString();
       circulatingSupplyData = circulatingSupply.toString();
 
       totalSupplyCheckResponse = {
