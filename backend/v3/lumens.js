@@ -40,8 +40,7 @@ function updateApiLumens() {
       upgradeReserve,
       sdfMandate,
     ]) {
-      let totalSupply = new BigNumber(0)
-        .plus(originalSupply)
+      let totalSupply = new BigNumber(originalSupply)
         .plus(inflationLumens)
         .minus(burnedLumens);
 
