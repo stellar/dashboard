@@ -90,5 +90,5 @@ function updateApiLumens() {
     });
 }
 
-setInterval(updateApiLumens, 8 * 1000);
+setInterval(updateApiLumens, 1 * 60 * 1000);
 updateApiLumens();
