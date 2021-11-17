@@ -5,26 +5,22 @@ let cachedData;
 const LUMEN_SUPPLY_METRICS_URL =
   "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
 
-/* For CoinMarketCap */
-let totalSupplyData;
-let circulatingSupplyData;
-
 let totalSupplyCheckResponse;
 
 export const handler = function(req, res) {
   res.send(cachedData);
 };
 
-export const totalSupplyHandler = function(req, res) {
-  res.json(totalSupplyData);
-};
-
-export const circulatingSupplyHandler = function(req, res) {
-  res.json(circulatingSupplyData);
-};
-
 export const totalSupplyCheckHandler = function(req, res) {
   res.json(totalSupplyCheckResponse);
+};
+
+/* For CoinMarketCap */
+export const totalSupplyHandler = function(req, res) {
+  res.json(totalSupplyCheckResponse.totalSupplySum);
+};
+export const circulatingSupplyHandler = function(req, res) {
+  res.json(totalSupplyCheckResponse.circulatingSupply);
 };
 
 function updateApiLumens() {
@@ -32,25 +28,33 @@ function updateApiLumens() {
     commonLumens.ORIGINAL_SUPPLY_AMOUNT,
     commonLumens.inflationLumens(),
     commonLumens.burnedLumens(),
-    commonLumens.totalSupply(),
-    commonLumens.getUpgradeReserve(),
     commonLumens.feePool(),
+    commonLumens.getUpgradeReserve(),
     commonLumens.sdfAccounts(),
-    commonLumens.circulatingSupply(),
-    commonLumens.totalSupplySum(),
   ])
     .then(function([
       originalSupply,
       inflationLumens,
       burnedLumens,
-      totalSupply,
-      upgradeReserve,
       feePool,
+      upgradeReserve,
       sdfMandate,
-      circulatingSupply,
-      totalSupplySum,
     ]) {
-      var response = {
+      let totalSupply = new BigNumber(originalSupply)
+        .plus(inflationLumens)
+        .minus(burnedLumens);
+
+      let circulatingSupply = totalSupply
+        .minus(upgradeReserve)
+        .minus(feePool)
+        .minus(sdfMandate);
+
+      let totalSupplySum = circulatingSupply
+        .plus(upgradeReserve)
+        .plus(feePool)
+        .plus(sdfMandate);
+
+      let response = {
         updatedAt: new Date(),
         originalSupply,
         inflationLumens,
@@ -65,15 +69,12 @@ function updateApiLumens() {
 
       cachedData = response;
 
-      totalSupplyData = totalSupply.toString();
-      circulatingSupplyData = circulatingSupply.toString();
-
       totalSupplyCheckResponse = {
         updatedAt: new Date(),
-        totalSupply: totalSupply.toString(),
+        totalSupply,
         inflationLumens,
         burnedLumens,
-        totalSupplySum: totalSupplySum.toString(),
+        totalSupplySum,
         upgradeReserve,
         feePool,
         sdfMandate,
