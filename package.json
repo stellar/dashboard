@@ -11,7 +11,7 @@
     "build": "gulp build",
     "heroku-postbuild": "gulp build",
     "lint:prettier": "prettier --config --write '**/*.js'",
-    "test": "mocha"
+    "test": "mocha './test/**/*.js'"
   },
   "husky": {
     "hooks": {

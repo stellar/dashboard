@@ -1,12 +1,7 @@
-// ALEC TODO - make global somehow
-require("babel-register")({
-  presets: ["es2015"],
-});
-
-const chai = require("chai");
-const v1 = require("../backend/lumens.js");
-const v2 = require("../backend/v2/lumens.js");
-const v3 = require("../backend/v3/lumens.js");
+import chai from "chai";
+const v1 = require("../../backend/lumens.js");
+const v2 = require("../../backend/v2/lumens.js");
+const v3 = require("../../backend/v3/lumens.js");
 
 describe("lumens v1", function() {
   describe("updateApiLumens", function() {
