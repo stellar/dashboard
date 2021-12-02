@@ -41,6 +41,7 @@
     "bourbon": "^4.3.4",
     "bourbon-neat": "^2.0.0",
     "browser-sync": "^2.18.2",
+    "chai": "^4.3.4",
     "css-loader": "2.1.1",
     "dompurify": "^2.2.6",
     "express": "^4.14.0",
