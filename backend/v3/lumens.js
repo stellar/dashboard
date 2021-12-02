@@ -23,8 +23,8 @@ export const circulatingSupplyHandler = function(req, res) {
   res.json(totalSupplyCheckResponse.circulatingSupply);
 };
 
-function updateApiLumens() {
-  Promise.all([
+export function updateApiLumens() {
+  return Promise.all([
     commonLumens.ORIGINAL_SUPPLY_AMOUNT,
     commonLumens.inflationLumens(),
     commonLumens.burnedLumens(),
@@ -81,13 +81,10 @@ function updateApiLumens() {
         circulatingSupply,
       };
 
-      console.log("/api/lumens data saved!");
+      console.log("/api/v3/lumens data saved!");
     })
     .catch(function(err) {
       console.error(err);
-      res.sendStatus(500);
+      return err;
     });
 }
-
-setInterval(updateApiLumens, 1 * 60 * 1000);
-updateApiLumens();
