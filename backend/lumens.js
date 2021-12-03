@@ -6,8 +6,8 @@ export const handler = function(req, res) {
   res.send(cachedData);
 };
 
-function updateApiLumens() {
-  Promise.all([
+export function updateApiLumens() {
+  return Promise.all([
     commonLumens.totalSupply(),
     commonLumens.circulatingSupply(),
     commonLumens.directDevelopmentAll(),
@@ -40,9 +40,6 @@ function updateApiLumens() {
     })
     .catch(function(err) {
       console.error(err);
-      res.sendStatus(500);
+      return err;
     });
 }
-
-setInterval(updateApiLumens, 10 * 60 * 1000);
-updateApiLumens();

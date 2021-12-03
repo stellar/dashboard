@@ -48,3 +48,11 @@ app.get("/api/v3/lumens/circulating-supply", lumensV3.circulatingSupplyHandler);
 app.listen(app.get("port"), function() {
   console.log("Listening on port", app.get("port"));
 });
+
+export function updateLumensCache() {
+  lumens.updateApiLumens();
+  lumensV2.updateApiLumens();
+  lumensV3.updateApiLumens();
+}
+setInterval(updateLumensCache, 10 * 60 * 1000);
+updateLumensCache();
