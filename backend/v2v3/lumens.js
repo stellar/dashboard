@@ -1,25 +1,42 @@
 import * as commonLumens from "../../common/lumens.js";
 import BigNumber from "bignumber.js";
 
-let cachedData;
 const LUMEN_SUPPLY_METRICS_URL =
   "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
 
-let totalSupplyCheckResponse;
+// v2:
+export let lumensDataV2;
 
-export const handler = function(req, res) {
-  res.send(cachedData);
+/* For CoinMarketCap */
+let totalSupplyData;
+let circulatingSupplyData;
+
+export const v2Handler = function(req, res) {
+  res.send(lumensDataV2);
+};
+export const v2TotalSupplyHandler = function(req, res) {
+  res.json(totalSupplyData);
+};
+export const v2CirculatingSupplyHandler = function(req, res) {
+  res.json(circulatingSupplyData);
 };
 
+// v3:
+export let lumensDataV3;
+export let totalSupplyCheckResponse;
+
+export const v3Handler = function(req, res) {
+  res.send(lumensDataV3);
+};
 export const totalSupplyCheckHandler = function(req, res) {
   res.json(totalSupplyCheckResponse);
 };
 
 /* For CoinMarketCap */
-export const totalSupplyHandler = function(req, res) {
+export const v3TotalSupplyHandler = function(req, res) {
   res.json(totalSupplyCheckResponse.totalSupplySum);
 };
-export const circulatingSupplyHandler = function(req, res) {
+export const v3CirculatingSupplyHandler = function(req, res) {
   res.json(totalSupplyCheckResponse.circulatingSupply);
 };
 
@@ -28,33 +45,23 @@ export function updateApiLumens() {
     commonLumens.ORIGINAL_SUPPLY_AMOUNT,
     commonLumens.inflationLumens(),
     commonLumens.burnedLumens(),
-    commonLumens.feePool(),
+    commonLumens.totalSupply(),
     commonLumens.getUpgradeReserve(),
+    commonLumens.feePool(),
     commonLumens.sdfAccounts(),
+    commonLumens.circulatingSupply(),
   ])
     .then(function([
       originalSupply,
       inflationLumens,
       burnedLumens,
-      feePool,
+      totalSupply,
       upgradeReserve,
+      feePool,
       sdfMandate,
+      circulatingSupply,
     ]) {
-      let totalSupply = new BigNumber(originalSupply)
-        .plus(inflationLumens)
-        .minus(burnedLumens);
-
-      let circulatingSupply = totalSupply
-        .minus(upgradeReserve)
-        .minus(feePool)
-        .minus(sdfMandate);
-
-      let totalSupplySum = circulatingSupply
-        .plus(upgradeReserve)
-        .plus(feePool)
-        .plus(sdfMandate);
-
-      let response = {
+      lumensDataV2 = {
         updatedAt: new Date(),
         originalSupply,
         inflationLumens,
@@ -67,18 +74,48 @@ export function updateApiLumens() {
         _details: LUMEN_SUPPLY_METRICS_URL,
       };
 
-      cachedData = response;
+      /* For CoinMarketCap */
+      totalSupplyData = totalSupply * 1;
+      circulatingSupplyData = circulatingSupply * 1;
 
+      console.log("/api/v2/lumens data saved!");
+
+      let totalSupplyCalculate = new BigNumber(originalSupply)
+        .plus(inflationLumens)
+        .minus(burnedLumens);
+
+      let circulatingSupplyCalculate = totalSupplyCalculate
+        .minus(upgradeReserve)
+        .minus(feePool)
+        .minus(sdfMandate);
+
+      let totalSupplySum = circulatingSupplyCalculate
+        .plus(upgradeReserve)
+        .plus(feePool)
+        .plus(sdfMandate);
+
+      lumensDataV3 = {
+        updatedAt: new Date(),
+        originalSupply,
+        inflationLumens,
+        burnedLumens,
+        totalSupplyCalculate,
+        upgradeReserve,
+        feePool,
+        sdfMandate,
+        circulatingSupplyCalculate,
+        _details: LUMEN_SUPPLY_METRICS_URL,
+      };
       totalSupplyCheckResponse = {
         updatedAt: new Date(),
-        totalSupply,
+        totalSupplyCalculate,
         inflationLumens,
         burnedLumens,
         totalSupplySum,
         upgradeReserve,
         feePool,
         sdfMandate,
-        circulatingSupply,
+        circulatingSupplyCalculate,
       };
 
       console.log("/api/v3/lumens data saved!");
