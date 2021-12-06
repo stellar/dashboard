@@ -49,10 +49,10 @@ app.listen(app.get("port"), function() {
   console.log("Listening on port", app.get("port"));
 });
 
-export function updateLumensCache() {
-  lumens.updateApiLumens();
-  lumensV2.updateApiLumens();
-  lumensV3.updateApiLumens();
+export async function updateLumensCache() {
+  await lumens.updateApiLumens();
+  await lumensV2.updateApiLumens();
+  await lumensV3.updateApiLumens();
 }
 setInterval(updateLumensCache, 10 * 60 * 1000);
 updateLumensCache();
