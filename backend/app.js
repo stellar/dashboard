@@ -33,7 +33,7 @@ if (process.env.DEV) {
 app.get("/api/ledgers/public", ledgers.handler);
 app.get("/api/lumens", lumens.v1Handler);
 
-app.get("/api/v2/lumens", lumens.v2Handler);
+app.get("/api/v2/lumens", lumensV2V3.v2Handler);
 /* For CoinMarketCap */
 app.get("/api/v2/lumens/total-supply", lumensV2V3.v2TotalSupplyHandler);
 app.get(
