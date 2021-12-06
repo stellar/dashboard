@@ -1,8 +1,9 @@
 import * as commonLumens from "../common/lumens.js";
+import BigNumber from "bignumber.js";
 
-let cachedData;
+export let cachedData;
 
-export const handler = function(req, res) {
+export const v1Handler = function(req, res) {
   res.send(cachedData);
 };
 
@@ -23,7 +24,7 @@ export function updateApiLumens() {
       useCaseInvestment,
       userAcquisition,
     ]) {
-      var response = {
+      cachedData = {
         updatedAt: new Date(),
         totalCoins,
         availableCoins,
@@ -34,8 +35,6 @@ export function updateApiLumens() {
           userAcquisition,
         },
       };
-
-      cachedData = response;
       console.log("/api/lumens data saved!");
     })
     .catch(function(err) {
