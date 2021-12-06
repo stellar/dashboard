@@ -99,23 +99,23 @@ export function updateApiLumens() {
         originalSupply,
         inflationLumens,
         burnedLumens,
-        totalSupplyCalculate,
+        totalSupply: totalSupplyCalculate,
         upgradeReserve,
         feePool,
         sdfMandate,
-        circulatingSupplyCalculate,
+        circulatingSupply: circulatingSupplyCalculate,
         _details: LUMEN_SUPPLY_METRICS_URL,
       };
       totalSupplyCheckResponse = {
         updatedAt: new Date(),
-        totalSupplyCalculate,
+        totalSupply: totalSupplyCalculate,
         inflationLumens,
         burnedLumens,
         totalSupplySum,
         upgradeReserve,
         feePool,
         sdfMandate,
-        circulatingSupplyCalculate,
+        circulatingSupply: circulatingSupplyCalculate,
       };
 
       console.log("/api/v3/lumens data saved!");

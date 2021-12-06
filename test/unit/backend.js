@@ -72,11 +72,11 @@ describe("lumens v3", function() {
           "originalSupply",
           "inflationLumens",
           "burnedLumens",
-          "totalSupplyCalculate",
+          "totalSupply",
           "upgradeReserve",
           "feePool",
           "sdfMandate",
-          "circulatingSupplyCalculate",
+          "circulatingSupply",
           "_details",
         ]);
       for (var k in v2v3.lumensDataV3) {
@@ -88,14 +88,14 @@ describe("lumens v3", function() {
         .to.be.an("object")
         .that.has.all.keys([
           "updatedAt",
-          "totalSupplyCalculate",
+          "totalSupply",
           "inflationLumens",
           "burnedLumens",
           "totalSupplySum",
           "upgradeReserve",
           "feePool",
           "sdfMandate",
-          "circulatingSupplyCalculate",
+          "circulatingSupply",
         ]);
       for (var k in v2v3.totalSupplyCheckResponse) {
         chai.expect(v2v3.totalSupplyCheckResponse[k].toString()).to.not.be
