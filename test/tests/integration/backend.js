@@ -63,8 +63,8 @@ const containsData = function(data) {
     case "number":
       return data == 0;
     case "undefined":
-      return true;
+      return false;
     case "null":
-      return true;
+      return false;
   }
 };
