@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: 10
       - run: yarn install
+      - run: createdb dashboard
       - run: yarn test
         env:
           # The hostname used to communicate with the PostgreSQL service container
