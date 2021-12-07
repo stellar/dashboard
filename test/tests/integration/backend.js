@@ -46,7 +46,7 @@ describe("integration", function() {
           .expect(200);
 
         chai.expect(body).to.be.an(tc.wantResultType);
-        chai.expect(containsData(body)).to.be.false;
+        chai.expect(containsData(body)).to.be.true;
       }
     });
   });
@@ -55,13 +55,13 @@ describe("integration", function() {
 const containsData = function(data) {
   switch (typeof data) {
     case "object":
-      return Object.keys(data).length == 0;
+      return Object.keys(data).length > 0;
     case "array":
-      return data.length == 0;
+      return data.length > 0;
     case "string":
-      return data.length == 0;
+      return data.length > 0;
     case "number":
-      return data == 0;
+      return data != 0;
     case "undefined":
       return false;
     case "null":
