@@ -9,62 +9,76 @@ describe("integration", function() {
   });
 
   describe("backend api endpoints", function() {
-    it("should return data of correct type", async function() {
-      let testCases = [
-        {
-          url: "/api/lumens",
-          wantResultType: "object",
-        },
-        {
-          url: "/api/v2/lumens",
-          wantResultType: "object",
-        },
-        {
-          url: "/api/v2/lumens/total-supply",
-          wantResultType: "number",
-        },
-        {
-          url: "/api/v2/lumens/circulating-supply",
-          wantResultType: "number",
-        },
-        { url: "/api/v3/lumens", wantResultType: "object" },
-        { url: "/api/v3/lumens/all", wantResultType: "object" },
-        {
-          url: "/api/v3/lumens/total-supply",
-          wantResultType: "string",
-        },
-        {
-          url: "/api/v3/lumens/circulating-supply",
-          wantResultType: "string",
-        },
-      ];
+    it("/api/lumens should return successfuly with data", async function() {
+      let { body } = await request(app)
+        .get("/api/lumens")
+        .expect(200);
 
-      for (var tc of testCases) {
-        console.log("testing: ", tc.url);
-        let { body } = await request(app)
-          .get(tc.url)
-          .expect(200);
+      chai.expect(body).to.be.an("object");
+      chai.expect(Object.keys(body).length).to.not.equal(0);
+    });
 
-        chai.expect(body).to.be.an(tc.wantResultType);
-        chai.expect(containsData(body)).to.be.true;
-      }
+    it("/api/v2/lumens should return successfuly with data", async function() {
+      let { body } = await request(app)
+        .get("/api/v2/lumens")
+        .expect(200);
+
+      chai.expect(body).to.be.an("object");
+      chai.expect(Object.keys(body).length).to.not.equal(0);
+    });
+
+    it("/api/v2/lumens/total-supply should return successfuly with data", async function() {
+      let { body } = await request(app)
+        .get("/api/v2/lumens/total-supply")
+        .expect(200);
+
+      chai.expect(body).to.be.an("number");
+      chai.expect(body).to.not.equal(0);
+    });
+
+    it("/api/v2/lumens/circulating-supply should return successfuly with data", async function() {
+      let { body } = await request(app)
+        .get("/api/v2/lumens/circulating-supply")
+        .expect(200);
+
+      chai.expect(body).to.be.an("number");
+      chai.expect(body).to.not.equal(0);
+    });
+
+    it("/api/v3/lumens should return successfuly with data", async function() {
+      let { body } = await request(app)
+        .get("/api/v3/lumens")
+        .expect(200);
+
+      chai.expect(body).to.be.an("object");
+      chai.expect(Object.keys(body).length).to.not.equal(0);
+    });
+
+    it("/api/v3/lumens/all should return successfuly with data", async function() {
+      let { body } = await request(app)
+        .get("/api/v3/lumens/all")
+        .expect(200);
+
+      chai.expect(body).to.be.an("object");
+      chai.expect(Object.keys(body).length).to.not.equal(0);
+    });
+
+    it("/api/v3/lumens/total-supply should return successfuly with data", async function() {
+      let { body } = await request(app)
+        .get("/api/v3/lumens/total-supply")
+        .expect(200);
+
+      chai.expect(body).to.be.an("string");
+      chai.expect(body).to.not.equal("");
+    });
+
+    it("/api/v3/lumens/circulating-supply should return successfuly with data", async function() {
+      let { body } = await request(app)
+        .get("/api/v3/lumens/circulating-supply")
+        .expect(200);
+
+      chai.expect(body).to.be.an("string");
+      chai.expect(body).to.not.equal("");
     });
   });
 });
-
-const containsData = function(data) {
-  switch (typeof data) {
-    case "object":
-      return Object.keys(data).length > 0;
-    case "array":
-      return data.length > 0;
-    case "string":
-      return data.length > 0;
-    case "number":
-      return data != 0;
-    case "undefined":
-      return false;
-    case "null":
-      return false;
-  }
-};
