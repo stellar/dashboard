@@ -11,45 +11,38 @@ describe("integration", function() {
     await updateResults();
   });
 
-  describe("", function() {
-    it("should return correct type", async function() {
+  describe("backend api endpoints", function() {
+    it("should return data of correct type", async function() {
       let testCases = [
         {
           url: "/api/ledgers/public",
           wantResultType: "array",
-          emptyState: {},
         },
         {
           url: "/api/lumens",
           wantResultType: "object",
-          emptyState: {},
         },
         {
           url: "/api/v2/lumens",
           wantResultType: "object",
-          emptyState: {},
         },
         {
           url: "/api/v2/lumens/total-supply",
           wantResultType: "number",
-          emptyState: "",
         },
         {
           url: "/api/v2/lumens/circulating-supply",
           wantResultType: "number",
-          emptyState: "",
         },
-        { url: "/api/v3/lumens", wantResultType: "object", emptyState: {} },
-        { url: "/api/v3/lumens/all", wantResultType: "object", emptyState: {} },
+        { url: "/api/v3/lumens", wantResultType: "object" },
+        { url: "/api/v3/lumens/all", wantResultType: "object" },
         {
           url: "/api/v3/lumens/total-supply",
           wantResultType: "string",
-          emptyState: "",
         },
         {
           url: "/api/v3/lumens/circulating-supply",
           wantResultType: "string",
-          emptyState: "",
         },
       ];
 
@@ -59,15 +52,26 @@ describe("integration", function() {
           .get(tc.url)
           .expect(200);
 
-        // ALEC TODO - remove
-        console.log(body);
-        console.log(typeof body);
-
-        console.log(body == "{}");
-
-        // chai.expect(body).to.be.an(tc.wantResultType);
-        chai.expect(body).to.not.equal(tc.emptyState);
+        chai.expect(body).to.be.an(tc.wantResultType);
+        chai.expect(containsData(body)).to.be.false;
       }
     });
   });
 });
+
+const containsData = function(data) {
+  switch (typeof data) {
+    case "object":
+      return Object.keys(data).length == 0;
+    case "array":
+      return data.length == 0;
+    case "string":
+      return data.length == 0;
+    case "number":
+      return data == 0;
+    case "undefined":
+      return true;
+    case "null":
+      return true;
+  }
+};

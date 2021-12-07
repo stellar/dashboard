@@ -30,7 +30,7 @@ describe("lumens v1", function() {
   });
 });
 
-describe("lumens v2", function() {
+describe("lumens v2v3", function() {
   describe("updateApiLumens", function() {
     it("should run without error and caches should update", async function() {
       let err = await v2v3.updateApiLumens();

@@ -58,5 +58,3 @@ export async function updateLumensCache() {
   await lumens.updateApiLumens();
   await lumensV2V3.updateApiLumens();
 }
-setInterval(updateLumensCache, 10 * 60 * 1000);
-updateLumensCache();
