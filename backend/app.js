@@ -6,7 +6,7 @@ import * as lumens from "./lumens.js";
 import * as lumensV2V3 from "./v2v3/lumens.js";
 import * as ledgers from "./ledgers.js";
 
-var app = express();
+export var app = express();
 app.set("port", process.env.PORT || 5000);
 app.set("json spaces", 2);
 
@@ -58,5 +58,3 @@ export async function updateLumensCache() {
   await lumens.updateApiLumens();
   await lumensV2V3.updateApiLumens();
 }
-setInterval(updateLumensCache, 10 * 60 * 1000);
-updateLumensCache();
