@@ -2,22 +2,15 @@ import chai from "chai";
 const request = require("supertest");
 
 const { app, updateLumensCache } = require("../../../backend/app.js");
-const { updateResults, cachedData } = require("../../../backend/ledgers.js");
-
 describe("integration", function() {
   // update caches
   before(async function() {
     await updateLumensCache();
-    await updateResults();
   });
 
   describe("backend api endpoints", function() {
     it("should return data of correct type", async function() {
       let testCases = [
-        {
-          url: "/api/ledgers/public",
-          wantResultType: "array",
-        },
         {
           url: "/api/lumens",
           wantResultType: "object",
