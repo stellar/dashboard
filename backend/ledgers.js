@@ -9,7 +9,7 @@ export const handler = function(req, res) {
   res.send(cachedData);
 };
 
-function updateResults() {
+export async function updateResults() {
   let query = `select
       to_char(closed_at, 'YYYY-MM-DD') as date,
       sum(transaction_count) as transaction_count,
