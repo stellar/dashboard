@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": "10.x"
+    "node": "16.x"
   },
   "scripts": {
     "start": "gulp",
@@ -55,7 +55,6 @@
     "moment": "^2.17.1",
     "morgan": "^1.8.2",
     "muicss": "^0.9.5",
-    "node-sass": "^4.12.0",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
     "react": "^16.3.2",
