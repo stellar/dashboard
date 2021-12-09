@@ -7,8 +7,6 @@ var path = require("path");
 var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-gulp.task("default", ["develop"]);
-
 var webpackOptions = {
   entry: {
     app: "./frontend/app.js",
@@ -52,7 +50,7 @@ var webpackOptions = {
   ],
 };
 
-gulp.task("develop", function(done) {
+const develop = function(done) {
   var options = merge(webpackOptions, {
     output: {
       filename: "[name].js",
@@ -93,9 +91,9 @@ gulp.task("develop", function(done) {
       }),
     );
   });
-});
+};
 
-gulp.task("build", function(done) {
+const build = function(done) {
   var options = merge(webpackOptions, {
     bail: true,
     output: {
@@ -119,7 +117,7 @@ gulp.task("build", function(done) {
   var compiler = webpack(options);
   compiler.purgeInputFileSystem();
   compiler.run(done);
-});
+};
 
 function merge(object1, object2) {
   return _.mergeWith(object1, object2, function(a, b) {
@@ -128,3 +126,7 @@ function merge(object1, object2) {
     }
   });
 }
+
+gulp.task("develop", develop);
+gulp.task("build", build);
+gulp.task("default", develop);
