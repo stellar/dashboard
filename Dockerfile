@@ -8,7 +8,7 @@ WORKDIR /app/src
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
     gpg curl ca-certificates git apt-transport-https && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key|gpg --dearmor >/etc/apt/trusted.gpg.d/nodesource.gpg && \
-    echo "deb https://deb.nodesource.com/node_10.x focal main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    echo "deb https://deb.nodesource.com/node_16.x focal main" | tee /etc/apt/sources.list.d/nodesource.list && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg |gpg --dearmor >/etc/apt/trusted.gpg.d/yarnpkg.gpg && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs yarn && \
