@@ -17,5 +17,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
 ENV PORT=80 UPDATE_DATA=false
 EXPOSE 80
 
+
+RUN yarn list
+
 ENTRYPOINT ["/usr/bin/node"]
 CMD ["./app.js"]
