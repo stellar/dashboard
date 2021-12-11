@@ -31,6 +31,8 @@ export default class App extends React.Component {
     super(props);
     this.chrome57 = navigator.userAgent.toLowerCase().indexOf("chrome/57") > -1;
     this.emitter = new EventEmitter();
+    console.log("emitter:");
+    console.log(this.emitter);
     this.sleepDetector();
 
     // Add an axios response interceptor to setup a timestamp offset between
