@@ -53,6 +53,11 @@ const horizonTest = "https://horizon-testnet.stellar.org";
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+
+    // ALEC TODO - remove
+    console.log("node env:");
+    console.log(process.env.DEV);
+
     this.chrome57 = navigator.userAgent.toLowerCase().indexOf("chrome/57") > -1;
     this.emitter = new EventEmitter();
     this.sleepDetector();

@@ -4,7 +4,9 @@ export const sequelize = new Sequelize(
   process.env.DEV
     ? "postgres://localhost/dashboard?sslmode=disable"
     : process.env.POSTGRES_URL,
-  process.env.DEV ? {} : { dialect: "postgres", dialectOptions: { ssl: true } },
+  process.env.DEV
+    ? { rejectUnauthorized: false }
+    : { dialect: "postgres", dialectOptions: { ssl: true } },
 );
 
 export const NodeMeasurement = sequelize.define(
