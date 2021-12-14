@@ -8,8 +8,12 @@ export const sequelize = new Sequelize(
     ? {}
     : {
         dialect: "postgres",
-        dialectOptions: { ssl: true },
-        rejectUnauthorized: false,
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
       },
 );
 
