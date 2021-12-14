@@ -17,10 +17,6 @@ export const sequelize = new Sequelize(
       },
 );
 
-// ALEC TODO - remove
-console.log("node env is dev:");
-console.log(process.env.DEV);
-
 export const NodeMeasurement = sequelize.define(
   "node_measurement",
   {
