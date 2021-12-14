@@ -178,51 +178,57 @@ export default class App extends React.Component {
 
   // ALEC TODO - change back
   render() {
-    <section>
-      <h1>Live network status</h1>
-      <div className="row">
-        <div className="mui-col-md-4">
-          <NetworkStatus
-            network="Live network"
-            horizonURL={horizonLive}
-            newLedgerEventName={LIVE_NEW_LEDGER}
-            emitter={this.emitter}
-          />
-          <Incidents />
-          <FeeStats horizonURL={horizonLive} />
-          <RecentOperations
-            limit="20"
-            label="Live network"
-            horizonURL={horizonLive}
-            emitter={this.emitter}
-          />
-        </div>
-        <div className="mui-col-md-8">
-          <LedgerCloseChart
-            network="Live network"
-            horizonURL={horizonLive}
-            limit="100"
-            newLedgerEventName={LIVE_NEW_LEDGER}
-            emitter={this.emitter}
-          />
-          <TransactionsChart
-            network="Live network"
-            horizonURL={horizonLive}
-            limit="100"
-            newLedgerEventName={LIVE_NEW_LEDGER}
-            emitter={this.emitter}
-          />
-          <FailedTransactionsChart
-            network="Live network"
-            horizonURL={horizonLive}
-            limit="100"
-            newLedgerEventName={LIVE_NEW_LEDGER}
-            emitter={this.emitter}
-          />
-          <PublicNetworkLedgersHistoryChart />
+    return (
+      <div id="main" className={this.state.forceTheme ? "force" : null}>
+        <div id="main" className="mui-container-fluid">
+          <section>
+            <h1>Live network status</h1>
+            <div className="row">
+              <div className="mui-col-md-4">
+                <NetworkStatus
+                  network="Live network"
+                  horizonURL={horizonLive}
+                  newLedgerEventName={LIVE_NEW_LEDGER}
+                  emitter={this.emitter}
+                />
+                <Incidents />
+                <FeeStats horizonURL={horizonLive} />
+                <RecentOperations
+                  limit="20"
+                  label="Live network"
+                  horizonURL={horizonLive}
+                  emitter={this.emitter}
+                />
+              </div>
+              <div className="mui-col-md-8">
+                <LedgerCloseChart
+                  network="Live network"
+                  horizonURL={horizonLive}
+                  limit="100"
+                  newLedgerEventName={LIVE_NEW_LEDGER}
+                  emitter={this.emitter}
+                />
+                <TransactionsChart
+                  network="Live network"
+                  horizonURL={horizonLive}
+                  limit="100"
+                  newLedgerEventName={LIVE_NEW_LEDGER}
+                  emitter={this.emitter}
+                />
+                <FailedTransactionsChart
+                  network="Live network"
+                  horizonURL={horizonLive}
+                  limit="100"
+                  newLedgerEventName={LIVE_NEW_LEDGER}
+                  emitter={this.emitter}
+                />
+                <PublicNetworkLedgersHistoryChart />
+              </div>
+            </div>
+          </section>
         </div>
       </div>
-    </section>;
+    );
   }
 
   // render() {
