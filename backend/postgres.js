@@ -5,8 +5,12 @@ export const sequelize = new Sequelize(
     ? "postgres://localhost/dashboard?sslmode=disable"
     : process.env.POSTGRES_URL,
   process.env.DEV
-    ? { rejectUnauthorized: false }
-    : { dialect: "postgres", dialectOptions: { ssl: true } },
+    ? {}
+    : {
+        dialect: "postgres",
+        dialectOptions: { ssl: true },
+        rejectUnauthorized: false,
+      },
 );
 
 // ALEC TODO - remove
