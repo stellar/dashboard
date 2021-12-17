@@ -3,7 +3,7 @@ require("babel-register")({
 });
 
 // Run backend with interval cache updates.
-const { updateLumensCache } = require("./backend/app.js");
+const { updateLumensCache } = require("./routes");
 
 setInterval(updateLumensCache, 10 * 60 * 1000);
 updateLumensCache();

@@ -1,0 +1,13 @@
+{
+  "extends": "@stellar/tsconfig",
+  "compilerOptions": {
+    // temporary flags during js->ts transition
+    "allowJs": false, 
+    "isolatedModules": false,
+
+    "target": "es5",      
+    "rootDir": "./backend",
+    "baseUrl": "./"
+  },
+  "include": ["./backend"] 
+}
