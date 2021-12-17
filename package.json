@@ -12,7 +12,7 @@
     "heroku-postbuild": "gulp build",
     "lint:prettier": "prettier --config --write '**/*.js'",
     "test": "DEV=true mocha './test/**/*.js' --exit",
-    "dev-backend": "UPDATE=true DEV=true ts-node backend/app.ts"
+    "dev-backend": "UPDATE_DATA=true DEV=true ts-node backend/app.ts"
   },
   "husky": {
     "hooks": {
