@@ -1,0 +1,15 @@
+export function getLumenBalance(horizonURL: any, accountId: any): Promise<any>;
+export function totalLumens(horizonURL: any): Promise<any>;
+export function inflationLumens(): Promise<any>;
+export function feePool(): Promise<any>;
+export function burnedLumens(): Promise<any>;
+export function directDevelopmentAll(): Promise<any>;
+export function distributionEcosystemSupport(): Promise<any>;
+export function distributionUseCaseInvestment(): Promise<any>;
+export function distributionUserAcquisition(): Promise<any>;
+export function getUpgradeReserve(): Promise<any>;
+export function sdfAccounts(): Promise<any>;
+export function totalSupply(): Promise<any>;
+export function noncirculatingSupply(): Promise<any>;
+export function circulatingSupply(): Promise<any>;
+export const ORIGINAL_SUPPLY_AMOUNT: "100000000000";

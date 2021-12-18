@@ -72,7 +72,7 @@ function sumRelevantAccounts(accounts) {
   ).then((data) =>
     data
       .reduce(
-        (sum, currentBalance) => new BigNumber(currentBalance).add(sum),
+        (sum, currentBalance) => new BigNumber(currentBalance).plus(sum),
         new BigNumber(0),
       )
       .toString(),
@@ -185,7 +185,7 @@ export function sdfAccounts() {
   return Promise.all(balanceMap).then((balances) => {
     return reduce(
       balances,
-      (sum, balance) => sum.add(balance),
+      (sum, balance) => sum.plus(balance),
       new BigNumber(0),
     );
   });
@@ -206,7 +206,7 @@ export function noncirculatingSupply() {
     (balances) => {
       return reduce(
         balances,
-        (sum, balance) => sum.add(balance),
+        (sum, balance) => sum.plus(balance),
         new BigNumber(0),
       );
     },

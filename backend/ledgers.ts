@@ -1,11 +1,18 @@
 import stellarSdk from "stellar-sdk";
-import moment from "moment";
 import _ from "lodash";
-import * as postgres from "./postgres.js";
+import { QueryTypes } from "sequelize";
+import * as postgres from "./postgres";
 
-let cachedData;
+interface Ledger {
+  date: string;
+  transaction_count: number;
+  operation_count: number;
+}
 
-export const handler = function(req, res) {
+let cachedData: Array<Ledger>;
+
+// ALEC TODO - change res:any
+export const handler = function({}, res: any) {
   res.send(cachedData);
 };
 
@@ -20,11 +27,19 @@ function updateResults() {
     order by 1 desc`;
 
   postgres.sequelize
-    .query(query, { type: postgres.sequelize.QueryTypes.SELECT })
-    .then((results) => (cachedData = _.each(results, convertFields)));
+    .query(query, { type: QueryTypes.SELECT })
+    // ALEC TODO - change to correct type
+    .then((results: any) => {
+      // ALEC TODO - remove
+      console.log(results);
+      cachedData = _.each(results, convertFields);
+    });
 }
 
-function convertFields(ledger) {
+function convertFields(ledger: any) {
+  // ALEC TODO - remove, and change ledger to correct
+  console.log(ledger);
+
   // String to int fields
   const fields = ["transaction_count", "operation_count"];
   for (let field of fields) {
@@ -44,7 +59,9 @@ postgres.sequelize.addHook("afterBulkSync", () => {
   if (process.env.UPDATE_DATA == "true") {
     // Stream ledgers - get last paging_token/
     postgres.LedgerStats.findOne({ order: [["sequence", "DESC"]] }).then(
-      (lastLedger) => {
+      (lastLedger: any) => {
+        // ALEC TODO - remove, and change ledger to correct
+        console.log(lastLedger);
         let pagingToken;
         if (!lastLedger) {
           pagingToken = "now";
@@ -58,8 +75,10 @@ postgres.sequelize.addHook("afterBulkSync", () => {
           .cursor(pagingToken)
           .limit(200)
           .stream({
-            onmessage: (ledger) => {
-              let newLedger = _.pick(ledger, [
+            // ALEC TODO - change to correct type
+            onmessage: (ledger: any) => {
+              // ALEC TODO - change to correct type
+              let newLedger: any = _.pick(ledger, [
                 "sequence",
                 "closed_at",
                 "paging_token",

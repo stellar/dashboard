@@ -1,9 +1,21 @@
 import * as commonLumens from "../common/lumens.js";
-import BigNumber from "bignumber.js";
 
-export let cachedData;
+// ALEC TODO - check these string types are correct
+interface CachedData {
+  updatedAt: Date;
+  totalCoins: number;
+  availableCoins: number;
+  programs: {
+    directDevelopment: string;
+    ecosystemSupport: string;
+    useCaseInvestment: string;
+    userAcquisition: string;
+  };
+}
 
-export const v1Handler = function(req, res) {
+export let cachedData: CachedData;
+
+export const v1Handler = function({}, res: any) {
   res.send(cachedData);
 };
 

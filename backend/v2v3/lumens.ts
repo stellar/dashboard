@@ -5,38 +5,79 @@ const LUMEN_SUPPLY_METRICS_URL =
   "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
 
 // v2:
-export let lumensDataV2;
+// ALEC TODO - are these string types correct?
+interface LumensDataV2 {
+  updatedAt: Date;
+  originalSupply: string;
+  inflationLumens: string;
+  burnedLumens: string;
+  totalSupply: string;
+  upgradeReserve: string;
+  feePool: string;
+  sdfMandate: string;
+  circulatingSupply: string;
+  _details: string;
+}
+
+export let lumensDataV2: LumensDataV2;
 
 /* For CoinMarketCap */
-let totalSupplyData;
-let circulatingSupplyData;
+let totalSupplyData: number;
+let circulatingSupplyData: number;
 
-export const v2Handler = function(req, res) {
+// ALEC TODO - fix res:any to be a type
+export const v2Handler = function({}, res: any) {
   res.send(lumensDataV2);
 };
-export const v2TotalSupplyHandler = function(req, res) {
+export const v2TotalSupplyHandler = function({}, res: any) {
   res.json(totalSupplyData);
 };
-export const v2CirculatingSupplyHandler = function(req, res) {
+export const v2CirculatingSupplyHandler = function({}, res: any) {
   res.json(circulatingSupplyData);
 };
 
 // v3:
-export let lumensDataV3;
-export let totalSupplyCheckResponse;
+// ALEC TODO - are these string types correct?
+interface LumensDataV3 {
+  updatedAt: Date;
+  originalSupply: string;
+  inflationLumens: string;
+  burnedLumens: string;
+  totalSupply: BigNumber;
+  upgradeReserve: string;
+  feePool: string;
+  sdfMandate: string;
+  circulatingSupply: BigNumber;
+  _details: string;
+}
+export let lumensDataV3: LumensDataV3;
 
-export const v3Handler = function(req, res) {
+// ALEC TODO - are these string types correct?
+interface TotalSupplyCheckResponse {
+  updatedAt: Date;
+  totalSupply: BigNumber;
+  inflationLumens: string;
+  burnedLumens: string;
+  totalSupplySum: BigNumber;
+  upgradeReserve: string;
+  feePool: string;
+  sdfMandate: string;
+  circulatingSupply: BigNumber;
+}
+export let totalSupplyCheckResponse: TotalSupplyCheckResponse;
+
+export const v3Handler = function({}, res: any) {
   res.send(lumensDataV3);
 };
-export const totalSupplyCheckHandler = function(req, res) {
+export const totalSupplyCheckHandler = function({}, res: any) {
   res.json(totalSupplyCheckResponse);
 };
 
 /* For CoinMarketCap */
-export const v3TotalSupplyHandler = function(req, res) {
+export const v3TotalSupplyHandler = function({}, res: any) {
   res.json(totalSupplyCheckResponse.totalSupplySum);
 };
-export const v3CirculatingSupplyHandler = function(req, res) {
+export const v3CirculatingSupplyHandler = function({}, res: any) {
   res.json(totalSupplyCheckResponse.circulatingSupply);
 };
 
