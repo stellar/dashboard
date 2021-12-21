@@ -9,5 +9,8 @@
     "rootDir": "./backend",
     "baseUrl": "./"
   },
+  "ts-node": {
+    "files": true
+  },
   "include": ["./backend"] 
 }
