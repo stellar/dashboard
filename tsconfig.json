@@ -4,7 +4,6 @@
     // temporary flags during js->ts transition
     "allowJs": false, 
     "isolatedModules": false,
-
     "target": "ES2016",      
     "rootDir": "./backend",
     "baseUrl": "./"

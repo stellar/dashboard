@@ -42,7 +42,7 @@ createdb dashboard
 Once you have postgres installed, start this command
 
 ```sh
-yarn run dev-backend
+yarn run start:backend
 ```
 
 It will create a proxy to `browser-sync` server started by gulp at
