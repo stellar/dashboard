@@ -1,6 +1,7 @@
 import stellarSdk from "stellar-sdk";
 import _ from "lodash";
 import { QueryTypes } from "sequelize";
+import { Response } from "express";
 import * as postgres from "./postgres";
 
 interface Ledger {
@@ -11,8 +12,7 @@ interface Ledger {
 
 let cachedData: Array<Ledger>;
 
-// ALEC TODO - change res:any
-export const handler = function({}, res: any) {
+export const handler = function({}, res: Response) {
   res.send(cachedData);
 };
 
@@ -28,27 +28,18 @@ function updateResults() {
 
   postgres.sequelize
     .query(query, { type: QueryTypes.SELECT })
-    // ALEC TODO - change to correct type
-    .then((results: any) => {
-      // ALEC TODO - remove
-      console.log(results);
+    .then((results: Array<any>) => {
       cachedData = _.each(results, convertFields);
     });
 }
 
-function convertFields(ledger: any) {
-  // ALEC TODO - remove, and change ledger to correct
-  console.log(ledger);
-
-  // String to int fields
-  const fields = ["transaction_count", "operation_count"];
-  for (let field of fields) {
-    ledger[field] = parseInt(ledger[field]);
-  }
-
-  // Remove year from date
-  ledger["date"] = ledger["date"].substring(5);
-  return ledger;
+function convertFields(ledger: any): Ledger {
+  return {
+    // Remove year from date
+    date: ledger["date"].substring(5),
+    transaction_count: parseInt(ledger.transaction_count),
+    operation_count: parseInt(ledger.operation_count),
+  };
 }
 
 // Wait for schema sync
@@ -59,9 +50,7 @@ postgres.sequelize.addHook("afterBulkSync", () => {
   if (process.env.UPDATE_DATA == "true") {
     // Stream ledgers - get last paging_token/
     postgres.LedgerStats.findOne({ order: [["sequence", "DESC"]] }).then(
-      (lastLedger: any) => {
-        // ALEC TODO - remove, and change ledger to correct
-        console.log(lastLedger);
+      (lastLedger: postgres.LedgerStats) => {
         let pagingToken;
         if (!lastLedger) {
           pagingToken = "now";
@@ -75,9 +64,8 @@ postgres.sequelize.addHook("afterBulkSync", () => {
           .cursor(pagingToken)
           .limit(200)
           .stream({
-            // ALEC TODO - change to correct type
+            // TODO - use type any until https://github.com/stellar/js-stellar-sdk/issues/731 resolved
             onmessage: (ledger: any) => {
-              // ALEC TODO - change to correct type
               let newLedger: any = _.pick(ledger, [
                 "sequence",
                 "closed_at",

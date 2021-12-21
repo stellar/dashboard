@@ -1,11 +1,11 @@
 import * as commonLumens from "../../common/lumens.js";
 import BigNumber from "bignumber.js";
+import { Response } from "express";
 
 const LUMEN_SUPPLY_METRICS_URL =
   "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
 
 // v2:
-// ALEC TODO - are these string types correct?
 interface LumensDataV2 {
   updatedAt: Date;
   originalSupply: string;
@@ -25,19 +25,17 @@ export let lumensDataV2: LumensDataV2;
 let totalSupplyData: number;
 let circulatingSupplyData: number;
 
-// ALEC TODO - fix res:any to be a type
-export const v2Handler = function({}, res: any) {
+export const v2Handler = function({}, res: Response) {
   res.send(lumensDataV2);
 };
-export const v2TotalSupplyHandler = function({}, res: any) {
+export const v2TotalSupplyHandler = function({}, res: Response) {
   res.json(totalSupplyData);
 };
-export const v2CirculatingSupplyHandler = function({}, res: any) {
+export const v2CirculatingSupplyHandler = function({}, res: Response) {
   res.json(circulatingSupplyData);
 };
 
 // v3:
-// ALEC TODO - are these string types correct?
 interface LumensDataV3 {
   updatedAt: Date;
   originalSupply: string;
@@ -52,7 +50,6 @@ interface LumensDataV3 {
 }
 export let lumensDataV3: LumensDataV3;
 
-// ALEC TODO - are these string types correct?
 interface TotalSupplyCheckResponse {
   updatedAt: Date;
   totalSupply: BigNumber;
@@ -66,18 +63,18 @@ interface TotalSupplyCheckResponse {
 }
 export let totalSupplyCheckResponse: TotalSupplyCheckResponse;
 
-export const v3Handler = function({}, res: any) {
+export const v3Handler = function({}, res: Response) {
   res.send(lumensDataV3);
 };
-export const totalSupplyCheckHandler = function({}, res: any) {
+export const totalSupplyCheckHandler = function({}, res: Response) {
   res.json(totalSupplyCheckResponse);
 };
 
 /* For CoinMarketCap */
-export const v3TotalSupplyHandler = function({}, res: any) {
+export const v3TotalSupplyHandler = function({}, res: Response) {
   res.json(totalSupplyCheckResponse.totalSupplySum);
 };
-export const v3CirculatingSupplyHandler = function({}, res: any) {
+export const v3CirculatingSupplyHandler = function({}, res: Response) {
   res.json(totalSupplyCheckResponse.circulatingSupply);
 };
 

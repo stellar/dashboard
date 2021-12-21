@@ -1,10 +1,10 @@
 import * as commonLumens from "../common/lumens.js";
+import { Response } from "express";
 
-// ALEC TODO - check these string types are correct
 interface CachedData {
   updatedAt: Date;
-  totalCoins: number;
-  availableCoins: number;
+  totalCoins: string;
+  availableCoins: string;
   programs: {
     directDevelopment: string;
     ecosystemSupport: string;
@@ -15,7 +15,7 @@ interface CachedData {
 
 export let cachedData: CachedData;
 
-export const v1Handler = function({}, res: any) {
+export const v1Handler = function({}, res: Response) {
   res.send(cachedData);
 };
 

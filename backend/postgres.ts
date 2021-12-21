@@ -1,4 +1,4 @@
-import { Sequelize, INTEGER, STRING, DATE } from "sequelize";
+import { Sequelize, Model, DataTypes } from "sequelize";
 
 export const sequelize = new Sequelize(
   process.env.DEV
@@ -17,55 +17,43 @@ export const sequelize = new Sequelize(
       },
 );
 
-export const NodeMeasurement = sequelize.define(
-  "node_measurement",
+export class LedgerStats extends Model {
+  public sequence!: number;
+  public closed_at!: Date;
+  public paging_token!: string;
+  public transaction_count!: number;
+  public operation_count!: number;
+}
+
+LedgerStats.init(
   {
-    id: {
-      type: INTEGER,
+    sequence: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
     },
-    node_id: {
-      type: STRING,
+    closed_at: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
-    date: {
-      type: DATE,
+    paging_token: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    status: {
-      type: INTEGER,
+    transaction_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    operation_count: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },
   {
-    indexes: [{ unique: true, fields: ["node_id", "date"] }],
+    tableName: "ledger_stats",
+    sequelize,
   },
 );
-
-export const LedgerStats = sequelize.define("ledger_stats", {
-  sequence: {
-    type: INTEGER,
-    allowNull: false,
-    primaryKey: true,
-  },
-  closed_at: {
-    type: DATE,
-    allowNull: false,
-  },
-  paging_token: {
-    type: STRING,
-    allowNull: false,
-  },
-  transaction_count: {
-    type: INTEGER,
-    allowNull: false,
-  },
-  operation_count: {
-    type: INTEGER,
-    allowNull: false,
-  },
-});
 
 // Create schema if doesn't exist
 sequelize.sync({ hooks: true });
