@@ -4,9 +4,10 @@
     // temporary flags during js->ts transition
     "allowJs": false, 
     "isolatedModules": false,
-    "target": "ES2016",      
+    "target": "es6",
     "rootDir": "./backend",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "moduleResolution": "node"
   },
   "ts-node": {
     "files": true
