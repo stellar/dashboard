@@ -4,7 +4,17 @@ export const sequelize = new Sequelize(
   process.env.DEV
     ? "postgres://localhost/dashboard?sslmode=disable"
     : process.env.POSTGRES_URL || "",
-  {},
+  process.env.DEV
+    ? {}
+    : {
+        dialect: "postgres",
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
+      },
 );
 
 export class LedgerStats extends Model {

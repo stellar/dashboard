@@ -2,12 +2,11 @@
   "extends": "@stellar/tsconfig",
   "compilerOptions": {
     // temporary flags during js->ts transition
-    "allowJs": false, 
+    "allowJs": true, 
     "isolatedModules": false,
     "target": "es6",
-    "rootDir": "./backend",
+    "module": "commonjs",
     "baseUrl": "./",
-    "moduleResolution": "node"
   },
   "ts-node": {
     "files": true
