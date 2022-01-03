@@ -34,12 +34,11 @@ function updateResults() {
 }
 
 function convertFields(ledger: any): Ledger {
-  return {
-    // Remove year from date
-    date: ledger["date"].substring(5),
-    transaction_count: parseInt(ledger.transaction_count),
-    operation_count: parseInt(ledger.operation_count),
-  };
+  // Remove year from date
+  ledger.date = ledger["date"].substring(5);
+  ledger.transaction_count = parseInt(ledger.transaction_count);
+  ledger.operation_count = parseInt(ledger.operation_count);
+  return ledger;
 }
 
 // Wait for schema sync
