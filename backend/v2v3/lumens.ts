@@ -113,8 +113,8 @@ export function updateApiLumens() {
       };
 
       /* For CoinMarketCap */
-      totalSupplyData = totalSupply * 1;
-      circulatingSupplyData = circulatingSupply * 1;
+      totalSupplyData = Number(totalSupply);
+      circulatingSupplyData = Number(circulatingSupply);
 
       console.log("/api/v2/lumens data saved!");
 
