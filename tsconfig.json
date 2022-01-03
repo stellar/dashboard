@@ -1,8 +1,6 @@
 {
   "extends": "@stellar/tsconfig",
   "compilerOptions": {
-    // temporary flags during js->ts transition
-    "allowJs": true, 
     "isolatedModules": false,
     "target": "es6",
     "module": "commonjs",
