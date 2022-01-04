@@ -4,6 +4,8 @@ import { QueryTypes } from "sequelize";
 import { Response } from "express";
 import * as postgres from "./postgres";
 
+import { redisClient } from "./app";
+
 interface Ledger {
   date: string;
   transaction_count: number;
@@ -18,11 +20,13 @@ interface LedgerSql {
 
 let cachedData: Array<Ledger>;
 
-export const handler = function(_: any, res: Response) {
-  res.send(cachedData);
+// ALEC TODO - can handler be async?
+export const handler = async function(_: any, res: Response) {
+  let val = await redisClient.get("handler-test");
+  res.send(val);
 };
 
-function updateResults() {
+async function updateResults() {
   let query = `select
       to_char(closed_at, 'YYYY-MM-DD') as date,
       sum(transaction_count) as transaction_count,
@@ -36,6 +40,7 @@ function updateResults() {
     .query(query, { type: QueryTypes.SELECT })
     .then((results: Array<LedgerSql>) => {
       cachedData = map(results, convertFields);
+      redisClient.set("handler-test", cachedData.toString());
     });
 }
 
@@ -49,9 +54,9 @@ function convertFields(ledger: LedgerSql): Ledger {
 }
 
 // Wait for schema sync
-postgres.sequelize.addHook("afterBulkSync", () => {
+postgres.sequelize.addHook("afterBulkSync", async () => {
   setInterval(updateResults, 60 * 1000);
-  updateResults();
+  await updateResults();
 
   if (process.env.UPDATE_DATA == "true") {
     // Stream ledgers - get last paging_token/

@@ -1,5 +1,6 @@
 import * as commonLumens from "../common/lumens.js";
 import { Response } from "express";
+import { redisClient } from "./app";
 
 interface CachedData {
   updatedAt: Date;
@@ -13,13 +14,19 @@ interface CachedData {
   };
 }
 
-export let cachedData: CachedData;
-
-export const v1Handler = function(_: any, res: Response) {
-  res.send(cachedData);
+export const v1Handler = async function(_: any, res: Response) {
+  try {
+    // // ALEC TODO - needs to have await?
+    let cachedData = await redisClient.get("lumensV1");
+    let obj: CachedData = JSON.parse(cachedData || "");
+    res.send(obj);
+  } catch (e) {
+    console.error(e);
+    res.send("");
+  }
 };
 
-export function updateApiLumens() {
+export async function updateApiLumens() {
   return Promise.all([
     commonLumens.totalSupply(),
     commonLumens.circulatingSupply(),
@@ -28,7 +35,7 @@ export function updateApiLumens() {
     commonLumens.distributionUseCaseInvestment(),
     commonLumens.distributionUserAcquisition(),
   ])
-    .then(function([
+    .then(async function([
       totalCoins,
       availableCoins,
       directDevelopment,
@@ -36,7 +43,7 @@ export function updateApiLumens() {
       useCaseInvestment,
       userAcquisition,
     ]) {
-      cachedData = {
+      let cachedData = {
         updatedAt: new Date(),
         totalCoins,
         availableCoins,
@@ -47,6 +54,7 @@ export function updateApiLumens() {
           userAcquisition,
         },
       };
+      await redisClient.set("lumensV1", JSON.stringify(cachedData));
       console.log("/api/lumens data saved!");
     })
     .catch(function(err) {

@@ -1,6 +1,7 @@
 import * as commonLumens from "../../common/lumens.js";
 import BigNumber from "bignumber.js";
 import { Response } from "express";
+import { redisClient } from "../app";
 
 const LUMEN_SUPPLY_METRICS_URL =
   "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
@@ -19,20 +20,43 @@ interface LumensDataV2 {
   _details: string;
 }
 
-export let lumensDataV2: LumensDataV2;
-
-/* For CoinMarketCap */
-let totalSupplyData: number;
-let circulatingSupplyData: number;
-
-export const v2Handler = function(_: any, res: Response) {
-  res.send(lumensDataV2);
+export const v2Handler = async function(_: any, res: Response) {
+  try {
+    let cachedData = await redisClient.get("lumensV2");
+    // ALEC TODO - what happens if parsing ""?
+    let obj: LumensDataV2 = JSON.parse(cachedData || "");
+    res.send(obj);
+  } catch (e) {
+    console.error(e);
+    // ALEC TODO - should handle differently?
+    res.send("");
+  }
 };
-export const v2TotalSupplyHandler = function(_: any, res: Response) {
-  res.json(totalSupplyData);
+export const v2TotalSupplyHandler = async function(_: any, res: Response) {
+  try {
+    let cachedData = await redisClient.get("lumensV2");
+    // ALEC TODO - what happens if parsing ""?
+    let obj: LumensDataV2 = JSON.parse(cachedData || "");
+    res.send(parseFloat(obj.totalSupply));
+  } catch (e) {
+    console.error(e);
+    res.send("");
+  }
 };
-export const v2CirculatingSupplyHandler = function(_: any, res: Response) {
-  res.json(circulatingSupplyData);
+export const v2CirculatingSupplyHandler = async function(
+  _: any,
+  res: Response,
+) {
+  try {
+    let cachedData = await redisClient.get("lumensV2");
+    // ALEC TODO - what happens if parsing ""?
+    let obj: LumensDataV2 = JSON.parse(cachedData || "");
+    // ALEC TODO - any chance this fails?
+    res.send(parseFloat(obj.circulatingSupply));
+  } catch (e) {
+    console.error(e);
+    res.send("");
+  }
 };
 
 // v3:
@@ -48,7 +72,6 @@ interface LumensDataV3 {
   circulatingSupply: BigNumber;
   _details: string;
 }
-export let lumensDataV3: LumensDataV3;
 
 interface TotalSupplyCheckResponse {
   updatedAt: Date;
@@ -61,21 +84,59 @@ interface TotalSupplyCheckResponse {
   sdfMandate: string;
   circulatingSupply: BigNumber;
 }
-export let totalSupplyCheckResponse: TotalSupplyCheckResponse;
 
-export const v3Handler = function(_: any, res: Response) {
-  res.send(lumensDataV3);
+export const v3Handler = async function(_: any, res: Response) {
+  try {
+    let cachedData = await redisClient.get("lumensV2");
+    // ALEC TODO - what happens if parsing ""?
+    let obj: LumensDataV3 = JSON.parse(cachedData || "");
+    res.send(obj);
+  } catch (e) {
+    console.error(e);
+    // ALEC TODO - should handle differently?
+    res.send("");
+  }
 };
-export const totalSupplyCheckHandler = function(_: any, res: Response) {
-  res.json(totalSupplyCheckResponse);
+export const totalSupplyCheckHandler = async function(_: any, res: Response) {
+  try {
+    let cachedData = await redisClient.get("totalSupplyCheckResponse");
+    // ALEC TODO - what happens if parsing ""?
+    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "");
+    res.send(obj);
+  } catch (e) {
+    console.error(e);
+    // ALEC TODO - should handle differently?
+    res.send("");
+  }
 };
 
 /* For CoinMarketCap */
-export const v3TotalSupplyHandler = function(_: any, res: Response) {
-  res.json(totalSupplyCheckResponse.totalSupplySum);
+export const v3TotalSupplyHandler = async function(_: any, res: Response) {
+  try {
+    let cachedData = await redisClient.get("totalSupplyCheckResponse");
+    // ALEC TODO - what happens if parsing ""?
+    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "");
+    res.send(obj.totalSupplySum);
+  } catch (e) {
+    console.error(e);
+    // ALEC TODO - should handle differently?
+    res.send("");
+  }
 };
-export const v3CirculatingSupplyHandler = function(_: any, res: Response) {
-  res.json(totalSupplyCheckResponse.circulatingSupply);
+export const v3CirculatingSupplyHandler = async function(
+  _: any,
+  res: Response,
+) {
+  try {
+    let cachedData = await redisClient.get("totalSupplyCheckResponse");
+    // ALEC TODO - what happens if parsing ""?
+    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "");
+    res.send(obj.circulatingSupply);
+  } catch (e) {
+    console.error(e);
+    // ALEC TODO - should handle differently?
+    res.send("");
+  }
 };
 
 export function updateApiLumens() {
@@ -89,7 +150,7 @@ export function updateApiLumens() {
     commonLumens.sdfAccounts(),
     commonLumens.circulatingSupply(),
   ])
-    .then(function([
+    .then(async function([
       originalSupply,
       inflationLumens,
       burnedLumens,
@@ -99,7 +160,7 @@ export function updateApiLumens() {
       sdfMandate,
       circulatingSupply,
     ]) {
-      lumensDataV2 = {
+      let lumensDataV2 = {
         updatedAt: new Date(),
         originalSupply,
         inflationLumens,
@@ -111,10 +172,12 @@ export function updateApiLumens() {
         circulatingSupply,
         _details: LUMEN_SUPPLY_METRICS_URL,
       };
+      await redisClient.set("lumensV2", JSON.stringify(lumensDataV2));
 
-      /* For CoinMarketCap */
-      totalSupplyData = Number(totalSupply);
-      circulatingSupplyData = Number(circulatingSupply);
+      // ALEC TODO - okay to remove?
+      // /* For CoinMarketCap */
+      // await redisClient.set("totalSupplyData", Number(totalSupply));
+      // await redisClient.set("circulatingSupplyData", Number(circulatingSupply));
 
       console.log("/api/v2/lumens data saved!");
 
@@ -132,7 +195,7 @@ export function updateApiLumens() {
         .plus(feePool)
         .plus(sdfMandate);
 
-      lumensDataV3 = {
+      let lumensDataV3 = {
         updatedAt: new Date(),
         originalSupply,
         inflationLumens,
@@ -144,7 +207,7 @@ export function updateApiLumens() {
         circulatingSupply: circulatingSupplyCalculate,
         _details: LUMEN_SUPPLY_METRICS_URL,
       };
-      totalSupplyCheckResponse = {
+      let totalSupplyCheckResponse = {
         updatedAt: new Date(),
         totalSupply: totalSupplyCalculate,
         inflationLumens,
@@ -155,6 +218,11 @@ export function updateApiLumens() {
         sdfMandate,
         circulatingSupply: circulatingSupplyCalculate,
       };
+      await redisClient.set("lumensV3", JSON.stringify(lumensDataV3));
+      await redisClient.set(
+        "totalSupplyCheckResponse",
+        JSON.stringify(totalSupplyCheckResponse),
+      );
 
       console.log("/api/v3/lumens data saved!");
     })
