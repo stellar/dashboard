@@ -10,6 +10,12 @@ interface Ledger {
   operation_count: number;
 }
 
+interface LedgerSql {
+  date: string;
+  transaction_count: string;
+  operation_count: string;
+}
+
 let cachedData: Array<Ledger>;
 
 export const handler = function({}, res: Response) {
@@ -28,17 +34,18 @@ function updateResults() {
 
   postgres.sequelize
     .query(query, { type: QueryTypes.SELECT })
-    .then((results: Array<any>) => {
-      cachedData = _.each(results, convertFields);
+    .then((results: Array<LedgerSql>) => {
+      cachedData = _.map(results, convertFields);
     });
 }
 
-function convertFields(ledger: any): Ledger {
-  // Remove year from date
-  ledger.date = ledger["date"].substring(5);
-  ledger.transaction_count = parseInt(ledger.transaction_count);
-  ledger.operation_count = parseInt(ledger.operation_count);
-  return ledger;
+function convertFields(ledger: LedgerSql): Ledger {
+  return {
+    // Remove year from date
+    date: ledger["date"].substring(5),
+    transaction_count: parseInt(ledger.transaction_count),
+    operation_count: parseInt(ledger.operation_count),
+  };
 }
 
 // Wait for schema sync
