@@ -1,9 +1,21 @@
 import * as commonLumens from "../common/lumens.js";
-import BigNumber from "bignumber.js";
+import { Response } from "express";
 
-export let cachedData;
+interface CachedData {
+  updatedAt: Date;
+  totalCoins: string;
+  availableCoins: string;
+  programs: {
+    directDevelopment: string;
+    ecosystemSupport: string;
+    useCaseInvestment: string;
+    userAcquisition: string;
+  };
+}
 
-export const v1Handler = function(req, res) {
+export let cachedData: CachedData;
+
+export const v1Handler = function(_: any, res: Response) {
   res.send(cachedData);
 };
 

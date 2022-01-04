@@ -1,7 +1,7 @@
 import chai from "chai";
 const request = require("supertest");
 
-const { app, updateLumensCache } = require("../../../backend/routes.js");
+const { app, updateLumensCache } = require("../../../backend/routes");
 describe("integration", function() {
   // update caches
   before(async function() {

@@ -1,10 +1,10 @@
 // This file contains functions used both in backend and frontend code.
 // Will be helpful to build distribution stats API.
-import axios from "axios";
-import BigNumber from "bignumber.js";
-import map from "lodash/map";
-import reduce from "lodash/reduce";
-import find from "lodash/find";
+const axios = require("axios");
+const BigNumber = require("bignumber.js");
+const map = require("lodash/map");
+const reduce = require("lodash/reduce");
+const find = require("lodash/find");
 
 const horizonLiveURL = "https://horizon.stellar.org";
 
@@ -47,9 +47,12 @@ const accounts = {
     "GBI5PADO5TEDY3R6WFAO2HEKBTTZS4LGR77XM4AHGN52H45ENBWGDFOH",
 };
 
-export const ORIGINAL_SUPPLY_AMOUNT = "100000000000";
+const ORIGINAL_SUPPLY_AMOUNT = "100000000000";
 
-export function getLumenBalance(horizonURL, accountId) {
+exports.ORIGINAL_SUPPLY_AMOUNT = ORIGINAL_SUPPLY_AMOUNT;
+
+exports.getLumenBalance = getLumenBalance;
+function getLumenBalance(horizonURL, accountId) {
   return axios
     .get(`${horizonURL}/accounts/${accountId}`)
     .then((response) => {
@@ -72,14 +75,15 @@ function sumRelevantAccounts(accounts) {
   ).then((data) =>
     data
       .reduce(
-        (sum, currentBalance) => new BigNumber(currentBalance).add(sum),
+        (sum, currentBalance) => new BigNumber(currentBalance).plus(sum),
         new BigNumber(0),
       )
       .toString(),
   );
 }
 
-export function totalLumens(horizonURL) {
+exports.totalLumens = totalLumens;
+function totalLumens(horizonURL) {
   return axios
     .get(`${horizonURL}/ledgers/?order=desc&limit=1`)
     .then((response) => {
@@ -87,7 +91,8 @@ export function totalLumens(horizonURL) {
     });
 }
 
-export function inflationLumens() {
+exports.inflationLumens = inflationLumens;
+function inflationLumens() {
   return Promise.all([
     totalLumens(horizonLiveURL),
     ORIGINAL_SUPPLY_AMOUNT,
@@ -97,7 +102,8 @@ export function inflationLumens() {
   });
 }
 
-export function feePool() {
+exports.feePool = feePool;
+function feePool() {
   return axios
     .get(`${horizonLiveURL}/ledgers/?order=desc&limit=1`)
     .then((response) => {
@@ -105,7 +111,8 @@ export function feePool() {
     });
 }
 
-export function burnedLumens() {
+exports.burnedLumens = burnedLumens;
+function burnedLumens() {
   return axios
     .get(`${horizonLiveURL}/accounts/${voidAccount}`)
     .then((response) => {
@@ -117,7 +124,8 @@ export function burnedLumens() {
     });
 }
 
-export function directDevelopmentAll() {
+exports.directDevelopmentAll = directDevelopmentAll;
+function directDevelopmentAll() {
   const {
     directDevelopment,
     // directDevelopmentHot1,
@@ -136,7 +144,8 @@ export function directDevelopmentAll() {
   ]);
 }
 
-export function distributionEcosystemSupport() {
+exports.distributionEcosystemSupport = distributionEcosystemSupport;
+function distributionEcosystemSupport() {
   const {
     infrastructureGrants,
     currencySupport,
@@ -153,12 +162,14 @@ export function distributionEcosystemSupport() {
   ]);
 }
 
-export function distributionUseCaseInvestment() {
+exports.distributionUseCaseInvestment = distributionUseCaseInvestment;
+function distributionUseCaseInvestment() {
   const { enterpriseFund, newProducts } = accounts;
   return sumRelevantAccounts([enterpriseFund, newProducts]);
 }
 
-export function distributionUserAcquisition() {
+exports.distributionUserAcquisition = distributionUserAcquisition;
+function distributionUserAcquisition() {
   const {
     inAppDistribution,
     inAppDistributionHot,
@@ -176,22 +187,25 @@ export function distributionUserAcquisition() {
   ]);
 }
 
-export function getUpgradeReserve() {
+exports.getUpgradeReserve = getUpgradeReserve;
+function getUpgradeReserve() {
   return getLumenBalance(horizonLiveURL, networkUpgradeReserveAccount);
 }
 
-export function sdfAccounts() {
+exports.sdfAccounts = sdfAccounts;
+function sdfAccounts() {
   var balanceMap = map(accounts, (id) => getLumenBalance(horizonLiveURL, id));
   return Promise.all(balanceMap).then((balances) => {
     return reduce(
       balances,
-      (sum, balance) => sum.add(balance),
+      (sum, balance) => sum.plus(balance),
       new BigNumber(0),
     );
   });
 }
 
-export function totalSupply() {
+exports.totalSupply = totalSupply;
+function totalSupply() {
   return Promise.all([inflationLumens(), burnedLumens()]).then((result) => {
     let [inflationLumens, burnedLumens] = result;
 
@@ -201,19 +215,21 @@ export function totalSupply() {
   });
 }
 
-export function noncirculatingSupply() {
+exports.noncirculatingSupply = noncirculatingSupply;
+function noncirculatingSupply() {
   return Promise.all([getUpgradeReserve(), feePool(), sdfAccounts()]).then(
     (balances) => {
       return reduce(
         balances,
-        (sum, balance) => sum.add(balance),
+        (sum, balance) => sum.plus(balance),
         new BigNumber(0),
       );
     },
   );
 }
 
-export function circulatingSupply() {
+exports.circulatingSupply = circulatingSupply;
+function circulatingSupply() {
   return Promise.all([totalSupply(), noncirculatingSupply()]).then((result) => {
     let [totalLumens, noncirculatingSupply] = result;
 

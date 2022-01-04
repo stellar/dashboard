@@ -1,6 +1,6 @@
 import chai from "chai";
-const v1 = require("../../../backend/lumens.js");
-const v2v3 = require("../../../backend/v2v3/lumens.js");
+const v1 = require("../../../backend/lumens");
+const v2v3 = require("../../../backend/v2v3/lumens");
 
 describe("lumens v1", function() {
   describe("updateApiLumens", function() {

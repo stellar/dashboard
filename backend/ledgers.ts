@@ -1,11 +1,24 @@
 import stellarSdk from "stellar-sdk";
-import moment from "moment";
-import _ from "lodash";
-import * as postgres from "./postgres.js";
+import { map, pick } from "lodash";
+import { QueryTypes } from "sequelize";
+import { Response } from "express";
+import * as postgres from "./postgres";
 
-let cachedData;
+interface Ledger {
+  date: string;
+  transaction_count: number;
+  operation_count: number;
+}
 
-export const handler = function(req, res) {
+interface LedgerSql {
+  date: string;
+  transaction_count: string;
+  operation_count: string;
+}
+
+let cachedData: Array<Ledger>;
+
+export const handler = function(_: any, res: Response) {
   res.send(cachedData);
 };
 
@@ -20,20 +33,19 @@ function updateResults() {
     order by 1 desc`;
 
   postgres.sequelize
-    .query(query, { type: postgres.sequelize.QueryTypes.SELECT })
-    .then((results) => (cachedData = _.each(results, convertFields)));
+    .query(query, { type: QueryTypes.SELECT })
+    .then((results: Array<LedgerSql>) => {
+      cachedData = map(results, convertFields);
+    });
 }
 
-function convertFields(ledger) {
-  // String to int fields
-  const fields = ["transaction_count", "operation_count"];
-  for (let field of fields) {
-    ledger[field] = parseInt(ledger[field]);
-  }
-
-  // Remove year from date
-  ledger["date"] = ledger["date"].substring(5);
-  return ledger;
+function convertFields(ledger: LedgerSql): Ledger {
+  return {
+    // Remove year from date
+    date: ledger["date"].substring(5),
+    transaction_count: parseInt(ledger.transaction_count),
+    operation_count: parseInt(ledger.operation_count),
+  };
 }
 
 // Wait for schema sync
@@ -44,7 +56,7 @@ postgres.sequelize.addHook("afterBulkSync", () => {
   if (process.env.UPDATE_DATA == "true") {
     // Stream ledgers - get last paging_token/
     postgres.LedgerStats.findOne({ order: [["sequence", "DESC"]] }).then(
-      (lastLedger) => {
+      (lastLedger: postgres.LedgerStats) => {
         let pagingToken;
         if (!lastLedger) {
           pagingToken = "now";
@@ -58,8 +70,9 @@ postgres.sequelize.addHook("afterBulkSync", () => {
           .cursor(pagingToken)
           .limit(200)
           .stream({
-            onmessage: (ledger) => {
-              let newLedger = _.pick(ledger, [
+            // TODO - use type any until https://github.com/stellar/js-stellar-sdk/issues/731 resolved
+            onmessage: (ledger: any) => {
+              let newLedger: any = pick(ledger, [
                 "sequence",
                 "closed_at",
                 "paging_token",

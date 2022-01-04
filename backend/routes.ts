@@ -2,9 +2,9 @@ import express from "express";
 import proxy from "express-http-proxy";
 import logger from "morgan";
 
-import * as lumens from "./lumens.js";
-import * as lumensV2V3 from "./v2v3/lumens.js";
-import * as ledgers from "./ledgers.js";
+import * as lumens from "./lumens";
+import * as lumensV2V3 from "./v2v3/lumens";
+import * as ledgers from "./ledgers";
 
 export var app = express();
 app.set("port", process.env.PORT || 5000);
@@ -16,7 +16,7 @@ if (process.env.DEV) {
   app.use(
     "/",
     proxy("localhost:3000", {
-      filter: function(req, res) {
+      filter: function(req, _) {
         return (
           req.path == "/" ||
           req.path.indexOf(".js") >= 0 ||
