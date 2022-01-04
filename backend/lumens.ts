@@ -15,7 +15,7 @@ interface CachedData {
 
 export let cachedData: CachedData;
 
-export const v1Handler = function({}, res: Response) {
+export const v1Handler = function(_: any, res: Response) {
   res.send(cachedData);
 };
 

@@ -25,13 +25,13 @@ export let lumensDataV2: LumensDataV2;
 let totalSupplyData: number;
 let circulatingSupplyData: number;
 
-export const v2Handler = function({}, res: Response) {
+export const v2Handler = function(_: any, res: Response) {
   res.send(lumensDataV2);
 };
-export const v2TotalSupplyHandler = function({}, res: Response) {
+export const v2TotalSupplyHandler = function(_: any, res: Response) {
   res.json(totalSupplyData);
 };
-export const v2CirculatingSupplyHandler = function({}, res: Response) {
+export const v2CirculatingSupplyHandler = function(_: any, res: Response) {
   res.json(circulatingSupplyData);
 };
 
@@ -63,18 +63,18 @@ interface TotalSupplyCheckResponse {
 }
 export let totalSupplyCheckResponse: TotalSupplyCheckResponse;
 
-export const v3Handler = function({}, res: Response) {
+export const v3Handler = function(_: any, res: Response) {
   res.send(lumensDataV3);
 };
-export const totalSupplyCheckHandler = function({}, res: Response) {
+export const totalSupplyCheckHandler = function(_: any, res: Response) {
   res.json(totalSupplyCheckResponse);
 };
 
 /* For CoinMarketCap */
-export const v3TotalSupplyHandler = function({}, res: Response) {
+export const v3TotalSupplyHandler = function(_: any, res: Response) {
   res.json(totalSupplyCheckResponse.totalSupplySum);
 };
-export const v3CirculatingSupplyHandler = function({}, res: Response) {
+export const v3CirculatingSupplyHandler = function(_: any, res: Response) {
   res.json(totalSupplyCheckResponse.circulatingSupply);
 };
 
