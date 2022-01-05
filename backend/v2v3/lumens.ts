@@ -25,11 +25,11 @@ export const v2Handler = async function(_: any, res: Response) {
     let cachedData = await redisClient.get("lumensV2");
     // ALEC TODO - what happens if parsing ""?
     let obj: LumensDataV2 = JSON.parse(cachedData || "");
-    res.send(obj);
+    res.json(obj);
   } catch (e) {
     console.error(e);
     // ALEC TODO - should handle differently?
-    res.send("");
+    res.json("");
   }
 };
 export const v2TotalSupplyHandler = async function(_: any, res: Response) {
@@ -37,10 +37,10 @@ export const v2TotalSupplyHandler = async function(_: any, res: Response) {
     let cachedData = await redisClient.get("lumensV2");
     // ALEC TODO - what happens if parsing ""?
     let obj: LumensDataV2 = JSON.parse(cachedData || "");
-    res.send(parseFloat(obj.totalSupply));
+    res.json(parseFloat(obj.totalSupply));
   } catch (e) {
     console.error(e);
-    res.send("");
+    res.json("");
   }
 };
 export const v2CirculatingSupplyHandler = async function(
@@ -52,10 +52,10 @@ export const v2CirculatingSupplyHandler = async function(
     // ALEC TODO - what happens if parsing ""?
     let obj: LumensDataV2 = JSON.parse(cachedData || "");
     // ALEC TODO - any chance this fails?
-    res.send(parseFloat(obj.circulatingSupply));
+    res.json(parseFloat(obj.circulatingSupply));
   } catch (e) {
     console.error(e);
-    res.send("");
+    res.json("");
   }
 };
 
@@ -90,11 +90,11 @@ export const v3Handler = async function(_: any, res: Response) {
     let cachedData = await redisClient.get("lumensV2");
     // ALEC TODO - what happens if parsing ""?
     let obj: LumensDataV3 = JSON.parse(cachedData || "");
-    res.send(obj);
+    res.json(obj);
   } catch (e) {
     console.error(e);
     // ALEC TODO - should handle differently?
-    res.send("");
+    res.json("");
   }
 };
 export const totalSupplyCheckHandler = async function(_: any, res: Response) {
@@ -102,11 +102,11 @@ export const totalSupplyCheckHandler = async function(_: any, res: Response) {
     let cachedData = await redisClient.get("totalSupplyCheckResponse");
     // ALEC TODO - what happens if parsing ""?
     let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "");
-    res.send(obj);
+    res.json(obj);
   } catch (e) {
     console.error(e);
     // ALEC TODO - should handle differently?
-    res.send("");
+    res.json("");
   }
 };
 
@@ -116,11 +116,11 @@ export const v3TotalSupplyHandler = async function(_: any, res: Response) {
     let cachedData = await redisClient.get("totalSupplyCheckResponse");
     // ALEC TODO - what happens if parsing ""?
     let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "");
-    res.send(obj.totalSupplySum);
+    res.json(obj.totalSupplySum);
   } catch (e) {
     console.error(e);
     // ALEC TODO - should handle differently?
-    res.send("");
+    res.json("");
   }
 };
 export const v3CirculatingSupplyHandler = async function(
@@ -131,11 +131,11 @@ export const v3CirculatingSupplyHandler = async function(
     let cachedData = await redisClient.get("totalSupplyCheckResponse");
     // ALEC TODO - what happens if parsing ""?
     let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "");
-    res.send(obj.circulatingSupply);
+    res.json(obj.circulatingSupply);
   } catch (e) {
     console.error(e);
     // ALEC TODO - should handle differently?
-    res.send("");
+    res.json("");
   }
 };
 

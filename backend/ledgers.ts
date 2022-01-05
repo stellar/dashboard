@@ -23,7 +23,7 @@ let cachedData: Array<Ledger>;
 // ALEC TODO - can handler be async?
 export const handler = async function(_: any, res: Response) {
   let val = await redisClient.get("handler-test");
-  res.send(val);
+  res.json(val);
 };
 
 async function updateResults() {

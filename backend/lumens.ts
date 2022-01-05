@@ -19,10 +19,10 @@ export const v1Handler = async function(_: any, res: Response) {
     // // ALEC TODO - needs to have await?
     let cachedData = await redisClient.get("lumensV1");
     let obj: CachedData = JSON.parse(cachedData || "");
-    res.send(obj);
+    res.json(obj);
   } catch (e) {
     console.error(e);
-    res.send("");
+    res.json("");
   }
 };
 
