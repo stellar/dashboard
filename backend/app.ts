@@ -3,21 +3,6 @@
 // require("regenerator-runtime/runtime");
 import "regenerator-runtime/runtime";
 
-// ALEC TODO - move elsewhere?
-
-import * as redis from "redis";
-export const redisClient = redis.createClient();
-
-(async () => {
-  redisClient.on("error", (err: Error) =>
-    console.error("Redis Client Error", err),
-  );
-  await redisClient.connect();
-
-  // ALEC TODO - when to close connection?
-  // await redisClient.quit();
-})();
-
 // Run backend with interval cache updates.
 const { updateLumensCache } = require("./routes");
 

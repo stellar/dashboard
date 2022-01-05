@@ -1,6 +1,6 @@
 import * as commonLumens from "../common/lumens.js";
 import { Response } from "express";
-import { redisClient } from "./app";
+import { redisClient } from "./redis";
 
 interface CachedData {
   updatedAt: Date;

@@ -4,7 +4,7 @@ import { QueryTypes } from "sequelize";
 import { Response, NextFunction } from "express";
 import * as postgres from "./postgres";
 
-import { redisClient } from "./app";
+import { redisClient } from "./redis";
 
 interface Ledger {
   date: string;

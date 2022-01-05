@@ -1,7 +1,7 @@
 import * as commonLumens from "../../common/lumens.js";
 import BigNumber from "bignumber.js";
 import { Response, NextFunction } from "express";
-import { redisClient } from "../app";
+import { redisClient } from "../redis";
 
 const LUMEN_SUPPLY_METRICS_URL =
   "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
