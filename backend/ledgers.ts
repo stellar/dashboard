@@ -31,7 +31,7 @@ export const handler = async function(
   res.json(ledgers);
 };
 
-async function updateResults() {
+function updateResults() {
   let query = `select
       to_char(closed_at, 'YYYY-MM-DD') as date,
       sum(transaction_count) as transaction_count,
@@ -61,7 +61,7 @@ function convertFields(ledger: LedgerSql): Ledger {
 // Wait for schema sync
 postgres.sequelize.addHook("afterBulkSync", async () => {
   setInterval(updateResults, 60 * 1000);
-  await updateResults();
+  updateResults();
 
   if (process.env.UPDATE_DATA == "true") {
     // Stream ledgers - get last paging_token/
