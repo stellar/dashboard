@@ -1,5 +1,5 @@
 import * as commonLumens from "../common/lumens.js";
-import { Response } from "express";
+import { Response, NextFunction } from "express";
 import { redisClient } from "./redis";
 
 interface CachedData {
@@ -14,10 +14,17 @@ interface CachedData {
   };
 }
 
-export const v1Handler = async function(_: any, res: Response) {
+export const v1Handler = async function(
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     let cachedData = await redisClient.get("lumensV1");
-    let obj: CachedData = JSON.parse(cachedData || "{}");
+    if (cachedData == null) {
+      return next(Error("null value found"));
+    }
+    let obj: CachedData = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
     console.error(e);

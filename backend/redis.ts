@@ -8,9 +8,8 @@ export const redisClient = redis.createClient();
   await redisClient.connect();
   console.log("connected to redis");
 
-  // ALEC TODO - needed?
   process.on("exit", async function() {
-    console.log("closing redis connection");
+    console.log("closed redis connection");
     await redisClient.quit();
   });
 })();
