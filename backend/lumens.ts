@@ -32,7 +32,7 @@ export const v1Handler = async function(
   }
 };
 
-export async function updateApiLumens() {
+export function updateApiLumens() {
   return Promise.all([
     commonLumens.totalSupply(),
     commonLumens.circulatingSupply(),
