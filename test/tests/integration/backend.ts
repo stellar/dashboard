@@ -3,6 +3,7 @@ const request = require("supertest");
 
 const { app, updateLumensCache } = require("../../../backend/routes");
 describe("integration", function() {
+  this.timeout(10000);
   // update caches
   before(async function() {
     await updateLumensCache();
