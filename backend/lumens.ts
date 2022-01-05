@@ -16,9 +16,8 @@ interface CachedData {
 
 export const v1Handler = async function(_: any, res: Response) {
   try {
-    // // ALEC TODO - needs to have await?
     let cachedData = await redisClient.get("lumensV1");
-    let obj: CachedData = JSON.parse(cachedData || "");
+    let obj: CachedData = JSON.parse(cachedData || "{}");
     res.json(obj);
   } catch (e) {
     console.error(e);

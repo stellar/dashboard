@@ -1,6 +1,6 @@
 import * as commonLumens from "../../common/lumens.js";
 import BigNumber from "bignumber.js";
-import { Response } from "express";
+import { Response, NextFunction } from "express";
 import { redisClient } from "../app";
 
 const LUMEN_SUPPLY_METRICS_URL =
@@ -20,42 +20,45 @@ interface LumensDataV2 {
   _details: string;
 }
 
-export const v2Handler = async function(_: any, res: Response) {
+export const v2Handler = async function(
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     let cachedData = await redisClient.get("lumensV2");
-    // ALEC TODO - what happens if parsing ""?
-    let obj: LumensDataV2 = JSON.parse(cachedData || "");
+    let obj: LumensDataV2 = JSON.parse(cachedData || "{}");
     res.json(obj);
   } catch (e) {
-    console.error(e);
-    // ALEC TODO - should handle differently?
-    res.json("");
+    return next(e);
   }
 };
-export const v2TotalSupplyHandler = async function(_: any, res: Response) {
+export const v2TotalSupplyHandler = async function(
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     let cachedData = await redisClient.get("lumensV2");
-    // ALEC TODO - what happens if parsing ""?
-    let obj: LumensDataV2 = JSON.parse(cachedData || "");
-    res.json(parseFloat(obj.totalSupply));
+    let obj: LumensDataV2 = JSON.parse(cachedData || "{}");
+    // for CoinMarketCap returning Number
+    res.json(Number(obj.totalSupply));
   } catch (e) {
-    console.error(e);
-    res.json("");
+    return next(e);
   }
 };
 export const v2CirculatingSupplyHandler = async function(
   _: any,
   res: Response,
+  next: NextFunction,
 ) {
   try {
     let cachedData = await redisClient.get("lumensV2");
-    // ALEC TODO - what happens if parsing ""?
-    let obj: LumensDataV2 = JSON.parse(cachedData || "");
-    // ALEC TODO - any chance this fails?
-    res.json(parseFloat(obj.circulatingSupply));
+    let obj: LumensDataV2 = JSON.parse(cachedData || "{}");
+    // for CoinMarketCap returning Number
+    res.json(Number(obj.circulatingSupply));
   } catch (e) {
-    console.error(e);
-    res.json("");
+    return next(e);
   }
 };
 
@@ -85,57 +88,58 @@ interface TotalSupplyCheckResponse {
   circulatingSupply: BigNumber;
 }
 
-export const v3Handler = async function(_: any, res: Response) {
+export const v3Handler = async function(
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     let cachedData = await redisClient.get("lumensV2");
-    // ALEC TODO - what happens if parsing ""?
-    let obj: LumensDataV3 = JSON.parse(cachedData || "");
+    let obj: LumensDataV3 = JSON.parse(cachedData || "{}");
     res.json(obj);
   } catch (e) {
-    console.error(e);
-    // ALEC TODO - should handle differently?
-    res.json("");
+    return next(e);
   }
 };
-export const totalSupplyCheckHandler = async function(_: any, res: Response) {
+export const totalSupplyCheckHandler = async function(
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     let cachedData = await redisClient.get("totalSupplyCheckResponse");
-    // ALEC TODO - what happens if parsing ""?
-    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "");
+    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "{}");
     res.json(obj);
   } catch (e) {
-    console.error(e);
-    // ALEC TODO - should handle differently?
-    res.json("");
+    return next(e);
   }
 };
 
 /* For CoinMarketCap */
-export const v3TotalSupplyHandler = async function(_: any, res: Response) {
+export const v3TotalSupplyHandler = async function(
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     let cachedData = await redisClient.get("totalSupplyCheckResponse");
-    // ALEC TODO - what happens if parsing ""?
-    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "");
+    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "{}");
     res.json(obj.totalSupplySum);
   } catch (e) {
-    console.error(e);
-    // ALEC TODO - should handle differently?
-    res.json("");
+    return next(e);
   }
 };
 export const v3CirculatingSupplyHandler = async function(
   _: any,
   res: Response,
+  next: NextFunction,
 ) {
   try {
     let cachedData = await redisClient.get("totalSupplyCheckResponse");
-    // ALEC TODO - what happens if parsing ""?
-    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "");
+    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData || "{}");
     res.json(obj.circulatingSupply);
   } catch (e) {
-    console.error(e);
-    // ALEC TODO - should handle differently?
-    res.json("");
+    return next(e);
   }
 };
 
@@ -173,11 +177,6 @@ export function updateApiLumens() {
         _details: LUMEN_SUPPLY_METRICS_URL,
       };
       await redisClient.set("lumensV2", JSON.stringify(lumensDataV2));
-
-      // ALEC TODO - okay to remove?
-      // /* For CoinMarketCap */
-      // await redisClient.set("totalSupplyData", Number(totalSupply));
-      // await redisClient.set("circulatingSupplyData", Number(circulatingSupply));
 
       console.log("/api/v2/lumens data saved!");
 

@@ -1,7 +1,7 @@
 import stellarSdk from "stellar-sdk";
 import { map, pick } from "lodash";
 import { QueryTypes } from "sequelize";
-import { Response } from "express";
+import { Response, NextFunction } from "express";
 import * as postgres from "./postgres";
 
 import { redisClient } from "./app";
@@ -18,12 +18,17 @@ interface LedgerSql {
   operation_count: string;
 }
 
-let cachedData: Array<Ledger>;
-
-// ALEC TODO - can handler be async?
-export const handler = async function(_: any, res: Response) {
-  let val = await redisClient.get("handler-test");
-  res.json(val);
+export const handler = async function(
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  let cached = await redisClient.get("ledgers");
+  if (cached == null) {
+    return next(Error("null value found"));
+  }
+  let ledgers: Array<Ledger> = JSON.parse(cached as string);
+  res.json(ledgers);
 };
 
 async function updateResults() {
@@ -39,8 +44,8 @@ async function updateResults() {
   postgres.sequelize
     .query(query, { type: QueryTypes.SELECT })
     .then((results: Array<LedgerSql>) => {
-      cachedData = map(results, convertFields);
-      redisClient.set("handler-test", cachedData.toString());
+      let cachedData: Array<Ledger> = map(results, convertFields);
+      redisClient.set("ledgers", JSON.stringify(cachedData));
     });
 }
 
