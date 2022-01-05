@@ -59,7 +59,7 @@ function convertFields(ledger: LedgerSql): Ledger {
 }
 
 // Wait for schema sync
-postgres.sequelize.addHook("afterBulkSync", async () => {
+postgres.sequelize.addHook("afterBulkSync", () => {
   setInterval(updateResults, 60 * 1000);
   updateResults();
 
