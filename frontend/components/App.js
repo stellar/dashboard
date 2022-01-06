@@ -37,7 +37,7 @@ export default class App extends React.Component {
     // local time and horizon time if a date header is present
     // this will be used to settle clock discrepancies
     axios.interceptors.response.use(
-      function(response) {
+      function (response) {
         let headerDate = response.headers.date;
         if (headerDate) {
           setTimeOffset(
@@ -46,7 +46,7 @@ export default class App extends React.Component {
         }
         return response;
       },
-      function(error) {
+      function (error) {
         return Promise.reject(error);
       },
     );
@@ -160,40 +160,46 @@ export default class App extends React.Component {
           turnOffForceTheme={this.turnOffForceTheme.bind(this)}
         />
 
-        {/* Incidents */
-        this.state.statusPage
-          ? this.state.statusPage.incidents.map((m) => {
-              return (
-                <Panel key={m.id} className="mui--bg-accent">
-                  <div className="mui--text-subhead mui--text-light">
-                    <a href={"https://status.stellar.org/incidents/" + m.id}>
-                      <strong>{m.name}</strong>
-                    </a>{" "}
-                    (started: {moment(m.started_at).fromNow()}
-                    {m.incident_updates.length > 0
-                      ? ", last update: " +
-                        moment(m.incident_updates[0].created_at).fromNow()
-                      : null}
-                    )<br />
-                    <small>
-                      Affected: {m.components.map((c) => c.name).join(", ")}
-                    </small>
-                    <br />
-                    {m.incident_updates.length > 0 ? (
-                      <span>{sanitizeHtml(m.incident_updates[0].body)}</span>
-                    ) : null}
-                  </div>
-                </Panel>
-              );
-            })
-          : null}
-        {/* Scheduled maintenances */
-        this.state.statusPage &&
-        this.state.statusPage.scheduled_maintenances.length ? (
-          <ScheduledMaintenance
-            scheduledMaintenances={this.state.statusPage.scheduled_maintenances}
-          />
-        ) : null}
+        {
+          /* Incidents */
+          this.state.statusPage
+            ? this.state.statusPage.incidents.map((m) => {
+                return (
+                  <Panel key={m.id} className="mui--bg-accent">
+                    <div className="mui--text-subhead mui--text-light">
+                      <a href={"https://status.stellar.org/incidents/" + m.id}>
+                        <strong>{m.name}</strong>
+                      </a>{" "}
+                      (started: {moment(m.started_at).fromNow()}
+                      {m.incident_updates.length > 0
+                        ? ", last update: " +
+                          moment(m.incident_updates[0].created_at).fromNow()
+                        : null}
+                      )<br />
+                      <small>
+                        Affected: {m.components.map((c) => c.name).join(", ")}
+                      </small>
+                      <br />
+                      {m.incident_updates.length > 0 ? (
+                        <span>{sanitizeHtml(m.incident_updates[0].body)}</span>
+                      ) : null}
+                    </div>
+                  </Panel>
+                );
+              })
+            : null
+        }
+        {
+          /* Scheduled maintenances */
+          this.state.statusPage &&
+          this.state.statusPage.scheduled_maintenances.length ? (
+            <ScheduledMaintenance
+              scheduledMaintenances={
+                this.state.statusPage.scheduled_maintenances
+              }
+            />
+          ) : null
+        }
         {this.chrome57 ? (
           <Panel>
             <div className="mui--text-subhead mui--text-dark-secondary">

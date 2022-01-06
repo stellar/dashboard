@@ -15,7 +15,7 @@ interface CachedData {
 
 export let cachedData: CachedData;
 
-export const v1Handler = function(_: any, res: Response) {
+export const v1Handler = function (_: any, res: Response) {
   res.send(cachedData);
 };
 
@@ -28,7 +28,7 @@ export function updateApiLumens() {
     commonLumens.distributionUseCaseInvestment(),
     commonLumens.distributionUserAcquisition(),
   ])
-    .then(function([
+    .then(function ([
       totalCoins,
       availableCoins,
       directDevelopment,
@@ -49,7 +49,7 @@ export function updateApiLumens() {
       };
       console.log("/api/lumens data saved!");
     })
-    .catch(function(err) {
+    .catch(function (err) {
       console.error(err);
       return err;
     });
