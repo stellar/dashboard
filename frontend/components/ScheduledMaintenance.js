@@ -23,14 +23,11 @@ export const ScheduledMaintenance = ({ scheduledMaintenances }) => {
           <strong>{name}</strong>
         </a>{" "}
         on{" "}
-        {moment(scheduled_for)
-          .utc()
-          .format("dddd, MMMM Do YYYY, [at] h:mma")}{" "}
+        {moment(scheduled_for).utc().format("dddd, MMMM Do YYYY, [at] h:mma")}{" "}
         UTC (
         {moment(scheduled_for).format(
-          moment(scheduled_for)
-            .utc()
-            .format("dddd") === moment(scheduled_for).format("dddd")
+          moment(scheduled_for).utc().format("dddd") ===
+            moment(scheduled_for).format("dddd")
             ? "h:mma"
             : "MMMM Do YYYY, h:mma",
         )}{" "}

@@ -43,9 +43,7 @@ export default class Incidents extends React.Component {
             {this.state.incidents.map((m) => {
               return (
                 <li key={m.id}>
-                  <a
-                    href={"https://status.stellar.org/incidents/" + m.id}
-                  >
+                  <a href={"https://status.stellar.org/incidents/" + m.id}>
                     {m.name}
                   </a>{" "}
                   ({moment(m.started_at).fromNow()})

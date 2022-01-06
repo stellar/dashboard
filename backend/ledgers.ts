@@ -18,7 +18,7 @@ interface LedgerSql {
   operation_count: string;
 }
 
-export const handler = async function(
+export const handler = async function (
   _: any,
   res: Response,
   next: NextFunction,

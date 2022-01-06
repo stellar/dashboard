@@ -20,7 +20,7 @@ interface LumensDataV2 {
   _details: string;
 }
 
-export const v2Handler = async function(
+export const v2Handler = async function (
   _: any,
   res: Response,
   next: NextFunction,
@@ -36,7 +36,7 @@ export const v2Handler = async function(
     return next(e);
   }
 };
-export const v2TotalSupplyHandler = async function(
+export const v2TotalSupplyHandler = async function (
   _: any,
   res: Response,
   next: NextFunction,
@@ -53,7 +53,7 @@ export const v2TotalSupplyHandler = async function(
     return next(e);
   }
 };
-export const v2CirculatingSupplyHandler = async function(
+export const v2CirculatingSupplyHandler = async function (
   _: any,
   res: Response,
   next: NextFunction,
@@ -97,7 +97,7 @@ interface TotalSupplyCheckResponse {
   circulatingSupply: BigNumber;
 }
 
-export const v3Handler = async function(
+export const v3Handler = async function (
   _: any,
   res: Response,
   next: NextFunction,
@@ -113,7 +113,7 @@ export const v3Handler = async function(
     return next(e);
   }
 };
-export const totalSupplyCheckHandler = async function(
+export const totalSupplyCheckHandler = async function (
   _: any,
   res: Response,
   next: NextFunction,
@@ -131,7 +131,7 @@ export const totalSupplyCheckHandler = async function(
 };
 
 /* For CoinMarketCap */
-export const v3TotalSupplyHandler = async function(
+export const v3TotalSupplyHandler = async function (
   _: any,
   res: Response,
   next: NextFunction,
@@ -147,7 +147,7 @@ export const v3TotalSupplyHandler = async function(
     return next(e);
   }
 };
-export const v3CirculatingSupplyHandler = async function(
+export const v3CirculatingSupplyHandler = async function (
   _: any,
   res: Response,
   next: NextFunction,
@@ -175,7 +175,7 @@ export function updateApiLumens() {
     commonLumens.sdfAccounts(),
     commonLumens.circulatingSupply(),
   ])
-    .then(async function([
+    .then(async function ([
       originalSupply,
       inflationLumens,
       burnedLumens,
@@ -246,7 +246,7 @@ export function updateApiLumens() {
 
       console.log("/api/v3/lumens data saved!");
     })
-    .catch(function(err) {
+    .catch(function (err) {
       console.error(err);
       return err;
     });

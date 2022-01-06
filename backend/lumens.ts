@@ -14,7 +14,7 @@ interface CachedData {
   };
 }
 
-export const v1Handler = async function(
+export const v1Handler = async function (
   _: any,
   res: Response,
   next: NextFunction,
@@ -41,7 +41,7 @@ export function updateApiLumens() {
     commonLumens.distributionUseCaseInvestment(),
     commonLumens.distributionUserAcquisition(),
   ])
-    .then(async function([
+    .then(async function ([
       totalCoins,
       availableCoins,
       directDevelopment,
@@ -63,7 +63,7 @@ export function updateApiLumens() {
       await redisClient.set("lumensV1", JSON.stringify(cachedData));
       console.log("/api/lumens data saved!");
     })
-    .catch(function(err) {
+    .catch(function (err) {
       console.error(err);
       return err;
     });

@@ -3,10 +3,10 @@ import { redisClient } from "../../../backend/redis";
 const v1 = require("../../../backend/lumens");
 const v2v3 = require("../../../backend/v2v3/lumens");
 
-describe("lumens v1", function() {
+describe("lumens v1", function () {
   this.timeout(10000);
-  describe("updateApiLumens", function() {
-    it("should run without error and caches should update", async function() {
+  describe("updateApiLumens", function () {
+    it("should run without error and caches should update", async function () {
       let err = await v1.updateApiLumens();
       chai.assert.isUndefined(err, "there was no error");
 
@@ -36,10 +36,10 @@ describe("lumens v1", function() {
   });
 });
 
-describe("lumens v2", function() {
+describe("lumens v2", function () {
   this.timeout(10000);
-  describe("updateApiLumens", function() {
-    it("should run without error and caches should update", async function() {
+  describe("updateApiLumens", function () {
+    it("should run without error and caches should update", async function () {
       let err = await v2v3.updateApiLumens();
       chai.assert.isUndefined(err, "there was no error");
 
@@ -69,10 +69,10 @@ describe("lumens v2", function() {
   });
 });
 
-describe("lumens v3", function() {
+describe("lumens v3", function () {
   this.timeout(10000);
-  describe("updateApiLumens", function() {
-    it("should run without error and caches should update", async function() {
+  describe("updateApiLumens", function () {
+    it("should run without error and caches should update", async function () {
       let err = await v2v3.updateApiLumens();
       chai.assert.isUndefined(err, "there was no error");
 
