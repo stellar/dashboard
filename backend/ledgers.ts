@@ -18,7 +18,7 @@ interface LedgerSql {
 
 let cachedData: Array<Ledger>;
 
-export const handler = function(_: any, res: Response) {
+export const handler = function (_: any, res: Response) {
   res.send(cachedData);
 };
 

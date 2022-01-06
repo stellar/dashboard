@@ -16,7 +16,7 @@ if (process.env.DEV) {
   app.use(
     "/",
     proxy("localhost:3000", {
-      filter: function(req, _) {
+      filter: function (req, _) {
         return (
           req.path == "/" ||
           req.path.indexOf(".js") >= 0 ||
@@ -50,7 +50,7 @@ app.get(
   lumensV2V3.v3CirculatingSupplyHandler,
 );
 
-app.listen(app.get("port"), function() {
+app.listen(app.get("port"), function () {
   console.log("Listening on port", app.get("port"));
 });
 

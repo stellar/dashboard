@@ -2,9 +2,9 @@ import chai from "chai";
 const v1 = require("../../../backend/lumens");
 const v2v3 = require("../../../backend/v2v3/lumens");
 
-describe("lumens v1", function() {
-  describe("updateApiLumens", function() {
-    it("should run without error and caches should update", async function() {
+describe("lumens v1", function () {
+  describe("updateApiLumens", function () {
+    it("should run without error and caches should update", async function () {
       let err = await v1.updateApiLumens();
       chai.assert.isUndefined(err, "there was no error");
 
@@ -30,9 +30,9 @@ describe("lumens v1", function() {
   });
 });
 
-describe("lumens v2", function() {
-  describe("updateApiLumens", function() {
-    it("should run without error and caches should update", async function() {
+describe("lumens v2", function () {
+  describe("updateApiLumens", function () {
+    it("should run without error and caches should update", async function () {
       let err = await v2v3.updateApiLumens();
       chai.assert.isUndefined(err, "there was no error");
 
@@ -58,9 +58,9 @@ describe("lumens v2", function() {
   });
 });
 
-describe("lumens v3", function() {
-  describe("updateApiLumens", function() {
-    it("should run without error and caches should update", async function() {
+describe("lumens v3", function () {
+  describe("updateApiLumens", function () {
+    it("should run without error and caches should update", async function () {
       let err = await v2v3.updateApiLumens();
       chai.assert.isUndefined(err, "there was no error");
 

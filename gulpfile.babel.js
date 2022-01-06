@@ -50,7 +50,7 @@ var webpackOptions = {
   ],
 };
 
-const develop = function(done) {
+const develop = function (done) {
   var options = merge(webpackOptions, {
     output: {
       filename: "[name].js",
@@ -67,7 +67,7 @@ const develop = function(done) {
 
   var compiler = webpack(options);
   compiler.purgeInputFileSystem();
-  compiler.watch(watchOptions, function(error, stats) {
+  compiler.watch(watchOptions, function (error, stats) {
     if (!bsInitialized) {
       gulp.watch(".tmp/**/*").on("change", bs.reload);
       bs.init({
@@ -93,7 +93,7 @@ const develop = function(done) {
   });
 };
 
-const build = function(done) {
+const build = function (done) {
   var options = merge(webpackOptions, {
     bail: true,
     output: {
@@ -120,7 +120,7 @@ const build = function(done) {
 };
 
 function merge(object1, object2) {
-  return _.mergeWith(object1, object2, function(a, b) {
+  return _.mergeWith(object1, object2, function (a, b) {
     if (_.isArray(a)) {
       return a.concat(b);
     }
