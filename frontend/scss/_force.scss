@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css?family=Press+Start+2P");
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
 
 #main.force {
   background: black;
 
   h1.may4 {
     color: white;
-    font-family: "Press Start 2P", cursive;
+    font-family: 'Press Start 2P', cursive;
     font-size: 1em;
     text-align: center;
   }
@@ -25,7 +25,7 @@
   }
 
   .mui-appbar {
-    background-color: #7e0010;
+    background-color: #7E0010;
 
     .icons i {
       color: white;
@@ -50,7 +50,7 @@
   }
 
   .api-link {
-    background-color: #7e0010;
+    background-color: #7E0010;
     color: white;
   }
 
@@ -65,18 +65,9 @@
 
   @mixin glow($color) {
     @keyframes glow_#{$color} {
-      from {
-        color: #{$color};
-        box-shadow: 0 0 9px #{$color};
-      }
-      50% {
-        color: #{$color};
-        box-shadow: 0 0 50px #{$color};
-      }
-      to {
-        color: #{$color};
-        box-shadow: 0 0 9px #{$color};
-      }
+      from { color: #{$color}; box-shadow: 0 0 9px #{$color}; }
+      50% { color: #{$color}; box-shadow: 0 0 50px #{$color}; }
+      to { color: #{$color}; box-shadow: 0 0 9px #{$color}; }
     }
   }
 
@@ -121,24 +112,7 @@
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 2px;
 
-        @include prefixer(
-          background,
-          linear-gradient(
-            to right,
-            #fff 0%,
-            #999 10%,
-            #fff 20%,
-            #999 30%,
-            #fff 40%,
-            #999 50%,
-            #fff 70%,
-            #999 70%,
-            #fff 80%,
-            #999 90%,
-            #fff 100%
-          ),
-          webkit moz spec
-        );
+        @include prefixer(background, linear-gradient(to right, #fff 0%, #999 10%, #fff 20%, #999 30%, #fff 40%, #999 50%, #fff 70%, #999 70%, #fff 80%, #999 90%, #fff 100%), webkit moz spec);
       }
 
       &.pulse1.slow {
