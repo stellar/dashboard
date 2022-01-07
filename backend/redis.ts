@@ -1,8 +1,8 @@
 import * as redis from "redis";
 
 const redisUrl = process.env.DEV
-  ? "redis://localhost:6379"
-  : "redis://stellar-dashboard-redis:6379";
+  ? "redis://127.0.0.1:6379"
+  : process.env.REDIS_URL;
 
 export const redisClient = redis.createClient({ url: redisUrl });
 
