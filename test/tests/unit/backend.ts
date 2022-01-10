@@ -3,6 +3,9 @@ import { redisClient } from "../../../backend/redis";
 const v1 = require("../../../backend/lumens");
 const v2v3 = require("../../../backend/v2v3/lumens");
 
+// 10s timeout added for the multiple calls to Horizon per test, which occasionally
+// surpasses the default 2s timeout causing an error.
+
 describe("lumens v1", function () {
   this.timeout(10000);
   describe("updateApiLumens", function () {
