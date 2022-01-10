@@ -23,11 +23,11 @@ export const handler = async function (
   res: Response,
   next: NextFunction,
 ) {
-  let cached = await redisClient.get("ledgers");
+  const cached = await redisClient.get("ledgers");
   if (cached == null) {
     return next(Error("null value found"));
   }
-  let ledgers: Array<Ledger> = JSON.parse(cached as string);
+  const ledgers: Array<Ledger> = JSON.parse(cached as string);
   res.json(ledgers);
 };
 
@@ -44,7 +44,7 @@ function updateResults() {
   postgres.sequelize
     .query(query, { type: QueryTypes.SELECT })
     .then((results: Array<LedgerSql>) => {
-      let cachedData: Array<Ledger> = map(results, convertFields);
+      const cachedData: Array<Ledger> = map(results, convertFields);
       redisClient.set("ledgers", JSON.stringify(cachedData));
     });
 }

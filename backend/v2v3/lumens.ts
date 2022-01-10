@@ -26,11 +26,11 @@ export const v2Handler = async function (
   next: NextFunction,
 ) {
   try {
-    let cachedData = await redisClient.get("lumensV2");
+    const cachedData = await redisClient.get("lumensV2");
     if (cachedData == null) {
       return next(Error("null value found"));
     }
-    let obj: LumensDataV2 = JSON.parse(cachedData as string);
+    const obj: LumensDataV2 = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
     return next(e);
@@ -42,11 +42,11 @@ export const v2TotalSupplyHandler = async function (
   next: NextFunction,
 ) {
   try {
-    let cachedData = await redisClient.get("lumensV2");
+    const cachedData = await redisClient.get("lumensV2");
     if (cachedData == null) {
       return next(Error("null value found"));
     }
-    let obj: LumensDataV2 = JSON.parse(cachedData as string);
+    const obj: LumensDataV2 = JSON.parse(cachedData as string);
     // for CoinMarketCap returning Number
     res.json(Number(obj.totalSupply));
   } catch (e) {
@@ -59,11 +59,11 @@ export const v2CirculatingSupplyHandler = async function (
   next: NextFunction,
 ) {
   try {
-    let cachedData = await redisClient.get("lumensV2");
+    const cachedData = await redisClient.get("lumensV2");
     if (cachedData == null) {
       return next(Error("null value found"));
     }
-    let obj: LumensDataV2 = JSON.parse(cachedData as string);
+    const obj: LumensDataV2 = JSON.parse(cachedData as string);
     // for CoinMarketCap returning Number
     res.json(Number(obj.circulatingSupply));
   } catch (e) {
@@ -103,11 +103,11 @@ export const v3Handler = async function (
   next: NextFunction,
 ) {
   try {
-    let cachedData = await redisClient.get("lumensV2");
+    const cachedData = await redisClient.get("lumensV2");
     if (cachedData == null) {
       return next(Error("null value found"));
     }
-    let obj: LumensDataV3 = JSON.parse(cachedData as string);
+    const obj: LumensDataV3 = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
     return next(e);
@@ -119,11 +119,11 @@ export const totalSupplyCheckHandler = async function (
   next: NextFunction,
 ) {
   try {
-    let cachedData = await redisClient.get("totalSupplyCheckResponse");
+    const cachedData = await redisClient.get("totalSupplyCheckResponse");
     if (cachedData == null) {
       return next(Error("null value found"));
     }
-    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
     return next(e);
@@ -137,11 +137,11 @@ export const v3TotalSupplyHandler = async function (
   next: NextFunction,
 ) {
   try {
-    let cachedData = await redisClient.get("totalSupplyCheckResponse");
+    const cachedData = await redisClient.get("totalSupplyCheckResponse");
     if (cachedData == null) {
       return next(Error("null value found"));
     }
-    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
     res.json(obj.totalSupplySum);
   } catch (e) {
     return next(e);
@@ -153,11 +153,11 @@ export const v3CirculatingSupplyHandler = async function (
   next: NextFunction,
 ) {
   try {
-    let cachedData = await redisClient.get("totalSupplyCheckResponse");
+    const cachedData = await redisClient.get("totalSupplyCheckResponse");
     if (cachedData == null) {
       return next(Error("null value found"));
     }
-    let obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
     res.json(obj.circulatingSupply);
   } catch (e) {
     return next(e);

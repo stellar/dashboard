@@ -20,11 +20,11 @@ export const v1Handler = async function (
   next: NextFunction,
 ) {
   try {
-    let cachedData = await redisClient.get("lumensV1");
+    const cachedData = await redisClient.get("lumensV1");
     if (cachedData == null) {
       return next(Error("null value found"));
     }
-    let obj: CachedData = JSON.parse(cachedData as string);
+    const obj: CachedData = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
     console.error(e);
