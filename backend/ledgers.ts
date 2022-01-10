@@ -4,7 +4,7 @@ import { QueryTypes } from "sequelize";
 import { Response, NextFunction } from "express";
 import * as postgres from "./postgres";
 
-import { redisClient } from "./redis";
+import { redisClient, getOrThrow } from "./redis";
 
 interface Ledger {
   date: string;
@@ -23,12 +23,13 @@ export const handler = async function (
   res: Response,
   next: NextFunction,
 ) {
-  const cached = await redisClient.get("ledgers");
-  if (cached == null) {
-    return next(Error("null value found"));
+  try {
+    const cachedData = await getOrThrow(redisClient, "ledgers");
+    const ledgers: Array<Ledger> = JSON.parse(cachedData as string);
+    res.json(ledgers);
+  } catch (e) {
+    return next(e);
   }
-  const ledgers: Array<Ledger> = JSON.parse(cached as string);
-  res.json(ledgers);
 };
 
 function updateResults() {

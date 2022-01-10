@@ -1,5 +1,9 @@
 import * as redis from "redis";
 
+// recommended to use typeof for RedisClientType:
+// https://github.com/redis/node-redis/issues/1673#issuecomment-979866376
+type RedisClientType = typeof redisClient;
+
 const redisUrl = process.env.DEV
   ? "redis://127.0.0.1:6379"
   : process.env.REDIS_URL;
@@ -18,3 +22,11 @@ export const redisClient = redis.createClient({ url: redisUrl });
     await redisClient.quit();
   });
 })();
+
+export async function getOrThrow(redisClient: RedisClientType, key: string) {
+  const cachedData = await redisClient.get(key);
+  if (cachedData == null) {
+    throw "redis key not found";
+  }
+  return cachedData;
+}

@@ -1,7 +1,7 @@
 import * as commonLumens from "../../common/lumens.js";
 import BigNumber from "bignumber.js";
 import { Response, NextFunction } from "express";
-import { redisClient } from "../redis";
+import { redisClient, getOrThrow } from "../redis";
 
 const LUMEN_SUPPLY_METRICS_URL =
   "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
@@ -26,10 +26,7 @@ export const v2Handler = async function (
   next: NextFunction,
 ) {
   try {
-    const cachedData = await redisClient.get("lumensV2");
-    if (cachedData == null) {
-      return next(Error("null value found"));
-    }
+    const cachedData = await getOrThrow(redisClient, "lumensV2");
     const obj: LumensDataV2 = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
@@ -42,10 +39,7 @@ export const v2TotalSupplyHandler = async function (
   next: NextFunction,
 ) {
   try {
-    const cachedData = await redisClient.get("lumensV2");
-    if (cachedData == null) {
-      return next(Error("null value found"));
-    }
+    const cachedData = await getOrThrow(redisClient, "lumensV2");
     const obj: LumensDataV2 = JSON.parse(cachedData as string);
     // for CoinMarketCap returning Number
     res.json(Number(obj.totalSupply));
@@ -59,10 +53,7 @@ export const v2CirculatingSupplyHandler = async function (
   next: NextFunction,
 ) {
   try {
-    const cachedData = await redisClient.get("lumensV2");
-    if (cachedData == null) {
-      return next(Error("null value found"));
-    }
+    const cachedData = await getOrThrow(redisClient, "lumensV2");
     const obj: LumensDataV2 = JSON.parse(cachedData as string);
     // for CoinMarketCap returning Number
     res.json(Number(obj.circulatingSupply));
@@ -103,10 +94,7 @@ export const v3Handler = async function (
   next: NextFunction,
 ) {
   try {
-    const cachedData = await redisClient.get("lumensV2");
-    if (cachedData == null) {
-      return next(Error("null value found"));
-    }
+    const cachedData = await getOrThrow(redisClient, "lumensV2");
     const obj: LumensDataV3 = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
@@ -119,10 +107,10 @@ export const totalSupplyCheckHandler = async function (
   next: NextFunction,
 ) {
   try {
-    const cachedData = await redisClient.get("totalSupplyCheckResponse");
-    if (cachedData == null) {
-      return next(Error("null value found"));
-    }
+    const cachedData = await getOrThrow(
+      redisClient,
+      "totalSupplyCheckResponse",
+    );
     const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
@@ -137,10 +125,10 @@ export const v3TotalSupplyHandler = async function (
   next: NextFunction,
 ) {
   try {
-    const cachedData = await redisClient.get("totalSupplyCheckResponse");
-    if (cachedData == null) {
-      return next(Error("null value found"));
-    }
+    const cachedData = await getOrThrow(
+      redisClient,
+      "totalSupplyCheckResponse",
+    );
     const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
     res.json(obj.totalSupplySum);
   } catch (e) {
@@ -153,10 +141,10 @@ export const v3CirculatingSupplyHandler = async function (
   next: NextFunction,
 ) {
   try {
-    const cachedData = await redisClient.get("totalSupplyCheckResponse");
-    if (cachedData == null) {
-      return next(Error("null value found"));
-    }
+    const cachedData = await getOrThrow(
+      redisClient,
+      "totalSupplyCheckResponse",
+    );
     const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
     res.json(obj.circulatingSupply);
   } catch (e) {
