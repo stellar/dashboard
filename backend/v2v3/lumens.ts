@@ -1,6 +1,7 @@
 import * as commonLumens from "../../common/lumens.js";
 import BigNumber from "bignumber.js";
-import { Response } from "express";
+import { Response, NextFunction } from "express";
+import { redisClient, getOrThrow } from "../redis";
 
 const LUMEN_SUPPLY_METRICS_URL =
   "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
@@ -19,20 +20,46 @@ interface LumensDataV2 {
   _details: string;
 }
 
-export let lumensDataV2: LumensDataV2;
-
-/* For CoinMarketCap */
-let totalSupplyData: number;
-let circulatingSupplyData: number;
-
-export const v2Handler = function (_: any, res: Response) {
-  res.send(lumensDataV2);
+export const v2Handler = async function (
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const cachedData = await getOrThrow(redisClient, "lumensV2");
+    const obj: LumensDataV2 = JSON.parse(cachedData as string);
+    res.json(obj);
+  } catch (e) {
+    return next(e);
+  }
 };
-export const v2TotalSupplyHandler = function (_: any, res: Response) {
-  res.json(totalSupplyData);
+export const v2TotalSupplyHandler = async function (
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const cachedData = await getOrThrow(redisClient, "lumensV2");
+    const obj: LumensDataV2 = JSON.parse(cachedData as string);
+    // for CoinMarketCap returning Number
+    res.json(Number(obj.totalSupply));
+  } catch (e) {
+    return next(e);
+  }
 };
-export const v2CirculatingSupplyHandler = function (_: any, res: Response) {
-  res.json(circulatingSupplyData);
+export const v2CirculatingSupplyHandler = async function (
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const cachedData = await getOrThrow(redisClient, "lumensV2");
+    const obj: LumensDataV2 = JSON.parse(cachedData as string);
+    // for CoinMarketCap returning Number
+    res.json(Number(obj.circulatingSupply));
+  } catch (e) {
+    return next(e);
+  }
 };
 
 // v3:
@@ -48,7 +75,6 @@ interface LumensDataV3 {
   circulatingSupply: BigNumber;
   _details: string;
 }
-export let lumensDataV3: LumensDataV3;
 
 interface TotalSupplyCheckResponse {
   updatedAt: Date;
@@ -61,21 +87,69 @@ interface TotalSupplyCheckResponse {
   sdfMandate: string;
   circulatingSupply: BigNumber;
 }
-export let totalSupplyCheckResponse: TotalSupplyCheckResponse;
 
-export const v3Handler = function (_: any, res: Response) {
-  res.send(lumensDataV3);
+export const v3Handler = async function (
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const cachedData = await getOrThrow(redisClient, "lumensV2");
+    const obj: LumensDataV3 = JSON.parse(cachedData as string);
+    res.json(obj);
+  } catch (e) {
+    return next(e);
+  }
 };
-export const totalSupplyCheckHandler = function (_: any, res: Response) {
-  res.json(totalSupplyCheckResponse);
+export const totalSupplyCheckHandler = async function (
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const cachedData = await getOrThrow(
+      redisClient,
+      "totalSupplyCheckResponse",
+    );
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    res.json(obj);
+  } catch (e) {
+    return next(e);
+  }
 };
 
 /* For CoinMarketCap */
-export const v3TotalSupplyHandler = function (_: any, res: Response) {
-  res.json(totalSupplyCheckResponse.totalSupplySum);
+export const v3TotalSupplyHandler = async function (
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const cachedData = await getOrThrow(
+      redisClient,
+      "totalSupplyCheckResponse",
+    );
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    res.json(obj.totalSupplySum);
+  } catch (e) {
+    return next(e);
+  }
 };
-export const v3CirculatingSupplyHandler = function (_: any, res: Response) {
-  res.json(totalSupplyCheckResponse.circulatingSupply);
+export const v3CirculatingSupplyHandler = async function (
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const cachedData = await getOrThrow(
+      redisClient,
+      "totalSupplyCheckResponse",
+    );
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    res.json(obj.circulatingSupply);
+  } catch (e) {
+    return next(e);
+  }
 };
 
 export function updateApiLumens() {
@@ -89,7 +163,7 @@ export function updateApiLumens() {
     commonLumens.sdfAccounts(),
     commonLumens.circulatingSupply(),
   ])
-    .then(function ([
+    .then(async function ([
       originalSupply,
       inflationLumens,
       burnedLumens,
@@ -99,7 +173,7 @@ export function updateApiLumens() {
       sdfMandate,
       circulatingSupply,
     ]) {
-      lumensDataV2 = {
+      let lumensDataV2 = {
         updatedAt: new Date(),
         originalSupply,
         inflationLumens,
@@ -111,10 +185,7 @@ export function updateApiLumens() {
         circulatingSupply,
         _details: LUMEN_SUPPLY_METRICS_URL,
       };
-
-      /* For CoinMarketCap */
-      totalSupplyData = Number(totalSupply);
-      circulatingSupplyData = Number(circulatingSupply);
+      await redisClient.set("lumensV2", JSON.stringify(lumensDataV2));
 
       console.log("/api/v2/lumens data saved!");
 
@@ -132,7 +203,7 @@ export function updateApiLumens() {
         .plus(feePool)
         .plus(sdfMandate);
 
-      lumensDataV3 = {
+      let lumensDataV3 = {
         updatedAt: new Date(),
         originalSupply,
         inflationLumens,
@@ -144,7 +215,7 @@ export function updateApiLumens() {
         circulatingSupply: circulatingSupplyCalculate,
         _details: LUMEN_SUPPLY_METRICS_URL,
       };
-      totalSupplyCheckResponse = {
+      let totalSupplyCheckResponse = {
         updatedAt: new Date(),
         totalSupply: totalSupplyCalculate,
         inflationLumens,
@@ -155,6 +226,11 @@ export function updateApiLumens() {
         sdfMandate,
         circulatingSupply: circulatingSupplyCalculate,
       };
+      await redisClient.set("lumensV3", JSON.stringify(lumensDataV3));
+      await redisClient.set(
+        "totalSupplyCheckResponse",
+        JSON.stringify(totalSupplyCheckResponse),
+      );
 
       console.log("/api/v3/lumens data saved!");
     })

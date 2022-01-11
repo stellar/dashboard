@@ -1,5 +1,6 @@
 import * as commonLumens from "../common/lumens.js";
-import { Response } from "express";
+import { Response, NextFunction } from "express";
+import { redisClient, getOrThrow } from "./redis";
 
 interface CachedData {
   updatedAt: Date;
@@ -13,10 +14,18 @@ interface CachedData {
   };
 }
 
-export let cachedData: CachedData;
-
-export const v1Handler = function (_: any, res: Response) {
-  res.send(cachedData);
+export const v1Handler = async function (
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const cachedData = await getOrThrow(redisClient, "lumensV1");
+    const obj: CachedData = JSON.parse(cachedData as string);
+    res.json(obj);
+  } catch (e) {
+    return next(e);
+  }
 };
 
 export function updateApiLumens() {
@@ -28,7 +37,7 @@ export function updateApiLumens() {
     commonLumens.distributionUseCaseInvestment(),
     commonLumens.distributionUserAcquisition(),
   ])
-    .then(function ([
+    .then(async function ([
       totalCoins,
       availableCoins,
       directDevelopment,
@@ -36,7 +45,7 @@ export function updateApiLumens() {
       useCaseInvestment,
       userAcquisition,
     ]) {
-      cachedData = {
+      let cachedData = {
         updatedAt: new Date(),
         totalCoins,
         availableCoins,
@@ -47,6 +56,7 @@ export function updateApiLumens() {
           userAcquisition,
         },
       };
+      await redisClient.set("lumensV1", JSON.stringify(cachedData));
       console.log("/api/lumens data saved!");
     })
     .catch(function (err) {

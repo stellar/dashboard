@@ -1,8 +1,10 @@
 import stellarSdk from "stellar-sdk";
 import { map, pick } from "lodash";
 import { QueryTypes } from "sequelize";
-import { Response } from "express";
+import { Response, NextFunction } from "express";
 import * as postgres from "./postgres";
+
+import { redisClient, getOrThrow } from "./redis";
 
 interface Ledger {
   date: string;
@@ -16,10 +18,18 @@ interface LedgerSql {
   operation_count: string;
 }
 
-let cachedData: Array<Ledger>;
-
-export const handler = function (_: any, res: Response) {
-  res.send(cachedData);
+export const handler = async function (
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const cachedData = await getOrThrow(redisClient, "ledgers");
+    const ledgers: Array<Ledger> = JSON.parse(cachedData as string);
+    res.json(ledgers);
+  } catch (e) {
+    return next(e);
+  }
 };
 
 function updateResults() {
@@ -35,7 +45,8 @@ function updateResults() {
   postgres.sequelize
     .query(query, { type: QueryTypes.SELECT })
     .then((results: Array<LedgerSql>) => {
-      cachedData = map(results, convertFields);
+      const cachedData: Array<Ledger> = map(results, convertFields);
+      redisClient.set("ledgers", JSON.stringify(cachedData));
     });
 }
 
