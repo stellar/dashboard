@@ -2,7 +2,7 @@ import * as redis from "redis";
 
 // recommended to use typeof for RedisClientType:
 // https://github.com/redis/node-redis/issues/1673#issuecomment-979866376
-type RedisClientType = typeof redisClient;
+export type RedisClientType = typeof redisClient;
 
 const redisUrl = process.env.DEV
   ? "redis://127.0.0.1:6379"
