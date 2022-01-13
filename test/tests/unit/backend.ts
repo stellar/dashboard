@@ -171,21 +171,21 @@ describe("ledgers", function () {
       let cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
       chai.expect(JSON.parse(cachedLedgers as string)).to.eql([
         {
-          date: "01-11",
-          transaction_count: 15,
-          operation_count: 50,
-        },
-        {
           date: "01-12",
           transaction_count: 80,
           operation_count: 300,
+        },
+        {
+          date: "01-11",
+          transaction_count: 15,
+          operation_count: 50,
         },
       ]);
       chai.assert.equal(cachedPagingToken as string, "103");
     });
   });
   describe("catchup", function () {
-    this.timeout(10000);
+    this.timeout(20000);
     it("should handle large amounts of ledgers", async function () {
       // cleanup
       await redisClient.del(REDIS_LEDGER_KEY);
@@ -228,7 +228,7 @@ describe("ledgers", function () {
       await redisClient.del(REDIS_PAGING_TOKEN_KEY);
 
       const ledgers: LedgerRecord = [];
-      for (let i = 1; i < 35; i++) {
+      for (let i = 1; i <= 31; i++) {
         ledgers.push(
           {
             paging_token: String(100 + 2 * i - 1),
@@ -251,9 +251,11 @@ describe("ledgers", function () {
       await updateCache(ledgers, REDIS_LEDGER_KEY, REDIS_PAGING_TOKEN_KEY);
 
       let cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
+
       let cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
       chai.assert.equal(JSON.parse(cachedLedgers as string).length, 30);
-      chai.assert.equal(cachedPagingToken as string, "169");
+      chai.assert.equal(JSON.parse(cachedLedgers as string)[0].date, "01-31");
+      chai.assert.equal(cachedPagingToken as string, "163");
     });
   });
 });

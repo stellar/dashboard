@@ -1,5 +1,5 @@
 import stellarSdk from "stellar-sdk";
-import { findIndex } from "lodash";
+import { findIndex, sortBy } from "lodash";
 import { Response, NextFunction } from "express";
 
 import { redisClient, getOrThrow } from "./redis";
@@ -109,10 +109,27 @@ export async function updateCache(
     }
     pagingToken = ledger.paging_token;
   });
+  cachedLedgers.sort(dateSorter);
+
+  sortBy(cachedLedgers, ["date"]);
 
   // only store latest 30 days
-  await redisClient.set(ledgersKey, JSON.stringify(cachedLedgers.slice(-30)));
+  await redisClient.set(ledgersKey, JSON.stringify(cachedLedgers.slice(0, 30)));
   await redisClient.set(pagingTokenKey, pagingToken);
 
   console.log("ledgers updated to cursor:", pagingToken);
+}
+
+function dateSorter(a: Ledger, b: Ledger) {
+  let dateA = new Date(a.date);
+  let dateB = new Date(b.date);
+
+  if (dateA.getMonth() == 11) {
+    dateA.setFullYear(dateA.getFullYear() - 1);
+  }
+  if (dateB.getMonth() == 11) {
+    dateB.setFullYear(dateB.getFullYear() - 1);
+  }
+
+  return dateB.getTime() - dateA.getTime();
 }
