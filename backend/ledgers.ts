@@ -89,7 +89,7 @@ export async function updateCache(
 
   ledgers.forEach((ledger: LedgerRecord) => {
     const date = formatDate(ledger.closed_at);
-    let index = findIndex(cachedLedgers, { date: date });
+    const index = findIndex(cachedLedgers, { date });
     if (index == -1) {
       cachedLedgers.push({
         date: date,
