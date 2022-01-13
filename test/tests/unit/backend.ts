@@ -217,9 +217,6 @@ describe("ledgers", function () {
       chai.assert.equal(cachedPagingToken as string, "168147471422193664");
     });
     it("should not update if caught up", async function () {
-      const REDIS_LEDGER_KEY_TEST = "ledgers_test";
-      const REDIS_PAGING_TOKEN_KEY_TEST = "paging_token_test";
-
       await redisClient.set(REDIS_LEDGER_KEY_TEST, "[]");
       await redisClient.set(REDIS_PAGING_TOKEN_KEY_TEST, "10");
 
