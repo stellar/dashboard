@@ -4,7 +4,7 @@ import { Response, NextFunction } from "express";
 
 import { redisClient, getOrThrow } from "./redis";
 
-interface Ledger {
+interface LedgerStat {
   date: string;
   transaction_count: number;
   operation_count: number;
@@ -24,7 +24,7 @@ export const handler = async function (
 ) {
   try {
     const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEY);
-    const ledgers: Array<Ledger> = JSON.parse(cachedData as string);
+    const ledgers: Array<LedgerStat> = JSON.parse(cachedData as string);
     res.json(ledgers);
   } catch (e) {
     return next(e);
@@ -84,42 +84,42 @@ export async function updateCache(
     return;
   }
   const json = (await redisClient.get(ledgersKey)) || "[]";
-  const cachedLedgers: Array<Ledger> = JSON.parse(json);
+  const cachedStats: Array<LedgerStat> = JSON.parse(json);
   let pagingToken = "";
 
   ledgers.forEach((ledger: LedgerRecord) => {
     const date = formatDate(ledger.closed_at);
-    const index = findIndex(cachedLedgers, { date });
+    const index = findIndex(cachedStats, { date });
     if (index == -1) {
-      cachedLedgers.push({
+      cachedStats.push({
         date: date,
         transaction_count:
           ledger.successful_transaction_count + ledger.failed_transaction_count,
         operation_count: ledger.operation_count,
       });
     } else {
-      cachedLedgers.splice(index, 1, {
+      cachedStats.splice(index, 1, {
         date: date,
         transaction_count:
-          cachedLedgers[index].transaction_count +
+          cachedStats[index].transaction_count +
           ledger.successful_transaction_count +
           ledger.failed_transaction_count,
         operation_count:
-          cachedLedgers[index].operation_count + ledger.operation_count,
+          cachedStats[index].operation_count + ledger.operation_count,
       });
     }
     pagingToken = ledger.paging_token;
   });
-  cachedLedgers.sort(dateSorter);
+  cachedStats.sort(dateSorter);
 
   // only store latest 30 days
-  await redisClient.set(ledgersKey, JSON.stringify(cachedLedgers.slice(0, 30)));
+  await redisClient.set(ledgersKey, JSON.stringify(cachedStats.slice(0, 30)));
   await redisClient.set(pagingTokenKey, pagingToken);
 
   console.log("ledgers updated to:", ledgers[ledgers.length - 1].closed_at);
 }
 
-function dateSorter(a: Ledger, b: Ledger) {
+function dateSorter(a: LedgerStat, b: LedgerStat) {
   let dateA = new Date(a.date);
   let dateB = new Date(b.date);
 
