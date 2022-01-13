@@ -3,13 +3,17 @@
 // require("regenerator-runtime/runtime");
 import "regenerator-runtime/runtime";
 
-// Run backend with interval cache updates.
+// Run backend with cache updates.
 const { updateLumensCache } = require("./routes");
 const { updateLedgers } = require("./ledgers");
 
-setInterval(updateLumensCache, 10 * 60 * 1000);
-updateLumensCache();
+(async () => {
+  setInterval(updateLumensCache, 10 * 60 * 1000);
+  console.log("starting lumens cache update");
+  await updateLumensCache();
 
-if (process.env.UPDATE_DATA == "true") {
-  updateLedgers();
-}
+  if (process.env.UPDATE_DATA == "true") {
+    console.log("starting ledgers cache update");
+    await updateLedgers();
+  }
+})();
