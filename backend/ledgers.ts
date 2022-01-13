@@ -87,7 +87,7 @@ export async function updateCache(
   let pagingToken = "";
 
   ledgers.forEach((ledger: LedgerRecord) => {
-    let date = ledger.closed_at.substring(5, 10);
+    let date = formatDate(ledger.closed_at);
     let index = findIndex(cachedLedgers, { date: date });
     if (index == -1) {
       cachedLedgers.push({
@@ -130,4 +130,12 @@ function dateSorter(a: Ledger, b: Ledger) {
   }
 
   return dateB.getTime() - dateA.getTime();
+}
+
+// MM-DD
+function formatDate(s: string) {
+  const d = new Date(s);
+  return `${("0" + (d.getUTCMonth() + 1)).slice(-2)}-${(
+    "0" + d.getUTCDate()
+  ).slice(-2)}`;
 }
