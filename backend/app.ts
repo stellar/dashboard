@@ -10,6 +10,6 @@ const { updateLedgers } = require("./ledgers");
 setInterval(updateLumensCache, 10 * 60 * 1000);
 updateLumensCache();
 
-if (process.env.UPDATE_DATA) {
+if (process.env.UPDATE_DATA == "true") {
   updateLedgers();
 }
