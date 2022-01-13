@@ -11,7 +11,7 @@ interface Ledger {
 }
 
 // TODO - use any until https://github.com/stellar/js-stellar-sdk/issues/731 resolved
-type LedgerRecord = any;
+export type LedgerRecord = any;
 
 const REDIS_LEDGER_KEY = "ledgers";
 const REDIS_PAGING_TOKEN_KEY = "paging_token";
@@ -61,7 +61,6 @@ export async function catchup(
   let total = 0;
 
   while (true) {
-
     let resp = await horizon.ledgers().cursor(pagingToken).limit(200).call();
     ledgers = resp.records;
     total += resp.records.length;
