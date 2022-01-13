@@ -15,6 +15,7 @@ export type LedgerRecord = any;
 
 const REDIS_LEDGER_KEY = "ledgers";
 const REDIS_PAGING_TOKEN_KEY = "paging_token";
+const CURSOR_NOW = "now";
 
 export const handler = async function (
   _: any,
@@ -31,9 +32,9 @@ export const handler = async function (
 };
 
 export async function updateLedgers() {
-  let pagingToken = await redisClient.get("paging_token");
+  let pagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
   if (pagingToken == null || pagingToken == "") {
-    pagingToken = "now";
+    pagingToken = CURSOR_NOW;
   }
 
   await catchup(REDIS_LEDGER_KEY, pagingToken, REDIS_PAGING_TOKEN_KEY, 0);
@@ -41,7 +42,7 @@ export async function updateLedgers() {
   var horizon = new stellarSdk.Server("https://horizon.stellar.org");
   horizon
     .ledgers()
-    .cursor("now")
+    .cursor(CURSOR_NOW)
     .limit(200)
     .stream({
       onmessage: async (ledger: LedgerRecord) => {
