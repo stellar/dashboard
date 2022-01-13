@@ -1,8 +1,11 @@
 import chai from "chai";
 import { redisClient } from "../../../backend/redis";
-import { updateCache } from "../../../backend/ledgers";
+import { updateCache, catchup, LedgerRecord } from "../../../backend/ledgers";
 const v1 = require("../../../backend/lumens");
 const v2v3 = require("../../../backend/v2v3/lumens");
+
+const REDIS_LEDGER_KEY = "ledgers_test";
+const REDIS_PAGING_TOKEN_KEY = "paging_token_test";
 
 // 10s timeout added for the multiple calls to Horizon per test, which occasionally
 // surpasses the default 2s timeout causing an error.
@@ -130,15 +133,12 @@ describe("lumens v3", function () {
 
 describe("ledgers", function () {
   describe("updateCache", function () {
-    it("should store cache correctly", async function () {
-      const ledgersKey = "ledgers_test";
-      const pagingTokenKey = "paging_token_test";
-
+    it("should store cache with correct data", async function () {
       // cleanup
-      await redisClient.del(ledgersKey);
-      await redisClient.del(pagingTokenKey);
+      await redisClient.del(REDIS_LEDGER_KEY);
+      await redisClient.del(REDIS_PAGING_TOKEN_KEY);
 
-      const ledgers: any = [
+      const ledgers: LedgerRecord = [
         {
           paging_token: "101",
           sequence: 10001,
@@ -165,11 +165,10 @@ describe("ledgers", function () {
         },
       ];
 
-      await updateCache(ledgers, ledgersKey, "now", pagingTokenKey);
+      await updateCache(ledgers, REDIS_LEDGER_KEY, REDIS_PAGING_TOKEN_KEY);
 
-      let cachedLedgers = await redisClient.get(ledgersKey);
-      let cachedPagingToken = await redisClient.get(pagingTokenKey);
-
+      let cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
+      let cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
       chai.expect(JSON.parse(cachedLedgers as string)).to.eql([
         {
           date: "01-11",
@@ -182,15 +181,79 @@ describe("ledgers", function () {
           operation_count: 300,
         },
       ]);
-      chai.assert.equal(JSON.parse(cachedPagingToken as string), "103");
+      chai.assert.equal(cachedPagingToken as string, "103");
+    });
+  });
+  describe("catchup", function () {
+    this.timeout(10000);
+    it("should handle large amounts of ledgers", async function () {
+      // cleanup
+      await redisClient.del(REDIS_LEDGER_KEY);
+      await redisClient.del(REDIS_PAGING_TOKEN_KEY);
+
+      await catchup(
+        REDIS_LEDGER_KEY,
+        "168143176454897664",
+        REDIS_PAGING_TOKEN_KEY,
+        1000,
+      );
+
+      let cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
+      let cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+
+      chai
+        .expect(JSON.parse(cachedLedgers as string))
+        .to.eql([
+          { date: "01-12", transaction_count: 403018, operation_count: 781390 },
+        ]);
+      chai.assert.equal(cachedPagingToken as string, "168147471422193664");
+    });
+    it("should not update if caught up", async function () {
+      const REDIS_LEDGER_KEY = "ledgers_test";
+      const REDIS_PAGING_TOKEN_KEY = "paging_token_test";
+
+      await redisClient.set(REDIS_LEDGER_KEY, "[]");
+      await redisClient.set(REDIS_PAGING_TOKEN_KEY, "10");
+
+      await catchup(REDIS_LEDGER_KEY, "now", REDIS_PAGING_TOKEN_KEY, 0);
+
+      let cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
+      let cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+      chai.assert.equal(cachedLedgers as string, "[]");
+      chai.assert.equal(cachedPagingToken as string, "10");
+    });
+    it("should only store last 30 days", async function () {
+      // cleanup
+      await redisClient.del(REDIS_LEDGER_KEY);
+      await redisClient.del(REDIS_PAGING_TOKEN_KEY);
+
+      const ledgers: LedgerRecord = [];
+      for (let i = 1; i < 35; i++) {
+        ledgers.push(
+          {
+            paging_token: String(100 + 2 * i - 1),
+            sequence: 1000 + 2 * i - 1,
+            successful_transaction_count: 10 + i,
+            failed_transaction_count: 5 + i,
+            operation_count: 50 + i,
+            closed_at: `2022-01-${("0" + i).slice(-2)}T01:06:00Z`,
+          },
+          {
+            paging_token: String(101 + 2 * i),
+            sequence: 1001 + 2 * i,
+            successful_transaction_count: 10 + i,
+            failed_transaction_count: 5 + i,
+            operation_count: 50 + i,
+            closed_at: `2022-01-${("0" + i).slice(-2)}T01:06:01Z`,
+          },
+        );
+      }
+      await updateCache(ledgers, REDIS_LEDGER_KEY, REDIS_PAGING_TOKEN_KEY);
+
+      let cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
+      let cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+      chai.assert.equal(JSON.parse(cachedLedgers as string).length, 30);
+      chai.assert.equal(cachedPagingToken as string, "169");
     });
   });
 });
-
-// describe("ledgers", function () {
-//   describe("catchupLedgers", function () {
-//     it("should update redis without error", function () {
-//       catchupLedgers("now");
-//     });
-//   });
-// });

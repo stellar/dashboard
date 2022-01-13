@@ -1,5 +1,5 @@
 import stellarSdk from "stellar-sdk";
-import { pick, findIndex } from "lodash";
+import { findIndex } from "lodash";
 import { Response, NextFunction } from "express";
 
 import { redisClient, getOrThrow } from "./redis";
@@ -10,6 +10,9 @@ interface Ledger {
   operation_count: number;
 }
 
+// TODO - use any until https://github.com/stellar/js-stellar-sdk/issues/731 resolved
+type LedgerRecord = any;
+
 const REDIS_LEDGER_KEY = "ledgers";
 const REDIS_PAGING_TOKEN_KEY = "paging_token";
 
@@ -19,7 +22,7 @@ export const handler = async function (
   next: NextFunction,
 ) {
   try {
-    const cachedData = await getOrThrow(redisClient, "ledgers");
+    const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEY);
     const ledgers: Array<Ledger> = JSON.parse(cachedData as string);
     res.json(ledgers);
   } catch (e) {
@@ -27,13 +30,13 @@ export const handler = async function (
   }
 };
 
-async function updateLedgers() {
+export async function updateLedgers() {
   let pagingToken = await redisClient.get("paging_token");
   if (pagingToken == null) {
     pagingToken = "now";
   }
 
-  await catchupLedgers(pagingToken);
+  await catchup(REDIS_LEDGER_KEY, pagingToken, REDIS_PAGING_TOKEN_KEY, 0);
 
   var horizon = new stellarSdk.Server("https://horizon.stellar.org");
   horizon
@@ -41,108 +44,76 @@ async function updateLedgers() {
     .cursor("now")
     .limit(200)
     .stream({
-      // ALEC TODO - any
-      onmessage: async (ledger: any) => {
-        await updateCache(
-          [ledger],
-          REDIS_LEDGER_KEY,
-          ledger.paging_token,
-          REDIS_PAGING_TOKEN_KEY,
-        );
+      onmessage: async (ledger: LedgerRecord) => {
+        await updateCache([ledger], REDIS_LEDGER_KEY, REDIS_PAGING_TOKEN_KEY);
       },
     });
 }
 
-// ALEC TODO - how long does this take to catchup?
-export async function catchupLedgers(pagingToken: string) {
+export async function catchup(
+  ledgersKey: string,
+  pagingToken: string,
+  pagingTokenKey: string,
+  limit: number, // if 0, catchup until now
+) {
   const horizon = new stellarSdk.Server("https://horizon.stellar.org");
   let ledgers = [];
+  let total = 0;
+
   while (true) {
-    // ALEC TODO - check edge cases when length is 0 (eg. is pagingToken correct?)
+
     let resp = await horizon.ledgers().cursor(pagingToken).limit(200).call();
     ledgers = resp.records;
-    if (ledgers.length == 0) {
+    total += resp.records.length;
+    if (ledgers.length == 0 || (limit && total > limit)) {
       break;
     }
 
     pagingToken = ledgers[ledgers.length - 1].paging_token;
-    await updateCache(
-      ledgers,
-      REDIS_LEDGER_KEY,
-      pagingToken,
-      REDIS_PAGING_TOKEN_KEY,
-    );
+    await updateCache(ledgers, ledgersKey, pagingTokenKey);
   }
 }
 
 export async function updateCache(
-  ledgers: Array<any>,
+  ledgers: Array<LedgerRecord>,
   ledgersKey: string,
-  pagingToken: string,
   pagingTokenKey: string,
 ) {
-  // organize ledgers by date
-  // ALEC TODO - any
-  let organizedLedgers: any = {};
-
-  ledgers.forEach((ledger: any) => {
-    // TODO - use type any until https://github.com/stellar/js-stellar-sdk/issues/731 resolved
-    let newLedger: any = pick(ledger, [
-      "sequence",
-      "closed_at",
-      "paging_token",
-      "operation_count",
-    ]);
-    newLedger["transaction_count"] =
-      ledger.successful_transaction_count + ledger.failed_transaction_count;
-
-    let date = newLedger.closed_at.substring(5, 10);
-    if (!(date in organizedLedgers)) {
-      organizedLedgers[date] = { transaction_count: 0, operation_count: 0 };
-    }
-
-    organizedLedgers[date].transaction_count += newLedger.transaction_count;
-    organizedLedgers[date].operation_count += newLedger.operation_count;
-
-    // ALEC TODO - this gets the last one right?
-    pagingToken = newLedger.paging_token;
-  });
-
-  // ALEC TODO - works?
+  if (!ledgers.length) {
+    console.log("no ledgers to update");
+    return;
+  }
   const json = (await redisClient.get(ledgersKey)) || "[]";
-  let cachedLedgers = JSON.parse(json);
+  let cachedLedgers: Array<Ledger> = JSON.parse(json);
+  let pagingToken = "";
 
-  // update cache with new data
-  for (const date in organizedLedgers) {
+  ledgers.forEach((ledger: LedgerRecord) => {
+    let date = ledger.closed_at.substring(5, 10);
     let index = findIndex(cachedLedgers, { date: date });
     if (index == -1) {
       cachedLedgers.push({
         date: date,
-        transaction_count: organizedLedgers[date].transaction_count,
-        operation_count: organizedLedgers[date].operation_count,
+        transaction_count:
+          ledger.successful_transaction_count + ledger.failed_transaction_count,
+        operation_count: ledger.operation_count,
       });
     } else {
       cachedLedgers.splice(index, 1, {
         date: date,
         transaction_count:
           cachedLedgers[index].transaction_count +
-          organizedLedgers[date].transaction_count,
+          ledger.successful_transaction_count +
+          ledger.failed_transaction_count,
         operation_count:
-          cachedLedgers[index].operation_count +
-          organizedLedgers[date].operation_count,
+          cachedLedgers[index].operation_count + ledger.operation_count,
       });
     }
-  }
-  // ALEC TODO - sort cachedLedgers by date
+    pagingToken = ledger.paging_token;
+  });
 
-  // ALEC TODO - why doesn't mset work?
-  await redisClient.set(ledgersKey, JSON.stringify(cachedLedgers));
+  // only store latest 30 days
+  await redisClient.set(ledgersKey, JSON.stringify(cachedLedgers.slice(-30)));
   await redisClient.set(pagingTokenKey, pagingToken);
 
-  // ALEC TODO - use date?
-  console.log("updated to cursor:", pagingToken);
-
-  // ALEC TODO - check if greater than 30 days
+  console.log("ledgers updated to cursor:", pagingToken);
 }
-
-updateLedgers();

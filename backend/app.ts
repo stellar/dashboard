@@ -5,6 +5,8 @@ import "regenerator-runtime/runtime";
 
 // Run backend with interval cache updates.
 const { updateLumensCache } = require("./routes");
+const { updateLedgers } = require("./ledgers");
 
 setInterval(updateLumensCache, 10 * 60 * 1000);
 updateLumensCache();
+updateLedgers();
