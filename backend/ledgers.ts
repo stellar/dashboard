@@ -62,7 +62,7 @@ export async function catchup(
   let total = 0;
 
   while (true) {
-    let resp = await horizon.ledgers().cursor(pagingToken).limit(200).call();
+    const resp = await horizon.ledgers().cursor(pagingToken).limit(200).call();
     ledgers = resp.records;
     total += resp.records.length;
     if (ledgers.length == 0 || (limit && total > limit)) {
@@ -84,11 +84,11 @@ export async function updateCache(
     return;
   }
   const json = (await redisClient.get(ledgersKey)) || "[]";
-  let cachedLedgers: Array<Ledger> = JSON.parse(json);
+  const cachedLedgers: Array<Ledger> = JSON.parse(json);
   let pagingToken = "";
 
   ledgers.forEach((ledger: LedgerRecord) => {
-    let date = formatDate(ledger.closed_at);
+    const date = formatDate(ledger.closed_at);
     let index = findIndex(cachedLedgers, { date: date });
     if (index == -1) {
       cachedLedgers.push({

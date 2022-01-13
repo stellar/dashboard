@@ -167,8 +167,8 @@ describe("ledgers", function () {
 
       await updateCache(ledgers, REDIS_LEDGER_KEY, REDIS_PAGING_TOKEN_KEY);
 
-      let cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
-      let cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
+      const cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
       chai.expect(JSON.parse(cachedLedgers as string)).to.eql([
         {
           date: "01-12",
@@ -198,8 +198,8 @@ describe("ledgers", function () {
         1000,
       );
 
-      let cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
-      let cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
+      const cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
 
       chai
         .expect(JSON.parse(cachedLedgers as string))
@@ -217,8 +217,8 @@ describe("ledgers", function () {
 
       await catchup(REDIS_LEDGER_KEY, "now", REDIS_PAGING_TOKEN_KEY, 0);
 
-      let cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
-      let cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
+      const cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
       chai.assert.equal(cachedLedgers as string, "[]");
       chai.assert.equal(cachedPagingToken as string, "10");
     });
@@ -250,9 +250,9 @@ describe("ledgers", function () {
       }
       await updateCache(ledgers, REDIS_LEDGER_KEY, REDIS_PAGING_TOKEN_KEY);
 
-      let cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
+      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
 
-      let cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+      const cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
       chai.assert.equal(JSON.parse(cachedLedgers as string).length, 30);
       chai.assert.equal(JSON.parse(cachedLedgers as string)[0].date, "01-31");
       chai.assert.equal(cachedPagingToken as string, "163");
