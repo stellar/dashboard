@@ -4,8 +4,8 @@ import { updateCache, catchup, LedgerRecord } from "../../../backend/ledgers";
 const v1 = require("../../../backend/lumens");
 const v2v3 = require("../../../backend/v2v3/lumens");
 
-const REDIS_LEDGER_KEY = "ledgers_test";
-const REDIS_PAGING_TOKEN_KEY = "paging_token_test";
+const REDIS_LEDGER_KEY_TEST = "ledgers_test";
+const REDIS_PAGING_TOKEN_KEY_TEST = "paging_token_test";
 
 // 10s timeout added for the multiple calls to Horizon per test, which occasionally
 // surpasses the default 2s timeout causing an error.
@@ -135,8 +135,8 @@ describe("ledgers", function () {
   describe("updateCache", function () {
     it("should store cache with correct data", async function () {
       // cleanup
-      await redisClient.del(REDIS_LEDGER_KEY);
-      await redisClient.del(REDIS_PAGING_TOKEN_KEY);
+      await redisClient.del(REDIS_LEDGER_KEY_TEST);
+      await redisClient.del(REDIS_PAGING_TOKEN_KEY_TEST);
 
       const ledgers: LedgerRecord = [
         {
@@ -165,10 +165,16 @@ describe("ledgers", function () {
         },
       ];
 
-      await updateCache(ledgers, REDIS_LEDGER_KEY, REDIS_PAGING_TOKEN_KEY);
+      await updateCache(
+        ledgers,
+        REDIS_LEDGER_KEY_TEST,
+        REDIS_PAGING_TOKEN_KEY_TEST,
+      );
 
-      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
-      const cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
+      const cachedPagingToken = await redisClient.get(
+        REDIS_PAGING_TOKEN_KEY_TEST,
+      );
       chai.expect(JSON.parse(cachedLedgers as string)).to.eql([
         {
           date: "01-12",
@@ -188,18 +194,20 @@ describe("ledgers", function () {
     this.timeout(20000);
     it("should handle large amounts of ledgers", async function () {
       // cleanup
-      await redisClient.del(REDIS_LEDGER_KEY);
-      await redisClient.del(REDIS_PAGING_TOKEN_KEY);
+      await redisClient.del(REDIS_LEDGER_KEY_TEST);
+      await redisClient.del(REDIS_PAGING_TOKEN_KEY_TEST);
 
       await catchup(
-        REDIS_LEDGER_KEY,
+        REDIS_LEDGER_KEY_TEST,
         "168143176454897664",
-        REDIS_PAGING_TOKEN_KEY,
+        REDIS_PAGING_TOKEN_KEY_TEST,
         1000,
       );
 
-      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
-      const cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
+      const cachedPagingToken = await redisClient.get(
+        REDIS_PAGING_TOKEN_KEY_TEST,
+      );
 
       chai
         .expect(JSON.parse(cachedLedgers as string))
@@ -209,23 +217,30 @@ describe("ledgers", function () {
       chai.assert.equal(cachedPagingToken as string, "168147471422193664");
     });
     it("should not update if caught up", async function () {
-      const REDIS_LEDGER_KEY = "ledgers_test";
-      const REDIS_PAGING_TOKEN_KEY = "paging_token_test";
+      const REDIS_LEDGER_KEY_TEST = "ledgers_test";
+      const REDIS_PAGING_TOKEN_KEY_TEST = "paging_token_test";
 
-      await redisClient.set(REDIS_LEDGER_KEY, "[]");
-      await redisClient.set(REDIS_PAGING_TOKEN_KEY, "10");
+      await redisClient.set(REDIS_LEDGER_KEY_TEST, "[]");
+      await redisClient.set(REDIS_PAGING_TOKEN_KEY_TEST, "10");
 
-      await catchup(REDIS_LEDGER_KEY, "now", REDIS_PAGING_TOKEN_KEY, 0);
+      await catchup(
+        REDIS_LEDGER_KEY_TEST,
+        "now",
+        REDIS_PAGING_TOKEN_KEY_TEST,
+        0,
+      );
 
-      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
-      const cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
+      const cachedPagingToken = await redisClient.get(
+        REDIS_PAGING_TOKEN_KEY_TEST,
+      );
       chai.assert.equal(cachedLedgers as string, "[]");
       chai.assert.equal(cachedPagingToken as string, "10");
     });
     it("should only store last 30 days", async function () {
       // cleanup
-      await redisClient.del(REDIS_LEDGER_KEY);
-      await redisClient.del(REDIS_PAGING_TOKEN_KEY);
+      await redisClient.del(REDIS_LEDGER_KEY_TEST);
+      await redisClient.del(REDIS_PAGING_TOKEN_KEY_TEST);
 
       const ledgers: LedgerRecord = [];
       for (let i = 1; i <= 31; i++) {
@@ -248,11 +263,17 @@ describe("ledgers", function () {
           },
         );
       }
-      await updateCache(ledgers, REDIS_LEDGER_KEY, REDIS_PAGING_TOKEN_KEY);
+      await updateCache(
+        ledgers,
+        REDIS_LEDGER_KEY_TEST,
+        REDIS_PAGING_TOKEN_KEY_TEST,
+      );
 
-      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY);
+      const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
 
-      const cachedPagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
+      const cachedPagingToken = await redisClient.get(
+        REDIS_PAGING_TOKEN_KEY_TEST,
+      );
       chai.assert.equal(JSON.parse(cachedLedgers as string).length, 30);
       chai.assert.equal(JSON.parse(cachedLedgers as string)[0].date, "01-31");
       chai.assert.equal(cachedPagingToken as string, "163");
