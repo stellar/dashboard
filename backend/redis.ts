@@ -17,16 +17,16 @@ export const redisClient = redis.createClient({ url: redisUrl });
   await redisClient.connect();
   console.log("connected to redis");
 
-  process.on("exit", async function () {
+  process.on("exit", async () => {
     console.log("closed redis connection");
     await redisClient.quit();
   });
 })();
 
-export async function getOrThrow(redisClient: RedisClientType, key: string) {
-  const cachedData = await redisClient.get(key);
+export async function getOrThrow(rc: RedisClientType, key: string) {
+  const cachedData = await rc.get(key);
   if (cachedData == null) {
-    throw "redis key not found";
+    throw new Error("redis key not found");
   }
   return cachedData;
 }

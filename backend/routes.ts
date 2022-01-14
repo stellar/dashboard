@@ -6,7 +6,7 @@ import * as lumens from "./lumens";
 import * as lumensV2V3 from "./v2v3/lumens";
 import * as ledgers from "./ledgers";
 
-export var app = express();
+export const app = express();
 app.set("port", process.env.PORT || 5000);
 app.set("json spaces", 2);
 
@@ -16,9 +16,9 @@ if (process.env.DEV) {
   app.use(
     "/",
     proxy("localhost:3000", {
-      filter: function (req, _) {
+      filter: (req, _) => {
         return (
-          req.path == "/" ||
+          req.path === "/" ||
           req.path.indexOf(".js") >= 0 ||
           req.path.indexOf(".html") >= 0 ||
           req.path.indexOf(".css") >= 0
@@ -50,7 +50,7 @@ app.get(
   lumensV2V3.v3CirculatingSupplyHandler,
 );
 
-app.listen(app.get("port"), function () {
+app.listen(app.get("port"), () => {
   console.log("Listening on port", app.get("port"));
 });
 
