@@ -10,8 +10,15 @@ interface LedgerStat {
   operation_count: number;
 }
 
-// TODO - use any until https://github.com/stellar/js-stellar-sdk/issues/731 resolved
-export type LedgerRecord = any;
+// TODO - import Horizon type once https://github.com/stellar/js-stellar-sdk/issues/731 resolved
+export type LedgerRecord = {
+  closed_at: string;
+  paging_token: string;
+  sequence: number;
+  successful_transaction_count: number;
+  failed_transaction_count: number;
+  operation_count: number;
+};
 
 const REDIS_LEDGER_KEY = "ledgers";
 const REDIS_PAGING_TOKEN_KEY = "paging_token";
@@ -24,7 +31,7 @@ export const handler = async function (
 ) {
   try {
     const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEY);
-    const ledgers: Array<LedgerStat> = JSON.parse(cachedData as string);
+    const ledgers: LedgerStat[] = JSON.parse(cachedData);
     res.json(ledgers);
   } catch (e) {
     next(e);
@@ -33,13 +40,13 @@ export const handler = async function (
 
 export async function updateLedgers() {
   let pagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
-  if (pagingToken == null || pagingToken == "") {
+  if (pagingToken == null || pagingToken === "") {
     pagingToken = CURSOR_NOW;
   }
 
   await catchup(REDIS_LEDGER_KEY, pagingToken, REDIS_PAGING_TOKEN_KEY, 0);
 
-  var horizon = new stellarSdk.Server("https://horizon.stellar.org");
+  const horizon = new stellarSdk.Server("https://horizon.stellar.org");
   horizon
     .ledgers()
     .cursor(CURSOR_NOW)
@@ -53,19 +60,20 @@ export async function updateLedgers() {
 
 export async function catchup(
   ledgersKey: string,
-  pagingToken: string,
+  pagingTokenStart: string,
   pagingTokenKey: string,
   limit: number, // if 0, catchup until now
 ) {
   const horizon = new stellarSdk.Server("https://horizon.stellar.org");
-  let ledgers = [];
+  let ledgers: LedgerRecord[] = [];
   let total = 0;
+  let pagingToken = pagingTokenStart;
 
   while (true) {
     const resp = await horizon.ledgers().cursor(pagingToken).limit(200).call();
     ledgers = resp.records;
     total += resp.records.length;
-    if (ledgers.length == 0 || (limit && total > limit)) {
+    if (ledgers.length === 0 || (limit && total > limit)) {
       break;
     }
 
@@ -75,7 +83,7 @@ export async function catchup(
 }
 
 export async function updateCache(
-  ledgers: Array<LedgerRecord>,
+  ledgers: LedgerRecord[],
   ledgersKey: string,
   pagingTokenKey: string,
 ) {
@@ -84,15 +92,15 @@ export async function updateCache(
     return;
   }
   const json = (await redisClient.get(ledgersKey)) || "[]";
-  const cachedStats: Array<LedgerStat> = JSON.parse(json);
+  const cachedStats: LedgerStat[] = JSON.parse(json);
   let pagingToken = "";
 
   ledgers.forEach((ledger: LedgerRecord) => {
-    const date = formatDate(ledger.closed_at);
-    const index = findIndex(cachedStats, { date });
-    if (index == -1) {
+    const date: string = formatDate(ledger.closed_at);
+    const index: number = findIndex(cachedStats, { date });
+    if (index === -1) {
       cachedStats.push({
-        date: date,
+        date,
         transaction_count:
           ledger.successful_transaction_count + ledger.failed_transaction_count,
         operation_count: ledger.operation_count,
@@ -120,13 +128,13 @@ export async function updateCache(
 }
 
 function dateSorter(a: LedgerStat, b: LedgerStat) {
-  let dateA = new Date(a.date);
-  let dateB = new Date(b.date);
+  const dateA = new Date(a.date);
+  const dateB = new Date(b.date);
 
-  if (dateA.getMonth() == 11) {
+  if (dateA.getMonth() === 11) {
     dateA.setFullYear(dateA.getFullYear() - 1);
   }
-  if (dateB.getMonth() == 11) {
+  if (dateB.getMonth() === 11) {
     dateB.setFullYear(dateB.getFullYear() - 1);
   }
 
@@ -134,9 +142,9 @@ function dateSorter(a: LedgerStat, b: LedgerStat) {
 }
 
 // MM-DD
-function formatDate(s: string) {
+function formatDate(s: string): string {
   const d = new Date(s);
-  return `${("0" + (d.getUTCMonth() + 1)).slice(-2)}-${(
-    "0" + d.getUTCDate()
-  ).slice(-2)}`;
+  const month = `0${d.getUTCMonth() + 1}`;
+  const day = `0${d.getUTCDate()}`;
+  return `${month.slice(-2)}-${day.slice(-2)}`;
 }

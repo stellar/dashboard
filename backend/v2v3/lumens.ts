@@ -27,7 +27,7 @@ export const v2Handler = async function (
 ) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV2");
-    const obj: LumensDataV2 = JSON.parse(cachedData as string);
+    const obj: LumensDataV2 = JSON.parse(cachedData);
     res.json(obj);
   } catch (e) {
     next(e);
@@ -40,7 +40,7 @@ export const v2TotalSupplyHandler = async function (
 ) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV2");
-    const obj: LumensDataV2 = JSON.parse(cachedData as string);
+    const obj: LumensDataV2 = JSON.parse(cachedData);
     // for CoinMarketCap returning Number
     res.json(Number(obj.totalSupply));
   } catch (e) {
@@ -54,7 +54,7 @@ export const v2CirculatingSupplyHandler = async function (
 ) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV2");
-    const obj: LumensDataV2 = JSON.parse(cachedData as string);
+    const obj: LumensDataV2 = JSON.parse(cachedData);
     // for CoinMarketCap returning Number
     res.json(Number(obj.circulatingSupply));
   } catch (e) {
@@ -95,7 +95,7 @@ export const v3Handler = async function (
 ) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV2");
-    const obj: LumensDataV3 = JSON.parse(cachedData as string);
+    const obj: LumensDataV3 = JSON.parse(cachedData);
     res.json(obj);
   } catch (e) {
     next(e);
@@ -111,7 +111,7 @@ export const totalSupplyCheckHandler = async function (
       redisClient,
       "totalSupplyCheckResponse",
     );
-    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData);
     res.json(obj);
   } catch (e) {
     next(e);
@@ -129,7 +129,7 @@ export const v3TotalSupplyHandler = async function (
       redisClient,
       "totalSupplyCheckResponse",
     );
-    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData);
     res.json(obj.totalSupplySum);
   } catch (e) {
     next(e);
@@ -145,7 +145,7 @@ export const v3CirculatingSupplyHandler = async function (
       redisClient,
       "totalSupplyCheckResponse",
     );
-    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData);
     res.json(obj.circulatingSupply);
   } catch (e) {
     next(e);

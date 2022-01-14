@@ -3,6 +3,9 @@ module.exports = {
   rules: {
     "no-console": "off",
     "import/no-unresolved": "off",
+    "no-await-in-loop": "off",
+    // ALEC TODO - turn off only for backend/ledgers.ts file
+    // "@typescript-eslint/naming-convention": "off",
   },
 };
 

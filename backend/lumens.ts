@@ -21,7 +21,7 @@ export const v1Handler = async function (
 ) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV1");
-    const obj: CachedData = JSON.parse(cachedData as string);
+    const obj: CachedData = JSON.parse(cachedData);
     res.json(obj);
   } catch (e) {
     next(e);
