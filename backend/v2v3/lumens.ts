@@ -30,7 +30,7 @@ export const v2Handler = async function (
     const obj: LumensDataV2 = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
-    return next(e);
+    next(e);
   }
 };
 export const v2TotalSupplyHandler = async function (
@@ -44,7 +44,7 @@ export const v2TotalSupplyHandler = async function (
     // for CoinMarketCap returning Number
     res.json(Number(obj.totalSupply));
   } catch (e) {
-    return next(e);
+    next(e);
   }
 };
 export const v2CirculatingSupplyHandler = async function (
@@ -58,7 +58,7 @@ export const v2CirculatingSupplyHandler = async function (
     // for CoinMarketCap returning Number
     res.json(Number(obj.circulatingSupply));
   } catch (e) {
-    return next(e);
+    next(e);
   }
 };
 
@@ -98,7 +98,7 @@ export const v3Handler = async function (
     const obj: LumensDataV3 = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
-    return next(e);
+    next(e);
   }
 };
 export const totalSupplyCheckHandler = async function (
@@ -114,7 +114,7 @@ export const totalSupplyCheckHandler = async function (
     const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
-    return next(e);
+    next(e);
   }
 };
 
@@ -132,7 +132,7 @@ export const v3TotalSupplyHandler = async function (
     const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
     res.json(obj.totalSupplySum);
   } catch (e) {
-    return next(e);
+    next(e);
   }
 };
 export const v3CirculatingSupplyHandler = async function (
@@ -148,7 +148,7 @@ export const v3CirculatingSupplyHandler = async function (
     const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
     res.json(obj.circulatingSupply);
   } catch (e) {
-    return next(e);
+    next(e);
   }
 };
 

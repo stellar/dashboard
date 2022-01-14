@@ -24,7 +24,7 @@ export const v1Handler = async function (
     const obj: CachedData = JSON.parse(cachedData as string);
     res.json(obj);
   } catch (e) {
-    return next(e);
+    next(e);
   }
 };
 

@@ -27,7 +27,7 @@ export const handler = async function (
     const ledgers: Array<LedgerStat> = JSON.parse(cachedData as string);
     res.json(ledgers);
   } catch (e) {
-    return next(e);
+    next(e);
   }
 };
 
