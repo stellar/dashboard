@@ -1,6 +1,6 @@
-import * as commonLumens from "../common/lumens.js";
 import { Response, NextFunction } from "express";
 import { redisClient, getOrThrow } from "./redis";
+import * as commonLumens from "../common/lumens.js";
 
 interface CachedData {
   updatedAt: Date;
@@ -14,11 +14,7 @@ interface CachedData {
   };
 }
 
-export const v1Handler = async function (
-  _: any,
-  res: Response,
-  next: NextFunction,
-) {
+export async function v1Handler(_: any, res: Response, next: NextFunction) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV1");
     const obj: CachedData = JSON.parse(cachedData);
@@ -26,7 +22,7 @@ export const v1Handler = async function (
   } catch (e) {
     next(e);
   }
-};
+}
 
 export function updateApiLumens() {
   return Promise.all([
@@ -37,29 +33,31 @@ export function updateApiLumens() {
     commonLumens.distributionUseCaseInvestment(),
     commonLumens.distributionUserAcquisition(),
   ])
-    .then(async function ([
-      totalCoins,
-      availableCoins,
-      directDevelopment,
-      ecosystemSupport,
-      useCaseInvestment,
-      userAcquisition,
-    ]) {
-      let cachedData = {
-        updatedAt: new Date(),
+    .then(
+      async ([
         totalCoins,
         availableCoins,
-        programs: {
-          directDevelopment,
-          ecosystemSupport,
-          useCaseInvestment,
-          userAcquisition,
-        },
-      };
-      await redisClient.set("lumensV1", JSON.stringify(cachedData));
-      console.log("/api/lumens data saved!");
-    })
-    .catch(function (err) {
+        directDevelopment,
+        ecosystemSupport,
+        useCaseInvestment,
+        userAcquisition,
+      ]) => {
+        const cachedData = {
+          updatedAt: new Date(),
+          totalCoins,
+          availableCoins,
+          programs: {
+            directDevelopment,
+            ecosystemSupport,
+            useCaseInvestment,
+            userAcquisition,
+          },
+        };
+        await redisClient.set("lumensV1", JSON.stringify(cachedData));
+        console.log("/api/lumens data saved!");
+      },
+    )
+    .catch((err) => {
       console.error(err);
       return err;
     });
