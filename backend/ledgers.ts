@@ -24,11 +24,7 @@ const REDIS_LEDGER_KEY = "ledgers";
 const REDIS_PAGING_TOKEN_KEY = "paging_token";
 const CURSOR_NOW = "now";
 
-export const handler = async function (
-  _: any,
-  res: Response,
-  next: NextFunction,
-) {
+export async function handler(_: any, res: Response, next: NextFunction) {
   try {
     const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEY);
     const ledgers: LedgerStat[] = JSON.parse(cachedData);
@@ -36,7 +32,7 @@ export const handler = async function (
   } catch (e) {
     next(e);
   }
-};
+}
 
 export async function updateLedgers() {
   let pagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
@@ -107,7 +103,7 @@ export async function updateCache(
       });
     } else {
       cachedStats.splice(index, 1, {
-        date: date,
+        date,
         transaction_count:
           cachedStats[index].transaction_count +
           ledger.successful_transaction_count +

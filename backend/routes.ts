@@ -16,14 +16,11 @@ if (process.env.DEV) {
   app.use(
     "/",
     proxy("localhost:3000", {
-      filter: (req, _) => {
-        return (
-          req.path === "/" ||
-          req.path.indexOf(".js") >= 0 ||
-          req.path.indexOf(".html") >= 0 ||
-          req.path.indexOf(".css") >= 0
-        );
-      },
+      filter: (req, _) =>
+        req.path === "/" ||
+        req.path.indexOf(".js") >= 0 ||
+        req.path.indexOf(".html") >= 0 ||
+        req.path.indexOf(".css") >= 0,
     }),
   );
 } else {
