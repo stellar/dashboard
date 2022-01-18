@@ -138,7 +138,7 @@ describe("ledgers", function () {
       await redisClient.del(REDIS_LEDGER_KEY_TEST);
       await redisClient.del(REDIS_PAGING_TOKEN_KEY_TEST);
 
-      const ledgers: LedgerRecord = [
+      const ledgers: LedgerRecord[] = [
         {
           paging_token: "101",
           sequence: 10001,
@@ -239,7 +239,7 @@ describe("ledgers", function () {
       await redisClient.del(REDIS_LEDGER_KEY_TEST);
       await redisClient.del(REDIS_PAGING_TOKEN_KEY_TEST);
 
-      const ledgers: LedgerRecord = [];
+      const ledgers: LedgerRecord[] = [];
       for (let i = 1; i <= 31; i++) {
         ledgers.push(
           {

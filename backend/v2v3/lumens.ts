@@ -1,7 +1,7 @@
-import * as commonLumens from "../../common/lumens.js";
 import BigNumber from "bignumber.js";
 import { Response, NextFunction } from "express";
 import { redisClient, getOrThrow } from "../redis";
+import * as commonLumens from "../../common/lumens.js";
 
 const LUMEN_SUPPLY_METRICS_URL =
   "https://www.stellar.org/developers/guides/lumen-supply-metrics.html";
@@ -20,47 +20,43 @@ interface LumensDataV2 {
   _details: string;
 }
 
-export const v2Handler = async function (
-  _: any,
-  res: Response,
-  next: NextFunction,
-) {
+export async function v2Handler(_: any, res: Response, next: NextFunction) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV2");
-    const obj: LumensDataV2 = JSON.parse(cachedData as string);
+    const obj: LumensDataV2 = JSON.parse(cachedData);
     res.json(obj);
   } catch (e) {
-    return next(e);
+    next(e);
   }
-};
-export const v2TotalSupplyHandler = async function (
+}
+export async function v2TotalSupplyHandler(
   _: any,
   res: Response,
   next: NextFunction,
 ) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV2");
-    const obj: LumensDataV2 = JSON.parse(cachedData as string);
+    const obj: LumensDataV2 = JSON.parse(cachedData);
     // for CoinMarketCap returning Number
     res.json(Number(obj.totalSupply));
   } catch (e) {
-    return next(e);
+    next(e);
   }
-};
-export const v2CirculatingSupplyHandler = async function (
+}
+export async function v2CirculatingSupplyHandler(
   _: any,
   res: Response,
   next: NextFunction,
 ) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV2");
-    const obj: LumensDataV2 = JSON.parse(cachedData as string);
+    const obj: LumensDataV2 = JSON.parse(cachedData);
     // for CoinMarketCap returning Number
     res.json(Number(obj.circulatingSupply));
   } catch (e) {
-    return next(e);
+    next(e);
   }
-};
+}
 
 // v3:
 interface LumensDataV3 {
@@ -88,20 +84,16 @@ interface TotalSupplyCheckResponse {
   circulatingSupply: BigNumber;
 }
 
-export const v3Handler = async function (
-  _: any,
-  res: Response,
-  next: NextFunction,
-) {
+export async function v3Handler(_: any, res: Response, next: NextFunction) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV2");
-    const obj: LumensDataV3 = JSON.parse(cachedData as string);
+    const obj: LumensDataV3 = JSON.parse(cachedData);
     res.json(obj);
   } catch (e) {
-    return next(e);
+    next(e);
   }
-};
-export const totalSupplyCheckHandler = async function (
+}
+export async function totalSupplyCheckHandler(
   _: any,
   res: Response,
   next: NextFunction,
@@ -111,15 +103,15 @@ export const totalSupplyCheckHandler = async function (
       redisClient,
       "totalSupplyCheckResponse",
     );
-    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData);
     res.json(obj);
   } catch (e) {
-    return next(e);
+    next(e);
   }
-};
+}
 
 /* For CoinMarketCap */
-export const v3TotalSupplyHandler = async function (
+export async function v3TotalSupplyHandler(
   _: any,
   res: Response,
   next: NextFunction,
@@ -129,13 +121,13 @@ export const v3TotalSupplyHandler = async function (
       redisClient,
       "totalSupplyCheckResponse",
     );
-    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData);
     res.json(obj.totalSupplySum);
   } catch (e) {
-    return next(e);
+    next(e);
   }
-};
-export const v3CirculatingSupplyHandler = async function (
+}
+export async function v3CirculatingSupplyHandler(
   _: any,
   res: Response,
   next: NextFunction,
@@ -145,12 +137,12 @@ export const v3CirculatingSupplyHandler = async function (
       redisClient,
       "totalSupplyCheckResponse",
     );
-    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData as string);
+    const obj: TotalSupplyCheckResponse = JSON.parse(cachedData);
     res.json(obj.circulatingSupply);
   } catch (e) {
-    return next(e);
+    next(e);
   }
-};
+}
 
 export function updateApiLumens() {
   return Promise.all([
@@ -163,18 +155,8 @@ export function updateApiLumens() {
     commonLumens.sdfAccounts(),
     commonLumens.circulatingSupply(),
   ])
-    .then(async function ([
-      originalSupply,
-      inflationLumens,
-      burnedLumens,
-      totalSupply,
-      upgradeReserve,
-      feePool,
-      sdfMandate,
-      circulatingSupply,
-    ]) {
-      let lumensDataV2 = {
-        updatedAt: new Date(),
+    .then(
+      async ([
         originalSupply,
         inflationLumens,
         burnedLumens,
@@ -183,58 +165,70 @@ export function updateApiLumens() {
         feePool,
         sdfMandate,
         circulatingSupply,
-        _details: LUMEN_SUPPLY_METRICS_URL,
-      };
-      await redisClient.set("lumensV2", JSON.stringify(lumensDataV2));
+      ]) => {
+        const lumensDataV2 = {
+          updatedAt: new Date(),
+          originalSupply,
+          inflationLumens,
+          burnedLumens,
+          totalSupply,
+          upgradeReserve,
+          feePool,
+          sdfMandate,
+          circulatingSupply,
+          _details: LUMEN_SUPPLY_METRICS_URL,
+        };
+        await redisClient.set("lumensV2", JSON.stringify(lumensDataV2));
 
-      console.log("/api/v2/lumens data saved!");
+        console.log("/api/v2/lumens data saved!");
 
-      let totalSupplyCalculate = new BigNumber(originalSupply)
-        .plus(inflationLumens)
-        .minus(burnedLumens);
+        const totalSupplyCalculate: BigNumber = new BigNumber(originalSupply)
+          .plus(inflationLumens as BigNumber)
+          .minus(burnedLumens);
 
-      let circulatingSupplyCalculate = totalSupplyCalculate
-        .minus(upgradeReserve)
-        .minus(feePool)
-        .minus(sdfMandate);
+        const circulatingSupplyCalculate = totalSupplyCalculate
+          .minus(upgradeReserve)
+          .minus(feePool)
+          .minus(sdfMandate as BigNumber);
 
-      let totalSupplySum = circulatingSupplyCalculate
-        .plus(upgradeReserve)
-        .plus(feePool)
-        .plus(sdfMandate);
+        const totalSupplySum = circulatingSupplyCalculate
+          .plus(upgradeReserve)
+          .plus(feePool)
+          .plus(sdfMandate as BigNumber);
 
-      let lumensDataV3 = {
-        updatedAt: new Date(),
-        originalSupply,
-        inflationLumens,
-        burnedLumens,
-        totalSupply: totalSupplyCalculate,
-        upgradeReserve,
-        feePool,
-        sdfMandate,
-        circulatingSupply: circulatingSupplyCalculate,
-        _details: LUMEN_SUPPLY_METRICS_URL,
-      };
-      let totalSupplyCheckResponse = {
-        updatedAt: new Date(),
-        totalSupply: totalSupplyCalculate,
-        inflationLumens,
-        burnedLumens,
-        totalSupplySum,
-        upgradeReserve,
-        feePool,
-        sdfMandate,
-        circulatingSupply: circulatingSupplyCalculate,
-      };
-      await redisClient.set("lumensV3", JSON.stringify(lumensDataV3));
-      await redisClient.set(
-        "totalSupplyCheckResponse",
-        JSON.stringify(totalSupplyCheckResponse),
-      );
+        const lumensDataV3 = {
+          updatedAt: new Date(),
+          originalSupply,
+          inflationLumens,
+          burnedLumens,
+          totalSupply: totalSupplyCalculate,
+          upgradeReserve,
+          feePool,
+          sdfMandate,
+          circulatingSupply: circulatingSupplyCalculate,
+          _details: LUMEN_SUPPLY_METRICS_URL,
+        };
+        const totalSupplyCheckResponse = {
+          updatedAt: new Date(),
+          totalSupply: totalSupplyCalculate,
+          inflationLumens,
+          burnedLumens,
+          totalSupplySum,
+          upgradeReserve,
+          feePool,
+          sdfMandate,
+          circulatingSupply: circulatingSupplyCalculate,
+        };
+        await redisClient.set("lumensV3", JSON.stringify(lumensDataV3));
+        await redisClient.set(
+          "totalSupplyCheckResponse",
+          JSON.stringify(totalSupplyCheckResponse),
+        );
 
-      console.log("/api/v3/lumens data saved!");
-    })
-    .catch(function (err) {
+        console.log("/api/v3/lumens data saved!");
+      },
+    )
+    .catch((err) => {
       console.error(err);
       return err;
     });
