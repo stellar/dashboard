@@ -13,18 +13,16 @@
     "heroku-postbuild": "gulp build",
     "lint:prettier": "prettier --config --write '**/*.js'",
     "test": "DEV=true mocha -r ts-node/register './test/**/*.ts' --exit",
-    "start:backend": "UPDATE_DATA=true DEV=true ts-node backend/app.ts"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "start:backend": "UPDATE_DATA=true DEV=true ts-node backend/app.ts",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "**/*.js": [
       "prettier --write",
       "git add"
-    ]
+    ],
+    "backend": "eslint --cache --fix"
   },
   "resolutions": {
     "**/ua-parser-js": "0.7.28"
@@ -84,8 +82,8 @@
     "eslint-config-react-app": "^7.0.0",
     "eslint-plugin-jsdoc": "^37.6.1",
     "eslint-plugin-prefer-arrow": "^1.2.3",
-    "husky": "1.3.1",
-    "lint-staged": "7.3.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
     "mocha": "^8.4.0",
     "prettier": "^2.5.1",
     "supertest": "^6.1.6",
