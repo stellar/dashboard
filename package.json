@@ -21,7 +21,7 @@
     "**/*.js": [
       "prettier --write"
     ],
-    "backend": "eslint --cache --fix"
+    "./backend/*.ts": "eslint --cache --fix"
   },
   "resolutions": {
     "**/ua-parser-js": "0.7.28"
