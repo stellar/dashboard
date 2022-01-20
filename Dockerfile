@@ -1,23 +1,24 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.04 as build
 
-MAINTAINER SDF Ops Team <ops@stellar.org>
+LABEL maintainer="SDF Ops Team <ops@stellar.org>"
 
-ADD . /app/src
-WORKDIR /app/src
+RUN mkdir -p /app
+WORKDIR /app
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-    gpg curl ca-certificates git apt-transport-https && \
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install --no-install-recommends -y gpg curl git make ca-certificates apt-transport-https && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key|gpg --dearmor >/etc/apt/trusted.gpg.d/nodesource.gpg && \
-    echo "deb https://deb.nodesource.com/node_16.x focal main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    echo "deb https://deb.nodesource.com/node_14.x focal main" | tee /etc/apt/sources.list.d/nodesource.list && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg |gpg --dearmor >/etc/apt/trusted.gpg.d/yarnpkg.gpg && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs yarn && \
-    yarn install && /app/src/node_modules/gulp/bin/gulp.js build
+    apt-get update && apt-get install -y nodejs yarn && apt-get clean
 
-ENV PORT=80 UPDATE_DATA=false
-EXPOSE 80
 
-RUN node_modules/typescript/bin/tsc
+COPY . /app/
+RUN yarn install
+RUN yarn build
 
-ENTRYPOINT ["/usr/bin/node"]
-CMD ["./backend/app.js"]
+FROM nginx:1.17
+
+COPY --from=build /app/build/ /usr/share/nginx/html/
+COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
