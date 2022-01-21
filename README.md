@@ -19,27 +19,23 @@ yarn
 yarn start
 ```
 
-### If you wish to use backend server API, you need a postgres db running with dashboard database
+### If you wish to use backend server API, you need to have redis running locally on port 6379 (default for redis)
 
-(If you do not have postgres installed) Install postgres using homebrew
-
-```sh
-brew install postgres
-```
-
-Run postgres
+(If you do not have redis installed) If on a mac, install redis using homebrew
 
 ```sh
-pg_ctl -D /usr/local/var/postgres start
+brew install redis
 ```
 
-Create dashboard db
+(Other install directions can be found here: https://redis.io/download)
+
+Make sure it's running
 
 ```sh
-createdb dashboard
+brew services start redis
 ```
 
-Once you have postgres installed, start this command
+Once you have redis installed, start this command
 
 ```sh
 yarn run start:backend
