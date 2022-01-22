@@ -1,63 +1,64 @@
-import chai from "chai";
-import { redisClient } from "../../../backend/redis";
-import { updateCache, catchup, LedgerRecord } from "../../../backend/ledgers";
-const v1 = require("../../../backend/lumens");
-const v2v3 = require("../../../backend/v2v3/lumens");
+import { redisClient } from "../redis";
+import { updateCache, catchup, LedgerRecord } from "../ledgers";
+import { updateApiLumens as updateApiLumensV1 } from "../lumens";
+import { updateApiLumens as updateApiLumensV2V3 } from "../v2v3/lumens";
 
 const REDIS_LEDGER_KEY_TEST = "ledgers_test";
 const REDIS_PAGING_TOKEN_KEY_TEST = "paging_token_test";
 
-// 10s timeout added for the multiple calls to Horizon per test, which occasionally
-// surpasses the default 2s timeout causing an error.
+describe("lumens v1", () => {
+  // 10s timeout added for the multiple calls to Horizon per test, which
+  // occasionally surpasses the default 2s timeout causing an error.
+  jest.setTimeout(10000);
 
-describe("lumens v1", function () {
-  this.timeout(10000);
-  describe("updateApiLumens", function () {
-    it("should run without error and caches should update", async function () {
-      let err = await v1.updateApiLumens();
-      chai.assert.isUndefined(err, "there was no error");
+  describe("updateApiLumens", () => {
+    it("should run without error and caches should update", async () => {
+      const err = await updateApiLumensV1();
+      expect(err).toBeUndefined();
 
-      let cached = await redisClient.get("lumensV1");
-      chai.expect(cached).to.not.be.null;
-      let obj = JSON.parse(cached as string);
+      const cached = await redisClient.get("lumensV1");
+      expect(cached).not.toBe(null);
 
-      chai
-        .expect(obj)
-        .to.be.an("object")
-        .that.has.all.keys([
+      const obj = JSON.parse(cached as string);
+      expect(obj).toEqual(expect.any(Object));
+      expect(Object.keys(obj)).toEqual(
+        expect.arrayContaining([
           "updatedAt",
           "totalCoins",
           "availableCoins",
           "programs",
-        ]);
-      chai
-        .expect(obj.programs)
-        .to.be.an("object")
-        .that.has.all.keys([
+        ]),
+      );
+
+      const { programs } = obj;
+      expect(programs).toEqual(expect.any(Object));
+      expect(Object.keys(programs)).toEqual(
+        expect.arrayContaining([
           "directDevelopment",
           "ecosystemSupport",
           "useCaseInvestment",
           "userAcquisition",
-        ]);
+        ]),
+      );
     });
   });
 });
 
-describe("lumens v2", function () {
-  this.timeout(10000);
-  describe("updateApiLumens", function () {
-    it("should run without error and caches should update", async function () {
-      let err = await v2v3.updateApiLumens();
-      chai.assert.isUndefined(err, "there was no error");
+describe("lumens v2", () => {
+  jest.setTimeout(10000);
 
-      let cached = await redisClient.get("lumensV2");
-      chai.expect(cached).to.not.be.null;
-      let obj = JSON.parse(cached as string);
+  describe("updateApiLumens", () => {
+    it("should run without error and caches should update", async () => {
+      const err = await updateApiLumensV2V3();
+      expect(err).toBeUndefined();
 
-      chai
-        .expect(obj)
-        .to.be.an("object")
-        .that.has.all.keys([
+      const cached = await redisClient.get("lumensV2");
+      expect(cached).not.toBe(null);
+
+      const obj = JSON.parse(cached as string);
+      expect(obj).toEqual(expect.any(Object));
+      expect(Object.keys(obj)).toEqual(
+        expect.arrayContaining([
           "updatedAt",
           "originalSupply",
           "inflationLumens",
@@ -68,29 +69,30 @@ describe("lumens v2", function () {
           "sdfMandate",
           "circulatingSupply",
           "_details",
-        ]);
-      for (var k in obj) {
-        chai.expect(obj[k].toString()).to.not.be.empty;
-      }
+        ]),
+      );
+
+      const objValues = Object.values(obj).filter((v) => !v);
+      expect(objValues.length).toEqual(0);
     });
   });
 });
 
-describe("lumens v3", function () {
-  this.timeout(10000);
-  describe("updateApiLumens", function () {
-    it("should run without error and caches should update", async function () {
-      let err = await v2v3.updateApiLumens();
-      chai.assert.isUndefined(err, "there was no error");
+describe("lumens v3", () => {
+  jest.setTimeout(10000);
 
-      let cached = await redisClient.get("lumensV3");
-      chai.expect(cached).to.not.be.null;
-      let obj = JSON.parse(cached as string);
+  describe("updateApiLumens", () => {
+    it("should run without error and caches should update", async () => {
+      const err = await updateApiLumensV2V3();
+      expect(err).toBeUndefined();
 
-      chai
-        .expect(obj)
-        .to.be.an("object")
-        .that.has.all.keys([
+      const cached = await redisClient.get("lumensV3");
+      expect(cached).not.toBe(null);
+
+      const obj = JSON.parse(cached as string);
+      expect(obj).toEqual(expect.any(Object));
+      expect(Object.keys(obj)).toEqual(
+        expect.arrayContaining([
           "updatedAt",
           "originalSupply",
           "inflationLumens",
@@ -101,19 +103,19 @@ describe("lumens v3", function () {
           "sdfMandate",
           "circulatingSupply",
           "_details",
-        ]);
-      for (var k in obj) {
-        chai.expect(obj[k].toString()).to.not.be.empty;
-      }
+        ]),
+      );
 
-      cached = await redisClient.get("totalSupplyCheckResponse");
-      chai.expect(cached).to.not.be.null;
-      obj = JSON.parse(cached as string);
+      const objValues = Object.values(obj).filter((v) => !v);
+      expect(objValues.length).toEqual(0);
 
-      chai
-        .expect(obj)
-        .to.be.an("object")
-        .that.has.all.keys([
+      const totalCached = await redisClient.get("totalSupplyCheckResponse");
+      expect(totalCached).not.toBe(null);
+
+      const totalObj = JSON.parse(totalCached as string);
+      expect(totalObj).toEqual(expect.any(Object));
+      expect(Object.keys(totalObj)).toEqual(
+        expect.arrayContaining([
           "updatedAt",
           "totalSupply",
           "inflationLumens",
@@ -123,17 +125,18 @@ describe("lumens v3", function () {
           "feePool",
           "sdfMandate",
           "circulatingSupply",
-        ]);
-      for (var k in obj) {
-        chai.expect(obj[k].toString()).to.not.be.empty;
-      }
+        ]),
+      );
+
+      const totalObjValues = Object.values(totalObj).filter((v) => !v);
+      expect(totalObjValues.length).toEqual(0);
     });
   });
 });
 
-describe("ledgers", function () {
-  describe("updateCache", function () {
-    it("should store cache with correct data", async function () {
+describe("ledgers", () => {
+  describe("updateCache", () => {
+    it("should store cache with correct data", async () => {
       // cleanup
       await redisClient.del(REDIS_LEDGER_KEY_TEST);
       await redisClient.del(REDIS_PAGING_TOKEN_KEY_TEST);
@@ -175,7 +178,8 @@ describe("ledgers", function () {
       const cachedPagingToken = await redisClient.get(
         REDIS_PAGING_TOKEN_KEY_TEST,
       );
-      chai.expect(JSON.parse(cachedLedgers as string)).to.eql([
+
+      expect(JSON.parse(cachedLedgers as string)).toEqual([
         {
           date: "01-12",
           transaction_count: 80,
@@ -187,12 +191,14 @@ describe("ledgers", function () {
           operation_count: 50,
         },
       ]);
-      chai.assert.equal(cachedPagingToken as string, "103");
+      expect(cachedPagingToken).toEqual("103");
     });
   });
-  describe("catchup", function () {
-    this.timeout(20000);
-    it("should handle large amounts of ledgers", async function () {
+
+  describe("catchup", () => {
+    jest.setTimeout(20000);
+
+    it("should handle large amounts of ledgers", async () => {
       // cleanup
       await redisClient.del(REDIS_LEDGER_KEY_TEST);
       await redisClient.del(REDIS_PAGING_TOKEN_KEY_TEST);
@@ -209,14 +215,13 @@ describe("ledgers", function () {
         REDIS_PAGING_TOKEN_KEY_TEST,
       );
 
-      chai
-        .expect(JSON.parse(cachedLedgers as string))
-        .to.eql([
-          { date: "01-12", transaction_count: 403018, operation_count: 781390 },
-        ]);
-      chai.assert.equal(cachedPagingToken as string, "168147471422193664");
+      expect(JSON.parse(cachedLedgers as string)).toEqual([
+        { date: "01-12", transaction_count: 403018, operation_count: 781390 },
+      ]);
+      expect(cachedPagingToken).toEqual("168147471422193664");
     });
-    it("should not update if caught up", async function () {
+
+    it("should not update if caught up", async () => {
       await redisClient.set(REDIS_LEDGER_KEY_TEST, "[]");
       await redisClient.set(REDIS_PAGING_TOKEN_KEY_TEST, "10");
 
@@ -231,16 +236,21 @@ describe("ledgers", function () {
       const cachedPagingToken = await redisClient.get(
         REDIS_PAGING_TOKEN_KEY_TEST,
       );
-      chai.assert.equal(cachedLedgers as string, "[]");
-      chai.assert.equal(cachedPagingToken as string, "10");
+
+      expect(cachedLedgers).toEqual("[]");
+      expect(cachedPagingToken).toEqual("10");
     });
-    it("should only store last 30 days", async function () {
+
+    it("should only store last 30 days", async () => {
       // cleanup
       await redisClient.del(REDIS_LEDGER_KEY_TEST);
       await redisClient.del(REDIS_PAGING_TOKEN_KEY_TEST);
 
       const ledgers: LedgerRecord[] = [];
+
       for (let i = 1; i <= 31; i++) {
+        const dayString = `0${i}`;
+
         ledgers.push(
           {
             paging_token: String(100 + 2 * i - 1),
@@ -248,7 +258,7 @@ describe("ledgers", function () {
             successful_transaction_count: 10 + i,
             failed_transaction_count: 5 + i,
             operation_count: 50 + i,
-            closed_at: `2022-01-${("0" + i).slice(-2)}T01:06:00Z`,
+            closed_at: `2022-01-${dayString.slice(-2)}T01:06:00Z`,
           },
           {
             paging_token: String(101 + 2 * i),
@@ -256,10 +266,11 @@ describe("ledgers", function () {
             successful_transaction_count: 10 + i,
             failed_transaction_count: 5 + i,
             operation_count: 50 + i,
-            closed_at: `2022-01-${("0" + i).slice(-2)}T01:06:01Z`,
+            closed_at: `2022-01-${dayString.slice(-2)}T01:06:01Z`,
           },
         );
       }
+
       await updateCache(
         ledgers,
         REDIS_LEDGER_KEY_TEST,
@@ -267,13 +278,13 @@ describe("ledgers", function () {
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
-
       const cachedPagingToken = await redisClient.get(
         REDIS_PAGING_TOKEN_KEY_TEST,
       );
-      chai.assert.equal(JSON.parse(cachedLedgers as string).length, 30);
-      chai.assert.equal(JSON.parse(cachedLedgers as string)[0].date, "01-31");
-      chai.assert.equal(cachedPagingToken as string, "163");
+
+      expect(JSON.parse(cachedLedgers as string).length).toEqual(30);
+      expect(JSON.parse(cachedLedgers as string)[0].date).toEqual("01-31");
+      expect(cachedPagingToken as string).toEqual("163");
     });
   });
 });
