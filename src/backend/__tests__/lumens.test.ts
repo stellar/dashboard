@@ -11,6 +11,10 @@ describe("lumens v1", () => {
   // occasionally surpasses the default 2s timeout causing an error.
   jest.setTimeout(10000);
 
+  afterAll((done) => {
+    done();
+  });
+
   describe("updateApiLumens", () => {
     it("should run without error and caches should update", async () => {
       const err = await updateApiLumensV1();
@@ -47,6 +51,10 @@ describe("lumens v1", () => {
 describe("lumens v2", () => {
   jest.setTimeout(10000);
 
+  afterAll((done) => {
+    done();
+  });
+
   describe("updateApiLumens", () => {
     it("should run without error and caches should update", async () => {
       const err = await updateApiLumensV2V3();
@@ -80,6 +88,10 @@ describe("lumens v2", () => {
 
 describe("lumens v3", () => {
   jest.setTimeout(10000);
+
+  afterAll((done) => {
+    done();
+  });
 
   describe("updateApiLumens", () => {
     it("should run without error and caches should update", async () => {
@@ -135,6 +147,10 @@ describe("lumens v3", () => {
 });
 
 describe("ledgers", () => {
+  afterAll((done) => {
+    done();
+  });
+
   describe("updateCache", () => {
     it("should store cache with correct data", async () => {
       // cleanup
@@ -197,6 +213,10 @@ describe("ledgers", () => {
 
   describe("catchup", () => {
     jest.setTimeout(20000);
+
+    afterAll((done) => {
+      done();
+    });
 
     it("should handle large amounts of ledgers", async () => {
       // cleanup

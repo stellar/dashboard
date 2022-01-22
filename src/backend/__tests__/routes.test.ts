@@ -6,6 +6,10 @@ describe("integration", () => {
     await updateLumensCache();
   }, 10000);
 
+  afterAll((done) => {
+    done();
+  });
+
   describe("backend api endpoints", () => {
     it("/api/lumens should return successfuly with data", async () => {
       const { body } = await request(app).get("/api/lumens").expect(200);
