@@ -51,7 +51,7 @@ export async function updateLedgers() {
       pagingToken = String(ledger.id);
     } catch (err) {
       console.error("BigQuery error", err);
-      pagingToken = "now";
+      pagingToken = CURSOR_NOW;
     }
     await redisClient.del(REDIS_LEDGER_KEY);
   }
