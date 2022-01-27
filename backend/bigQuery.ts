@@ -7,7 +7,7 @@ const options = {
 
 export const bqClient = new BigQuery(options);
 
-export function getLast30DaysQuery() {
+export function get30DayOldLedgerQuery() {
   const today = new Date();
   const before = new Date(today.setDate(today.getDate() - 32));
   const bqDate = `${before.getFullYear()}-${

@@ -4,7 +4,7 @@ import { Response, NextFunction } from "express";
 
 import { redisClient, getOrThrow } from "./redis";
 
-import { getLast30DaysQuery, bqClient, BQHistoryLedger } from "./bigQuery";
+import { get30DayOldLedgerQuery, bqClient, BQHistoryLedger } from "./bigQuery";
 import { QueryRowsResponse } from "@google-cloud/bigquery";
 
 interface LedgerStat {
@@ -43,7 +43,7 @@ export async function updateLedgers() {
   // if pagingToken missing, catchup from last 30 days
   if (pagingToken == null || pagingToken === "") {
     try {
-      const query = getLast30DaysQuery();
+      const query = get30DayOldLedgerQuery();
       const [job] = await bqClient.createQueryJob(query);
       console.log("running bq query:", query);
       const [ledgers]: QueryRowsResponse = await job.getQueryResults();
