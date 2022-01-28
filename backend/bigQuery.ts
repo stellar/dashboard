@@ -1,7 +1,7 @@
 import { BigQuery } from "@google-cloud/bigquery";
 
 const options = {
-  keyFilename: "service-account.json",
+  keyFilename: "gcloud/credentials/service-account.json",
   projectId: "hubble-261722",
 };
 
