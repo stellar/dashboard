@@ -1,10 +1,12 @@
 import { BigQuery } from "@google-cloud/bigquery";
 
+const PROJECT_ID = process.env.PROJECT_ID;
+const DATASET_ID = process.env.DATASET_ID;
 const options = {
   keyFilename: process.env.DEV
     ? "gcloud/service-account.json"
     : "../../../gcloud/service-account.json",
-  projectId: "hubble-261722",
+  projectId: PROJECT_ID,
 };
 
 export const bqClient = new BigQuery(options);
@@ -15,7 +17,7 @@ export function get30DayOldLedgerQuery() {
   const bqDate = `${before.getFullYear()}-${
     before.getUTCMonth() + 1
   }-${before.getUTCDate()}`;
-  return `SELECT * FROM \`hubble-261722.crypto_stellar_internal_2.history_ledgers\` WHERE closed_at >= "${bqDate}" ORDER BY sequence LIMIT 1;`;
+  return `SELECT * FROM \`${PROJECT_ID}.${DATASET_ID}.history_ledgers\` WHERE closed_at >= "${bqDate}" ORDER BY sequence LIMIT 1;`;
 }
 
 export interface BQHistoryLedger {
