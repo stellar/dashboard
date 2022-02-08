@@ -1,8 +1,13 @@
 import stellarSdk from "stellar-sdk";
 import { findIndex } from "lodash";
+import { QueryRowsResponse } from "@google-cloud/bigquery";
 import { Response, NextFunction } from "express";
 
 import { redisClient, getOrThrow } from "./redis";
+
+import { get30DayOldLedgerQuery, bqClient, BQHistoryLedger } from "./bigQuery";
+
+const LEDGER_DAY_COUNT = 30;
 
 interface LedgerStat {
   date: string;
@@ -39,9 +44,26 @@ export async function handler(_: any, res: Response, next: NextFunction) {
 }
 
 export async function updateLedgers() {
-  let pagingToken = await redisClient.get(REDIS_PAGING_TOKEN_KEY);
-  if (pagingToken == null || pagingToken === "") {
-    pagingToken = CURSOR_NOW;
+  const cachedData = (await redisClient.get(REDIS_LEDGER_KEY)) || "[]";
+  const cachedLedgers: LedgerStat[] = JSON.parse(cachedData);
+
+  // if missing data in last 30 days, catchup from last 30 days
+  let pagingToken = "";
+  if (cachedLedgers.length < LEDGER_DAY_COUNT) {
+    try {
+      const query = get30DayOldLedgerQuery();
+      const [job] = await bqClient.createQueryJob(query);
+      console.log("running bq query:", query);
+      const [ledgers]: QueryRowsResponse = await job.getQueryResults();
+      const ledger: BQHistoryLedger = ledgers[0];
+      pagingToken = String(ledger.id);
+    } catch (err) {
+      console.error("BigQuery error", err);
+      pagingToken = CURSOR_NOW;
+    }
+    await redisClient.del(REDIS_LEDGER_KEY);
+  } else {
+    pagingToken = (await redisClient.get(REDIS_PAGING_TOKEN_KEY)) || CURSOR_NOW;
   }
 
   await catchup(REDIS_LEDGER_KEY, pagingToken, REDIS_PAGING_TOKEN_KEY, 0);
@@ -124,7 +146,10 @@ export async function updateCache(
   cachedStats.sort(dateSorter);
 
   // only store latest 30 days
-  await redisClient.set(ledgersKey, JSON.stringify(cachedStats.slice(0, 30)));
+  await redisClient.set(
+    ledgersKey,
+    JSON.stringify(cachedStats.slice(0, LEDGER_DAY_COUNT)),
+  );
   await redisClient.set(pagingTokenKey, pagingToken);
 
   console.log("ledgers updated to:", ledgers[ledgers.length - 1].closed_at);

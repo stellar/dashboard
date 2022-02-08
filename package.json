@@ -38,6 +38,7 @@
     ]
   },
   "dependencies": {
+    "@google-cloud/bigquery": "^5.10.0",
     "@reduxjs/toolkit": "^1.7.1",
     "@stellar/design-system": "^0.5.0",
     "@stellar/frontend-helpers": "^2.1.3",
