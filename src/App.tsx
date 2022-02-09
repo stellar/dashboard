@@ -1,18 +1,20 @@
 import { Layout } from "@stellar/design-system";
+import { BrowserRouter } from "react-router-dom";
 
-// import { store } from "config/store";
-// import { Network } from "components/Network";
-// import { Header } from "components/Header";
-
-// import { Dashboard } from "pages/Dashboard";
-// import { NotFound } from "pages/NotFound";
+import { NetworkSwitch } from "frontend/components/NetworkSwitch";
+import { Content } from "frontend/components/Content";
 
 import "styles.scss";
 
 export const App = () => (
-  <>
-    <Layout.Header projectTitle="Dashboard" />
-    <Layout.Content>Dashboard content</Layout.Content>
+  <BrowserRouter>
+    <Layout.Header projectTitle="Dashboard" hasDarkModeToggle />
+    <Layout.Content>
+      <Layout.Inset>
+        <NetworkSwitch />
+        <Content />
+      </Layout.Inset>
+    </Layout.Content>
     <Layout.Footer gitHubLink="https://github.com/stellar/dashboard" />
-  </>
+  </BrowserRouter>
 );
