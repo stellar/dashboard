@@ -1656,10 +1656,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@stellar/design-system@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@stellar/design-system/-/design-system-0.5.0.tgz#b20838ecc2886a171b4340a0557e3a89421469f9"
-  integrity sha512-Vuvp7JWInqtXGoHmHErGa59bBlzus2BOAETZLCObnX8WvPQj+dbHi1OaoYT6goDsDe7ugNqK15obsT40QLUMiA==
+"@stellar/design-system@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@stellar/design-system/-/design-system-0.6.0.tgz#2d5034701cd163741763502ecfaa3f6aed5c87d0"
+  integrity sha512-2OXK8U3vDoeHiZW+3A+Xw5tSvaV8y8cio+RoeFMfl29iXPTikB3jNQis/20JSE/YHwvfq3MR0+nw09loYxMz4w==
   dependencies:
     "@popperjs/core" "^2.11.2"
     bignumber.js "^9.0.2"
