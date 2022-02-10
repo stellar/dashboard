@@ -34,3 +34,17 @@ export type AnnouncementMessage = {
   scheduled_for: string;
   /* eslint-enable camelcase */
 };
+
+export type IncidentItem = {
+  [key: string]: any;
+  id: string;
+  name: string;
+  // eslint-disable-next-line camelcase
+  started_at: string;
+};
+
+export type Incident = {
+  id: string;
+  name: string;
+  startedAt: string;
+};

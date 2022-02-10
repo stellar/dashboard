@@ -1,2 +1,24 @@
 .Incidents {
+  table.Table {
+    tr:not(:last-child) {
+      border-bottom: none;
+    }
+
+    th {
+      padding-bottom: 0.5rem;
+    }
+
+    td {
+      padding-top: 0.75rem;
+      padding-bottom: 0;
+
+      &.Incidents__timeAgo {
+        color: var(--pal-text-tertiary);
+      }
+    }
+
+    tbody > tr:first-child > td {
+      padding-top: 1rem;
+    }
+  }
 }
