@@ -2,15 +2,18 @@ import { useEffect, useState, useCallback } from "react";
 import { StatusBar, TextLink } from "@stellar/design-system";
 import moment from "moment";
 
+import {
+  STATUS_INCIDENTS_URL,
+  STATUSPAGE_URL,
+} from "frontend/constants/settings";
+
 import { getLastMaintenanceMessage } from "frontend/helpers/getLastMaintenanceMessage";
 import { getIncidentMessages } from "frontend/helpers/getIncidentMessages";
 
 import { MaintenanceMessage, IncidentMessage } from "types";
 
-const FETCH_URL = "https://9sl3dhr1twv1.statuspage.io/api/v2/summary.json";
 // TODO: do we want to fetch every 30 sec?
 const FETCH_INTERVAL = 30 * 1000;
-const STATUS_INCIDENTS_URL = "https://status.stellar.org/incidents";
 
 export const AnnouncementsBanner = () => {
   const [maintenanceMessage, setMaintenanceMessage] =
@@ -71,7 +74,7 @@ export const AnnouncementsBanner = () => {
   );
 
   const fetchStatusPage = useCallback(async () => {
-    const fetchResponse = await fetch(FETCH_URL);
+    const fetchResponse = await fetch(`${STATUSPAGE_URL}/summary.json`);
     const statusPageData = await fetchResponse.json();
     const { scheduled_maintenances: maintenances, incidents } = statusPageData;
 

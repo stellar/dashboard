@@ -1,6 +1,18 @@
 #root {
+  .Layout__inset {
+    font-size: var(--font-size-secondary);
+  }
+
   .Layout__content {
     --layout-window-width-max: 792px;
+  }
+
+  table.Table {
+    --table-min-width: 360px;
+
+    th {
+      color: var(--pal-text-tertiary);
+    }
   }
 }
 
