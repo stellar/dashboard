@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Network, NETWORK_SEARCH_PARAM } from "frontend/constants/settings";
+import { NETWORK_SEARCH_PARAM } from "frontend/constants/settings";
+import { Network } from "types";
 
 import "./styles.scss";
 

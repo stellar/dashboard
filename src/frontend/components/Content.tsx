@@ -1,8 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 
-import { Network, NETWORK_SEARCH_PARAM } from "frontend/constants/settings";
+import { NETWORK_SEARCH_PARAM } from "frontend/constants/settings";
 import { Mainnet } from "frontend/pages/Mainnet";
 import { Testnet } from "frontend/pages/Testnet";
+import { Network } from "types";
 
 export const Content = () => {
   const [searchParams] = useSearchParams();

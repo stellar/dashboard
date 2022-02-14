@@ -43,6 +43,7 @@
     "@stellar/design-system": "^0.6.0",
     "@stellar/frontend-helpers": "^2.1.3",
     "axios": "^0.25.0",
+    "bignumber.js": "^9.0.2",
     "dompurify": "^2.2.6",
     "express": "^4.17.2",
     "express-http-proxy": "^1.6.3",
