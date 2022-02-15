@@ -111,4 +111,5 @@ export type LedgerItem = {
   opCount: number;
   closedAt: string;
   protocolVersion: number;
+  closedTime: number;
 };

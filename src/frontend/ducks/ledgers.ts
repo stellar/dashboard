@@ -5,6 +5,8 @@ import { RootState } from "frontend/config/store";
 import { networkConfig } from "frontend/constants/settings";
 import { getErrorString } from "frontend/helpers/getErrorString";
 import { getAverageLedgerClosedTime } from "frontend/helpers/getAverageLedgerClosedTime";
+import { getLedgerClosedTimes } from "frontend/helpers/getLedgerClosedTimes";
+import { getDateDiffSeconds } from "frontend/helpers/getDateDiffSeconds";
 
 import {
   LedgersInitialState,
@@ -20,13 +22,17 @@ const LAST_SIZE = 11;
 
 let ledgerStreamRunner: any;
 
-const formatLedgerRecord = (record: LedgerRecord): LedgerItem => ({
+const formatLedgerRecord = (
+  record: LedgerRecord,
+  timeDiff: number,
+): LedgerItem => ({
   sequenceNumber: record.sequence,
   txCountSuccessful: record.successful_transaction_count,
   txCountFailed: record.failed_transaction_count,
   opCount: record.operation_count,
   closedAt: record.closed_at,
   protocolVersion: record.protocol_version,
+  closedTime: Math.round(timeDiff),
 });
 
 type FetchLedgersActionResponse = {
@@ -54,9 +60,11 @@ export const fetchLedgersAction = createAsyncThunk<
     const ledgerClosedTimes = ledgerRecords.map((r) => r.closed_at);
     const averageClosedTime = getAverageLedgerClosedTime(ledgerClosedTimes);
 
+    const closedTimes = getLedgerClosedTimes(ledgerClosedTimes);
+
     const lastLedgerRecords = ledgerRecords
       .slice(0, LAST_SIZE)
-      .map((r) => formatLedgerRecord(r));
+      .map((r, idx) => formatLedgerRecord(r, closedTimes[idx]));
 
     const { protocolVersion } = lastLedgerRecords[0];
 
@@ -79,7 +87,12 @@ export const startLedgerStreamingAction = createAsyncThunk<
   { rejectValue: RejectMessage; state: RootState }
 >(
   "ledgers/startLedgerStreamingAction",
-  (network, { rejectWithValue, dispatch }) => {
+  (network, { rejectWithValue, dispatch, getState }) => {
+    if (ledgerStreamRunner) {
+      return {
+        isStreaming: true,
+      };
+    }
     const server = new StellarSdk.Server(networkConfig[network].url);
 
     try {
@@ -88,7 +101,13 @@ export const startLedgerStreamingAction = createAsyncThunk<
         .cursor("now")
         .stream({
           onmessage: (ledger: LedgerRecord) => {
-            dispatch(updateLedgersAction(formatLedgerRecord(ledger)));
+            const { lastLedgerRecords } = ledgersSelector(getState());
+            const timeDiff = getDateDiffSeconds(
+              ledger.closed_at,
+              lastLedgerRecords[0].closedAt,
+            );
+
+            dispatch(updateLedgersAction(formatLedgerRecord(ledger, timeDiff)));
           },
           onerror: () => {
             // do nothing
@@ -120,6 +139,7 @@ const ledgersSlice = createSlice({
   name: "ledgers",
   initialState,
   reducers: {
+    resetLedgersAction: () => initialState,
     updateLedgersAction: (state, action) => {
       const { protocolVersion, closedAt } = action.payload as LedgerItem;
       const updatedClosedTimes = [
@@ -168,5 +188,8 @@ const ledgersSlice = createSlice({
 export const ledgersSelector = (state: RootState) => state.ledgers;
 
 export const { reducer } = ledgersSlice;
-export const { updateLedgersAction, stopLedgerStreamingAction } =
-  ledgersSlice.actions;
+export const {
+  resetLedgersAction,
+  updateLedgersAction,
+  stopLedgerStreamingAction,
+} = ledgersSlice.actions;
