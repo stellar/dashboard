@@ -11,7 +11,7 @@ const getLedgerClosedStatus = (closedTime: number) => {
     return ClosedStatus.NORMAl;
   }
 
-  if (closedTime > 6) {
+  if (closedTime <= 10) {
     return ClosedStatus.SLOW;
   }
 

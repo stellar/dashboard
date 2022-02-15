@@ -1,3 +1,5 @@
+import { getDateDiffSeconds } from "frontend/helpers/getDateDiffSeconds";
+
 export const getLedgerClosedTimes = (times: string[]): number[] => {
   const size = times.length;
 
@@ -10,10 +12,6 @@ export const getLedgerClosedTimes = (times: string[]): number[] => {
       return 0;
     }
 
-    const date1 = new Date(t).getTime();
-    const date2 = new Date(times[idx + 1]).getTime();
-    const diff = (date1 - date2) / 1000;
-
-    return diff;
+    return getDateDiffSeconds(t, times[idx + 1]);
   });
 };

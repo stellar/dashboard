@@ -6,6 +6,7 @@ import { networkConfig } from "frontend/constants/settings";
 import { getErrorString } from "frontend/helpers/getErrorString";
 import { getAverageLedgerClosedTime } from "frontend/helpers/getAverageLedgerClosedTime";
 import { getLedgerClosedTimes } from "frontend/helpers/getLedgerClosedTimes";
+import { getDateDiffSeconds } from "frontend/helpers/getDateDiffSeconds";
 
 import {
   LedgersInitialState,
@@ -80,12 +81,6 @@ export const fetchLedgersAction = createAsyncThunk<
   }
 });
 
-const getDateDiff = (date1: string, date2: string) => {
-  const d1 = new Date(date1).getTime();
-  const d2 = new Date(date2).getTime();
-  return (d1 - d2) / 1000;
-};
-
 export const startLedgerStreamingAction = createAsyncThunk<
   { isStreaming: boolean },
   Network,
@@ -107,7 +102,7 @@ export const startLedgerStreamingAction = createAsyncThunk<
         .stream({
           onmessage: (ledger: LedgerRecord) => {
             const { lastLedgerRecords } = ledgersSelector(getState());
-            const timeDiff = getDateDiff(
+            const timeDiff = getDateDiffSeconds(
               ledger.closed_at,
               lastLedgerRecords[0].closedAt,
             );
