@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, TextLink, Icon, Tag } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 import moment from "moment";
@@ -9,7 +9,7 @@ import {
   stopLedgerStreamingAction,
 } from "frontend/ducks/ledgers";
 import { useRedux } from "frontend/hooks/useRedux";
-import { Network, ActionStatus } from "types";
+import { Network } from "types";
 
 import "./styles.scss";
 
@@ -67,16 +67,12 @@ export const NetworkStatus = ({
   const { ledgers } = useRedux("ledgers");
   const dispatch = useDispatch();
 
-  const {
-    isStreaming,
-    lastLedgerRecords,
-    protocolVersion,
-    averageClosedTime,
-    status,
-  } = ledgers;
+  const { isStreaming, lastLedgerRecords, protocolVersion, averageClosedTime } =
+    ledgers;
 
   const [closedAgo, setClosedAgo] = useState(0);
   const { closedAt: lastLedgerClosedAt } = lastLedgerRecords[0] || {};
+  const hasLastLedgerRecord = Boolean(lastLedgerRecords[0]);
 
   useEffect(() => {
     dispatch(fetchLedgersAction(network));
@@ -86,11 +82,15 @@ export const NetworkStatus = ({
     };
   }, [network, dispatch]);
 
+  const startStreaming = useCallback(() => {
+    dispatch(startLedgerStreamingAction(network));
+  }, [network, dispatch]);
+
   useEffect(() => {
-    if (status === ActionStatus.SUCCESS && !isStreaming) {
-      dispatch(startLedgerStreamingAction(network));
+    if (hasLastLedgerRecord && !isStreaming) {
+      startStreaming();
     }
-  }, [status, isStreaming, network, dispatch]);
+  }, [isStreaming, hasLastLedgerRecord, startStreaming]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -105,8 +105,6 @@ export const NetworkStatus = ({
   }, [lastLedgerClosedAt]);
 
   const networkState = getNetworkState(closedAgo, averageClosedTime || 0);
-
-  console.log("networkState: ", networkState);
 
   return (
     <Card>
