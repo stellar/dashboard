@@ -102,6 +102,11 @@ export const startLedgerStreamingAction = createAsyncThunk<
         .stream({
           onmessage: (ledger: LedgerRecord) => {
             const { lastLedgerRecords } = ledgersSelector(getState());
+
+            if (!lastLedgerRecords[0]) {
+              return;
+            }
+
             const timeDiff = getDateDiffSeconds(
               ledger.closed_at,
               lastLedgerRecords[0].closedAt,
