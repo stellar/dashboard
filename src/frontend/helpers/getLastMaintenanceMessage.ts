@@ -1,4 +1,3 @@
-import moment from "moment";
 import { sanitizeHtml } from "frontend/helpers/sanitizeHtml";
 import { AnnouncementMessage, MaintenanceMessage } from "types";
 
@@ -12,7 +11,7 @@ export const getLastMaintenanceMessage = (
   const sortedMessages = messages
     .slice()
     .sort((a, b) =>
-      moment(a.scheduled_for).isSameOrBefore(b.scheduled_for) ? 1 : -1,
+      new Date(a.scheduled_for) <= new Date(b.scheduled_for) ? 1 : -1,
     );
 
   const {

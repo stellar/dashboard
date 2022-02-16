@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Card, TextLink, Icon, Tag } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
-import moment from "moment";
 
 import {
   fetchLedgersAction,
@@ -12,6 +11,7 @@ import { useRedux } from "frontend/hooks/useRedux";
 import { Network } from "types";
 
 import "./styles.scss";
+import { getDateDiffSeconds } from "frontend/helpers/getDateDiffSeconds";
 
 enum NetworkState {
   RUNNING = "running",
@@ -95,7 +95,11 @@ export const NetworkStatus = ({
   useEffect(() => {
     const interval = setInterval(() => {
       if (lastLedgerClosedAt) {
-        setClosedAgo(moment().diff(lastLedgerClosedAt, "seconds"));
+        const diff = getDateDiffSeconds(
+          new Date().toString(),
+          lastLedgerClosedAt,
+        );
+        setClosedAgo(diff);
       }
     }, 5000);
 
