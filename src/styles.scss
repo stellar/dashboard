@@ -21,3 +21,30 @@
   flex-direction: column;
   gap: 1.5rem;
 }
+
+.LedgerClosedTime {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  svg {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0.5rem;
+
+    &.LedgerClosedTime {
+      &--normal {
+        stroke: var(--pal-success);
+      }
+
+      &--slow {
+        stroke: var(--pal-warning);
+      }
+
+      &--verySlow {
+        stroke: var(--pal-error);
+      }
+    }
+  }
+}

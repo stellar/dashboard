@@ -1,14 +1,14 @@
 import { Icon } from "@stellar/design-system";
 
 enum ClosedStatus {
-  NORMAl = "normal",
+  NORMAL = "normal",
   SLOW = "slow",
   VERY_SLOW = "verySlow",
 }
 
 const getLedgerClosedStatus = (closedTime: number) => {
   if (closedTime <= 6) {
-    return ClosedStatus.NORMAl;
+    return ClosedStatus.NORMAL;
   }
 
   if (closedTime <= 10) {
@@ -19,10 +19,10 @@ const getLedgerClosedStatus = (closedTime: number) => {
 };
 
 export const LedgerClosedTime = ({ closedTime }: { closedTime: number }) => (
-  <>
+  <div className="LedgerClosedTime">
     {`closed in ${closedTime}s`}{" "}
     <Icon.Clock
-      className={`LastLedger__closedTime--${getLedgerClosedStatus(closedTime)}`}
+      className={`LedgerClosedTime--${getLedgerClosedStatus(closedTime)}`}
     />
-  </>
+  </div>
 );

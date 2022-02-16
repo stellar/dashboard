@@ -1,2 +1,20 @@
 .LastLedgersInfo {
+  table.Table {
+    color: var(--pal-text-tertiary);
+
+    td {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+  }
+
+  &__sequence {
+    color: var(--pal-text-primary);
+    font-weight: var(--font-weight-medium);
+
+    &::before {
+      content: "#";
+      color: var(--pal-text-tertiary);
+    }
+  }
 }

@@ -1,12 +1,17 @@
 import { Icon, Loader } from "@stellar/design-system";
+import { networkConfig } from "frontend/constants/settings";
 import { useRedux } from "frontend/hooks/useRedux";
 import { SectionCard } from "frontend/components/SectionCard";
 import { LedgerClosedTime } from "frontend/components/LedgerClosedTime";
-import { ActionStatus } from "types";
+import { ActionStatus, Network } from "types";
 
 import "./styles.scss";
 
-export const LastLedger = () => {
+export const LastLedger = ({
+  network = Network.MAINNET,
+}: {
+  network?: Network;
+}) => {
   const { ledgers } = useRedux("ledgers");
   const isPending = ledgers.status === ActionStatus.PENDING;
   const lastLedger = ledgers.lastLedgerRecords[0];
@@ -16,7 +21,7 @@ export const LastLedger = () => {
       title="Last Ledger"
       titleIcon={<Icon.Box />}
       titleLinkLabel="Recent Ops"
-      titleLink="https://horizon.stellar.org/operations?order=desc&limit=20"
+      titleLink={`${networkConfig[network].url}/operations?order=desc&limit=20`}
     >
       {isPending || !lastLedger ? (
         <Loader />
