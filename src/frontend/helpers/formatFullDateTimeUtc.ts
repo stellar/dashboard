@@ -16,5 +16,5 @@ export const formatFullDateTimeUtc = (date: string) => {
     hour12: true,
   });
 
-  return `on ${fullDate} at ${utcTime} UTC (${localTime} local time) `;
+  return `${fullDate} at ${utcTime} UTC (${localTime} local time)`;
 };
