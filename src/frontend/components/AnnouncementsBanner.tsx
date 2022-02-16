@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import { StatusBar, TextLink } from "@stellar/design-system";
-import moment from "moment";
 
 import {
   STATUS_INCIDENTS_URL,
@@ -9,6 +8,8 @@ import {
 
 import { getLastMaintenanceMessage } from "frontend/helpers/getLastMaintenanceMessage";
 import { getIncidentMessages } from "frontend/helpers/getIncidentMessages";
+import { formatTimeAgo } from "frontend/helpers/formatTimeAgo";
+import { formatFullDateTimeUtc } from "frontend/helpers/formatFullDateTimeUtc";
 
 import { MaintenanceMessage, IncidentMessage } from "types";
 
@@ -33,18 +34,7 @@ export const AnnouncementsBanner = () => {
         >
           {message.name}
         </TextLink>{" "}
-        on{" "}
-        {moment(message.scheduledFor)
-          .utc()
-          .format("dddd, MMMM Do YYYY, [at] h:mma")}{" "}
-        UTC (
-        {moment(message.scheduledFor).format(
-          moment(message.scheduledFor).utc().format("dddd") ===
-            moment(message.scheduledFor).format("dddd")
-            ? "h:mma"
-            : "MMMM Do YYYY, h:mma",
-        )}{" "}
-        local time)
+        on {formatFullDateTimeUtc(message.scheduledFor)}
       </div>
       {message.details ? <div>{message.details}</div> : null}
     </>
@@ -60,9 +50,9 @@ export const AnnouncementsBanner = () => {
         >
           {message.name}
         </TextLink>{" "}
-        (started: {moment(message.startedAt).fromNow()}
+        (started: {formatTimeAgo(message.startedAt)}
         {message.lastUpdatedAt
-          ? `, last update: ${moment(message.lastUpdatedAt).fromNow()}`
+          ? `, last update: ${formatTimeAgo(message.lastUpdatedAt)}`
           : null}
         )
       </div>

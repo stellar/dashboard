@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { TextLink, Table } from "@stellar/design-system";
-import moment from "moment";
 
 import {
   STATUSPAGE_URL,
   STATUS_INCIDENTS_URL,
 } from "frontend/constants/settings";
 import { SectionCard } from "frontend/components/SectionCard";
+import { formatTimeAgo } from "frontend/helpers/formatTimeAgo";
 
 import { Incident, IncidentItem } from "types";
 
@@ -71,7 +71,7 @@ export const Incidents = () => {
                 </TextLink>
               </td>
               <td className="Incidents__timeAgo">
-                ({moment(i.startedAt).fromNow()})
+                ({formatTimeAgo(i.startedAt)})
               </td>
             </React.Fragment>
           )}
