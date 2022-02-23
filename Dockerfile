@@ -13,12 +13,13 @@ RUN apt-get update && apt-get install --no-install-recommends -y gpg curl git ma
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && apt-get install -y nodejs yarn && apt-get clean
 
-
-COPY . /app/
 RUN yarn install
 RUN yarn build
 
-FROM nginx:1.17
+ENV PORT=80 UPDATE_DATA=false
+EXPOSE 80
 
-COPY --from=build /app/build/ /usr/share/nginx/html/
-COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
+RUN node_modules/typescript/bin/tsc
+
+ENTRYPOINT ["/usr/bin/node"]
+CMD ["./backend/app.js"]
