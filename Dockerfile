@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y gpg curl git ma
 
 COPY . /app/
 RUN yarn install
+RUN yarn prebuild
 RUN yarn build
 
 ENV PORT=80 UPDATE_DATA=false
@@ -23,4 +24,4 @@ EXPOSE 80
 RUN node_modules/typescript/bin/tsc
 
 ENTRYPOINT ["/usr/bin/node"]
-CMD ["./backend/app.js"]
+CMD ["./build/app.js"]

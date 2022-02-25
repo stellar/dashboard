@@ -1,14 +1,14 @@
 {
-  "extends": "@stellar/tsconfig",
   "compilerOptions": {
-    "baseUrl": "src/",
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "allowSyntheticDefaultImports": true
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["backend/**/*"],
+  "exclude": ["backend/__tests__"]
 }
