@@ -25,7 +25,7 @@ if (process.env.DEV) {
     }),
   );
 } else {
-  app.use(express.static("../../frontend/build"));
+  app.use(express.static("../frontend/build"));
 }
 
 app.get("/api/ledgers/public", ledgers.handler);
