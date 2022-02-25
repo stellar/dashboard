@@ -18,10 +18,10 @@ RUN yarn install
 RUN yarn prebuild
 RUN yarn build
 
+WORKDIR /backend
+
 ENV PORT=80 UPDATE_DATA=false
 EXPOSE 80
-
-RUN node_modules/typescript/bin/tsc
 
 ENTRYPOINT ["/usr/bin/node"]
 CMD ["./build/app.js"]

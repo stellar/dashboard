@@ -2,13 +2,13 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "outDir": "./build",
+    "outDir": "build",
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*"]
     }
   },
-  "include": ["backend/**/*"],
-  "exclude": ["backend/__tests__"]
+  "include": ["src"],
+  "exclude": ["__tests__", "node_modules"]
 }

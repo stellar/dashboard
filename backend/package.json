@@ -9,7 +9,8 @@
   },
   "scripts": {
     "start": "UPDATE_DATA=true DEV=true ts-node ./src/app.ts",
-    "clean": "rm -rf node_modules"
+    "build": "tsc --project .",
+    "clean": "rm -rf node_modules && rm -rf build"
   },
   "dependencies": {
     "@google-cloud/bigquery": "^5.11.0",

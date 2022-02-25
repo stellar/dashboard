@@ -18,7 +18,7 @@
   "scripts": {
     "install-if-package-changed": "git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep --quiet yarn.lock && yarn install || exit 0",
     "prepare": "husky install",
-    "pre-commit": "concurrently 'pretty-quick --staged' 'tsc --noEmit'",
+    "pre-commit": "concurrently 'pretty-quick --staged'",
     "start:frontend": "cd frontend && yarn start && cd ..",
     "start:backend": "cd backend && yarn start && cd ..",
     "clean:frontend": "cd frontend && yarn clean && cd ..",
@@ -28,7 +28,7 @@
     "prebuild:backend": "cd backend && yarn install && cd ..",
     "prebuild": "run-s prebuild:backend prebuild:frontend",
     "build:frontend": "cd frontend && yarn build && cd ..",
-    "build:backend": "tsc --project .",
+    "build:backend": "cd backend && yarn build && cd ..",
     "build": "run-s build:frontend build:backend"
   },
   "browserslist": {
