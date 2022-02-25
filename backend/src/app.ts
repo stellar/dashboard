@@ -1,8 +1,3 @@
-// need to manually import regeneratorRuntime for babel w/ async
-// https://github.com/babel/babel/issues/9849#issuecomment-487040428
-// require("regenerator-runtime/runtime");
-// import "regenerator-runtime/runtime";
-
 // Run backend with cache updates.
 import { updateLumensCache } from "./routes";
 import { updateLedgers } from "./ledgers";

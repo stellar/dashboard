@@ -9,7 +9,7 @@ export const LumenSupply = () => {
       try {
         const response = await fetch("/api/v2/lumens");
         const data = await response.json();
-        console.log(">>> data: ", data);
+        console.log("api response: ", data);
       } catch (e) {
         // do nothing
       }
