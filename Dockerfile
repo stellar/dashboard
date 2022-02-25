@@ -18,7 +18,7 @@ RUN yarn install
 RUN yarn prebuild
 RUN yarn build
 
-WORKDIR /backend
+WORKDIR /app/backend
 
 ENV PORT=80 UPDATE_DATA=false
 EXPOSE 80
