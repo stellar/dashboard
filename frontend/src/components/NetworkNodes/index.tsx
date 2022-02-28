@@ -57,7 +57,9 @@ export const NetworkNodes = ({
     <SectionCard
       title="Network Nodes"
       titleLinkLabel="Explore Nodes"
-      titleLink="https://stellarbeat.io/"
+      titleLink={`https://stellarbeat.io/${
+        network === Network.TESTNET ? "?network=test" : ""
+      }`}
       isLoading={networkNodes.status === ActionStatus.PENDING}
       noData={!data}
     >
