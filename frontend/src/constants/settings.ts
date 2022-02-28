@@ -8,8 +8,10 @@ export const NETWORK_SEARCH_PARAM = "network";
 export const networkConfig = {
   [Network.MAINNET]: {
     url: "https://horizon.stellar.org",
+    stellarbeatUrl: "https://api.stellarbeat.io",
   },
   [Network.TESTNET]: {
     url: "https://horizon-testnet.stellar.org",
+    stellarbeatUrl: "https://api-testnet.stellarbeat.io",
   },
 };

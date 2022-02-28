@@ -1,4 +1,4 @@
-import { Icon, Loader } from "@stellar/design-system";
+import { Icon } from "@stellar/design-system";
 import { networkConfig } from "constants/settings";
 import { useRedux } from "hooks/useRedux";
 import { SectionCard } from "components/SectionCard";
@@ -13,7 +13,6 @@ export const LastLedger = ({
   network?: Network;
 }) => {
   const { ledgers } = useRedux("ledgers");
-  const isPending = ledgers.status === ActionStatus.PENDING;
   const lastLedger = ledgers.lastLedgerRecords[0];
 
   return (
@@ -22,10 +21,10 @@ export const LastLedger = ({
       titleIcon={<Icon.Box />}
       titleLinkLabel="Recent Ops"
       titleLink={`${networkConfig[network].url}/operations?order=desc&limit=20`}
+      isLoading={ledgers.status === ActionStatus.PENDING}
+      noData={!lastLedger}
     >
-      {isPending || !lastLedger ? (
-        <Loader />
-      ) : (
+      {lastLedger ? (
         <div className="LastLedger">
           <div className="LastLedger__sequence">
             {lastLedger.sequenceNumber}
@@ -52,7 +51,7 @@ export const LastLedger = ({
             </div>
           </div>
         </div>
-      )}
+      ) : null}
     </SectionCard>
   );
 };

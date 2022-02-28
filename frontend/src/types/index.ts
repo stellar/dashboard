@@ -6,6 +6,7 @@ export enum Network {
 // Store
 export interface Store {
   ledgers: LedgersInitialState;
+  networkNodes: NetworkNodesInitialState;
 }
 
 export type StoreKey = keyof Store;
@@ -18,6 +19,30 @@ export interface LedgersInitialState {
   isStreaming: boolean;
   status: ActionStatus | undefined;
   errorString?: string;
+}
+
+export interface NetworkNodesInitialState {
+  data: NetworkNodesData | null;
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
+export enum NetworkNodesType {
+  WATCHER_NODES = "watcherNodes",
+  VALIDATOR_NODES = "validatorNodes",
+  FULL_VALIDATORS = "fullValidators",
+  ORGANIZATIONS = "organizations",
+  TOP_TIER_VALIDATORS = "topTierValidators",
+  TOP_TIER_ORGANIZATIONS = "topTierOrganizations",
+}
+
+export interface NetworkNodesData {
+  [NetworkNodesType.WATCHER_NODES]: number;
+  [NetworkNodesType.VALIDATOR_NODES]: number;
+  [NetworkNodesType.FULL_VALIDATORS]: number;
+  [NetworkNodesType.ORGANIZATIONS]: number;
+  [NetworkNodesType.TOP_TIER_VALIDATORS]: number;
+  [NetworkNodesType.TOP_TIER_ORGANIZATIONS]: number;
 }
 
 export enum ActionStatus {
