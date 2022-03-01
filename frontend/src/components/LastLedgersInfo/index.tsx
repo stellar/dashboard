@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from "@stellar/design-system";
+import { Table, Icon } from "@stellar/design-system";
 import { networkConfig } from "constants/settings";
 import { useRedux } from "hooks/useRedux";
 import { SectionCard } from "components/SectionCard";
@@ -19,8 +19,11 @@ export const LastLedgersInfo = ({
   const labels = [
     {
       id: "ledgerNumber",
-      // TODO: add box icon, needs to support it in SDS
-      label: "Ledger number",
+      label: (
+        <div key="LedgerNumber" className="CellIcon">
+          <Icon.Box /> Ledger number
+        </div>
+      ),
     },
     {
       id: "transactions",
@@ -40,11 +43,19 @@ export const LastLedgersInfo = ({
     <React.Fragment key={ledger.sequenceNumber}>
       <td className="LastLedgersInfo__sequence">{ledger.sequenceNumber}</td>
       <td>
-        {/* TODO: add chart */}
-        {ledger.txCountSuccessful} succeeded / {ledger.txCountFailed} failed
+        <div className="LastLedgersInfo__chartWrapper">
+          {/* TODO: add chart */}
+          <div className="LastLedgersInfo__pieChart" />
+          {ledger.txCountSuccessful} succeeded / {ledger.txCountFailed} failed
+        </div>
       </td>
       {/* TODO: add chart */}
-      <td>{ledger.opCount}</td>
+      <td>
+        <div className="LastLedgersInfo__chartWrapper">
+          <div className="LastLedgersInfo__barChart" />
+          {ledger.opCount}
+        </div>
+      </td>
       <td>
         <LedgerClosedTime closedTime={ledger.closedTime} />
       </td>
