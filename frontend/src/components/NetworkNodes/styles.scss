@@ -1,2 +1,55 @@
 .NetworkNodes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 1.5rem;
+
+  &__node {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 16rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--pal-border-primary);
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    @media (min-width: 697px) {
+      &:nth-child(5) {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+    }
+
+    &__label {
+      font-size: var(--font-size-secondary);
+      line-height: 1rem;
+      font-weight: var(--font-weight-normal);
+      color: var(--pal-text-tertiary);
+      flex: 1;
+    }
+
+    &__chart {
+      flex-shrink: 0;
+      width: 4.5rem;
+      height: 1.6rem;
+      border: 1px solid var(--pal-border-primary);
+    }
+
+    &__count {
+      font-size: var(--font-size-secondary);
+      line-height: 1rem;
+      font-weight: var(--font-weight-medium);
+      color: var(--pal-text-primary);
+      flex-shrink: 0;
+      width: 2rem;
+      text-align: right;
+    }
+  }
 }

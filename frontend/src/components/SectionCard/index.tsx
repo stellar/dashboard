@@ -1,4 +1,4 @@
-import { Card, TextLink, Icon } from "@stellar/design-system";
+import { Card, TextLink, Icon, Loader } from "@stellar/design-system";
 
 import "./styles.scss";
 
@@ -8,6 +8,8 @@ interface SectionCardProps {
   titleLinkLabel?: string;
   titleLink?: string;
   titleCustom?: React.ReactNode;
+  isLoading?: boolean;
+  noData?: boolean;
   children: React.ReactNode;
 }
 
@@ -17,24 +19,40 @@ export const SectionCard = ({
   titleLinkLabel = "Link",
   titleLink,
   titleCustom,
+  isLoading,
+  noData,
   children,
-}: SectionCardProps) => (
-  <Card>
-    <div className="SectionCard__heading">
-      <div className="SectionCard__heading__title">
-        {titleIcon ?? null}
-        {title}
-      </div>
+}: SectionCardProps) => {
+  const renderContent = () => {
+    if (isLoading) {
+      return <Loader />;
+    }
 
-      <div className="SectionCard__heading__options">
-        {titleCustom ?? null}
-        {titleLink ? (
-          <TextLink href={titleLink} iconRight={<Icon.ExternalLink />}>
-            {titleLinkLabel}
-          </TextLink>
-        ) : null}
+    if (noData) {
+      return "Something went wrong";
+    }
+
+    return children;
+  };
+
+  return (
+    <Card>
+      <div className="SectionCard__heading">
+        <div className="SectionCard__heading__title">
+          {titleIcon ?? null}
+          {title}
+        </div>
+
+        <div className="SectionCard__heading__options">
+          {titleCustom ?? null}
+          {titleLink ? (
+            <TextLink href={titleLink} iconRight={<Icon.ExternalLink />}>
+              {titleLinkLabel}
+            </TextLink>
+          ) : null}
+        </div>
       </div>
-    </div>
-    {children}
-  </Card>
-);
+      {renderContent()}
+    </Card>
+  );
+};
