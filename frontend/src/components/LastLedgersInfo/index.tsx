@@ -43,11 +43,19 @@ export const LastLedgersInfo = ({
     <React.Fragment key={ledger.sequenceNumber}>
       <td className="LastLedgersInfo__sequence">{ledger.sequenceNumber}</td>
       <td>
-        {/* TODO: add chart */}
-        {ledger.txCountSuccessful} succeeded / {ledger.txCountFailed} failed
+        <div className="LastLedgersInfo__chartWrapper">
+          {/* TODO: add chart */}
+          <div className="LastLedgersInfo__pieChart" />
+          {ledger.txCountSuccessful} succeeded / {ledger.txCountFailed} failed
+        </div>
       </td>
       {/* TODO: add chart */}
-      <td>{ledger.opCount}</td>
+      <td>
+        <div className="LastLedgersInfo__chartWrapper">
+          <div className="LastLedgersInfo__barChart" />
+          {ledger.opCount}
+        </div>
+      </td>
       <td>
         <LedgerClosedTime closedTime={ledger.closedTime} />
       </td>

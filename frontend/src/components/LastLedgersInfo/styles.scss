@@ -15,7 +15,6 @@
         width: 0.9rem;
         height: 0.9rem;
         margin-right: 0.2rem;
-        margin-bottom: 0.2rem;
       }
     }
   }
@@ -28,5 +27,24 @@
       content: "#";
       color: var(--pal-text-tertiary);
     }
+  }
+
+  &__chartWrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__pieChart {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--pal-border-primary);
+  }
+
+  &__barChart {
+    width: 0.75rem;
+    height: 1rem;
+    background-color: var(--pal-border-primary);
   }
 }
