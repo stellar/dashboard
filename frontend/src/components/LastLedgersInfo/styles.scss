@@ -6,6 +6,18 @@
       padding-top: 0.75rem;
       padding-bottom: 0.75rem;
     }
+
+    .CellIcon {
+      display: flex;
+      align-items: center;
+
+      svg {
+        width: 0.9rem;
+        height: 0.9rem;
+        margin-right: 0.2rem;
+        margin-bottom: 0.2rem;
+      }
+    }
   }
 
   &__sequence {

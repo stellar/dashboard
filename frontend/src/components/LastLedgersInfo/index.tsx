@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from "@stellar/design-system";
+import { Table, Icon } from "@stellar/design-system";
 import { networkConfig } from "constants/settings";
 import { useRedux } from "hooks/useRedux";
 import { SectionCard } from "components/SectionCard";
@@ -19,8 +19,11 @@ export const LastLedgersInfo = ({
   const labels = [
     {
       id: "ledgerNumber",
-      // TODO: add box icon, needs to support it in SDS
-      label: "Ledger number",
+      label: (
+        <div key="LedgerNumber" className="CellIcon">
+          <Icon.Box /> Ledger number
+        </div>
+      ),
     },
     {
       id: "transactions",
