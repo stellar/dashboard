@@ -1,3 +1,11 @@
+body.light-mode {
+  --pal-text-note: #999999;
+}
+
+body.dark-mode {
+  --pal-text-note: #a9abb2;
+}
+
 #root {
   .Layout__inset {
     font-size: var(--font-size-secondary);
@@ -45,6 +53,22 @@
       &--verySlow {
         stroke: var(--pal-error);
       }
+    }
+  }
+}
+
+.SectionCard__heading,
+.LumenSupply {
+  .TextLink {
+    font-size: var(--font-size-secondary);
+    text-transform: uppercase;
+    text-align: right;
+
+    .ButtonIcon {
+      --ButtonIcon-gap: 0.4rem;
+
+      width: 0.8rem;
+      height: 0.8rem;
     }
   }
 }
