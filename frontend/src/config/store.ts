@@ -10,6 +10,7 @@ import BigNumber from "bignumber.js";
 import { RESET_STORE_ACTION_TYPE } from "constants/settings";
 
 import { reducer as ledgers } from "ducks/ledgers";
+import { reducer as lumenSupply } from "ducks/lumenSupply";
 import { reducer as networkNodes } from "ducks/networkNodes";
 
 export type RootState = ReturnType<typeof store.getState>;
@@ -27,6 +28,7 @@ const isSerializable = (value: any) =>
 
 const reducers = combineReducers({
   ledgers,
+  lumenSupply,
   networkNodes,
 });
 

@@ -6,6 +6,7 @@ export enum Network {
 // Store
 export interface Store {
   ledgers: LedgersInitialState;
+  lumenSupply: LumenSupplyInitialState;
   networkNodes: NetworkNodesInitialState;
 }
 
@@ -27,6 +28,12 @@ export interface NetworkNodesInitialState {
   errorString?: string;
 }
 
+export interface LumenSupplyInitialState {
+  data: LumenSupplyData | null;
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
 export enum NetworkNodesType {
   WATCHER_NODES = "watcherNodes",
   VALIDATOR_NODES = "validatorNodes",
@@ -43,6 +50,12 @@ export interface NetworkNodesData {
   [NetworkNodesType.ORGANIZATIONS]: number;
   [NetworkNodesType.TOP_TIER_VALIDATORS]: number;
   [NetworkNodesType.TOP_TIER_ORGANIZATIONS]: number;
+}
+
+export interface LumenSupplyData {
+  circulating: string;
+  nonCirculating: string;
+  total: string;
 }
 
 export enum ActionStatus {
