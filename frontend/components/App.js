@@ -230,7 +230,7 @@ export default class App extends React.Component {
         ) : null}
         <div id="main" className="mui-container-fluid">
           <section>
-            <h1>Live network status</h1>
+            <h1>Live network statusss</h1>
             <div className="row">
               <div className="mui-col-md-4">
                 <NetworkStatus
