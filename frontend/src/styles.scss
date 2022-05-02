@@ -1,0 +1,74 @@
+body.light-mode {
+  --pal-text-note: #999999;
+}
+
+body.dark-mode {
+  --pal-text-note: #a9abb2;
+}
+
+#root {
+  .Layout__inset {
+    font-size: var(--font-size-secondary);
+  }
+
+  .Layout__content {
+    --layout-window-width-max: 888px;
+  }
+
+  table.Table {
+    --table-min-width: 360px;
+
+    th {
+      color: var(--pal-text-tertiary);
+    }
+  }
+}
+
+.ContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.LedgerClosedTime {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  svg {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0.5rem;
+
+    &.LedgerClosedTime {
+      &--normal {
+        stroke: var(--pal-success);
+      }
+
+      &--slow {
+        stroke: var(--pal-warning);
+      }
+
+      &--verySlow {
+        stroke: var(--pal-error);
+      }
+    }
+  }
+}
+
+.SectionCard__heading,
+.LumenSupply {
+  .TextLink {
+    font-size: var(--font-size-secondary);
+    text-transform: uppercase;
+    text-align: right;
+
+    .ButtonIcon {
+      --ButtonIcon-gap: 0.4rem;
+
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+  }
+}

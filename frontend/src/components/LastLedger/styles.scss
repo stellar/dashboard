@@ -1,0 +1,52 @@
+.LastLedger {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  &__sequence {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--pal-text-primary);
+
+    &::before {
+      content: "#";
+      color: var(--pal-text-tertiary);
+    }
+  }
+
+  &__details {
+    flex: 1;
+    max-width: 33.25rem;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--pal-border-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    &__label {
+      color: var(--pal-text-tertiary);
+    }
+
+    &__value {
+      color: var(--pal-text-primary);
+      font-weight: var(--font-weight-medium);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+
+      span {
+        color: var(--pal-text-tertiary);
+      }
+    }
+  }
+}

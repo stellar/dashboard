@@ -1,4 +1,6 @@
-export var ORIGINAL_SUPPLY_AMOUNT: string;
+import { BigNumber } from "bignumber.js";
+
+export const ORIGINAL_SUPPLY_AMOUNT: string;
 export function getLumenBalance(horizonURL: string, accountId: string): string;
 export function totalLumens(horizonURL: string): string;
 export function inflationLumens(): Promise<BigNumber>;

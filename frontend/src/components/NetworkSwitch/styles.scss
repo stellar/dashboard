@@ -1,0 +1,68 @@
+.NetworkSwitch {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+
+  &__statusMessage {
+    font-size: 1.25rem;
+    line-height: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::before {
+      content: "";
+      display: block;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 0.5rem;
+      background-color: var(--pal-text-primary);
+      transition: background-color var(--anim-transition-default);
+    }
+
+    &--mainnet {
+      &::before {
+        background-color: var(--pal-success);
+      }
+    }
+
+    &--testnet {
+      &::before {
+        background-color: var(--pal-brand-primary);
+      }
+    }
+  }
+
+  &__tabs {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+
+    &__tabItem {
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: var(--font-size-secondary);
+      line-height: 1.375rem;
+      font-weight: var(--font-weight-medium);
+      color: var(--pal-text-tertiary);
+      padding-bottom: 0.5rem;
+      transition: color var(--anim-transition-default);
+      border-bottom: 2px solid transparent;
+
+      @media (hover: hover) {
+        &:hover {
+          color: var(--pal-text-link);
+        }
+      }
+
+      &--active {
+        cursor: default;
+        color: var(--pal-text-link);
+        border-bottom-color: var(--pal-text-link);
+      }
+    }
+  }
+}
