@@ -3,3 +3,4 @@
 /dist
 *.eslintcache
 *service-account.json
+*.env
