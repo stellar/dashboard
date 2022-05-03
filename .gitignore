@@ -32,3 +32,4 @@ yarn-error.log*
 *.eslintcache
 *service-account.json
 .nvmrc
+*.env
