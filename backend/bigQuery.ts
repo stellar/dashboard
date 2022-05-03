@@ -1,13 +1,22 @@
 import { BigQuery } from "@google-cloud/bigquery";
 
-const options = {
-  keyFilename: process.env.DEV
-    ? "gcloud/service-account.json"
-    : "../../../gcloud/service-account.json",
-  projectId: "hubble-261722",
-};
+let options;
+if (process.env.DEV) {
+  options = {
+    keyFilename: "gcloud/service-account.json",
+    projectId: process.env.BQ_PROJECT_ID,
+  };
+} else {
+  options = {
+    keyFilename: "../../../gcloud/service-account.json",
+    projectId: "hubble-261722",
+  };
+}
 
 export const bqClient = new BigQuery(options);
+
+// TODO - drop the _2 when Hubble 2.0 is live
+const BQHistoryLedgersTable = "crypto-stellar.crypto_stellar_2.history_ledgers";
 
 export function get30DayOldLedgerQuery() {
   const today = new Date();
@@ -15,7 +24,7 @@ export function get30DayOldLedgerQuery() {
   const bqDate = `${before.getFullYear()}-${
     before.getUTCMonth() + 1
   }-${before.getUTCDate()}`;
-  return `SELECT * FROM \`hubble-261722.crypto_stellar_internal_2.history_ledgers\` WHERE closed_at >= "${bqDate}" ORDER BY sequence LIMIT 1;`;
+  return `SELECT * FROM \`${BQHistoryLedgersTable}\` WHERE closed_at >= "${bqDate}" ORDER BY sequence LIMIT 1;`;
 }
 
 export interface BQHistoryLedger {

@@ -3,6 +3,8 @@
 // require("regenerator-runtime/runtime");
 import "regenerator-runtime/runtime";
 
+import "dotenv/config";
+
 // Run backend with cache updates.
 import { updateLumensCache } from "./routes";
 import { updateLedgers } from "./ledgers";
