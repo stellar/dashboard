@@ -4,7 +4,7 @@ import { app, updateLumensCache } from "../src/routes";
 describe("integration", () => {
   beforeAll(async () => {
     await updateLumensCache();
-  }, 10000);
+  }, 50000);
 
   afterAll((done) => {
     done();
