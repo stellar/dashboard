@@ -1,0 +1,16 @@
+.BatteryLikeChart {
+  &__value {
+    background-color: var(--pal-success);
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+
+    &__filled {
+      border-radius: 2px;
+    }
+  }
+  &__rest {
+    background-color: var(--pal-border-secondary);
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+  }
+}
