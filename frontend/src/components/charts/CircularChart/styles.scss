@@ -1,0 +1,45 @@
+.CircularChart {
+  font-family: var(--font-family-base);
+
+  &__custom-tooltip {
+    transform: translateY(-50%);
+    min-width: 300px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+
+    &__arrow {
+      transform: rotate(-90deg) scaleX(1.5);
+      fill: var(--pal-background-tooltip);
+      color: var(--pal-background-tooltip);
+      height: 15px;
+      width: 15px;
+      margin-right: -5px;
+    }
+
+    &__content {
+      background-color: var(--pal-background-tooltip);
+      padding: 0.8rem;
+      border-radius: 0.5rem;
+      color: var(--pal-white);
+      font-weight: var(--font-weight-medium);
+      line-height: 171%;
+
+      &__title {
+        opacity: 0.6;
+      }
+
+      &__row {
+        display: flex;
+        align-items: center;
+
+        &__circle {
+          height: 8px;
+          width: 8px;
+          border-radius: 50%;
+          margin-right: 0.4rem;
+        }
+      }
+    }
+  }
+}
