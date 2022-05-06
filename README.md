@@ -59,4 +59,6 @@ Directions for creating a service account
 
 Once you've created a service account, add the service account key json file to
 the `gcloud` folder under the name `service-account.json`. An example json file
-shows what the file structure should look like.
+shows what the file structure should look like. You also must update your .env
+file, `BQ_PROJECT_ID` should point to the project id associated with your gcloud
+service account.
