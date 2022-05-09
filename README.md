@@ -19,7 +19,7 @@ yarn
 yarn start
 ```
 
-### If you wish to use backend server API, you need to have redis running locally on port 6379 (default for redis)
+### If you wish to use backend server API, you need to have redis running locally on port  `6379` (default for redis)
 
 (If you do not have redis installed) If on a mac, install redis using homebrew
 
