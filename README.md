@@ -41,7 +41,7 @@ Once you have redis installed, start this command
 yarn run start:backend
 ```
 
-It will create a proxy to `browser-sync` server started by gulp at
+It will create a proxy to `browser-sync` server started by gulp at: 
 `http://localhost:5000`
 
 ### Connecting to Big Query
