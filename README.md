@@ -7,7 +7,7 @@ To build this project, you must have the following dependencies installed:
 - node 10.16.3
 - yarn
 
-## Installation:
+## Installation
 
 ```sh
 yarn
