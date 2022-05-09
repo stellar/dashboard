@@ -115,7 +115,7 @@ export const NetworkStatus = ({
       <div className="NetworkStatus">
         <div className="NetworkStatus__info">
           <div className="NetworkStatus__title">
-            Protocol version: {protocolVersion}
+            Protocol versionnnn: {protocolVersion}
           </div>
           {/* TODO: get updated date and link */}
           <TextLink
