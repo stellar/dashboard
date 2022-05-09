@@ -1,10 +1,12 @@
-name: Test and build
+name: Backend - Test and build
 on:
   push:
     branches:
       - master
   pull_request:
-
+defaults:
+  run:
+    working-directory: ./backend
 jobs:
   build:
     runs-on: ubuntu-latest
