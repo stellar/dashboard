@@ -4,9 +4,6 @@ on:
     branches:
       - master
   pull_request:
-defaults:
-  run:
-    working-directory: ./backend
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,5 +24,9 @@ jobs:
         with:
           node-version: 16
       - run: yarn install
+      - run: yarn install
+        working-directory: ./backend
       - run: yarn test
+        working-directory: ./backend
       - run: yarn build
+        working-directory: ./backend

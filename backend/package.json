@@ -10,7 +10,7 @@
   "scripts": {
     "start": "UPDATE_DATA=true DEV=true ts-node ./src/app.ts",
     "clean": "rm -rf node_modules && rm -rf build",
-    "test": "jest",
+    "test": "jest --forceExit",
     "build": "tsc --project ."
   },
   "dependencies": {

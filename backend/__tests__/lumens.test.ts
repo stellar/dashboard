@@ -49,7 +49,7 @@ describe("lumens v1", () => {
 });
 
 describe("lumens v2", () => {
-  jest.setTimeout(10000);
+  jest.setTimeout(50000);
 
   afterAll((done) => {
     done();
@@ -212,7 +212,7 @@ describe("ledgers", () => {
   });
 
   describe("catchup", () => {
-    jest.setTimeout(20000);
+    jest.setTimeout(50000);
 
     afterAll((done) => {
       done();
