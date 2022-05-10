@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
-import { PieChart, Pie, Tooltip } from "recharts";
-import { Icon } from "@stellar/design-system";
+import { PieChart, Pie, Tooltip as RechartsTooltip } from "recharts";
+import { Tooltip, TooltipData } from "components/charts/Tooltip";
 
 import "./styles.scss";
 
@@ -73,37 +73,18 @@ export const CircularChart = ({
 
   const renderTooltip = useCallback(
     ({ active }: { active?: boolean }) => {
-      if (active) {
-        return (
-          <div
-            className={`CircularChart__custom-tooltip ${
-              tooltipClassName ?? ""
-            }`}
-          >
-            <Icon.Triangle className="CircularChart__custom-tooltip__arrow" />
-            <div className="CircularChart__custom-tooltip__content">
-              {tooltipTitle && (
-                <div className="CircularChart__custom-tooltip__content__title">
-                  {tooltipTitle}
-                </div>
-              )}
-              {data.map((entry: any) => (
-                <div className="CircularChart__custom-tooltip__content__row">
-                  <div
-                    className="CircularChart__custom-tooltip__content__row__circle"
-                    style={{
-                      backgroundColor: entry.fill,
-                    }}
-                  ></div>
-                  <div>{entry.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-
-      return null;
+      return (
+        <Tooltip
+          data={
+            data.map((a) => ({ label: a.label, fill: a.fill })) as TooltipData
+          }
+          active={active}
+          tooltipClassName={["CircularChart__tooltip", tooltipClassName].join(
+            " ",
+          )}
+          tooltipTitle={tooltipTitle}
+        />
+      );
     },
     [data, tooltipClassName, tooltipTitle],
   );
@@ -144,7 +125,8 @@ export const CircularChart = ({
         />
       )}
       {tooltipEnabled && (
-        <Tooltip
+        <RechartsTooltip
+          allowEscapeViewBox={{ x: true, y: false }}
           position={{ x: size * 0.9, y: size * 0.5 }}
           content={renderTooltip}
         />
