@@ -1,2 +1,43 @@
 .LedgerInfo {
+  &__title_nav {
+    font-weight: var(--font-weight-medium);
+    color: var(--pal-text-primary);
+    border-right: 1px solid var(--pal-border-primary);
+
+    & > * {
+      margin-right: 1rem;
+    }
+
+    &--active {
+      cursor: not-allowed;
+    }
+
+    &--inactive {
+      cursor: pointer;
+      opacity: var(--opacity-disabled-button);
+    }
+  }
+
+  &__cards_row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  &__main_chart_container {
+    width: 100%;
+    height: 20rem;
+  }
+
+  &__transactions_chart_container {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &__operations_chart_container {
+    width: 0.7rem;
+    height: 1rem;
+  }
 }
