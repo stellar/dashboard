@@ -1,10 +1,9 @@
-name: Test and build
+name: Backend - Test and build
 on:
   push:
     branches:
       - master
   pull_request:
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,8 +12,10 @@ jobs:
         image: redis
         # Set health checks to wait until redis has started
         options: >-
-          --health-cmd "redis-cli ping" --health-interval 10s --health-timeout
-          5s --health-retries 5
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
         ports:
           - 6379:6379
     steps:
@@ -23,6 +24,9 @@ jobs:
         with:
           node-version: 16
       - run: yarn install
-      # TODO: bring back tests (needs redis running)
-      # - run: yarn test
+      - run: yarn install
+        working-directory: ./backend
+      - run: yarn test
+        working-directory: ./backend
       - run: yarn build
+        working-directory: ./backend

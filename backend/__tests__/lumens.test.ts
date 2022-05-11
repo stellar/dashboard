@@ -9,7 +9,7 @@ const REDIS_PAGING_TOKEN_KEY_TEST = "paging_token_test";
 describe("lumens v1", () => {
   // 10s timeout added for the multiple calls to Horizon per test, which
   // occasionally surpasses the default 2s timeout causing an error.
-  jest.setTimeout(10000);
+  jest.setTimeout(50000);
 
   afterAll((done) => {
     done();
@@ -49,7 +49,7 @@ describe("lumens v1", () => {
 });
 
 describe("lumens v2", () => {
-  jest.setTimeout(10000);
+  jest.setTimeout(50000);
 
   afterAll((done) => {
     done();
@@ -212,7 +212,7 @@ describe("ledgers", () => {
   });
 
   describe("catchup", () => {
-    jest.setTimeout(20000);
+    jest.setTimeout(50000);
 
     afterAll((done) => {
       done();
