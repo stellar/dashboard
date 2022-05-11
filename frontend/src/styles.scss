@@ -49,7 +49,10 @@ body.dark-mode {
     display: inline-block;
     width: 1rem;
     height: 1rem;
-    margin-left: 0.5rem;
+
+    :not(:first-child) {
+      margin-left: 0.5rem;
+    }
 
     &.LedgerClosedTime {
       &--normal {
