@@ -1,0 +1,57 @@
+.AmountInfoCard {
+  flex: 1;
+  min-width: 150px;
+
+  .Card {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__card_title {
+    color: var(--pal-text-tertiary);
+    font-weight: var(--font-weight-medium);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-bottom: 2rem;
+
+    &__title {
+      margin-left: 0.4rem;
+      text-transform: uppercase;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 0.4rem;
+
+    h5 {
+      font-weight: var(--font-weight-medium);
+
+      &:not(:first-child) {
+        margin-left: 0.4rem;
+      }
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 0.4rem;
+    }
+
+    &__amount_by {
+      &::before {
+        content: " / ";
+        color: var(--pal-text-note);
+      }
+    }
+  }
+
+  &__description {
+    color: var(--pal-text-tertiary);
+  }
+}
