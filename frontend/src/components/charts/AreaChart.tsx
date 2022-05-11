@@ -13,10 +13,15 @@ export const AreaChart = ({ data }: Props) => {
       <RechartsArea data={data}>
         <defs>
           <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="80%" stopColor="var(--pal-graph-gradient-primary)" />
+            <stop
+              offset="80%"
+              stopColor="var(--pal-graph-gradient-primary)"
+              stopOpacity={0.1}
+            />
             <stop
               offset="100%"
               stopColor="var(--pal-graph-gradient-secondary)"
+              stopOpacity={0}
             />
           </linearGradient>
         </defs>
