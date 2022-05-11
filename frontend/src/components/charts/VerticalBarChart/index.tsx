@@ -12,6 +12,8 @@ import {
   LegendProps,
 } from "recharts";
 import { fromUnixTime } from "date-fns";
+import BigNumber from "bignumber.js";
+
 import { Tooltip } from "components/charts/Tooltip";
 
 import { VerticalBarShape } from "./VerticalBarShape";
@@ -23,7 +25,8 @@ import {
   VerticalBarChartProps,
   VerticalBarChartTooltipInnerProps,
 } from "./types";
-import { getTimeRangeProps, getTooltipProps } from "./utils";
+
+import { dateFormatter, getTimeRangeProps, getTooltipProps } from "./utils";
 
 import "./styles.scss";
 
@@ -34,13 +37,8 @@ export const VerticalBarChart = ({
   primaryValueName,
   secondaryValueName,
 
-  timeRange,
+  timeRange = TimeRange.HOUR,
   baseStartDate,
-
-  valueYAxisFormatter,
-  dateFormatter,
-  primaryValueFormatter,
-  secondaryValueFormatter,
 }: VerticalBarChartProps) => {
   const renderTooltip = useCallback(
     (props: VerticalBarChartTooltipInnerProps) => {
@@ -50,19 +48,12 @@ export const VerticalBarChart = ({
 
       const tooltipProps = getTooltipProps(props, {
         tooltipClassName,
-        secondaryValueFormatter,
-        primaryValueFormatter,
-        dateFormatter,
+        timeRange,
       });
 
       return <Tooltip {...tooltipProps} />;
     },
-    [
-      dateFormatter,
-      primaryValueFormatter,
-      secondaryValueFormatter,
-      tooltipClassName,
-    ],
+    [timeRange, tooltipClassName],
   );
 
   const renderTickXAxis = useCallback(
@@ -93,12 +84,10 @@ export const VerticalBarChart = ({
         textAnchor="end"
         fill="var(--pal-text-tertiary)"
       >
-        {valueYAxisFormatter
-          ? valueYAxisFormatter(payload.value)
-          : String(payload.value)}
+        {new BigNumber(payload.value).toFormat()}
       </text>
     ),
-    [valueYAxisFormatter],
+    [],
   );
 
   const renderLegendContent = useCallback(({ payload }: LegendContentProps) => {
@@ -109,9 +98,7 @@ export const VerticalBarChart = ({
             <span
               className="VerticalBarChart__legend__indicator"
               style={{ backgroundColor: entry.color }}
-            >
-              {" "}
-            </span>
+            ></span>
             <span>{entry.value}</span>
           </div>
         ))}
@@ -140,12 +127,14 @@ export const VerticalBarChart = ({
           vertical={false}
           stroke="var(--pal-border-primary)"
         />
+        {/* xaxis to add padding to graph container */}
         <XAxis
           hide
           padding={{ left: 50, right: 50 }}
           dataKey="date"
           tickLine={false}
         />
+        {/* xaxis to show labels */}
         <XAxis
           padding={{ left: 25, right: 25 }}
           xAxisId="labelsTime"
@@ -159,27 +148,9 @@ export const VerticalBarChart = ({
           domain={timeRangeData.domain.map((date) => date.getTime())}
           tickFormatter={(unixTime) => {
             const date = fromUnixTime(unixTime / 1000);
-            if (dateFormatter) {
-              return dateFormatter(date);
-            }
-            return date.toISOString();
+            return dateFormatter(timeRange, date);
           }}
           ticks={timeRangeData.ticks.map((date) => date.getTime())}
-          hide={!timeRange}
-        />
-        <XAxis
-          padding={{ left: 25, right: 25 }}
-          dataKey="date"
-          xAxisId="labels"
-          tickFormatter={(date: Date) =>
-            dateFormatter ? dateFormatter(date) : String(date)
-          }
-          interval="preserveStartEnd"
-          stroke="var(--pal-border-primary)"
-          tickLine={false}
-          tickMargin={10}
-          tick={renderTickXAxis}
-          hide={!!timeRange}
         />
         <YAxis
           stroke="var(--pal-border-primary)"
@@ -219,3 +190,5 @@ export const VerticalBarChart = ({
 };
 
 VerticalBarChart.TimeRange = TimeRange;
+
+export { TimeRange } from "./types";

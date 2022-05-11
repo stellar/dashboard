@@ -50,9 +50,4 @@ export type VerticalBarChartProps = {
 
   timeRange?: TimeRange;
   baseStartDate?: Date;
-
-  valueYAxisFormatter?: (value: number) => string;
-  dateFormatter?: (date: Date) => string;
-  primaryValueFormatter?: (value: number) => string;
-  secondaryValueFormatter?: (value: number) => string;
 };
