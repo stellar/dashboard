@@ -1,4 +1,4 @@
-import { Icon } from "@stellar/design-system";
+import { Tooltip as StellarTooltip } from "@stellar/design-system";
 
 import "./styles.scss";
 
@@ -24,24 +24,33 @@ export const Tooltip = ({
 }: Props) => {
   if (active) {
     return (
-      <div className={["CustomTooltip", tooltipClassName].join(" ")}>
-        <Icon.Triangle className="CustomTooltip__arrow" />
-        <div className="CustomTooltip__content">
-          {tooltipTitle && (
-            <div className="CustomTooltip__content__title">{tooltipTitle}</div>
-          )}
-          {data.map((entry: any) => (
-            <div key={entry.label} className="CustomTooltip__content__row">
-              <div
-                className="CustomTooltip__content__row__circle"
-                style={{
-                  backgroundColor: entry.fill,
-                }}
-              ></div>
-              <div>{entry.label}</div>
+      <div className={["ChartTooltip", tooltipClassName].join(" ")}>
+        <StellarTooltip
+          isVisible={active}
+          content={
+            <div className="ChartTooltip__content">
+              {tooltipTitle && (
+                <div className="ChartTooltip__content__title">
+                  {tooltipTitle}
+                </div>
+              )}
+              {data.map((entry) => (
+                <div key={entry.label} className="ChartTooltip__content__row">
+                  <div
+                    className="ChartTooltip__content__row__circle"
+                    style={{
+                      backgroundColor: entry.fill,
+                    }}
+                  ></div>
+                  <div>{entry.label}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          }
+          position={StellarTooltip.position.RIGHT}
+        >
+          <div className="ChartTooltip__placeholder">-</div>
+        </StellarTooltip>
       </div>
     );
   }

@@ -1,33 +1,9 @@
-.CustomTooltip {
-  font-family: var(--font-family-base);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-
-  &__right {
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-  }
-
-  &__arrow {
-    transform: rotate(-90deg) scaleX(1.5);
-    fill: var(--pal-background-tooltip);
-    color: var(--pal-background-tooltip);
-    height: 12px;
-    width: 12px;
-    margin-right: -5px;
-
-    &__right {
-      transform: rotate(90deg) scaleX(1.5);
-      margin-right: 0;
-      margin-left: -5px;
-    }
+.ChartTooltip {
+  &__placeholder {
+    opacity: 0;
   }
 
   &__content {
-    background-color: var(--pal-background-tooltip);
-    padding: 0.8rem;
-    border-radius: 0.5rem;
     color: var(--pal-brand-primary-on);
     font-weight: var(--font-weight-medium);
     line-height: 171%;
