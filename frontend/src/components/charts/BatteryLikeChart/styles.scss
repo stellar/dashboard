@@ -1,4 +1,7 @@
 .BatteryLikeChart {
+  width: 100%;
+  height: 100%;
+
   &__value {
     background-color: var(--pal-success);
     border-bottom-right-radius: 2px;

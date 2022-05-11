@@ -29,8 +29,6 @@ import "./styles.scss";
 
 export const VerticalBarChart = ({
   data,
-  width,
-  height,
   tooltipClassName,
 
   primaryValueName,
@@ -129,11 +127,9 @@ export const VerticalBarChart = ({
   }, [baseStartDate, timeRange]);
 
   return (
-    <ResponsiveContainer width={width} height={height}>
+    <ResponsiveContainer width="100%" height="100%">
       <BarChart
         className="VerticalBarChart"
-        width={400}
-        height={200}
         data={data}
         barGap={0}
         barSize={4}
@@ -195,6 +191,7 @@ export const VerticalBarChart = ({
           active
           allowEscapeViewBox={{ x: true, y: false }}
           cursor={false}
+          offset={-5}
           content={renderTooltip as TooltipProps<number, string>["content"]}
         />
         <Legend

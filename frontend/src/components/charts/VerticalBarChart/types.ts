@@ -44,20 +44,6 @@ export type VerticalBarChartProps = {
    * Custom CSS class name for the tooltip component.
    */
   tooltipClassName?: string;
-  /**
-   * Height of the chart. Could be in pixels, percentage or any other CSS property valid value.
-   * If a number is provided, it will be treated as pixels.
-   *
-   * E.g. "100px" or "50%" or "10em" or "1rem" or "2vh" or 40
-   */
-  height: number | string;
-  /**
-   * Width of the chart. Could be in pixels, percentage or any other CSS property valid value.
-   * If a number is provided, it will be treated as pixels.
-   *
-   * E.g. "100px" or "50%" or "10em" or "1rem" or "2vh" or 40
-   */
-  width: number | string;
 
   primaryValueName?: string;
   secondaryValueName?: string;

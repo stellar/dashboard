@@ -1,5 +1,10 @@
-import { useCallback, useMemo } from "react";
-import { PieChart, Pie, Tooltip as RechartsTooltip } from "recharts";
+import { useCallback, useMemo, useState } from "react";
+import {
+  PieChart,
+  Pie,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+} from "recharts";
 import { Tooltip, TooltipData } from "components/charts/Tooltip";
 
 import "./styles.scss";
@@ -32,7 +37,6 @@ const DEFAULT_LINE_WIDTH_PERCENTAGE = 0.25;
 
 type Props = {
   data: CircularChartData;
-  size: number;
   colorType?: CircularChartColorType;
   tooltipEnabled?: boolean;
   tooltipClassName?: string;
@@ -48,24 +52,22 @@ type Props = {
 
 export const CircularChart = ({
   data: dataProp,
-  colorType,
-  size,
-  tooltipEnabled,
+  colorType = CircularChartColorType.PRIMARY,
+  tooltipEnabled = true,
   tooltipClassName,
   tooltipTitle,
-  lineWidth,
+  lineWidth = DEFAULT_LINE_WIDTH_PERCENTAGE,
 }: Props) => {
+  const [size, setSize] = useState({ x: 0, y: 0 });
   const data = useMemo(
     () => [
       {
         ...dataProp[0],
-        fill: CircularChartColors[colorType || CircularChartColorType.PRIMARY]
-          .primary,
+        fill: CircularChartColors[colorType].primary,
       },
       {
         ...dataProp[1],
-        fill: CircularChartColors[colorType || CircularChartColorType.PRIMARY]
-          .secondary,
+        fill: CircularChartColors[colorType].secondary,
       },
     ],
     [dataProp, colorType],
@@ -90,55 +92,75 @@ export const CircularChart = ({
   );
 
   const innerRadius = useMemo(() => {
-    const value = lineWidth || DEFAULT_LINE_WIDTH_PERCENTAGE;
+    const value = lineWidth;
     const basePercentage = BASE_LINE_WIDTH_PERCENTAGE * 100;
     return basePercentage * (1 - value);
   }, [lineWidth]);
   const filled = useMemo(() => innerRadius === 0, [innerRadius]);
 
+  const getSizeByRef = useCallback(
+    (ref: { container?: HTMLDivElement } | null) => {
+      if (ref) {
+        if (ref.container) {
+          if (
+            ref.container.clientWidth !== size.x ||
+            ref.container.clientHeight !== size.y
+          ) {
+            setSize({
+              x: ref.container.clientWidth,
+              y: ref.container.clientHeight,
+            });
+          }
+        }
+      }
+    },
+    [size],
+  );
+
   return (
-    <PieChart className="CircularChart" width={size} height={size}>
-      <Pie
-        data={data}
-        dataKey="value"
-        nameKey="label"
-        cx="50%"
-        cy="50%"
-        innerRadius={`${innerRadius}%`}
-        outerRadius={`${BASE_LINE_WIDTH_PERCENTAGE * 100}%`}
-        paddingAngle={filled ? 0 : 4}
-        stroke="transparent"
-        // makes the chart start from the top in anticlockwise
-        startAngle={90}
-        endAngle={360 + 90}
-      />
-      {!filled && (
+    <ResponsiveContainer width="100%" height="100%" aspect={1}>
+      <PieChart
+        className="CircularChart"
+        ref={getSizeByRef}
+        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+      >
         <Pie
-          data={[{ name: "placeholder", value: 100 }]}
+          data={data}
           dataKey="value"
           nameKey="label"
           cx="50%"
           cy="50%"
-          outerRadius="59%"
-          fill="transparent"
+          innerRadius={`${innerRadius}%`}
+          outerRadius={`${BASE_LINE_WIDTH_PERCENTAGE * 100}%`}
+          paddingAngle={filled ? 0 : 4}
           stroke="transparent"
+          // makes the chart start from the top in anticlockwise
+          startAngle={90}
+          endAngle={360 + 90}
         />
-      )}
-      {tooltipEnabled && (
-        <RechartsTooltip
-          allowEscapeViewBox={{ x: true, y: false }}
-          position={{ x: size * 0.9, y: size * 0.5 }}
-          content={renderTooltip}
-        />
-      )}
-    </PieChart>
+        {!filled && (
+          <Pie
+            data={[{ name: "placeholder", value: 100 }]}
+            dataKey="value"
+            nameKey="label"
+            cx="50%"
+            cy="50%"
+            outerRadius="59%"
+            fill="transparent"
+            stroke="transparent"
+          />
+        )}
+        {tooltipEnabled && (
+          <RechartsTooltip
+            allowEscapeViewBox={{ x: true, y: false }}
+            position={{ x: size.x * 0.85, y: size.y * 0.5 }}
+            content={renderTooltip}
+            cursor={false}
+          />
+        )}
+      </PieChart>
+    </ResponsiveContainer>
   );
-};
-
-CircularChart.defaultProps = {
-  colorType: CircularChartColorType.PRIMARY,
-  tooltipEnabled: true,
-  lineWidth: DEFAULT_LINE_WIDTH_PERCENTAGE,
 };
 
 CircularChart.ColorType = CircularChartColorType;

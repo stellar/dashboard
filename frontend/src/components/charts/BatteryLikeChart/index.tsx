@@ -9,20 +9,6 @@ type Props = {
    */
   value: number;
   /**
-   * Height of the chart. Could be in pixels, percentage or any other CSS property valid value.
-   * If a number is provided, it will be treated as pixels.
-   *
-   * E.g. "100px" or "50%" or "10em" or "1rem" or "2vh" or 40
-   */
-  height: number | string;
-  /**
-   * Width of the chart. Could be in pixels, percentage or any other CSS property valid value.
-   * If a number is provided, it will be treated as pixels.
-   *
-   * E.g. "100px" or "50%" or "10em" or "1rem" or "2vh" or 40
-   */
-  width: number | string;
-  /**
    * Gap between the bars. In pixels.
    *
    * @default 1
@@ -32,9 +18,7 @@ type Props = {
 
 export const BatteryLikeChart = ({
   value: valueProp,
-  height,
-  width,
-  gap: gapProp,
+  gap: gapProp = 1,
 }: Props) => {
   const value = useMemo(
     () => Math.max(0, Math.min(100, valueProp)),
@@ -45,15 +29,7 @@ export const BatteryLikeChart = ({
   const filled = useMemo(() => value === 100, [value]);
 
   return (
-    <div
-      className="BatteryLikeChart"
-      style={{
-        height: `calc(${height}${
-          typeof height === "number" ? "px" : ""
-        } + ${gap}px)`,
-        width,
-      }}
-    >
+    <div className="BatteryLikeChart">
       {!filled && (
         <div
           className="BatteryLikeChart__rest"
@@ -74,9 +50,4 @@ export const BatteryLikeChart = ({
       ></div>
     </div>
   );
-};
-
-BatteryLikeChart.defaultProps = {
-  radius: 2,
-  gap: 1,
 };

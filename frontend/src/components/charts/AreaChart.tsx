@@ -1,20 +1,16 @@
-import { AreaChart as RechartsArea, Area } from "recharts";
-
-import "./styles.scss";
+import { AreaChart as RechartsArea, Area, ResponsiveContainer } from "recharts";
 
 type Props = {
   data: {
     name: string;
     value: number;
   }[];
-  width: number;
-  height: number;
 };
 
-export const AreaChart = ({ data, width, height }: Props) => {
+export const AreaChart = ({ data }: Props) => {
   return (
-    <div className="AreaChart">
-      <RechartsArea width={width} height={height} data={data}>
+    <ResponsiveContainer width="100%" height="100%">
+      <RechartsArea data={data}>
         <defs>
           <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="80%" stopColor="var(--pal-graph-gradient-primary)" />
@@ -33,6 +29,6 @@ export const AreaChart = ({ data, width, height }: Props) => {
           fill="url(#colorGradient)"
         />
       </RechartsArea>
-    </div>
+    </ResponsiveContainer>
   );
 };
