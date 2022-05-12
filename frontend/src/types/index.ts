@@ -43,13 +43,21 @@ export enum NetworkNodesType {
   TOP_TIER_ORGANIZATIONS = "topTierOrganizations",
 }
 
+export interface NetworkNodeItemData {
+  current: number;
+  historyStats: {
+    name: string;
+    value: number;
+  }[];
+}
+
 export interface NetworkNodesData {
-  [NetworkNodesType.WATCHER_NODES]: number;
-  [NetworkNodesType.VALIDATOR_NODES]: number;
-  [NetworkNodesType.FULL_VALIDATORS]: number;
-  [NetworkNodesType.ORGANIZATIONS]: number;
-  [NetworkNodesType.TOP_TIER_VALIDATORS]: number;
-  [NetworkNodesType.TOP_TIER_ORGANIZATIONS]: number;
+  [NetworkNodesType.WATCHER_NODES]: NetworkNodeItemData;
+  [NetworkNodesType.VALIDATOR_NODES]: NetworkNodeItemData;
+  [NetworkNodesType.FULL_VALIDATORS]: NetworkNodeItemData;
+  [NetworkNodesType.ORGANIZATIONS]: NetworkNodeItemData;
+  [NetworkNodesType.TOP_TIER_VALIDATORS]: NetworkNodeItemData;
+  [NetworkNodesType.TOP_TIER_ORGANIZATIONS]: NetworkNodeItemData;
 }
 
 export interface LumenSupplyData {
