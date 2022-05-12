@@ -50,7 +50,7 @@ body.dark-mode {
     width: 1rem;
     height: 1rem;
 
-    :not(:first-child) {
+    &:not(:first-child) {
       margin-left: 0.5rem;
     }
 
