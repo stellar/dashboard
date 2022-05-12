@@ -1,0 +1,32 @@
+.VerticalBarChart {
+  li::before {
+    content: "";
+  }
+
+  &__legend {
+    display: flex;
+    align-items: baseline;
+    height: 2.5rem;
+    color: var(--pal-text-tertiary);
+    font-size: var(--font-size-secondary);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+
+    &__item {
+      margin-right: 1.2rem;
+      display: flex;
+      align-items: baseline;
+    }
+
+    &__indicator {
+      height: 0.5rem;
+      width: 0.5rem;
+      border-radius: 50%;
+      margin-right: 0.4rem;
+    }
+  }
+
+  &__y_axis_tick {
+    transform: translateY(4px);
+  }
+}

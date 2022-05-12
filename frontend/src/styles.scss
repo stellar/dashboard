@@ -1,9 +1,19 @@
 body.light-mode {
   --pal-text-note: #999999;
+
+  --pal-graph-primary: #5332e6;
+  --pal-graph-secondary: #18dfdf;
+  --pal-graph-gradient-primary: #3e1bdb;
+  --pal-graph-gradient-secondary: #ffffff;
 }
 
 body.dark-mode {
   --pal-text-note: #a9abb2;
+
+  --pal-graph-primary: #6260eb;
+  --pal-graph-secondary: #18dfdf;
+  --pal-graph-gradient-primary: #3e1bdb;
+  --pal-graph-gradient-secondary: #ffffff;
 }
 
 #root {

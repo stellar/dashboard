@@ -1,0 +1,27 @@
+.ChartTooltip {
+  &__placeholder {
+    opacity: 0;
+  }
+
+  &__content {
+    color: var(--pal-brand-primary-on);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5rem;
+
+    &__title {
+      opacity: 0.6;
+    }
+
+    &__row {
+      display: flex;
+      align-items: center;
+
+      &__circle {
+        height: 0.5rem;
+        width: 0.5rem;
+        border-radius: 50%;
+        margin-right: 0.4rem;
+      }
+    }
+  }
+}
