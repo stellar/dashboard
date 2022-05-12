@@ -1,5 +1,6 @@
-import "./styles.scss";
 import { useMemo } from "react";
+
+import "./styles.scss";
 
 type Props = {
   /**
