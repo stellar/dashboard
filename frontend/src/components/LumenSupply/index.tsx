@@ -4,6 +4,10 @@ import { useDispatch } from "react-redux";
 import BigNumber from "bignumber.js";
 
 import { SectionCard } from "components/SectionCard";
+import {
+  CircularChart,
+  CircularChartData,
+} from "components/charts/CircularChart";
 import { DASHBOARD_URL, FRIENDBOT_PUBLIC_ADDRESS } from "constants/settings";
 import { fetchLumenSupplyAction } from "ducks/lumenSupply";
 import { formatAmount } from "helpers/formatAmount";
@@ -44,18 +48,48 @@ export const LumenSupply = ({
       ),
       amount: data?.circulating,
       apiUrl: isTestnet ? null : apiEndpoint,
+      chartData: [
+        {
+          label: "Circulating",
+          value: new BigNumber(data?.circulating ?? 1).toNumber(),
+        },
+        {
+          label: "Placeholder",
+          value: 0,
+        },
+      ] as CircularChartData,
     },
     {
       id: "nonCirculating",
       label: "Non-Circulating Supply",
       amount: data?.nonCirculating,
       apiUrl: isTestnet ? null : apiEndpoint,
+      chartData: [
+        {
+          label: "Placeholder",
+          value: 0,
+        },
+        {
+          label: "Non-Circulating",
+          value: new BigNumber(data?.nonCirculating ?? 1).toNumber(),
+        },
+      ] as CircularChartData,
     },
     {
       id: "total",
       label: "Total XLM Supply",
       amount: data?.total,
       apiUrl: isTestnet ? null : apiEndpoint,
+      chartData: [
+        {
+          label: `${formatAmount(data?.circulating ?? 1)} XLM`,
+          value: new BigNumber(data?.circulating ?? 1).toNumber(),
+        },
+        {
+          label: `${formatAmount(data?.nonCirculating ?? 1)} XLM`,
+          value: new BigNumber(data?.nonCirculating ?? 1).toNumber(),
+        },
+      ] as CircularChartData,
     },
   ];
 
@@ -70,7 +104,21 @@ export const LumenSupply = ({
       {data ? (
         <div className="LumenSupply">
           <div className="LumenSupply__chart">
-            <div className="LumenSupply__chart__item" />
+            <div className="LumenSupply__chart__item">
+              <CircularChart
+                data={[
+                  {
+                    label: `${formatAmount(data.circulating)} XLM`,
+                    value: new BigNumber(data.circulating).toNumber(),
+                  },
+                  {
+                    label: `${formatAmount(data.nonCirculating)} XLM`,
+                    value: new BigNumber(data.nonCirculating).toNumber(),
+                  },
+                ]}
+                tooltipTitle="Total XLM"
+              />
+            </div>
           </div>
           <div className="LumenSupply__supply">
             {items.map((i) => (
@@ -85,7 +133,13 @@ export const LumenSupply = ({
                       }
                     `}
                   >
-                    <div className="LumenSupply__supply__item__chart" />
+                    <div className="LumenSupply__supply__item__chart">
+                      <CircularChart
+                        data={i.chartData}
+                        tooltipEnabled={false}
+                        lineWidth={1}
+                      />
+                    </div>
                     {i.label}
                   </div>
                   {i.apiUrl ? (

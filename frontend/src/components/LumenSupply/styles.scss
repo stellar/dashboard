@@ -8,6 +8,8 @@
     display: flex;
     justify-content: center;
     width: 100%;
+    // because of the tooltip, we need to add this z-index here
+    z-index: 1;
 
     @media (min-width: 540px) {
       width: 11.75rem;
@@ -16,8 +18,6 @@
     &__item {
       width: 7.5rem;
       height: 7.5rem;
-      border-radius: 3.75rem;
-      background-color: var(--pal-border-primary);
     }
   }
 
@@ -65,15 +65,17 @@
         color: var(--pal-text-tertiary);
         display: flex;
         align-items: center;
-        gap: 0.2rem;
+        gap: 0.5rem;
       }
 
       &__chart {
         width: 0.5rem;
         height: 0.5rem;
-        border-radius: 0.25rem;
-        background-color: var(--pal-border-primary);
-        margin-right: 0.3rem;
+
+        // because of the small size, we need to do the following to make the chart be aligned correctly
+        .CircularChart {
+          display: flex;
+        }
       }
 
       &__bold {
