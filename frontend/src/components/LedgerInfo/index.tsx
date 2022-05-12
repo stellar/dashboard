@@ -19,7 +19,7 @@ import "./styles.scss";
 const start = subMinutes(new Date("2022-05-10T20:20:51.176Z"), 40);
 
 const generateChartData = () =>
-  [...Array(30)].map((_, index) => ({
+  [...Array(35)].map((_, index) => ({
     date: addMinutes(start, index * 2),
     primaryValue: Math.trunc(Math.random() * 1000),
     secondaryValue: Math.trunc(Math.random() * 1000),
@@ -104,19 +104,20 @@ export const LedgerInfo = ({
     <SectionCard
       title="Ledger Info"
       titleLinkLabel="API"
-      // TODO: update link
       titleLink={`${networkConfig[network].url}/operations?order=desc&limit=20`}
       titleCustom={graphNavOptionsContent}
     >
       <div className="LedgerInfo">
-        <div className="LedgerInfo__main_chart_container">
-          <VerticalBarChart
-            data={graphParams.data}
-            primaryValueName="Transactions"
-            secondaryValueName="Operations"
-            timeRange={rangeInterval}
-            baseStartDate={start}
-          />
+        <div className="LedgerInfo__main_chart">
+          <div className="LedgerInfo__main_chart__container">
+            <VerticalBarChart
+              data={graphParams.data}
+              primaryValueName="Transactions"
+              secondaryValueName="Operations"
+              timeRange={rangeInterval}
+              baseStartDate={start}
+            />
+          </div>
         </div>
         <div className="LedgerInfo__cards_row">
           <AmountInfoCard
