@@ -44,6 +44,18 @@
       align-items: center;
       gap: 0.3rem;
 
+      &__circular_chart {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.2rem;
+      }
+
+      &__battery_chart {
+        width: 0.75rem;
+        height: 1rem;
+        margin-right: 0.2rem;
+      }
+
       span {
         color: var(--pal-text-tertiary);
       }

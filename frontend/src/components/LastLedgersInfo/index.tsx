@@ -1,9 +1,12 @@
 import React from "react";
 import { Table, Icon } from "@stellar/design-system";
+
 import { networkConfig } from "constants/settings";
 import { useRedux } from "hooks/useRedux";
 import { SectionCard } from "components/SectionCard";
 import { LedgerClosedTime } from "components/LedgerClosedTime";
+import { CircularChart } from "components/charts/CircularChart";
+import { BatteryLikeChart } from "components/charts/BatteryLikeChart";
 import { LedgerItem, Network } from "types";
 
 import "./styles.scss";
@@ -44,15 +47,28 @@ export const LastLedgersInfo = ({
       <td className="LastLedgersInfo__sequence">{ledger.sequenceNumber}</td>
       <td>
         <div className="LastLedgersInfo__chartWrapper">
-          {/* TODO: add chart */}
-          <div className="LastLedgersInfo__pieChart" />
+          <div className="LastLedgersInfo__pieChart">
+            <CircularChart
+              data={[
+                {
+                  label: "Succeeded",
+                  value: ledger.txCountSuccessful,
+                },
+                { label: "Failed", value: ledger.txCountFailed },
+              ]}
+              lineWidth={0.5}
+              tooltipEnabled={false}
+              colorType={CircularChart.ColorType.SECONDARY}
+            />
+          </div>
           {ledger.txCountSuccessful} succeeded / {ledger.txCountFailed} failed
         </div>
       </td>
-      {/* TODO: add chart */}
       <td>
         <div className="LastLedgersInfo__chartWrapper">
-          <div className="LastLedgersInfo__barChart" />
+          <div className="LastLedgersInfo__barChart">
+            <BatteryLikeChart value={ledger.opCount / 10} />
+          </div>
           {ledger.opCount}
         </div>
       </td>
