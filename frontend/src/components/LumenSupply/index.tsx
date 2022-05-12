@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { TextLink, Icon } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 import BigNumber from "bignumber.js";
@@ -16,6 +16,8 @@ import { ActionStatus, Network } from "types";
 
 import "./styles.scss";
 
+const apiEndpoint = `${DASHBOARD_URL}/api/v3/lumens/`;
+
 export const LumenSupply = ({
   network = Network.MAINNET,
 }: {
@@ -24,74 +26,79 @@ export const LumenSupply = ({
   const { lumenSupply } = useRedux("lumenSupply");
   const { data } = lumenSupply;
   const dispatch = useDispatch();
-  const isTestnet = network === Network.TESTNET;
-  const apiEndpoint = `${DASHBOARD_URL}/api/v3/lumens/`;
+  const isTestnet = useMemo(() => network === Network.TESTNET, [network]);
 
   useEffect(() => {
     dispatch(fetchLumenSupplyAction(network));
   }, [network, dispatch]);
 
-  const items = [
-    {
-      id: "circulating",
-      label: isTestnet ? (
-        <>
-          Friendbot:
-          <TextLink
-            href={`https://horizon-testnet.stellar.org/accounts/${FRIENDBOT_PUBLIC_ADDRESS}`}
-          >
-            GAIH
-          </TextLink>
-        </>
-      ) : (
-        "Circulating Supply"
-      ),
-      amount: data?.circulating,
-      apiUrl: isTestnet ? null : apiEndpoint,
-      chartData: [
-        {
-          label: "Circulating",
-          value: new BigNumber(data?.circulating ?? 1).toNumber(),
-        },
-        {
-          label: "Placeholder",
-          value: 0,
-        },
-      ] as CircularChartData,
-    },
-    {
-      id: "nonCirculating",
-      label: "Non-Circulating Supply",
-      amount: data?.nonCirculating,
-      apiUrl: isTestnet ? null : apiEndpoint,
-      chartData: [
-        {
-          label: "Placeholder",
-          value: 0,
-        },
-        {
-          label: "Non-Circulating",
-          value: new BigNumber(data?.nonCirculating ?? 1).toNumber(),
-        },
-      ] as CircularChartData,
-    },
-    {
-      id: "total",
-      label: "Total XLM Supply",
-      amount: data?.total,
-      apiUrl: isTestnet ? null : apiEndpoint,
-      chartData: [
-        {
-          label: `${formatAmount(data?.circulating ?? 1)} XLM`,
-          value: new BigNumber(data?.circulating ?? 1).toNumber(),
-        },
-        {
-          label: `${formatAmount(data?.nonCirculating ?? 1)} XLM`,
-          value: new BigNumber(data?.nonCirculating ?? 1).toNumber(),
-        },
-      ] as CircularChartData,
-    },
-  ];
+  const items = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    return [
+      {
+        id: "circulating",
+        label: isTestnet ? (
+          <>
+            Friendbot:
+            <TextLink
+              href={`https://horizon-testnet.stellar.org/accounts/${FRIENDBOT_PUBLIC_ADDRESS}`}
+            >
+              GAIH
+            </TextLink>
+          </>
+        ) : (
+          "Circulating Supply"
+        ),
+        amount: data.circulating,
+        apiUrl: isTestnet ? null : apiEndpoint,
+        chartData: [
+          {
+            label: "Circulating",
+            value: new BigNumber(data.circulating).toNumber(),
+          },
+          {
+            label: "Placeholder",
+            value: 0,
+          },
+        ] as CircularChartData,
+      },
+      {
+        id: "nonCirculating",
+        label: "Non-Circulating Supply",
+        amount: data.nonCirculating,
+        apiUrl: isTestnet ? null : apiEndpoint,
+        chartData: [
+          {
+            label: "Placeholder",
+            value: 0,
+          },
+          {
+            label: "Non-Circulating",
+            value: new BigNumber(data.nonCirculating).toNumber(),
+          },
+        ] as CircularChartData,
+      },
+      {
+        id: "total",
+        label: "Total XLM Supply",
+        amount: data.total,
+        apiUrl: isTestnet ? null : apiEndpoint,
+        chartData: [
+          {
+            label: `${formatAmount(data.circulating)} XLM`,
+            value: new BigNumber(data.circulating).toNumber(),
+          },
+          {
+            label: `${formatAmount(data.nonCirculating)} XLM`,
+            value: new BigNumber(data.nonCirculating).toNumber(),
+          },
+        ] as CircularChartData,
+      },
+    ];
+  }, [data, isTestnet]);
 
   return (
     <SectionCard
