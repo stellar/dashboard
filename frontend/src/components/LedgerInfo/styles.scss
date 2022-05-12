@@ -26,9 +26,18 @@
     margin-top: 1rem;
   }
 
-  &__main_chart_container {
-    width: 100%;
-    height: 20rem;
+  &__main_chart {
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    &__container {
+      width: 100%;
+      height: 20rem;
+
+      @media (max-width: 540px) {
+        width: 32rem;
+      }
+    }
   }
 
   &__transactions_chart_container {
