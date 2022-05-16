@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { SectionCard } from "components/SectionCard";
+import { AreaChart } from "components/charts/AreaChart";
 import { fetchNetworkNodesAction } from "ducks/networkNodes";
 import { useRedux } from "hooks/useRedux";
 import { ActionStatus, Network, NetworkNodesType } from "types";
@@ -68,9 +69,12 @@ export const NetworkNodes = ({
           ? nodes.map((n) => (
               <div className="NetworkNodes__node" key={n.id}>
                 <div className="NetworkNodes__node__label">{n.label}</div>
-                {/* TODO: add chart */}
-                <div className="NetworkNodes__node__chart"></div>
-                <div className="NetworkNodes__node__count">{data[n.id]}</div>
+                <div className="NetworkNodes__node__chart">
+                  <AreaChart data={data[n.id].historyStats} />
+                </div>
+                <div className="NetworkNodes__node__count">
+                  {data[n.id].current}
+                </div>
               </div>
             ))
           : null}

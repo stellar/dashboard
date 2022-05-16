@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { subYears } from "date-fns";
 
 import { RootState } from "config/store";
 import { networkConfig } from "constants/settings";
 import { getErrorString } from "helpers/getErrorString";
+import { getNetworkNodesHistoryData } from "helpers/getNetworkNodesHistoryData";
 
 import {
   NetworkNodesInitialState,
@@ -10,6 +12,7 @@ import {
   RejectMessage,
   Network,
   NetworkNodesData,
+  NetworkNodesType,
 } from "types";
 
 export const fetchNetworkNodesAction = createAsyncThunk<
@@ -23,15 +26,47 @@ export const fetchNetworkNodesAction = createAsyncThunk<
       const response = await fetch(
         `${networkConfig[network].stellarbeatUrl}/v1`,
       );
+      const today = new Date();
+
+      const historyParams = new URLSearchParams({
+        from: subYears(today, 1).toISOString(),
+        to: today.toISOString(),
+      });
+
+      const historyResponse = await fetch(
+        `${networkConfig[network].stellarbeatUrl}/v1/month-statistics?${historyParams}`,
+      );
+
       const { statistics } = await response.json();
+      const history = await historyResponse.json();
+
+      const historyData = getNetworkNodesHistoryData(history);
 
       return {
-        watcherNodes: statistics.nrOfActiveWatchers,
-        validatorNodes: statistics.nrOfActiveValidators,
-        fullValidators: statistics.nrOfActiveFullValidators,
-        organizations: statistics.nrOfActiveOrganizations,
-        topTierValidators: statistics.topTierSize,
-        topTierOrganizations: statistics.topTierOrgsSize,
+        watcherNodes: {
+          current: statistics.nrOfActiveWatchers,
+          historyStats: historyData[NetworkNodesType.WATCHER_NODES],
+        },
+        validatorNodes: {
+          current: statistics.nrOfActiveValidators,
+          historyStats: historyData[NetworkNodesType.VALIDATOR_NODES],
+        },
+        fullValidators: {
+          current: statistics.nrOfActiveFullValidators,
+          historyStats: historyData[NetworkNodesType.FULL_VALIDATORS],
+        },
+        organizations: {
+          current: statistics.nrOfActiveOrganizations,
+          historyStats: historyData[NetworkNodesType.ORGANIZATIONS],
+        },
+        topTierValidators: {
+          current: statistics.topTierSize,
+          historyStats: historyData[NetworkNodesType.TOP_TIER_VALIDATORS],
+        },
+        topTierOrganizations: {
+          current: statistics.topTierOrgsSize,
+          historyStats: historyData[NetworkNodesType.TOP_TIER_ORGANIZATIONS],
+        },
       };
     } catch (error) {
       return rejectWithValue({

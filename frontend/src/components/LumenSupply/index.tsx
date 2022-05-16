@@ -1,9 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { TextLink, Icon } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 import BigNumber from "bignumber.js";
 
 import { SectionCard } from "components/SectionCard";
+import {
+  CircularChart,
+  CircularChartData,
+} from "components/charts/CircularChart";
 import { DASHBOARD_URL, FRIENDBOT_PUBLIC_ADDRESS } from "constants/settings";
 import { fetchLumenSupplyAction } from "ducks/lumenSupply";
 import { formatAmount } from "helpers/formatAmount";
@@ -11,6 +15,8 @@ import { useRedux } from "hooks/useRedux";
 import { ActionStatus, Network } from "types";
 
 import "./styles.scss";
+
+const apiEndpoint = `${DASHBOARD_URL}/api/v3/lumens/`;
 
 export const LumenSupply = ({
   network = Network.MAINNET,
@@ -20,44 +26,79 @@ export const LumenSupply = ({
   const { lumenSupply } = useRedux("lumenSupply");
   const { data } = lumenSupply;
   const dispatch = useDispatch();
-  const isTestnet = network === Network.TESTNET;
-  const apiEndpoint = `${DASHBOARD_URL}/api/v3/lumens/`;
+  const isTestnet = useMemo(() => network === Network.TESTNET, [network]);
 
   useEffect(() => {
     dispatch(fetchLumenSupplyAction(network));
   }, [network, dispatch]);
 
-  const items = [
-    {
-      id: "circulating",
-      label: isTestnet ? (
-        <>
-          Friendbot:
-          <TextLink
-            href={`https://horizon-testnet.stellar.org/accounts/${FRIENDBOT_PUBLIC_ADDRESS}`}
-          >
-            GAIH
-          </TextLink>
-        </>
-      ) : (
-        "Circulating Supply"
-      ),
-      amount: data?.circulating,
-      apiUrl: isTestnet ? null : apiEndpoint,
-    },
-    {
-      id: "nonCirculating",
-      label: "Non-Circulating Supply",
-      amount: data?.nonCirculating,
-      apiUrl: isTestnet ? null : apiEndpoint,
-    },
-    {
-      id: "total",
-      label: "Total XLM Supply",
-      amount: data?.total,
-      apiUrl: isTestnet ? null : apiEndpoint,
-    },
-  ];
+  const items = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    return [
+      {
+        id: "circulating",
+        label: isTestnet ? (
+          <>
+            Friendbot:
+            <TextLink
+              href={`https://horizon-testnet.stellar.org/accounts/${FRIENDBOT_PUBLIC_ADDRESS}`}
+            >
+              GAIH
+            </TextLink>
+          </>
+        ) : (
+          "Circulating Supply"
+        ),
+        amount: data.circulating,
+        apiUrl: isTestnet ? null : apiEndpoint,
+        chartData: [
+          {
+            label: "Circulating",
+            value: new BigNumber(data.circulating).toNumber(),
+          },
+          {
+            label: "Placeholder",
+            value: 0,
+          },
+        ] as CircularChartData,
+      },
+      {
+        id: "nonCirculating",
+        label: "Non-Circulating Supply",
+        amount: data.nonCirculating,
+        apiUrl: isTestnet ? null : apiEndpoint,
+        chartData: [
+          {
+            label: "Placeholder",
+            value: 0,
+          },
+          {
+            label: "Non-Circulating",
+            value: new BigNumber(data.nonCirculating).toNumber(),
+          },
+        ] as CircularChartData,
+      },
+      {
+        id: "total",
+        label: "Total XLM Supply",
+        amount: data.total,
+        apiUrl: isTestnet ? null : apiEndpoint,
+        chartData: [
+          {
+            label: `${formatAmount(data.circulating)} XLM`,
+            value: new BigNumber(data.circulating).toNumber(),
+          },
+          {
+            label: `${formatAmount(data.nonCirculating)} XLM`,
+            value: new BigNumber(data.nonCirculating).toNumber(),
+          },
+        ] as CircularChartData,
+      },
+    ];
+  }, [data, isTestnet]);
 
   return (
     <SectionCard
@@ -70,7 +111,21 @@ export const LumenSupply = ({
       {data ? (
         <div className="LumenSupply">
           <div className="LumenSupply__chart">
-            <div className="LumenSupply__chart__item" />
+            <div className="LumenSupply__chart__item">
+              <CircularChart
+                data={[
+                  {
+                    label: `${formatAmount(data.circulating)} XLM`,
+                    value: new BigNumber(data.circulating).toNumber(),
+                  },
+                  {
+                    label: `${formatAmount(data.nonCirculating)} XLM`,
+                    value: new BigNumber(data.nonCirculating).toNumber(),
+                  },
+                ]}
+                tooltipTitle="Total XLM"
+              />
+            </div>
           </div>
           <div className="LumenSupply__supply">
             {items.map((i) => (
@@ -85,7 +140,13 @@ export const LumenSupply = ({
                       }
                     `}
                   >
-                    <div className="LumenSupply__supply__item__chart" />
+                    <div className="LumenSupply__supply__item__chart">
+                      <CircularChart
+                        data={i.chartData}
+                        tooltipEnabled={false}
+                        lineWidth={1}
+                      />
+                    </div>
                     {i.label}
                   </div>
                   {i.apiUrl ? (
