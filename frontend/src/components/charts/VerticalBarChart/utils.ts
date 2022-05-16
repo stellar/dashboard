@@ -15,6 +15,14 @@ import {
 } from "date-fns";
 import BigNumber from "bignumber.js";
 
+/**
+ * Time range related properties. It's a map to help get the parameters
+ * based on the TimeRange enum.
+ *
+ * The parameters are:
+ * - dateFormatter: function to, given a date, return a string with a formatted date
+ * - generateTicks: function to, given a based date, generate the 5 ticks to be used
+ */
 const TIME_RANGE_PARAMS = {
   [TimeRange.HOUR]: {
     dateFormatter: (date: Date) => format(date, "h:mm a"),
@@ -43,7 +51,7 @@ const TIME_RANGE_PARAMS = {
     },
   },
   [TimeRange.MONTH]: {
-    dateFormatter: (date: Date) => format(date, "d/m/yy"),
+    dateFormatter: (date: Date) => format(date, "d/M/yy"),
     generateTicks: (baseDate: Date) => {
       const start = subDays(baseDate, 30);
       return [
@@ -57,10 +65,29 @@ const TIME_RANGE_PARAMS = {
   },
 };
 
+/**
+ * Helper function to get the date formatter based on the TimeRange
+ *
+ * @param {TimeRange} range - TimeRange to get the date formatter for
+ * @param {Date} date - Date to be formatted
+ * @returns {string} - Formatted date
+ */
 export const dateFormatter = (range: TimeRange, date: Date) => {
   return TIME_RANGE_PARAMS[range].dateFormatter(date);
 };
 
+/**
+ * Helper function to get the props to be used in the tooltip component.
+ *
+ * It gets the props from the default Recharts Tooltip component, and the `TimeRange` and
+ * `tooltipClassName` props.
+ *
+ * It returns an object containing the props to be used in the ChartTooltip component (our Tooltip, not Recharts' one).
+ *
+ * @see {@link https://recharts.org/en-US/api/Tooltip}
+ * @see VerticalBarChartProps.timeRange
+ * @see VerticalBarChartProps.tooltipClassName
+ */
 export const getTooltipProps = (
   { active, label, payload }: VerticalBarChartTooltipInnerProps,
   {
@@ -103,6 +130,17 @@ const EMPTY_TIME_RANGE_PROPS = {
   domain: [],
 };
 
+/**
+ * Helper function to get the ticks and domain based on the TimeRange
+ * @param params - An object containing the TimeRange to get the ticks and domain for,
+ *            and the base start date to generate the ticks
+ *
+ * @returns An object containing the attribute `ticks`, which is an Array/Tuple of 5 ticks (dates),
+ *      and the attribute `domain`, which is a Tuple of 2 dates - the start and the end of the domain
+ *
+ * @see VerticalBarChartProps.timeRange
+ * @see VerticalBarChartProps.baseStartDate
+ */
 export const getTimeRangeProps = ({
   timeRange,
   baseStartDate,

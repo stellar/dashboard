@@ -1,12 +1,26 @@
 import { AreaChart as RechartsArea, Area, ResponsiveContainer } from "recharts";
 
 type Props = {
+  /**
+   * The data to be displayed in the chart.
+   */
   data: {
     name: string;
     value: number;
   }[];
 };
 
+/**
+ * Area chart component. It is used to display a chart with a series-based data.
+ * The series should be an array of objects with the following properties:
+ *
+ * - name: string
+ * - value: number
+ *
+ * This chart does not render X-Axis, Y-Axis, Legend, or Tooltip.
+ *
+ * The width and height of the chart are based on the parent container, and the chart take 100% of the space.
+ */
 export const AreaChart = ({ data }: Props) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
