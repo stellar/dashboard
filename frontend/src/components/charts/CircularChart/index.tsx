@@ -53,10 +53,10 @@ type Props = {
   /**
    * The color type to be used on the chart. Can be one of the following:
    *
-   * - primary - Use the color pallet: `--pal-graph-primary` and `--pal-graph-secondary`
-   * - secondary - Use the color pallet: `--pal-success` and `--pal-error`
+   * - primary - Use the color palette: `--pal-graph-primary` and `--pal-graph-secondary`
+   * - secondary - Use the color palette: `--pal-success` and `--pal-error`
    *
-   * These pallet colors are for primary value and secondary value, respectively.
+   * These palette colors are for primary value and secondary value, respectively.
    *
    * @default CircularChartColorType.PRIMARY
    */
@@ -97,7 +97,7 @@ type Props = {
  * By default, the chart assumes a form of a Doughnut chart, with a `lineWidth` of `0.25`.
  *
  * Also, the chart has a tooltip, which can be disabled by passing the `tooltipEnabled` prop as `false`.
- * Furthermore, there are two color pallets available.
+ * Furthermore, there are two color palettes available.
  *
  * The width and height of the chart are based on the parent container, and the chart take 100% of the space.
  */
