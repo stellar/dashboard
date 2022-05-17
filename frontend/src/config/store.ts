@@ -12,6 +12,7 @@ import { RESET_STORE_ACTION_TYPE } from "constants/settings";
 import { reducer as ledgers } from "ducks/ledgers";
 import { reducer as lumenSupply } from "ducks/lumenSupply";
 import { reducer as networkNodes } from "ducks/networkNodes";
+import { reducer as dex } from "ducks/dex";
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -30,6 +31,7 @@ const reducers = combineReducers({
   ledgers,
   lumenSupply,
   networkNodes,
+  dex,
 });
 
 export const resetStoreAction = createAction(RESET_STORE_ACTION_TYPE);

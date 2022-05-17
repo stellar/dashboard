@@ -8,6 +8,7 @@ export interface Store {
   ledgers: LedgersInitialState;
   lumenSupply: LumenSupplyInitialState;
   networkNodes: NetworkNodesInitialState;
+  dex: DexDataInitialState;
 }
 
 export type StoreKey = keyof Store;
@@ -30,6 +31,12 @@ export interface NetworkNodesInitialState {
 
 export interface LumenSupplyInitialState {
   data: LumenSupplyData | null;
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
+export interface DexDataInitialState {
+  data: DexData | null;
   status: ActionStatus | undefined;
   errorString?: string;
 }
@@ -64,6 +71,20 @@ export interface LumenSupplyData {
   circulating: string;
   nonCirculating: string;
   total: string;
+}
+
+export interface DexItemData {
+  last24HR: number;
+  overall: number;
+  fluctuation: number;
+}
+
+export interface DexData {
+  trades: DexItemData;
+  volume: DexItemData;
+  totalUniqueAssets: number;
+  dailyActiveAccounts: number;
+  payments24HRs: number;
 }
 
 export enum ActionStatus {
