@@ -6,6 +6,7 @@ import path from "path";
 import * as lumens from "./lumens";
 import * as lumensV2V3 from "./v2v3/lumens";
 import * as ledgers from "./ledgers";
+import * as dex from "./v2v3/dex";
 
 export const app = express();
 app.set("port", process.env.PORT || 5000);
@@ -38,6 +39,10 @@ app.get(
   "/api/v2/lumens/circulating-supply",
   lumensV2V3.v2CirculatingSupplyHandler,
 );
+
+app.get("/api/v2/dex/24h-payments", dex.get24hPaymentsData);
+
+app.get("/api/v2/dex/24h-trades", dex.getDexTrades24hData);
 
 app.get("/api/v3/lumens", lumensV2V3.v3Handler);
 app.get("/api/v3/lumens/all", lumensV2V3.totalSupplyCheckHandler);
