@@ -35,21 +35,72 @@ const CircularChartColors = {
 const BASE_LINE_WIDTH_PERCENTAGE = 0.8;
 const DEFAULT_LINE_WIDTH_PERCENTAGE = 0.25;
 
+const START_ANGLE = 90;
+const END_ANGLE = 360 + START_ANGLE;
+
 type Props = {
+  /**
+   * The data to be displayed in the chart. It should be an array of two positions,
+   * containing objects with the following properties:
+   *
+   * - label: string - Used on the Tooltip
+   * - value: number - Used on the Chart
+   *
+   * The first position will be used as the primary value, and the second position
+   * will be used as the secondary value.
+   */
   data: CircularChartData;
+  /**
+   * The color type to be used on the chart. Can be one of the following:
+   *
+   * - primary - Use the color palette: `--pal-graph-primary` and `--pal-graph-secondary`
+   * - secondary - Use the color palette: `--pal-success` and `--pal-error`
+   *
+   * These palette colors are for primary value and secondary value, respectively.
+   *
+   * @default CircularChartColorType.PRIMARY
+   */
   colorType?: CircularChartColorType;
+  /**
+   * If the tooltip should be displayed on hover, or not.
+   *
+   * @default true
+   */
   tooltipEnabled?: boolean;
+  /**
+   * Custom CSS class name for the tooltip component.
+   */
   tooltipClassName?: string;
+  /**
+   * Custom title to be displayed on the tooltip.
+   */
   tooltipTitle?: string;
   /**
-   * It should be in percentage, between 0 and 1. 1 means that the chart is totally filled (like a common PieChart).
-   * Anything less than 1 means the width of the line, based on its size (like a common CircularChart).
+   * The thickness of the chart line.
+   * It should be in percentage, between 0 and 1, where:
+   * - 1 means that the chart is totally filled (like a common PieChart); and
+   * - anything less than 1 means the width of the line, based on its size (like a common DoughnutChart).
    *
    * @default 0.25
    */
   lineWidth?: number;
 };
 
+/**
+ * Circular chart component. It is used to display a chart with a two-values based data.
+ *
+ * The chart can assume a form of a Doughnut chart, with a line that represents the value.
+ * This line thickness can be controlled with the `lineWidth` prop.
+ *
+ * The chart can also assume a form of a pie chart, completely filled, by passing the `lineWidth` prop as `1`.
+ *
+ * By default, the chart assumes a form of a Doughnut chart, with a `lineWidth` of `0.25`.
+ *
+ * Also, the chart has a tooltip, which can be disabled by passing the `tooltipEnabled` prop as `false`.
+ * Furthermore, there are two color palettes available.
+ *
+ * The width and height of the chart are based on the parent container, and the chart take 100% of the space.
+ */
 export const CircularChart = ({
   data: dataProp,
   colorType = CircularChartColorType.PRIMARY,
@@ -96,6 +147,7 @@ export const CircularChart = ({
     const basePercentage = BASE_LINE_WIDTH_PERCENTAGE * 100;
     return basePercentage * (1 - value);
   }, [lineWidth]);
+
   const filled = useMemo(() => innerRadius === 0, [innerRadius]);
 
   const getSizeByRef = useCallback(
@@ -135,9 +187,10 @@ export const CircularChart = ({
           paddingAngle={filled ? 0 : 4}
           stroke="transparent"
           // makes the chart start from the top in anticlockwise
-          startAngle={90}
-          endAngle={360 + 90}
+          startAngle={START_ANGLE}
+          endAngle={END_ANGLE}
         />
+        {/* render a placeholder inside of main pie just to trigger tooltip */}
         {!filled && (
           <Pie
             data={[{ name: "placeholder", value: 100 }]}

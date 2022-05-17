@@ -8,6 +8,12 @@ type VerticalBarShapeProps = SVGProps<SVGElement> & {
 
 const BASE_BAR_RADIUS = 1;
 
+/**
+ * This is a component used to render a vertical bar shape. It should be a different component
+ * because we want to add border radius just on top of the bars, and we need to do this with svg.
+ * The unique required custom prop is `valueIndex` which is used to help identify the bar.
+ * The other props are from SVGProps, and should be gotten directly from Recharts.
+ */
 export const VerticalBarShape = ({
   fill,
   x,

@@ -10,12 +10,36 @@ type TooltipDataItem = {
 export type TooltipData = [TooltipDataItem, TooltipDataItem];
 
 type Props = {
+  /**
+   * A custom CSS class name to be applied on the component.
+   */
   tooltipClassName?: string;
+  /**
+   * The title to be rendered on the top of the tooltip.
+   */
   tooltipTitle?: string;
+  /**
+   * If the tooltip is visible or not.
+   */
   active?: boolean;
+  /**
+   * The data to be displayed in the tooltip.
+   */
   data: TooltipData;
 };
 
+/**
+ * Chart tooltip component. It is based on default `Tooltip` component from
+ * [Stellar Design System](https://design-system.stellar.org/component/tooltips).
+ * It renders a placeholder to trigger the tooltip, and should be used together with the default
+ * `Tooltip` component from Recharts library.
+ *
+ * The `data` prop should be an array of two positions, containing the label and the fill color.
+ *
+ * It will return `null` if the `active` prop is `false`.
+ *
+ * @see {@link https://recharts.org/en-US/api/Tooltip}
+ */
 export const Tooltip = ({
   active,
   tooltipTitle,
@@ -24,7 +48,7 @@ export const Tooltip = ({
 }: Props) => {
   if (active) {
     return (
-      <div className={["ChartTooltip", tooltipClassName].join(" ")}>
+      <div className={["ChartTooltip", tooltipClassName || ""].join(" ")}>
         <StellarTooltip
           isVisible={active}
           content={

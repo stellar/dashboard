@@ -30,6 +30,19 @@ import { dateFormatter, getTimeRangeProps, getTooltipProps } from "./utils";
 
 import "./styles.scss";
 
+/**
+ * Vertical Bar Chart component. It is used to display a chart with a series-based data.
+ * The series should be an array of objects with at least the following properties:
+ *
+ * - date: Date - used for grouping the bars
+ * - primaryValue: number - used for the primary bar (with color: `--pal-graph-primary`)
+ * - secondaryValue: number - used for the secondary bar (with color: `--pal-graph-secondary`)
+ *
+ * You also can pass a `TimeRange` prop, which says how the X-Axis labels will be showed. By default, it is `TimeRange.HOUR`.
+ * Optionally, you can also pass a `baseStartDate` prop, which will be used also to calculate the X-Axis labels.
+ *
+ * The width and height of the chart are based on the parent container, and the chart take 100% of the space.
+ */
 export const VerticalBarChart = ({
   data,
   tooltipClassName,
