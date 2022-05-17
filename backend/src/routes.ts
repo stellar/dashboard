@@ -41,11 +41,10 @@ app.get(
 );
 
 app.get("/api/v2/dex/24h-payments", dex.get24hPaymentsData);
-
 app.get("/api/v2/dex/24h-trades", dex.getDexTrades24hData);
-
 app.get("/api/v2/dex/unique-assets", dex.getUniqueAssets);
 app.get("/api/v2/dex/volume", dex.getVolume);
+app.get("/api/v2/dex/all", dex.getAll);
 
 app.get("/api/v3/lumens", lumensV2V3.v3Handler);
 app.get("/api/v3/lumens/all", lumensV2V3.totalSupplyCheckHandler);
