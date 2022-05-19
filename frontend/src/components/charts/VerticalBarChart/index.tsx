@@ -186,7 +186,7 @@ export const VerticalBarChart = ({
           active
           allowEscapeViewBox={{ x: true, y: false }}
           cursor={false}
-          offset={-5}
+          offset={0}
           content={renderTooltip as TooltipProps<number, string>["content"]}
         />
         <Legend
