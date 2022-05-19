@@ -1,4 +1,9 @@
 .ChartTooltip {
+  .Tooltip {
+    width: 0.32rem;
+    transform: translateX(-50%);
+  }
+
   &__placeholder {
     opacity: 0;
   }
