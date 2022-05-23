@@ -74,5 +74,45 @@ describe("integration", () => {
       expect(body).toEqual(expect.any(String));
       expect(body).not.toEqual("");
     });
+
+    it("/api/v2/dex/active-accounts should return a positive integer", async () => {
+      const { body } = await request(app)
+        .get("/api/v2/dex/active-accounts")
+        .expect(200);
+
+      expect(body).toEqual(expect.any(Number));
+      expect(body).toBeGreaterThan(0);
+    });
+
+    it("/api/v2/dex/unique-assets should return a positive integer", async () => {
+      const { body } = await request(app)
+        .get("/api/v2/dex/unique-assets")
+        .expect(200);
+
+      expect(body).toEqual(expect.any(Number));
+      expect(body).toBeGreaterThan(0);
+    });
+
+    it("/api/v2/dex/24h-trades should return an object", async () => {
+      const { body } = await request(app)
+        .get("/api/v2/dex/24h-trades")
+        .expect(200);
+
+      expect(body).toEqual(expect.any(Object));
+      expect(body).toMatchObject({
+        change: expect.any(String),
+        overall: expect.any(Number),
+        trades_last_24h: expect.any(Number),
+      });
+    });
+
+    it("/api/v2/dex/24h-payments should return an object", async () => {
+      const { body } = await request(app)
+        .get("/api/v2/dex/24h-payments")
+        .expect(200);
+
+      expect(body).toEqual(expect.any(Number));
+      expect(body).toBeGreaterThan(0);
+    });
   });
 });
