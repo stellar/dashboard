@@ -1,11 +1,11 @@
 import { Response, NextFunction } from "express";
 import {
+  getActiveAccountsData,
   getPaymentsData,
   getTradeData,
   getUniqueAssetsData,
   getVolumeData,
-  getActiveAccountsData,
-} from "./dexData";
+} from "./data";
 
 export async function get24hPaymentsData(
   _: any,
@@ -51,11 +51,23 @@ export async function getVolume(_: any, res: Response, next: NextFunction) {
   }
 }
 
+export async function getActiveAccounts(
+  _: any,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    return res.json(await getActiveAccountsData());
+  } catch (e) {
+    next(e);
+  }
+}
+
 export async function getAll(_: any, res: Response, next: NextFunction) {
   try {
     return res.json({
       volume: await getVolumeData(),
-      tradesLast24h: await getTradeData(),
+      tradesLast24H: await getTradeData(),
       paymentsLast24h: await getPaymentsData(),
       uniqueAssets: await getUniqueAssetsData(),
       activeAccounts: await getActiveAccountsData(),
