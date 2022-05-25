@@ -32,6 +32,13 @@ if (process.env.DEV) {
 app.get("/api/ledgers/public", ledgers.handler);
 app.get("/api/lumens", lumens.v1Handler);
 
+app.get("/api/dex/24h-payments", dex.get24hPaymentsData);
+app.get("/api/dex/24h-trades", dex.getDexTrades24hData);
+app.get("/api/dex/unique-assets", dex.getUniqueAssets);
+app.get("/api/dex/volume", dex.getVolume);
+app.get("/api/dex/active-accounts", dex.getActiveAccounts);
+app.get("/api/dex/all", dex.getAll);
+
 app.get("/api/v2/lumens", lumensV2V3.v2Handler);
 /* For CoinMarketCap */
 app.get("/api/v2/lumens/total-supply", lumensV2V3.v2TotalSupplyHandler);
@@ -48,13 +55,6 @@ app.get(
   "/api/v3/lumens/circulating-supply",
   lumensV2V3.v3CirculatingSupplyHandler,
 );
-
-app.get("/api/v2/dex/24h-payments", dex.get24hPaymentsData);
-app.get("/api/v2/dex/24h-trades", dex.getDexTrades24hData);
-app.get("/api/v2/dex/unique-assets", dex.getUniqueAssets);
-app.get("/api/v2/dex/volume", dex.getVolume);
-app.get("/api/v2/dex/active-accounts", dex.getActiveAccounts);
-app.get("/api/v2/dex/all", dex.getAll);
 
 app.listen(app.get("port"), () => {
   console.log("Listening on port", app.get("port"));

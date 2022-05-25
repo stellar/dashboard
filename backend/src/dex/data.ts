@@ -17,7 +17,7 @@ async function fetchBigQueryData(query: string) {
   }
 }
 
-async function fetchMemoizedData(key: string, query: string) {
+async function fetchCachedData(key: string, query: string) {
   try {
     const cachedData = await getOrThrow(redisClient, key);
     const output = JSON.parse(cachedData);
@@ -41,7 +41,7 @@ export async function getPaymentsData() {
     AND closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -24 HOUR) 
     AND successful is true
   `;
-  const payments = await fetchMemoizedData("dex-payments24h", query);
+  const payments = await fetchCachedData("dex-payments24h", query);
 
   return payments[0]?.data;
 }
@@ -62,9 +62,9 @@ export async function getTradeData() {
   `);
   const tradesOverall = tradesBase();
 
-  const results24h = await fetchMemoizedData("dex-trades24h", tradesQuery24h);
-  const results48h = await fetchMemoizedData("dex-trades48h", tradesQuery48h);
-  const resultsOverall = await fetchMemoizedData(
+  const results24h = await fetchCachedData("dex-trades24h", tradesQuery24h);
+  const results48h = await fetchCachedData("dex-trades48h", tradesQuery48h);
+  const resultsOverall = await fetchCachedData(
     "dex-trades-overall",
     tradesOverall,
   );
@@ -94,19 +94,19 @@ export async function getUniqueAssetsData() {
     where tl.asset_code is not null;
   `;
 
-  const payments = await fetchMemoizedData("dex-uniqueAssets", query);
+  const payments = await fetchCachedData("dex-uniqueAssets", query);
 
   return payments[0]?.data;
 }
 
 async function sumVolume(name: string, query: string) {
-  const rawData = await fetchMemoizedData(name, query);
+  const rawData = await fetchCachedData(name, query);
 
   if (!rawData) return null;
 
   //TODO: This should be removed once queries run at a reasonable time.
   const output = rawData
-    .slice(0, 100)
+    .slice(0, 1)
     .reduce(async (_prev: number, next: any): Promise<number> => {
       const asset = next["asset_name"];
       const prev = await _prev;
@@ -177,6 +177,6 @@ export async function getActiveAccountsData() {
     AND closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -24 HOUR);
   `;
 
-  const activeAccounts = await fetchMemoizedData("dex-activeAccounts", query);
+  const activeAccounts = await fetchCachedData("dex-activeAccounts", query);
   return activeAccounts[0]?.data;
 }
