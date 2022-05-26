@@ -75,27 +75,27 @@ describe("integration", () => {
       expect(body).not.toEqual("");
     });
 
-    it("/api/v2/dex/active-accounts should return a positive integer", async () => {
+    it("/api/dex/active-accounts should return a positive integer", async () => {
       const { body } = await request(app)
-        .get("/api/v2/dex/active-accounts")
+        .get("/api/dex/active-accounts")
         .expect(200);
 
       expect(body).toEqual(expect.any(Number));
       expect(body).toBeGreaterThan(0);
     });
 
-    it("/api/v2/dex/unique-assets should return a positive integer", async () => {
+    it("/api/dex/unique-assets should return a positive integer", async () => {
       const { body } = await request(app)
-        .get("/api/v2/dex/unique-assets")
+        .get("/api/dex/unique-assets")
         .expect(200);
 
       expect(body).toEqual(expect.any(Number));
       expect(body).toBeGreaterThan(0);
     });
 
-    it("/api/v2/dex/24h-trades should return an object", async () => {
+    it("/api/dex/24h-trades should return an object", async () => {
       const { body } = await request(app)
-        .get("/api/v2/dex/24h-trades")
+        .get("/api/dex/24h-trades")
         .expect(200);
 
       expect(body).toEqual(expect.any(Object));
@@ -106,9 +106,9 @@ describe("integration", () => {
       });
     });
 
-    it("/api/v2/dex/24h-payments should return an object", async () => {
+    it("/api/dex/24h-payments should return an object", async () => {
       const { body } = await request(app)
-        .get("/api/v2/dex/24h-payments")
+        .get("/api/dex/24h-payments")
         .expect(200);
 
       expect(body).toEqual(expect.any(Number));
