@@ -1,8 +1,11 @@
-import { bqClient } from "../../bigQuery";
-import { redisClient, getOrThrow } from "../../redisSetup";
+import { bqClient } from "../bigQuery";
+import { redisClient, getOrThrow } from "../redisSetup";
 import { getErrorMessage, getPrice } from "./utils";
 
 const bigQueryEndpointBase = "crypto-stellar.crypto_stellar_2";
+const cache24hKey = "dex-volume-sum-24h";
+const cache48hKey = "dex-volume-sum-48h";
+const cacheOverallKey = "dex-volume-sum-overall";
 
 async function fetchBigQueryData(query: string) {
   try {
@@ -50,15 +53,15 @@ export async function getTradeData() {
   const tradesBase = (filter = "") => `
     SELECT count(*) as data 
     FROM ${bigQueryEndpointBase}.history_trades
+    WHERE (selling_liquidity_pool_id IS NULL OR selling_liquidity_pool_id = '')
     ${filter};
   `;
   const tradesQuery24h = tradesBase(`
-    WHERE ledger_closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -24 HOUR) 
-    AND batch_run_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+    AND batch_run_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
   `);
   const tradesQuery48h = tradesBase(`
-    WHERE ledger_closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -48 HOUR) 
-    AND batch_run_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 3 DAY)
+    AND batch_run_date <= DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) 
+    AND batch_run_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) 
   `);
   const tradesOverall = tradesBase();
 
@@ -100,13 +103,16 @@ export async function getUniqueAssetsData() {
 }
 
 async function sumVolume(name: string, query: string) {
-  const rawData = await fetchCachedData(name, query);
+  const cachedOutput = await getOrThrow(redisClient, name, false);
 
-  if (!rawData) return null;
+  if (cachedOutput) {
+    return JSON.parse(cachedOutput);
+  }
 
-  //TODO: This should be removed once queries run at a reasonable time.
+  const rawData = await fetchBigQueryData(query);
+
   const output = rawData
-    .slice(0, 1)
+    .slice(0, 10)
     .reduce(async (_prev: number, next: any): Promise<number> => {
       const asset = next["asset_name"];
       const prev = await _prev;
@@ -126,6 +132,8 @@ async function sumVolume(name: string, query: string) {
           return prev + 0;
         });
     }, 0);
+
+  await redisClient.set(name, JSON.stringify(output));
   return output;
 }
 
@@ -135,13 +143,13 @@ export async function getVolumeData() {
     (
         SELECT SUM(buying_amount) AS summed_amount, CONCAT(buying_asset_code, "-", buying_asset_issuer) AS asset_name,
         FROM ${bigQueryEndpointBase}.history_trades
-        WHERE selling_liquidity_pool_id IS NULL OR selling_liquidity_pool_id = '' 
+        WHERE selling_liquidity_pool_id IS NULL
         ${filter}
         GROUP BY asset_name
             UNION ALL
         SELECT SUM(buying_amount) AS summed_amount, "native" as asset_name
         from ${bigQueryEndpointBase}.history_trades
-        WHERE selling_liquidity_pool_id IS NULL OR selling_liquidity_pool_id = '' 
+        WHERE selling_liquidity_pool_id IS NULL
         AND buying_asset_TYPE = "native" 
         ${filter}
         GROUP BY buying_asset_type
@@ -149,18 +157,25 @@ export async function getVolumeData() {
     SELECT * FROM bought_trades;
   `;
   const payments24h = baseQuery(`
-    AND ledger_closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -24 HOUR)
-    AND batch_run_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) 
+    AND batch_run_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) 
   `);
 
   const payments48h = baseQuery(`
-    AND ledger_closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -48 HOUR)
-    AND batch_run_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 3 DAY) 
+    AND batch_run_date <= DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) 
+    AND batch_run_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) 
   `);
 
-  const sum24h = await sumVolume("dex-volume-sum-24h", payments24h);
-  const sum48h = await sumVolume("dex-volume-sum-48h", payments48h);
-  const sumOverall = await sumVolume("dex-volume-sum-overall", baseQuery());
+  const has24hCache = await getOrThrow(redisClient, cache24hKey, false);
+  const has48hCache = await getOrThrow(redisClient, cache48hKey, false);
+
+  if (!has48hCache && has24hCache) {
+    await redisClient.set(cache48hKey, JSON.stringify(has24hCache));
+    await redisClient.del(cache24hKey);
+  }
+
+  const sum24h = await sumVolume(cache24hKey, payments24h);
+  const sum48h = await sumVolume(cache48hKey, payments48h);
+  const sumOverall = await sumVolume(cacheOverallKey, baseQuery());
 
   return {
     volume_last_24h: sum24h,

@@ -23,9 +23,13 @@ export const redisClient = createClient({ url: redisUrl });
   });
 })();
 
-export async function getOrThrow(rc: RedisClientType, key: string) {
+export async function getOrThrow(
+  rc: RedisClientType,
+  key: string,
+  shouldThrow: boolean = true,
+) {
   const cachedData = await rc.get(key);
-  if (cachedData == null) {
+  if (cachedData == null && shouldThrow) {
     throw new Error("redis key not found");
   }
   return cachedData;

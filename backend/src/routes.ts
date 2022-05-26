@@ -1,12 +1,11 @@
 import express from "express";
 import proxy from "express-http-proxy";
 import logger from "morgan";
-import path from "path";
 
 import * as lumens from "./lumens";
 import * as lumensV2V3 from "./v2v3/lumens";
 import * as ledgers from "./ledgers";
-import * as dex from "./v2v3/dex";
+import * as dex from "./dex";
 
 export const app = express();
 app.set("port", process.env.PORT || 5000);
