@@ -44,7 +44,7 @@ export async function getPaymentsData() {
     AND closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -24 HOUR) 
     AND successful is true
   `;
-  const payments = await fetchCachedData("dex-payments24h", query);
+  const payments = await fetchCachedData("payments24h", query);
 
   return payments[0]?.data;
 }
