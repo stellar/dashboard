@@ -72,13 +72,12 @@ export async function getTradeData() {
     tradesOverall,
   );
 
-  const previous24h = results48h[0]?.data - results24h[0]?.data;
-  const output =
-    ((previous24h - results24h[0]?.data) / results24h[0]?.data) * 100;
+  const change =
+    ((results24h[0]?.data - results48h[0]?.data) / results24h[0]?.data) * 100;
 
   return {
     trades_last_24h: results24h[0]?.data,
-    change: output.toFixed(2),
+    change,
     overall: resultsOverall[0]?.data,
   };
 }
@@ -179,8 +178,7 @@ export async function getVolumeData() {
   const sum48h = await sumVolume(cache48hKey, payments48h);
   const sumOverall = await sumVolume(cacheOverallKey, baseQuery());
 
-  const previous24h = sum48h - sum24h;
-  const change = ((previous24h - sum24h) / sum24h) * 100;
+  const change = ((sum24h - sum48h) / sum24h) * 100;
 
   return {
     volume_last_24h: sum24h,
