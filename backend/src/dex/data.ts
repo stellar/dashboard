@@ -72,8 +72,9 @@ export async function getTradeData() {
     tradesOverall,
   );
 
-  const difference = results24h[0]?.data - results48h[0]?.data;
-  const output = (difference / results24h[0]?.data) * 100;
+  const previous24h = results48h[0]?.data - results24h[0]?.data;
+  const output =
+    ((previous24h - results24h[0]?.data) / results24h[0]?.data) * 100;
 
   return {
     trades_last_24h: results24h[0]?.data,
@@ -111,9 +112,8 @@ async function sumVolume(name: string, query: string) {
 
   const rawData = await fetchBigQueryData(query);
 
-  const output = rawData
-    .slice(0, 10)
-    .reduce(async (_prev: number, next: any): Promise<number> => {
+  const output = await rawData.reduce(
+    async (_prev: number, next: any): Promise<number> => {
       const asset = next["asset_name"];
       const prev = await _prev;
       if (!asset) return prev + 0;
@@ -131,7 +131,9 @@ async function sumVolume(name: string, query: string) {
           console.error(`WARNING: Failed to fetch price for asset: "${asset}"`);
           return prev + 0;
         });
-    }, 0);
+    },
+    0,
+  );
 
   await redisClient.set(name, JSON.stringify(output));
   return output;
@@ -177,21 +179,26 @@ export async function getVolumeData() {
   const sum48h = await sumVolume(cache48hKey, payments48h);
   const sumOverall = await sumVolume(cacheOverallKey, baseQuery());
 
+  const previous24h = sum48h - sum24h;
+  const change = ((previous24h - sum24h) / sum24h) * 100;
+
   return {
     volume_last_24h: sum24h,
-    change: ((sum24h - sum48h) / sum24h) * 100,
+    change,
     overall: sumOverall,
   };
 }
 
 export async function getActiveAccountsData() {
   const query = `
-    SELECT COUNT(DISTINCT(op_source_account))
+    SELECT COUNT(DISTINCT(op_source_account)) as data
     FROM ${bigQueryEndpointBase}.enriched_history_operations 
     where type in (1, 2, 6, 13)
     AND closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -24 HOUR);
   `;
 
   const activeAccounts = await fetchCachedData("dex-activeAccounts", query);
+
+  console.log("accounts ", activeAccounts);
   return activeAccounts[0]?.data;
 }
