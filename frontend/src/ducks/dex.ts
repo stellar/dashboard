@@ -18,25 +18,15 @@ export const fetchDexDataAction = createAsyncThunk<
   { rejectValue: RejectMessage; state: RootState }
 >("dex/fetchDexDataAction", async (_, { rejectWithValue }) => {
   try {
-    const response = await fetch("api/v2/dex/all");
-    const {
-      volume,
-      tradesLast24h,
-      paymentsLast24h,
-      uniqueAssets,
-      activeAccounts,
-    } = await response.json();
+    const response = await fetch("api/dex/all");
+    const { tradesLast24H, paymentsLast24h, uniqueAssets, activeAccounts } =
+      await response.json();
 
     return {
-      volume: {
-        fluctuation: new BigNumber(volume.change).toNumber(),
-        last24HR: volume.last24h,
-        overall: volume.overall,
-      },
       trades: {
-        fluctuation: new BigNumber(tradesLast24h.change).toNumber(),
-        last24HR: tradesLast24h.trades_last_24h,
-        overall: tradesLast24h.overall,
+        fluctuation: new BigNumber(tradesLast24H.change || 0).toNumber(),
+        last24HR: tradesLast24H.trades_last_24h,
+        overall: tradesLast24H.overall,
       },
       payments24HRs: paymentsLast24h,
       totalUniqueAssets: uniqueAssets,

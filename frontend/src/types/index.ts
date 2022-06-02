@@ -81,7 +81,6 @@ export interface DexItemData {
 
 export interface DexData {
   trades: DexItemData;
-  volume: DexItemData;
   totalUniqueAssets: number;
   dailyActiveAccounts: number;
   payments24HRs: number;

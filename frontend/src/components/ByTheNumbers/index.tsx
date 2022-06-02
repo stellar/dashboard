@@ -31,11 +31,6 @@ export const ByTheNumbers = () => {
       dailyActiveAccounts: new BigNumber(data.dailyActiveAccounts).toFormat(),
       payments24HRs: new BigNumber(data.payments24HRs).toFormat(),
       totalUniqueAssets: new BigNumber(data.totalUniqueAssets).toFormat(),
-      volume: {
-        fluctuation: data.volume.fluctuation,
-        overall: new BigNumber(data.volume.overall).toFormat(),
-        last24HR: new BigNumber(data.volume.last24HR).toFormat(),
-      },
       trades: {
         fluctuation: data.trades.fluctuation,
         overall: new BigNumber(data.trades.overall).toFormat(),
@@ -47,9 +42,8 @@ export const ByTheNumbers = () => {
   return (
     <SectionCard
       title="By the Numbers"
-      titleLinkLabel="More stats"
-      // TODO: update link
-      titleLink="https://horizon.stellar.org/operations?order=desc&limit=20"
+      titleLinkLabel="API"
+      titleLink="/api/dex/all"
       isLoading={dex.status === ActionStatus.PENDING}
       noData={!dexData}
     >
@@ -62,14 +56,6 @@ export const ByTheNumbers = () => {
               last24HRValue={dexData.trades.last24HR}
               overallValue={dexData.trades.overall}
               fluctuation={dexData.trades.fluctuation}
-            />
-
-            <DexCard
-              title="DEX VOLUME"
-              icon={<Icon.BarChart width={16} height={16} />}
-              last24HRValue={`${dexData.volume.last24HR} XLM`}
-              overallValue={`${dexData.volume.overall} XLM`}
-              fluctuation={dexData.volume.fluctuation}
             />
           </div>
           <div className="ByTheNumbers__amount_cards_container">
