@@ -1,6 +1,7 @@
 {
   "extends": "@stellar/tsconfig",
   "compilerOptions": {
+    "outDir": "./build/",
     "baseUrl": "src/",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
