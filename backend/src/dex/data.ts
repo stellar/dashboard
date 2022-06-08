@@ -138,6 +138,7 @@ async function sumVolume(name: string, query: string) {
   return output;
 }
 
+//TODO: Currently unused due to a pending update to how we fetch asset prices. Once they're available we should refactor and make use of the function below again.
 export async function getVolumeData() {
   const baseQuery = (filter = "") => `
       WITH bought_trades AS
