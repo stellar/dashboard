@@ -5,9 +5,52 @@ import { Response, NextFunction } from "express";
 
 import { redisClient, getOrThrow } from "./redisSetup";
 
-import { get30DayOldLedgerQuery, bqClient, BQHistoryLedger } from "./bigQuery";
+import { getBqQueryByDate, bqClient, BQHistoryLedger } from "./bigQuery";
 
-const LEDGER_DAY_COUNT = 30;
+enum INTERVALS {
+  hour = "hour",
+  day = "day",
+  month = "month",
+}
+
+const LEDGER_ITEM_LIMIT = {
+  hour: 60,
+  day: 24,
+  month: 30,
+};
+
+const REDIS_LEDGER_KEYS = {
+  hour: "ledgers_hour",
+  day: "ledgers_day",
+  month: "ledgers",
+};
+
+const REDIS_PAGING_TOKEN_KEY = {
+  hour: "paging_token_hour",
+  day: "paging_token_day",
+  month: "paging_token",
+};
+
+const BIGQUERY_DATES = {
+  hour: getBqDate(INTERVALS.hour),
+  day: getBqDate(INTERVALS.day),
+  month: getBqDate(INTERVALS.month),
+};
+
+function getBqDate(interval: INTERVALS) {
+  const offsetByInterval = {
+    hour: (now: Date = new Date()): Date =>
+      new Date(now.setUTCHours(now.getUTCHours() - 1)),
+    day: (now: Date = new Date()): Date =>
+      new Date(now.setUTCDate(now.getUTCDate() - 1)),
+    month: (now: Date = new Date()): Date =>
+      new Date(now.setUTCMonth(now.getUTCMonth() - 1)),
+  };
+  const offset = offsetByInterval[interval]();
+  return `${offset.getFullYear()}-${
+    offset.getUTCMonth() + 1
+  }-${offset.getUTCDate()} ${offset.getUTCHours()}:${offset.getUTCMinutes()}:${offset.getUTCSeconds()}`;
+}
 
 interface LedgerStat {
   date: string;
@@ -28,14 +71,13 @@ export type LedgerRecord = {
   operation_count: number;
   /* eslint-enable camelcase */
 };
-
-const REDIS_LEDGER_KEY = "ledgers";
-const REDIS_PAGING_TOKEN_KEY = "paging_token";
 const CURSOR_NOW = "now";
 
 export async function handler(_: any, res: Response, next: NextFunction) {
+  // - attempt to fetch cached redis data
+  // - return it
   try {
-    const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEY);
+    const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.month);
     const ledgers: LedgerStat[] = JSON.parse(cachedData);
     res.json(ledgers);
   } catch (e) {
@@ -44,29 +86,40 @@ export async function handler(_: any, res: Response, next: NextFunction) {
 }
 
 export async function updateLedgers() {
-  const cachedData = (await redisClient.get(REDIS_LEDGER_KEY)) || "[]";
-  const cachedLedgers: LedgerStat[] = JSON.parse(cachedData);
+  const intervalTypes = [INTERVALS.day, INTERVALS.hour, INTERVALS.month];
 
-  // if missing data in last 30 days, catchup from last 30 days
-  let pagingToken = "";
-  if (cachedLedgers.length < LEDGER_DAY_COUNT) {
-    try {
-      const query = get30DayOldLedgerQuery();
-      const [job] = await bqClient.createQueryJob(query);
-      console.log("running bq query:", query);
-      const [ledgers]: QueryRowsResponse = await job.getQueryResults();
-      const ledger: BQHistoryLedger = ledgers[0];
-      pagingToken = String(ledger.id);
-    } catch (err) {
-      console.error("BigQuery error", err);
-      pagingToken = CURSOR_NOW;
+  for (const interval of intervalTypes) {
+    const cachedData =
+      (await redisClient.get(REDIS_LEDGER_KEYS[interval])) || "[]";
+    const cachedLedgers: LedgerStat[] = JSON.parse(cachedData);
+    let pagingToken = "";
+
+    if (cachedLedgers.length < LEDGER_ITEM_LIMIT[interval]) {
+      try {
+        console.log("DEBUG - INTERVAL: ", interval);
+        const query = getBqQueryByDate(BIGQUERY_DATES[interval]);
+        const [job] = await bqClient.createQueryJob(query);
+        console.log("running bq query:", query);
+        const [ledgers]: QueryRowsResponse = await job.getQueryResults();
+        const ledger: BQHistoryLedger = ledgers[0];
+        pagingToken = String(ledger.id);
+      } catch (err) {
+        console.error("BigQuery error", err);
+        pagingToken = CURSOR_NOW;
+      }
+      await redisClient.del(REDIS_LEDGER_KEYS[interval]);
+    } else {
+      pagingToken =
+        (await redisClient.get(REDIS_PAGING_TOKEN_KEY[interval])) || CURSOR_NOW;
     }
-    await redisClient.del(REDIS_LEDGER_KEY);
-  } else {
-    pagingToken = (await redisClient.get(REDIS_PAGING_TOKEN_KEY)) || CURSOR_NOW;
-  }
 
-  await catchup(REDIS_LEDGER_KEY, pagingToken, REDIS_PAGING_TOKEN_KEY, 0);
+    await catchup(
+      REDIS_LEDGER_KEYS[interval],
+      pagingToken,
+      REDIS_PAGING_TOKEN_KEY[interval],
+      0,
+    );
+  }
 
   const horizon = new stellarSdk.Server("https://horizon.stellar.org");
   horizon
@@ -75,7 +128,13 @@ export async function updateLedgers() {
     .limit(200)
     .stream({
       onmessage: async (ledger: LedgerRecord) => {
-        await updateCache([ledger], REDIS_LEDGER_KEY, REDIS_PAGING_TOKEN_KEY);
+        for (const interval of intervalTypes) {
+          await updateCache(
+            [ledger],
+            REDIS_LEDGER_KEYS[interval],
+            REDIS_PAGING_TOKEN_KEY[interval],
+          );
+        }
       },
     });
 }
@@ -84,8 +143,12 @@ export async function catchup(
   ledgersKey: string,
   pagingTokenStart: string,
   pagingTokenKey: string,
-  limit: number, // if 0, catchup until now
+  limit: number,
 ) {
+  // using the starting point defined previously, call for horizon records
+  // until the records end or we reach a record limit
+  // set the pointer towards the latest ledger we got
+  // update the cache with received ledgers
   const horizon = new stellarSdk.Server("https://horizon.stellar.org");
   let ledgers: LedgerRecord[] = [];
   let total = 0;
@@ -112,6 +175,17 @@ export async function updateCache(
   ledgersKey: string,
   pagingTokenKey: string,
 ) {
+  // - check for amount of ledgers
+  // - fetch cached ledgers from redis
+  // - iterate each of the received ledgers (not the ones already cached)
+  // - attempt to find a stored value for that day by it's key (the date formatted)
+  // - If you do not find that day, push new data into the array
+  // - If you do find a result, switch the new ledger in place of the old one. Sum the operation count for the day.
+  // - set the pointer towards the latest stored ledger
+  // - Sort the ledgers by most recent
+  // - store the 30 most recent ledgers
+  // - set the paging token redis variable
+  // - log the ledge update
   if (!ledgers.length) {
     console.log("no ledgers to update");
     return;
@@ -148,7 +222,7 @@ export async function updateCache(
   // only store latest 30 days
   await redisClient.set(
     ledgersKey,
-    JSON.stringify(cachedStats.slice(0, LEDGER_DAY_COUNT)),
+    JSON.stringify(cachedStats.slice(0, LEDGER_ITEM_LIMIT.month)),
   );
   await redisClient.set(pagingTokenKey, pagingToken);
 
