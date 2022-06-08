@@ -19,7 +19,6 @@ export const bqClient = new BigQuery(options);
 const BQHistoryLedgersTable = "crypto-stellar.crypto_stellar_2.history_ledgers";
 
 export function getBqQueryByDate(date: string) {
-  console.log("DEBUG - QUERY DATES - DATE NOW: ", new Date());
   return `SELECT id FROM \`${BQHistoryLedgersTable}\` WHERE closed_at >= "${date}" ORDER BY sequence LIMIT 1;`;
 }
 

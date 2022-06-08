@@ -28,6 +28,8 @@ if (process.env.DEV) {
   app.use(express.static("../frontend/build"));
 }
 
+app.get("/api/ledgers/hour/public", ledgers.handler_hour);
+app.get("/api/ledgers/day/public", ledgers.handler_day);
 app.get("/api/ledgers/public", ledgers.handler);
 app.get("/api/lumens", lumens.v1Handler);
 

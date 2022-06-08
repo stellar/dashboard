@@ -31,6 +31,14 @@ const REDIS_PAGING_TOKEN_KEY = {
   month: "paging_token",
 };
 
+const HORIZON_LIMITS = {
+  hour: 10,
+  day: 100,
+  month: 200,
+};
+
+const intervalTypes = [INTERVALS.day, INTERVALS.hour, INTERVALS.month];
+
 const BIGQUERY_DATES = {
   hour: getBqDate(INTERVALS.hour),
   day: getBqDate(INTERVALS.day),
@@ -54,28 +62,22 @@ function getBqDate(interval: INTERVALS) {
 
 interface LedgerStat {
   date: string;
-  /* eslint-disable camelcase */
   transaction_count: number;
   operation_count: number;
-  /* eslint-enable camelcase */
 }
 
 // TODO - import Horizon type once https://github.com/stellar/js-stellar-sdk/issues/731 resolved
 export type LedgerRecord = {
-  /* eslint-disable camelcase */
   closed_at: string;
   paging_token: string;
   sequence: number;
   successful_transaction_count: number;
   failed_transaction_count: number;
   operation_count: number;
-  /* eslint-enable camelcase */
 };
 const CURSOR_NOW = "now";
 
 export async function handler(_: any, res: Response, next: NextFunction) {
-  // - attempt to fetch cached redis data
-  // - return it
   try {
     const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.month);
     const ledgers: LedgerStat[] = JSON.parse(cachedData);
@@ -85,9 +87,27 @@ export async function handler(_: any, res: Response, next: NextFunction) {
   }
 }
 
-export async function updateLedgers() {
-  const intervalTypes = [INTERVALS.day, INTERVALS.hour, INTERVALS.month];
+export async function handler_day(_: any, res: Response, next: NextFunction) {
+  try {
+    const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.day);
+    const ledgers: LedgerStat[] = JSON.parse(cachedData);
+    res.json(ledgers);
+  } catch (e) {
+    next(e);
+  }
+}
 
+export async function handler_hour(_: any, res: Response, next: NextFunction) {
+  try {
+    const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.hour);
+    const ledgers: LedgerStat[] = JSON.parse(cachedData);
+    res.json(ledgers);
+  } catch (e) {
+    next(e);
+  }
+}
+
+export async function updateLedgers() {
   for (const interval of intervalTypes) {
     const cachedData =
       (await redisClient.get(REDIS_LEDGER_KEYS[interval])) || "[]";
@@ -96,7 +116,6 @@ export async function updateLedgers() {
 
     if (cachedLedgers.length < LEDGER_ITEM_LIMIT[interval]) {
       try {
-        console.log("DEBUG - INTERVAL: ", interval);
         const query = getBqQueryByDate(BIGQUERY_DATES[interval]);
         const [job] = await bqClient.createQueryJob(query);
         console.log("running bq query:", query);
@@ -118,6 +137,7 @@ export async function updateLedgers() {
       pagingToken,
       REDIS_PAGING_TOKEN_KEY[interval],
       0,
+      interval,
     );
   }
 
@@ -141,51 +161,45 @@ export async function updateLedgers() {
 
 export async function catchup(
   ledgersKey: string,
-  pagingTokenStart: string,
+  pagingToken: string,
   pagingTokenKey: string,
   limit: number,
+  interval: INTERVALS = INTERVALS.month,
+  total: number = 0,
 ) {
-  // using the starting point defined previously, call for horizon records
-  // until the records end or we reach a record limit
-  // set the pointer towards the latest ledger we got
-  // update the cache with received ledgers
   const horizon = new stellarSdk.Server("https://horizon.stellar.org");
+  const resp = await horizon
+    .ledgers()
+    .cursor(pagingToken)
+    .limit(HORIZON_LIMITS[interval])
+    .call();
   let ledgers: LedgerRecord[] = [];
-  let total = 0;
-  let pagingToken = pagingTokenStart;
 
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    // eslint-disable-next-line no-await-in-loop
-    const resp = await horizon.ledgers().cursor(pagingToken).limit(200).call();
-    ledgers = resp.records;
-    total += resp.records.length;
-    if (ledgers.length === 0 || (limit && total > limit)) {
-      break;
-    }
+  ledgers = resp.records;
+  total += resp.records.length;
 
-    pagingToken = ledgers[ledgers.length - 1].paging_token;
-    // eslint-disable-next-line no-await-in-loop
-    await updateCache(ledgers, ledgersKey, pagingTokenKey);
+  if (ledgers.length === 0 || (limit && total > limit)) {
+    return;
   }
+  pagingToken = ledgers[ledgers.length - 1].paging_token;
+  await updateCache(ledgers, ledgersKey, pagingTokenKey, interval);
+
+  await catchup(
+    ledgersKey,
+    pagingToken,
+    pagingTokenKey,
+    limit,
+    interval,
+    total,
+  );
 }
 
 export async function updateCache(
   ledgers: LedgerRecord[],
   ledgersKey: string,
   pagingTokenKey: string,
+  interval = INTERVALS.month,
 ) {
-  // - check for amount of ledgers
-  // - fetch cached ledgers from redis
-  // - iterate each of the received ledgers (not the ones already cached)
-  // - attempt to find a stored value for that day by it's key (the date formatted)
-  // - If you do not find that day, push new data into the array
-  // - If you do find a result, switch the new ledger in place of the old one. Sum the operation count for the day.
-  // - set the pointer towards the latest stored ledger
-  // - Sort the ledgers by most recent
-  // - store the 30 most recent ledgers
-  // - set the paging token redis variable
-  // - log the ledge update
   if (!ledgers.length) {
     console.log("no ledgers to update");
     return;
@@ -195,7 +209,7 @@ export async function updateCache(
   let pagingToken = "";
 
   ledgers.forEach((ledger: LedgerRecord) => {
-    const date: string = formatDate(ledger.closed_at);
+    const date: string = getLedgerKey[interval](ledger.closed_at);
     const index: number = findIndex(cachedStats, { date });
     if (index === -1) {
       cachedStats.push({
@@ -219,10 +233,9 @@ export async function updateCache(
   });
   cachedStats.sort(dateSorter);
 
-  // only store latest 30 days
   await redisClient.set(
     ledgersKey,
-    JSON.stringify(cachedStats.slice(0, LEDGER_ITEM_LIMIT.month)),
+    JSON.stringify(cachedStats.slice(0, LEDGER_ITEM_LIMIT[interval])),
   );
   await redisClient.set(pagingTokenKey, pagingToken);
 
@@ -250,3 +263,13 @@ function formatDate(s: string): string {
   const day = `0${d.getUTCDate()}`;
   return `${month.slice(-2)}-${day.slice(-2)}`;
 }
+
+const getLedgerKey = {
+  hour: (closed_at: string) =>
+    `${formatDate(closed_at)} ${new Date(closed_at).getUTCHours()}H:${new Date(
+      closed_at,
+    ).getUTCMinutes()}M`,
+  day: (closed_at: string) =>
+    `${formatDate(closed_at)} ${new Date(closed_at).getUTCHours()}H`,
+  month: (closed_at: string) => `${formatDate(closed_at)}`,
+};
