@@ -2,6 +2,7 @@ import { ReactNode, useMemo } from "react";
 import { Card, Heading4, Tag, Eyebrow } from "@stellar/design-system";
 
 import "./styles.scss";
+import BigNumber from "bignumber.js";
 
 type Props = {
   title: string;
@@ -20,7 +21,7 @@ export const DexCard = ({
 }: Props) => {
   const fluctuationLabel = useMemo(() => {
     const sign = fluctuation > 0 ? "+" : "";
-    const label = `${sign}${fluctuation}%`;
+    const label = `${sign}${new BigNumber(fluctuation).toFormat(2)}%`;
     let variant = Tag.variant.warning;
     if (fluctuation > 0) {
       variant = Tag.variant.success;
