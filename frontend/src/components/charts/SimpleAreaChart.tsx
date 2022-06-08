@@ -11,7 +11,7 @@ type Props = {
 };
 
 /**
- * Area chart component. It is used to display a chart with a series-based data.
+ * Simple Area chart component. It is used to display a chart with a series-based data.
  * The series should be an array of objects with the following properties:
  *
  * - name: string
@@ -21,7 +21,7 @@ type Props = {
  *
  * The width and height of the chart are based on the parent container, and the chart take 100% of the space.
  */
-export const AreaChart = ({ data }: Props) => {
+export const SimpleAreaChart = ({ data }: Props) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <RechartsArea data={data}>
