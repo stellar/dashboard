@@ -4,7 +4,6 @@ import {
   getPaymentsData,
   getTradeData,
   getUniqueAssetsData,
-  getVolumeData,
 } from "./data";
 
 export async function get24hPaymentsData(
@@ -43,14 +42,6 @@ export async function getUniqueAssets(
   }
 }
 
-export async function getVolume(_: any, res: Response, next: NextFunction) {
-  try {
-    return res.json(await getVolumeData());
-  } catch (e) {
-    next(e);
-  }
-}
-
 export async function getActiveAccounts(
   _: any,
   res: Response,
@@ -66,7 +57,6 @@ export async function getActiveAccounts(
 export async function getAll(_: any, res: Response, next: NextFunction) {
   try {
     return res.json({
-      volume: await getVolumeData(),
       tradesLast24H: await getTradeData(),
       paymentsLast24h: await getPaymentsData(),
       uniqueAssets: await getUniqueAssetsData(),

@@ -34,7 +34,6 @@ app.get("/api/lumens", lumens.v1Handler);
 app.get("/api/dex/24h-payments", dex.get24hPaymentsData);
 app.get("/api/dex/24h-trades", dex.getDexTrades24hData);
 app.get("/api/dex/unique-assets", dex.getUniqueAssets);
-app.get("/api/dex/volume", dex.getVolume);
 app.get("/api/dex/active-accounts", dex.getActiveAccounts);
 app.get("/api/dex/all", dex.getAll);
 
