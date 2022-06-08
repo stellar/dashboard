@@ -1,11 +1,11 @@
 import express from "express";
 import proxy from "express-http-proxy";
 import logger from "morgan";
-import path from "path";
 
 import * as lumens from "./lumens";
 import * as lumensV2V3 from "./v2v3/lumens";
 import * as ledgers from "./ledgers";
+import * as dex from "./dex";
 
 export const app = express();
 app.set("port", process.env.PORT || 5000);
@@ -30,6 +30,12 @@ if (process.env.DEV) {
 
 app.get("/api/ledgers/public", ledgers.handler);
 app.get("/api/lumens", lumens.v1Handler);
+
+app.get("/api/dex/24h-payments", dex.get24hPaymentsData);
+app.get("/api/dex/24h-trades", dex.getDexTrades24hData);
+app.get("/api/dex/unique-assets", dex.getUniqueAssets);
+app.get("/api/dex/active-accounts", dex.getActiveAccounts);
+app.get("/api/dex/all", dex.getAll);
 
 app.get("/api/v2/lumens", lumensV2V3.v2Handler);
 /* For CoinMarketCap */
