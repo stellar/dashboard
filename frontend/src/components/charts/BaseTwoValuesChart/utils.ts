@@ -1,7 +1,7 @@
 import {
   TimeRange,
-  VerticalBarChartProps,
-  VerticalBarChartTooltipInnerProps,
+  BaseTwoValuesChartProps,
+  BaseTwoValuesChartTooltipInnerProps,
 } from "./types";
 import { TooltipData } from "../Tooltip";
 import {
@@ -79,21 +79,25 @@ export const dateFormatter = (range: TimeRange, date: Date) => {
 /**
  * Helper function to get the props to be used in the tooltip component.
  *
- * It gets the props from the default Recharts Tooltip component, and the `TimeRange` and
- * `tooltipClassName` props.
+ * It gets the props from the default Recharts Tooltip component, and the `TimeRange`,
+ * `tooltipClassName` and `primaryValueOnly` props.
  *
  * It returns an object containing the props to be used in the ChartTooltip component (our Tooltip, not Recharts' one).
  *
  * @see {@link https://recharts.org/en-US/api/Tooltip}
- * @see VerticalBarChartProps.timeRange
- * @see VerticalBarChartProps.tooltipClassName
+ * @see BaseTwoValuesChartProps.timeRange
+ * @see BaseTwoValuesChartProps.tooltipClassName
  */
 export const getTooltipProps = (
-  { active, label, payload }: VerticalBarChartTooltipInnerProps,
+  { active, label, payload }: BaseTwoValuesChartTooltipInnerProps,
   {
     timeRange = TimeRange.HOUR,
     tooltipClassName,
-  }: Pick<VerticalBarChartProps, "timeRange" | "tooltipClassName">,
+    primaryValueOnly,
+  }: Pick<
+    BaseTwoValuesChartProps,
+    "timeRange" | "tooltipClassName" | "primaryValueOnly"
+  >,
 ) => {
   const [primaryData, secondaryData] = payload!;
 
@@ -106,7 +110,9 @@ export const getTooltipProps = (
   }
 
   const primaryLabel = new BigNumber(primaryData.value!).toFormat();
-  const secondaryLabel = new BigNumber(secondaryData.value!).toFormat();
+  const secondaryLabel = primaryValueOnly
+    ? null
+    : new BigNumber(secondaryData?.value!).toFormat();
 
   return {
     data: [
@@ -114,10 +120,12 @@ export const getTooltipProps = (
         label: primaryLabel,
         fill: primaryData?.fill,
       },
-      {
-        label: secondaryLabel,
-        fill: secondaryData?.fill,
-      },
+      primaryValueOnly
+        ? null
+        : {
+            label: secondaryLabel,
+            fill: secondaryData?.fill,
+          },
     ] as TooltipData,
     active,
     tooltipTitle,
@@ -138,13 +146,13 @@ const EMPTY_TIME_RANGE_PROPS = {
  * @returns An object containing the attribute `ticks`, which is an Array/Tuple of 5 ticks (dates),
  *      and the attribute `domain`, which is a Tuple of 2 dates - the start and the end of the domain
  *
- * @see VerticalBarChartProps.timeRange
- * @see VerticalBarChartProps.baseStartDate
+ * @see BaseTwoValuesChartProps.timeRange
+ * @see BaseTwoValuesChartProps.baseStartDate
  */
 export const getTimeRangeProps = ({
   timeRange,
   baseStartDate,
-}: Pick<VerticalBarChartProps, "timeRange" | "baseStartDate">) => {
+}: Pick<BaseTwoValuesChartProps, "timeRange" | "baseStartDate">) => {
   if (!timeRange) {
     return EMPTY_TIME_RANGE_PROPS;
   }
