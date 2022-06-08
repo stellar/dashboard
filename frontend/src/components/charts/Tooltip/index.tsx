@@ -58,17 +58,19 @@ export const Tooltip = ({
                   {tooltipTitle}
                 </div>
               )}
-              {data.map((entry) => (
-                <div key={entry.label} className="ChartTooltip__content__row">
-                  <div
-                    className="ChartTooltip__content__row__circle"
-                    style={{
-                      backgroundColor: entry.fill,
-                    }}
-                  ></div>
-                  <div>{entry.label}</div>
-                </div>
-              ))}
+              {data
+                .filter((entry) => !!entry)
+                .map((entry) => (
+                  <div key={entry.label} className="ChartTooltip__content__row">
+                    <div
+                      className="ChartTooltip__content__row__circle"
+                      style={{
+                        backgroundColor: entry.fill,
+                      }}
+                    ></div>
+                    <div>{entry.label}</div>
+                  </div>
+                ))}
             </div>
           }
           position={StellarTooltip.position.RIGHT}
