@@ -1,4 +1,6 @@
-.VerticalBarChart {
+@import "~styles/functions";
+
+.BaseTwoValuesChart {
   li::before {
     content: "";
   }
@@ -28,5 +30,11 @@
 
   &__y_axis_tick {
     transform: translateY(4px);
+  }
+
+  &__max_label {
+    @include stroke(1, var(--pal-background-primary));
+
+    fill: var(--pal-text-secondary);
   }
 }

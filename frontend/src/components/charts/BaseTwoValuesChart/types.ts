@@ -1,35 +1,35 @@
-import { SVGProps } from "react";
+import { ReactNode, SVGProps } from "react";
 import { XAxisProps } from "recharts";
 
 /**
- * Item for the VerticalBarChart data
+ * Item for the BaseTwoValuesChart data
  *
  * @prop {Date} date - X-Axis value - Used to group bars
- * @prop {number} primaryValue - Y-Axis primary bar value
- * @prop {number} secondaryValue - Y-Axis secondary bar value
+ * @prop {number} primaryValue - Y-Axis primary value
+ * @prop {number} secondaryValue - Y-Axis secondary value
  * @prop {string} [tooltipTitle] - It will be used as
- *    the tooltip title for the group of bars. If not provided,
+ *    the tooltip title for the group of values. If not provided,
  *    the title will be the date of the group.
  * @prop {string} [tooltipSubtitle] - It will be used as
  *    the tooltip subtitle for the group of bars.
  */
-export type VerticalBarChartDataItem = {
+export type BaseTwoValuesChartItem = {
   tooltipTitle?: string;
   tooltipSubtitle?: string;
   date: Date;
   primaryValue: number;
-  secondaryValue: number;
+  secondaryValue?: number;
 };
 
-export type VerticalBarChartData = VerticalBarChartDataItem[];
+export type BaseTwoValuesChartData = BaseTwoValuesChartItem[];
 
 export type ChartItemPayload = {
   value: number;
   fill: string;
-  payload: VerticalBarChartDataItem;
+  payload: BaseTwoValuesChartItem;
 };
 
-export type VerticalBarChartTooltipInnerProps = {
+export type BaseTwoValuesChartTooltipInnerProps = {
   active?: boolean;
   label?: Date;
   payload?: ChartItemPayload[];
@@ -46,7 +46,7 @@ export type LegendContentProps = {
 };
 
 /**
- * Enum for time range of VerticalBarChart.
+ * Enum for time range of BaseTwoValuesChart.
  */
 export enum TimeRange {
   HOUR = "hour",
@@ -54,7 +54,18 @@ export enum TimeRange {
   MONTH = "month",
 }
 
-export type VerticalBarChartProps = {
+/**
+ * @see BaseTwoValuesChartProps.data
+ * @see BaseTwoValuesChartProps.tooltipClassName
+ * @see BaseTwoValuesChartProps.timeRange
+ * @see BaseTwoValuesChartProps.baseStartDate
+ * @see BaseTwoValuesChartProps.primaryValueOnly
+ * @see BaseTwoValuesChartProps.children
+ * @see BaseTwoValuesChartProps.maxLine
+ * @see BaseTwoValuesChartProps.maxLineOffset
+ * @see BaseTwoValuesChartProps.xContentPaddingEnabled
+ */
+export type BaseTwoValuesChartProps = {
   /**
    * Data to be displayed in the chart.
    *
@@ -64,10 +75,11 @@ export type VerticalBarChartProps = {
    * - primaryValue
    * - secondaryValue
    * - tooltipTitle
+   * - tooltipSubtitle
    *
-   * @see VerticalBarChartDataItem
+   * @see BaseTwoValuesChartItem
    */
-  data: VerticalBarChartData;
+  data: BaseTwoValuesChartData;
   /**
    * Custom CSS class name for the tooltip component.
    */
@@ -108,4 +120,33 @@ export type VerticalBarChartProps = {
    * Date to be used as the base for the X-Axis ticks.
    */
   baseStartDate?: Date;
+  /**
+   * Flag that says if we should use just the primary value to render the bars.
+   */
+  primaryValueOnly?: boolean;
+  /**
+   * Content of the chart. Should be composed by Recharts components.
+   */
+  children?: ReactNode;
+  /**
+   * If the "max line" should be rendered. It can be a boolean, or a number. If `true`,
+   * the max line value will be the max value of the chart, calculated from `primaryValue`
+   * and `secondaryValue`. If a number is provided, it will be used as the max line value.
+   *
+   * @default false
+   */
+  maxLine?: number | boolean;
+  /**
+   * Offset to apply to the top of max line. It has impact on the data domain of Y-Axis.
+   *
+   * @default 0
+   */
+  maxLineOffset?: number;
+  /**
+   * If the X-Axis should have a padding or not, useful to avoid unwanted spacing on
+   * area charts.
+   *
+   * @default false
+   */
+  xContentPaddingEnabled?: boolean;
 };
