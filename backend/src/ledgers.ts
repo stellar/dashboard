@@ -169,10 +169,6 @@ export async function catchup(
   interval,
   total: number = 0,
 ) {
-  // using the starting point defined previously, call for horizon records
-  // until the records end or we reach a record limit
-  // set the pointer towards the latest ledger we got
-  // update the cache with received ledgers
   const horizon = new stellarSdk.Server("https://horizon.stellar.org");
   const resp = await horizon
     .ledgers()
@@ -206,17 +202,6 @@ export async function updateCache(
   pagingTokenKey: string,
   interval,
 ) {
-  // - check for amount of ledgers
-  // - fetch cached ledgers from redis
-  // - iterate each of the received ledgers (not the ones already cached)
-  // - attempt to find a stored value for that day by it's key (the date formatted)
-  // - If you do not find that day, push new data into the array
-  // - If you do find a result, switch the new ledger in place of the old one. Sum the operation count for the day.
-  // - set the pointer towards the latest stored ledger
-  // - Sort the ledgers by most recent
-  // - store the 30 most recent ledgers
-  // - set the paging token redis variable
-  // - log the ledge update
   if (!ledgers.length) {
     console.log("no ledgers to update");
     return;
