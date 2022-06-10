@@ -64,6 +64,7 @@ interface LedgerStat {
   date: string;
   transaction_count: number;
   operation_count: number;
+  sequence: number;
 }
 
 // TODO - import Horizon type once https://github.com/stellar/js-stellar-sdk/issues/731 resolved
@@ -214,6 +215,7 @@ export async function updateCache(
     if (index === -1) {
       cachedStats.push({
         date,
+        sequence: ledger.sequence,
         transaction_count:
           ledger.successful_transaction_count + ledger.failed_transaction_count,
         operation_count: ledger.operation_count,
@@ -221,6 +223,7 @@ export async function updateCache(
     } else {
       cachedStats.splice(index, 1, {
         date,
+        sequence: ledger.sequence,
         transaction_count:
           cachedStats[index].transaction_count +
           ledger.successful_transaction_count +
