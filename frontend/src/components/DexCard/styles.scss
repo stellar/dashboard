@@ -1,0 +1,48 @@
+.DexCard {
+  flex: 1;
+
+  &__card_title {
+    color: var(--pal-text-tertiary);
+    font-weight: var(--font-weight-medium);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-bottom: 2.5rem;
+
+    &__title {
+      margin-left: 0.4rem;
+    }
+  }
+
+  &__last_info {
+    color: var(--pal-text-tertiary);
+
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--pal-border-primary);
+
+    &__content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-top: 0.4rem;
+
+      .Tag {
+        margin-left: 0.4rem;
+      }
+    }
+  }
+
+  &__overall_info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    &__label {
+      color: var(--pal-text-tertiary);
+    }
+  }
+}

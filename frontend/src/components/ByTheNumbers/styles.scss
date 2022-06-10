@@ -1,2 +1,18 @@
 .ByTheNumbers {
+  &__cards_row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  &__dex_cards_container {
+    @extend .ByTheNumbers__cards_row;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  &__amount_cards_container {
+    @extend .ByTheNumbers__cards_row;
+    gap: 1rem;
+  }
 }
