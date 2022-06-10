@@ -1745,12 +1745,10 @@ event-target-shim@^5.0.0:
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
-eventsource@^1.0.7:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/eventsource/-/eventsource-1.1.0.tgz#00e8ca7c92109e94b0ddf32dac677d841028cfaf"
-  integrity sha512-VSJjT5oCNrFvCS6igjzPAt5hBzQ2qPBFIbJ03zLI9SE0mxwZpMw6BfJrbFHm1a141AavMEB8JHmBhWAd66PfCg==
-  dependencies:
-    original "^1.0.0"
+eventsource@^1.1.1:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/eventsource/-/eventsource-1.1.2.tgz#bc75ae1c60209e7cb1541231980460343eaea7c2"
+  integrity sha512-xAH3zWhgO2/3KIniEKYPr8plNSzlGINOUqYj0m0u7AB81iRw8b/3E73W6AuU+6klLbaSFmZnaETQ2lXPfAydrA==
 
 execa@^5.0.0:
   version "5.1.1"
@@ -3244,13 +3242,6 @@ optionator@^0.8.1:
     type-check "~0.3.2"
     word-wrap "~1.2.3"
 
-original@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/original/-/original-1.0.2.tgz#e442a61cffe1c5fd20a65f3261c26663b303f25f"
-  integrity sha512-hyBVl6iqqUOJ8FqRe+l/gS8H+kKYjrEndd5Pm1MfBtsEKA038HkkdbAl/72EAXGyonD/PFsvmVG+EvcIpliMBg==
-  dependencies:
-    url-parse "^1.4.3"
-
 p-cancelable@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-1.1.0.tgz#d078d15a3af409220c886f1d9a0ca2e441ab26cc"
@@ -3461,11 +3452,6 @@ qs@6.9.3:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.3.tgz#bfadcd296c2d549f1dffa560619132c977f5008e"
   integrity sha512-EbZYNarm6138UKKq46tdx08Yo/q9ZhFoAXAI1meAFd2GtbRDhbZY2WQSICskT0c5q99aFzLG1D4nvTk9tqfXIw==
 
-querystringify@^2.1.1:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
-  integrity sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==
-
 randombytes@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
@@ -3549,11 +3535,6 @@ require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
   integrity sha1-jGStX9MNqxyXbiNE/+f3kqam30I=
-
-requires-port@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
-  integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
 resolve-cwd@^3.0.0:
   version "3.0.0"
@@ -3769,10 +3750,10 @@ statuses@2.0.1:
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-2.0.1.tgz#55cb000ccf1d48728bd23c685a063998cf1a1b63"
   integrity sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==
 
-stellar-base@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-8.0.0.tgz#619e5fb7951fa8abb26322e51e611169a5d1cf62"
-  integrity sha512-MH0V94Hn/Ekq/yZxd+EQijkvfU+21zuqJAyEP8X+fhRR0IQYwGNByY003oLqIkgwqXotyofEQ76W5MoNFZmlpw==
+stellar-base@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-8.0.1.tgz#094ba419c07eec9d698bdcdae0c777c959102eee"
+  integrity sha512-IB7GxyAF59jHmY0jyX5vxzD5k7AJLTGSelRIcjJZwsENsqa7tNWEh9HpnmYGvCgdeG2D+MxaeR5fouEvElaH8A==
   dependencies:
     base32.js "^0.1.0"
     bignumber.js "^4.0.0"
@@ -3784,10 +3765,10 @@ stellar-base@^8.0.0:
   optionalDependencies:
     sodium-native "^3.3.0"
 
-stellar-sdk@^10.1.0:
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/stellar-sdk/-/stellar-sdk-10.1.0.tgz#91cf9ed3c84c9a9d4c8aaa6cca29bd997b7c778a"
-  integrity sha512-8PTKuyrQ5bIbsyrLav+JE/c+rrLynBygiB4dpvG30ou7K8P6a5ainmGyVMbCzlz1OkKWoaAW5rJAkl3RhlTZkA==
+stellar-sdk@^10.1.1:
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/stellar-sdk/-/stellar-sdk-10.1.2.tgz#90660ea213122669c28f18d4c1817bd68695ff8f"
+  integrity sha512-JfnyeKZp0X+0k3juGlKvzZDvGLvMIsIhkIdzoTozQaBjfy+7cpR/R/MH6do/5LrJuLXRodDRwjZs8UWtaKBCIQ==
   dependencies:
     "@types/eventsource" "^1.1.2"
     "@types/node" ">= 8"
@@ -3797,10 +3778,10 @@ stellar-sdk@^10.1.0:
     bignumber.js "^4.0.0"
     detect-node "^2.0.4"
     es6-promise "^4.2.4"
-    eventsource "^1.0.7"
+    eventsource "^1.1.1"
     lodash "^4.17.21"
     randombytes "^2.1.0"
-    stellar-base "^8.0.0"
+    stellar-base "^8.0.1"
     toml "^2.3.0"
     tslib "^1.10.0"
     urijs "^1.19.1"
@@ -4169,14 +4150,6 @@ url-parse-lax@^3.0.0:
   integrity sha1-FrXK/Afb42dsGxmZF3gj1lA6yww=
   dependencies:
     prepend-http "^2.0.0"
-
-url-parse@^1.4.3:
-  version "1.5.10"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.10.tgz#9d3c2f736c1d75dd3bd2be507dcc111f1e2ea9c1"
-  integrity sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==
-  dependencies:
-    querystringify "^2.1.1"
-    requires-port "^1.0.0"
 
 util-deprecate@^1.0.1:
   version "1.0.2"
