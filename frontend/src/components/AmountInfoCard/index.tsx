@@ -23,21 +23,23 @@ export const AmountInfoCard = ({
   <div className="AmountInfoCard">
     <Card noShadow>
       <div className="AmountInfoCard__card_title">
-        {titleIcon}
+        {!!titleIcon && (
+          <div className="AmountInfoCard__card_title__icon">{titleIcon}</div>
+        )}
         <div className="AmountInfoCard__card_title__title">{title}</div>
       </div>
       <div className="AmountInfoCard__content">
         {amountPrefixContent}
         <Heading5>
           {amount}
-          {amountBy && (
+          {!!amountBy && (
             <span className="AmountInfoCard__content__amount_by">
               {amountBy}
             </span>
           )}
         </Heading5>
       </div>
-      {description && (
+      {!!description && (
         <div className="AmountInfoCard__description">{description}</div>
       )}
     </Card>

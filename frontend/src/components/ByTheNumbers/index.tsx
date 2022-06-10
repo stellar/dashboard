@@ -61,17 +61,17 @@ export const ByTheNumbers = () => {
           <div className="ByTheNumbers__amount_cards_container">
             <AmountInfoCard
               title="Total Unique Assets"
-              titleIcon={<Icon.Database width={16} height={16} />}
+              titleIcon={<Icon.Database />}
               amount={dexData.totalUniqueAssets}
             />
             <AmountInfoCard
               title="Daily active accounts"
-              titleIcon={<Icon.User width={16} height={16} />}
+              titleIcon={<Icon.User />}
               amount={dexData.dailyActiveAccounts}
             />
             <AmountInfoCard
               title="24HR Payments"
-              titleIcon={<Icon.ChevronsRight width={16} height={16} />}
+              titleIcon={<Icon.ChevronsRight />}
               amount={dexData.payments24HRs}
             />
           </div>

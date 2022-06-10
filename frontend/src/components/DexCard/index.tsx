@@ -1,8 +1,8 @@
 import { ReactNode, useMemo } from "react";
 import { Card, Heading4, Tag, Eyebrow } from "@stellar/design-system";
+import BigNumber from "bignumber.js";
 
 import "./styles.scss";
-import BigNumber from "bignumber.js";
 
 type Props = {
   title: string;
