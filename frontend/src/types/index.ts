@@ -17,6 +17,15 @@ export interface LedgersInitialState {
   lastLedgerRecords: LedgerItem[];
   protocolVersion: number | null;
   ledgerClosedTimes: string[];
+  ledgerTransactionsHistory: {
+    items: LedgerTransactionHistoryItem[];
+    average: {
+      txTransactionSuccess: number;
+      txTransactionError: number;
+      opCount: number;
+      closeTimeAvg: number;
+    };
+  };
   averageClosedTime: number | null;
   isStreaming: boolean;
   status: ActionStatus | undefined;
@@ -179,3 +188,16 @@ export type LedgerItem = {
   protocolVersion: number;
   closedTime: number;
 };
+
+export type LedgerTransactionHistoryItem = {
+  date: Date;
+  txTransactionCount: number;
+  opCount: number;
+  sequence: number;
+};
+
+export enum LedgerTransactionHistoryFilterType {
+  "30D" = "30D",
+  "24H" = "24H",
+  "1H" = "1H",
+}

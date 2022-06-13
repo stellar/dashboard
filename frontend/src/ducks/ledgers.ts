@@ -2,7 +2,10 @@ import StellarSdk from "stellar-sdk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { RootState } from "config/store";
-import { networkConfig } from "constants/settings";
+import {
+  ledgerTransactionHistoryConfig,
+  networkConfig,
+} from "constants/settings";
 import { getErrorString } from "helpers/getErrorString";
 import { getAverageLedgerClosedTime } from "helpers/getAverageLedgerClosedTime";
 import { getLedgerClosedTimes } from "helpers/getLedgerClosedTimes";
@@ -15,6 +18,7 @@ import {
   Network,
   LedgerRecord,
   LedgerItem,
+  LedgerTransactionHistoryFilterType,
 } from "types";
 
 const LIMIT = 200;
@@ -81,6 +85,50 @@ export const fetchLedgersAction = createAsyncThunk<
   }
 });
 
+type FetchLedgersTransactionsHistoryActionParams = {
+  network: Network;
+  filter: LedgerTransactionHistoryFilterType;
+};
+
+type FetchLedgersTransactionsHistoryActionResponse =
+  LedgersInitialState["ledgerTransactionsHistory"];
+
+export const fetchLedgersTransactionsHistoryAction = createAsyncThunk<
+  FetchLedgersTransactionsHistoryActionResponse,
+  FetchLedgersTransactionsHistoryActionParams,
+  { rejectValue: RejectMessage; state: RootState }
+>(
+  "ledgers/fetchLedgersTransactionsHistoryAction",
+  async ({ network, filter }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `/api/ledgers${ledgerTransactionHistoryConfig[filter]}/public${networkConfig[network].ledgerTransactionsHistorySuffix}`,
+      );
+
+      const data = await response.json();
+
+      return {
+        items: data.map((item: Record<string, unknown>) => ({
+          date: item.date,
+          txTransactionCount: item.transaction_successful_count,
+          opCount: item.operation_count,
+          sequence: item.sequence,
+        })),
+        average: {
+          txTransactionSuccess: data.average_transaction_success,
+          txTransactionError: data.average_transaction_error,
+          opCount: data.average_operations,
+          closeTimeAvg: data.average_close_time,
+        },
+      };
+    } catch (error) {
+      return rejectWithValue({
+        errorString: getErrorString(error),
+      });
+    }
+  },
+);
+
 export const startLedgerStreamingAction = createAsyncThunk<
   { isStreaming: boolean },
   Network,
@@ -134,6 +182,10 @@ const initialState: LedgersInitialState = {
   lastLedgerRecords: [],
   protocolVersion: null,
   ledgerClosedTimes: [],
+  ledgerTransactionsHistory: {
+    items: [],
+    average: {} as FetchLedgersTransactionsHistoryActionResponse["average"],
+  },
   averageClosedTime: null,
   isStreaming: false,
   status: undefined,
@@ -187,6 +239,26 @@ const ledgersSlice = createSlice({
       state.status = ActionStatus.ERROR;
       state.errorString = action.payload?.errorString;
     });
+    builder.addCase(
+      fetchLedgersTransactionsHistoryAction.pending,
+      (state = initialState) => {
+        state.status = ActionStatus.PENDING;
+      },
+    );
+    builder.addCase(
+      fetchLedgersTransactionsHistoryAction.fulfilled,
+      (state, action) => {
+        state.ledgerTransactionsHistory = action.payload;
+        state.status = ActionStatus.SUCCESS;
+      },
+    );
+    builder.addCase(
+      fetchLedgersTransactionsHistoryAction.rejected,
+      (state, action) => {
+        state.status = ActionStatus.ERROR;
+        state.errorString = action.payload?.errorString;
+      },
+    );
   },
 });
 

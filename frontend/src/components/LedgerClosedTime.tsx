@@ -20,7 +20,7 @@ const getLedgerClosedStatus = (closedTime: number) => {
 
 type Props = { closedTime: number; showPrefix?: boolean };
 
-export const LedgerClosedTime = ({ closedTime, showPrefix }: Props) => (
+export const LedgerClosedTime = ({ closedTime, showPrefix = true }: Props) => (
   <div className="LedgerClosedTime">
     {showPrefix && <span>closed in {closedTime}s</span>}
     <Icon.Clock
@@ -28,7 +28,3 @@ export const LedgerClosedTime = ({ closedTime, showPrefix }: Props) => (
     />
   </div>
 );
-
-LedgerClosedTime.defaultProps = {
-  showPrefix: true,
-};
