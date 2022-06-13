@@ -211,7 +211,7 @@ export async function updateCache(
   let pagingToken = "";
 
   ledgers.forEach((ledger: LedgerRecord) => {
-    const date: string = getLedgerKey[interval](ledger.closed_at);
+    const date: string = getLedgerKey[interval](new Date(ledger.closed_at));
     const index: number = findIndex(cachedStats, { date });
     if (index === -1) {
       cachedStats.push({
@@ -260,20 +260,17 @@ function dateSorter(a: LedgerStat, b: LedgerStat) {
   return dateB.getTime() - dateA.getTime();
 }
 
-// MM-DD
-function formatDate(s: string): string {
-  const d = new Date(s);
-  const month = `0${d.getUTCMonth() + 1}`;
-  const day = `0${d.getUTCDate()}`;
-  return `${month.slice(-2)}-${day.slice(-2)}`;
-}
-
 const getLedgerKey = {
-  hour: (closed_at: string) =>
-    `${formatDate(closed_at)} ${new Date(closed_at).getUTCHours()}H:${new Date(
-      closed_at,
-    ).getUTCMinutes()}M`,
-  day: (closed_at: string) =>
-    `${formatDate(closed_at)} ${new Date(closed_at).getUTCHours()}H`,
-  month: (closed_at: string) => `${formatDate(closed_at)}`,
+  hour: (closed_at: Date) =>
+    `${closed_at.getUTCFullYear()}-${
+      closed_at.getUTCMonth() + 1
+    }-${closed_at.getUTCDate()} ${closed_at.getUTCHours()}:${closed_at.getUTCMinutes()}:00`,
+  day: (closed_at: Date) =>
+    `${closed_at.getUTCFullYear()}-${
+      closed_at.getUTCMonth() + 1
+    }-${closed_at.getUTCDate()} ${closed_at.getUTCHours()}:00:00`,
+  month: (closed_at: Date) =>
+    `${closed_at.getUTCFullYear()}-${
+      closed_at.getUTCMonth() + 1
+    }-${closed_at.getUTCDate()} 00:00:00`,
 };

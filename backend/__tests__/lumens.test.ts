@@ -198,13 +198,13 @@ describe("ledgers", () => {
 
       expect(JSON.parse(cachedLedgers as string)).toEqual([
         {
-          date: "01-12",
+          date: "2022-1-12 00:00:00",
           transaction_count: 80,
           operation_count: 300,
           sequence: 10003,
         },
         {
-          date: "01-11",
+          date: "2022-1-11 00:00:00",
           transaction_count: 15,
           operation_count: 50,
           sequence: 10001,
@@ -241,7 +241,7 @@ describe("ledgers", () => {
 
       expect(JSON.parse(cachedLedgers as string)).toEqual([
         {
-          date: "01-12",
+          date: "2022-1-12 00:00:00",
           transaction_count: 403018,
           operation_count: 781390,
           sequence: 39149884,
@@ -314,7 +314,9 @@ describe("ledgers", () => {
       );
 
       expect(JSON.parse(cachedLedgers as string).length).toEqual(30);
-      expect(JSON.parse(cachedLedgers as string)[0].date).toEqual("01-31");
+      expect(JSON.parse(cachedLedgers as string)[0].date).toEqual(
+        "2022-1-31 00:00:00",
+      );
       expect(cachedPagingToken as string).toEqual("163");
     });
   });
