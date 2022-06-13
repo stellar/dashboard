@@ -7,7 +7,7 @@ import { redisClient, getOrThrow } from "./redisSetup";
 
 import { getBqQueryByDate, bqClient, BQHistoryLedger } from "./bigQuery";
 
-enum INTERVALS {
+export enum INTERVALS {
   hour = "hour",
   day = "day",
   month = "month",
@@ -28,7 +28,7 @@ const REDIS_LEDGER_KEYS = {
 const REDIS_PAGING_TOKEN_KEY = {
   hour: "paging_token_hour",
   day: "paging_token_day",
-  month: "paging_token",
+  month: "paging_token_month",
 };
 
 const HORIZON_LIMITS = {
@@ -78,7 +78,7 @@ export type LedgerRecord = {
 };
 const CURSOR_NOW = "now";
 
-export async function handler(_: any, res: Response, next: NextFunction) {
+export async function handler_month(_: any, res: Response, next: NextFunction) {
   try {
     const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.month);
     const ledgers: LedgerStat[] = JSON.parse(cachedData);
@@ -154,6 +154,7 @@ export async function updateLedgers() {
             [ledger],
             REDIS_LEDGER_KEYS[interval],
             REDIS_PAGING_TOKEN_KEY[interval],
+            interval,
           );
         }
       },
@@ -165,7 +166,7 @@ export async function catchup(
   pagingToken: string,
   pagingTokenKey: string,
   limit: number,
-  interval: INTERVALS = INTERVALS.month,
+  interval,
   total: number = 0,
 ) {
   const horizon = new stellarSdk.Server("https://horizon.stellar.org");
@@ -199,7 +200,7 @@ export async function updateCache(
   ledgers: LedgerRecord[],
   ledgersKey: string,
   pagingTokenKey: string,
-  interval = INTERVALS.month,
+  interval,
 ) {
   if (!ledgers.length) {
     console.log("no ledgers to update");

@@ -1,5 +1,5 @@
 import { redisClient } from "../src/redisSetup";
-import { updateCache, catchup, LedgerRecord } from "../src/ledgers";
+import { updateCache, catchup, LedgerRecord, INTERVALS } from "../src/ledgers";
 import { updateApiLumens as updateApiLumensV1 } from "../src/lumens";
 import { updateApiLumens as updateApiLumensV2V3 } from "../src/v2v3/lumens";
 
@@ -188,6 +188,7 @@ describe("ledgers", () => {
         ledgers,
         REDIS_LEDGER_KEY_TEST,
         REDIS_PAGING_TOKEN_KEY_TEST,
+        INTERVALS.month,
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
@@ -230,6 +231,7 @@ describe("ledgers", () => {
         "168143176454897664",
         REDIS_PAGING_TOKEN_KEY_TEST,
         1000,
+        INTERVALS.month,
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
@@ -257,6 +259,7 @@ describe("ledgers", () => {
         "now",
         REDIS_PAGING_TOKEN_KEY_TEST,
         0,
+        INTERVALS.month,
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
@@ -302,6 +305,7 @@ describe("ledgers", () => {
         ledgers,
         REDIS_LEDGER_KEY_TEST,
         REDIS_PAGING_TOKEN_KEY_TEST,
+        INTERVALS.month,
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
