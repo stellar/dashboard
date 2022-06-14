@@ -10,6 +10,7 @@ import { getErrorString } from "helpers/getErrorString";
 import { getAverageLedgerClosedTime } from "helpers/getAverageLedgerClosedTime";
 import { getLedgerClosedTimes } from "helpers/getLedgerClosedTimes";
 import { getDateDiffSeconds } from "helpers/getDateDiffSeconds";
+import { parseDateFromFormat } from "helpers/parseDateFromFormat";
 
 import {
   LedgersInitialState,
@@ -101,16 +102,17 @@ export const fetchLedgersTransactionsHistoryAction = createAsyncThunk<
   "ledgers/fetchLedgersTransactionsHistoryAction",
   async ({ network, filter }, { rejectWithValue }) => {
     try {
+      const historyFilter = ledgerTransactionHistoryConfig[filter];
       const response = await fetch(
-        `/api/ledgers${ledgerTransactionHistoryConfig[filter]}/public${networkConfig[network].ledgerTransactionsHistorySuffix}`,
+        `/api/ledgers${historyFilter.endpointPrefix}/public${networkConfig[network].ledgerTransactionsHistorySuffix}`,
       );
 
       const data = await response.json();
 
       return {
-        items: data.map((item: Record<string, unknown>) => ({
-          date: item.date,
-          txTransactionCount: item.transaction_successful_count,
+        items: data.data.map((item: Record<string, unknown>) => ({
+          date: parseDateFromFormat(item.date as string, "yyyy-MM-dd HH:mm:ss"),
+          txTransactionCount: item.transaction_count,
           opCount: item.operation_count,
           sequence: item.sequence,
         })),
@@ -240,22 +242,14 @@ const ledgersSlice = createSlice({
       state.errorString = action.payload?.errorString;
     });
     builder.addCase(
-      fetchLedgersTransactionsHistoryAction.pending,
-      (state = initialState) => {
-        state.status = ActionStatus.PENDING;
-      },
-    );
-    builder.addCase(
       fetchLedgersTransactionsHistoryAction.fulfilled,
       (state, action) => {
         state.ledgerTransactionsHistory = action.payload;
-        state.status = ActionStatus.SUCCESS;
       },
     );
     builder.addCase(
       fetchLedgersTransactionsHistoryAction.rejected,
       (state, action) => {
-        state.status = ActionStatus.ERROR;
         state.errorString = action.payload?.errorString;
       },
     );

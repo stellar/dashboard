@@ -56,6 +56,8 @@ export const VerticalBarChart = ({
 
   timeRange = TimeRange.HOUR,
   baseStartDate,
+  primaryValueTooltipDescription,
+  secondaryValueTooltipDescription,
 }: VerticalBarChartProps) => {
   const smallScreen = useMediaQuery("(max-width: 540px)");
 
@@ -73,11 +75,18 @@ export const VerticalBarChart = ({
       const tooltipProps = getTooltipProps(props, {
         tooltipClassName,
         timeRange,
+        primaryValueTooltipDescription,
+        secondaryValueTooltipDescription,
       });
 
       return <Tooltip {...tooltipProps} />;
     },
-    [timeRange, tooltipClassName],
+    [
+      timeRange,
+      tooltipClassName,
+      primaryValueTooltipDescription,
+      secondaryValueTooltipDescription,
+    ],
   );
 
   const renderTickXAxis = useCallback(

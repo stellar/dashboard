@@ -19,6 +19,10 @@ type Props = {
    */
   tooltipTitle?: string;
   /**
+   * The subtitle to be rendered on the top of the tooltip.
+   */
+  tooltipSubtitle?: string;
+  /**
    * If the tooltip is visible or not.
    */
   active?: boolean;
@@ -43,6 +47,7 @@ type Props = {
 export const Tooltip = ({
   active,
   tooltipTitle,
+  tooltipSubtitle,
   tooltipClassName,
   data,
 }: Props) => {
@@ -56,6 +61,11 @@ export const Tooltip = ({
               {tooltipTitle && (
                 <div className="ChartTooltip__content__title">
                   {tooltipTitle}
+                </div>
+              )}
+              {tooltipSubtitle && (
+                <div className="ChartTooltip__content__subtitle">
+                  {tooltipSubtitle}
                 </div>
               )}
               {data.map((entry) => (

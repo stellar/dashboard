@@ -17,6 +17,12 @@
       opacity: 0.6;
     }
 
+    &__subtitle {
+      opacity: 0.6;
+      font-weight: var(--font-weight-light);
+      font-size: var(--font-size-small);
+    }
+
     &__row {
       display: flex;
       align-items: center;

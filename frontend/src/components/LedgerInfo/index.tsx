@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import BigNumber from "bignumber.js";
 import { TextLink } from "@stellar/design-system";
+import { useDispatch } from "react-redux";
 
 import { SectionCard } from "components/SectionCard";
 import { VerticalBarChart } from "components/charts/VerticalBarChart";
@@ -10,15 +11,11 @@ import { BatteryLikeChart } from "components/charts/BatteryLikeChart";
 import { LedgerClosedTime } from "components/LedgerClosedTime";
 
 import { networkConfig } from "constants/settings";
-import {
-  ActionStatus,
-  LedgerTransactionHistoryFilterType,
-  Network,
-} from "types";
+import { LedgerTransactionHistoryFilterType, Network } from "types";
 
 import { useRedux } from "hooks/useRedux";
-import { useDispatch } from "react-redux";
 import { fetchLedgersTransactionsHistoryAction } from "ducks/ledgers";
+import { formatDate } from "helpers/formatDate";
 
 import "./styles.scss";
 
@@ -45,7 +42,7 @@ export const LedgerInfo = ({
   const dispatch = useDispatch();
 
   const {
-    ledgers: { ledgerTransactionsHistory, status },
+    ledgers: { ledgerTransactionsHistory },
   } = useRedux("ledgers");
 
   const [rangeInterval, setRangeInterval] = useState(
@@ -68,6 +65,7 @@ export const LedgerInfo = ({
         primaryValue: item.txTransactionCount,
         secondaryValue: item.opCount,
         tooltipTitle: `#${item.sequence}`,
+        tooltipSubtitle: formatDate(item.date, "Pp"),
       })),
     [ledgerTransactionsHistory],
   );
@@ -113,7 +111,7 @@ export const LedgerInfo = ({
       titleLinkLabel="API"
       titleLink={`${networkConfig[network].url}/operations?order=desc&limit=20`}
       titleCustom={graphNavOptionsContent}
-      isLoading={status === ActionStatus.PENDING}
+      isLoading={!itemsData.length}
     >
       <div className="LedgerInfo">
         <div className="LedgerInfo__main_chart">
@@ -123,6 +121,8 @@ export const LedgerInfo = ({
               primaryValueName="Transactions"
               secondaryValueName="Operations"
               timeRange={rangeInterval}
+              primaryValueTooltipDescription="txns"
+              secondaryValueTooltipDescription="ops"
             />
           </div>
         </div>

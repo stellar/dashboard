@@ -79,25 +79,35 @@ export const dateFormatter = (range: TimeRange, date: Date) => {
 /**
  * Helper function to get the props to be used in the tooltip component.
  *
- * It gets the props from the default Recharts Tooltip component, and the `TimeRange` and
- * `tooltipClassName` props.
+ * It gets the props from the default Recharts Tooltip component, and the `TimeRange`,
+ * `tooltipClassName`, `primaryValueTooltipDescription` and `secondaryValueTooltipDescription` props.
  *
  * It returns an object containing the props to be used in the ChartTooltip component (our Tooltip, not Recharts' one).
  *
  * @see {@link https://recharts.org/en-US/api/Tooltip}
  * @see VerticalBarChartProps.timeRange
  * @see VerticalBarChartProps.tooltipClassName
+ * @see VerticalBarChartProps.primaryValueTooltipDescription
+ * @see VerticalBarChartProps.secondaryValueTooltipDescription
  */
 export const getTooltipProps = (
   { active, label, payload }: VerticalBarChartTooltipInnerProps,
   {
     timeRange = TimeRange.HOUR,
     tooltipClassName,
-  }: Pick<VerticalBarChartProps, "timeRange" | "tooltipClassName">,
+    primaryValueTooltipDescription,
+    secondaryValueTooltipDescription,
+  }: Pick<
+    VerticalBarChartProps,
+    | "timeRange"
+    | "tooltipClassName"
+    | "primaryValueTooltipDescription"
+    | "secondaryValueTooltipDescription"
+  >,
 ) => {
   const [primaryData, secondaryData] = payload!;
 
-  let { tooltipTitle } = primaryData.payload;
+  let { tooltipTitle, tooltipSubtitle } = primaryData.payload;
 
   if (!tooltipTitle) {
     tooltipTitle = dateFormatter
@@ -108,19 +118,28 @@ export const getTooltipProps = (
   const primaryLabel = new BigNumber(primaryData.value!).toFormat();
   const secondaryLabel = new BigNumber(secondaryData.value!).toFormat();
 
+  if (primaryValueTooltipDescription) {
+    primaryValueTooltipDescription = ` ${primaryValueTooltipDescription}`;
+  }
+
+  if (secondaryValueTooltipDescription) {
+    secondaryValueTooltipDescription = ` ${secondaryValueTooltipDescription}`;
+  }
+
   return {
     data: [
       {
-        label: primaryLabel,
+        label: `${primaryLabel}${primaryValueTooltipDescription || ""}`,
         fill: primaryData?.fill,
       },
       {
-        label: secondaryLabel,
+        label: `${secondaryLabel}${secondaryValueTooltipDescription || ""}`,
         fill: secondaryData?.fill,
       },
     ] as TooltipData,
     active,
     tooltipTitle,
+    tooltipSubtitle,
     tooltipClassName,
   };
 };

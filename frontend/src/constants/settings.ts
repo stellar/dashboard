@@ -23,7 +23,13 @@ export const networkConfig = {
 };
 
 export const ledgerTransactionHistoryConfig = {
-  [LedgerTransactionHistoryFilterType["1H"]]: "/hour",
-  [LedgerTransactionHistoryFilterType["24H"]]: "/day",
-  [LedgerTransactionHistoryFilterType["30D"]]: "",
+  [LedgerTransactionHistoryFilterType["1H"]]: {
+    endpointPrefix: "/hour",
+  },
+  [LedgerTransactionHistoryFilterType["24H"]]: {
+    endpointPrefix: "/day",
+  },
+  [LedgerTransactionHistoryFilterType["30D"]]: {
+    endpointPrefix: "/month",
+  },
 };
