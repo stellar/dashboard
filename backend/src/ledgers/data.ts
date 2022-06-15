@@ -1,34 +1,24 @@
-import stellarSdk from "stellar-sdk";
-import { findIndex } from "lodash";
 import { QueryRowsResponse } from "@google-cloud/bigquery";
-import { Response, NextFunction } from "express";
+import stellarSdk from "stellar-sdk";
 
-import { redisClient, getOrThrow } from "./redisSetup";
+import { redisClient } from "../redisSetup";
+import { bqClient, BQHistoryLedger, getBqQueryByDate } from "../bigQuery";
+import {
+  BIGQUERY_DATES,
+  dateSorter,
+  getLedgerKey,
+  INTERVALS,
+  LedgerStat,
+} from "./utils";
+import { findIndex } from "lodash";
 
-import { getBqQueryByDate, bqClient, BQHistoryLedger } from "./bigQuery";
-
-export enum INTERVALS {
-  hour = "hour",
-  day = "day",
-  month = "month",
-}
+const intervalTypes = [INTERVALS.hour, INTERVALS.day, INTERVALS.month];
+const CURSOR_NOW = "now";
 
 const LEDGER_ITEM_LIMIT = {
   hour: 60,
   day: 24,
   month: 30,
-};
-
-const REDIS_LEDGER_KEYS = {
-  hour: "ledgers_hour",
-  day: "ledgers_day",
-  month: "ledgers",
-};
-
-const REDIS_PAGING_TOKEN_KEY = {
-  hour: "paging_token_hour",
-  day: "paging_token_day",
-  month: "paging_token_month",
 };
 
 const HORIZON_LIMITS = {
@@ -37,35 +27,17 @@ const HORIZON_LIMITS = {
   month: 200,
 };
 
-const intervalTypes = [INTERVALS.day, INTERVALS.hour, INTERVALS.month];
-
-const BIGQUERY_DATES = {
-  hour: getBqDate(INTERVALS.hour),
-  day: getBqDate(INTERVALS.day),
-  month: getBqDate(INTERVALS.month),
+const REDIS_PAGING_TOKEN_KEY = {
+  hour: "paging_token_hour",
+  day: "paging_token_day",
+  month: "paging_token_month",
 };
 
-function getBqDate(interval: INTERVALS) {
-  const offsetByInterval = {
-    hour: (now: Date = new Date()): Date =>
-      new Date(now.setUTCHours(now.getUTCHours() - 1)),
-    day: (now: Date = new Date()): Date =>
-      new Date(now.setUTCDate(now.getUTCDate() - 1)),
-    month: (now: Date = new Date()): Date =>
-      new Date(now.setUTCMonth(now.getUTCMonth() - 1)),
-  };
-  const offset = offsetByInterval[interval]();
-  return `${offset.getFullYear()}-${
-    offset.getUTCMonth() + 1
-  }-${offset.getUTCDate()} ${offset.getUTCHours()}:${offset.getUTCMinutes()}:${offset.getUTCSeconds()}`;
-}
-
-interface LedgerStat {
-  date: string;
-  transaction_count: number;
-  operation_count: number;
-  sequence: number;
-}
+export const REDIS_LEDGER_KEYS = {
+  hour: "ledgers_hour",
+  day: "ledgers_day",
+  month: "ledgers",
+};
 
 // TODO - import Horizon type once https://github.com/stellar/js-stellar-sdk/issues/731 resolved
 export type LedgerRecord = {
@@ -76,37 +48,6 @@ export type LedgerRecord = {
   failed_transaction_count: number;
   operation_count: number;
 };
-const CURSOR_NOW = "now";
-
-export async function handler_month(_: any, res: Response, next: NextFunction) {
-  try {
-    const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.month);
-    const ledgers: LedgerStat[] = JSON.parse(cachedData);
-    res.json(ledgers);
-  } catch (e) {
-    next(e);
-  }
-}
-
-export async function handler_day(_: any, res: Response, next: NextFunction) {
-  try {
-    const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.day);
-    const ledgers: LedgerStat[] = JSON.parse(cachedData);
-    res.json(ledgers);
-  } catch (e) {
-    next(e);
-  }
-}
-
-export async function handler_hour(_: any, res: Response, next: NextFunction) {
-  try {
-    const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.hour);
-    const ledgers: LedgerStat[] = JSON.parse(cachedData);
-    res.json(ledgers);
-  } catch (e) {
-    next(e);
-  }
-}
 
 export async function updateLedgers() {
   for (const interval of intervalTypes) {
@@ -245,32 +186,3 @@ export async function updateCache(
 
   console.log("ledgers updated to:", ledgers[ledgers.length - 1].closed_at);
 }
-
-function dateSorter(a: LedgerStat, b: LedgerStat) {
-  const dateA = new Date(a.date);
-  const dateB = new Date(b.date);
-
-  if (dateA.getMonth() === 11) {
-    dateA.setFullYear(dateA.getFullYear() - 1);
-  }
-  if (dateB.getMonth() === 11) {
-    dateB.setFullYear(dateB.getFullYear() - 1);
-  }
-
-  return dateB.getTime() - dateA.getTime();
-}
-
-const getLedgerKey = {
-  hour: (closed_at: Date) =>
-    `${closed_at.getUTCFullYear()}-${
-      closed_at.getUTCMonth() + 1
-    }-${closed_at.getUTCDate()} ${closed_at.getUTCHours()}:${closed_at.getUTCMinutes()}:00`,
-  day: (closed_at: Date) =>
-    `${closed_at.getUTCFullYear()}-${
-      closed_at.getUTCMonth() + 1
-    }-${closed_at.getUTCDate()} ${closed_at.getUTCHours()}:00:00`,
-  month: (closed_at: Date) =>
-    `${closed_at.getUTCFullYear()}-${
-      closed_at.getUTCMonth() + 1
-    }-${closed_at.getUTCDate()} 00:00:00`,
-};

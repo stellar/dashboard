@@ -2,7 +2,7 @@ import "dotenv/config";
 
 // Run backend with cache updates.
 import { updateLumensCache } from "./routes";
-import { updateLedgers } from "./ledgers";
+import { updateLedgers } from "./ledgers/data";
 
 async function beginCacheUpdates() {
   if (process.env.UPDATE_DATA === "true") {
