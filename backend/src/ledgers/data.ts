@@ -36,7 +36,7 @@ const REDIS_PAGING_TOKEN_KEY = {
 export const REDIS_LEDGER_KEYS = {
   hour: "ledgers_hour",
   day: "ledgers_day",
-  month: "ledgers",
+  month: "ledgers_month",
 };
 
 // TODO - import Horizon type once https://github.com/stellar/js-stellar-sdk/issues/731 resolved

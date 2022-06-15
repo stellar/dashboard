@@ -12,17 +12,7 @@ export enum INTERVALS {
 }
 
 export const dateSorter = (a: LedgerStat, b: LedgerStat) => {
-  const dateA = new Date(a.date);
-  const dateB = new Date(b.date);
-
-  if (dateA.getMonth() === 11) {
-    dateA.setFullYear(dateA.getFullYear() - 1);
-  }
-  if (dateB.getMonth() === 11) {
-    dateB.setFullYear(dateB.getFullYear() - 1);
-  }
-
-  return dateB.getTime() - dateA.getTime();
+  return new Date(b.date).getTime() - new Date(a.date).getTime();
 };
 
 export const getLedgerKey = {
