@@ -50,12 +50,14 @@ interface sum {
 }
 
 export interface LedgerAverages {
-  closed_times_avg: string[] | string;
+  closed_times_avg: {
+    sum: number[];
+    size: number;
+  };
   transaction_failure_avg: sum;
   transaction_success_avg: sum;
   operation_avg: sum;
 }
-
 // TODO - import Horizon type once https://github.com/stellar/js-stellar-sdk/issues/731 resolved
 export type LedgerRecord = {
   closed_at: string;
@@ -182,7 +184,10 @@ export async function updateCache(
           operation_count: ledger.operation_count,
         },
         averages: {
-          closed_times_avg: [ledger.closed_at],
+          closed_times_avg: {
+            sum: [new Date(ledger.closed_at).getTime()],
+            size: 1,
+          },
           operation_avg: {
             sum: ledger.operation_count,
             size: 1,
@@ -228,10 +233,13 @@ export async function updateCache(
               ledger.successful_transaction_count,
             size: cachedStats[index].averages.transaction_success_avg.size + 1,
           },
-          closed_times_avg: [
-            ...cachedStats[index].averages.closed_times_avg,
-            ledger.closed_at,
-          ],
+          closed_times_avg: {
+            sum: [
+              ...cachedStats[index].averages.closed_times_avg.sum,
+              new Date(ledger.closed_at).getTime(),
+            ],
+            size: cachedStats[index].averages.closed_times_avg.size + 1,
+          },
         },
       });
     }

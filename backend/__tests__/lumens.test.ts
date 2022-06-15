@@ -200,15 +200,55 @@ describe("ledgers", () => {
       expect(JSON.parse(cachedLedgers as string)).toEqual([
         {
           date: "2022-1-12 00:00:00",
-          transaction_count: 80,
-          operation_count: 300,
-          sequence: 10003,
+          data: {
+            transaction_count: 80,
+            operation_count: 300,
+            sequence: 10003,
+          },
+          averages: {
+            closed_times_avg: {
+              size: 2,
+              sum: [1641949560000, 1641949620000],
+            },
+            operation_avg: {
+              size: 2,
+              sum: 300,
+            },
+            transaction_failure_avg: {
+              size: 2,
+              sum: 40,
+            },
+            transaction_success_avg: {
+              size: 2,
+              sum: 40,
+            },
+          },
         },
         {
           date: "2022-1-11 00:00:00",
-          transaction_count: 15,
-          operation_count: 50,
-          sequence: 10001,
+          data: {
+            transaction_count: 15,
+            operation_count: 50,
+            sequence: 10001,
+          },
+          averages: {
+            closed_times_avg: {
+              size: 1,
+              sum: [1641863160000],
+            },
+            operation_avg: {
+              size: 1,
+              sum: 50,
+            },
+            transaction_failure_avg: {
+              size: 1,
+              sum: 10,
+            },
+            transaction_success_avg: {
+              size: 1,
+              sum: 5,
+            },
+          },
         },
       ]);
       expect(cachedPagingToken).toEqual("103");
@@ -243,9 +283,31 @@ describe("ledgers", () => {
       expect(JSON.parse(cachedLedgers as string)).toEqual([
         {
           date: "2022-1-12 00:00:00",
-          transaction_count: 403018,
-          operation_count: 781390,
-          sequence: 39149884,
+          data: {
+            transaction_count: 403018,
+            operation_count: 781390,
+            sequence: 39149884,
+          },
+          averages: {
+            closed_times_avg: {
+              size: 1000,
+              sum: expect.arrayContaining([
+                1641992863000, 1641992869000, 1641992875000, 1641992881000,
+              ]),
+            },
+            operation_avg: {
+              size: 1000,
+              sum: 781390,
+            },
+            transaction_failure_avg: {
+              size: 1000,
+              sum: 147813,
+            },
+            transaction_success_avg: {
+              size: 1000,
+              sum: 255205,
+            },
+          },
         },
       ]);
       expect(cachedPagingToken).toEqual("168147471422193664");

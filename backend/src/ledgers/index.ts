@@ -8,7 +8,7 @@ export async function handler_month(_: any, res: Response, next: NextFunction) {
   try {
     const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.month);
     const ledgers: LedgerStat[] = JSON.parse(cachedData);
-    res.json(ledgers);
+    res.json(formatOutput(ledgers));
   } catch (e) {
     next(e);
   }
@@ -18,7 +18,7 @@ export async function handler_day(_: any, res: Response, next: NextFunction) {
   try {
     const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.day);
     const ledgers: LedgerStat[] = JSON.parse(cachedData);
-    res.json(ledgers);
+    res.json(formatOutput(ledgers));
   } catch (e) {
     next(e);
   }

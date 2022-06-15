@@ -61,6 +61,12 @@ export const BIGQUERY_DATES = {
 const sumAverages = (ledgers: LedgerStat[]) => {
   let output = ledgers.reduce(
     (acc, next) => {
+      const nextClosedTimesList = getLedgerClosedTimes(
+        next.averages.closed_times_avg.sum,
+      );
+      const nextClosedTimesSum = nextClosedTimesList.reduce(
+        (acc, next) => acc + next,
+      );
       return {
         transaction_success_avg: {
           sum:
@@ -82,10 +88,10 @@ const sumAverages = (ledgers: LedgerStat[]) => {
           sum: acc.operation_avg.sum + next.averages.operation_avg.sum,
           size: acc.operation_avg.size + next.averages.operation_avg.size,
         },
-        closed_times_avg: [
-          ...acc.closed_times_avg,
-          ...next.averages.closed_times_avg,
-        ],
+        closed_times_avg: {
+          sum: acc.closed_times_avg.sum + nextClosedTimesSum,
+          size: acc.closed_times_avg.size + next.averages.closed_times_avg.size,
+        },
       };
     },
     {
@@ -101,7 +107,10 @@ const sumAverages = (ledgers: LedgerStat[]) => {
         sum: 0,
         size: 0,
       },
-      closed_times_avg: [],
+      closed_times_avg: {
+        sum: 0,
+        size: 0,
+      },
     },
   );
 
@@ -110,11 +119,6 @@ const sumAverages = (ledgers: LedgerStat[]) => {
 
 export const formatOutput = (cachedLedgers: LedgerStat[]) => {
   const average_sums = sumAverages(cachedLedgers);
-  const closedTimes = getLedgerClosedTimes(
-    average_sums.closed_times_avg,
-  ).reduce((acc, next) => {
-    return acc + next;
-  }, 0);
   const average_values = {
     transaction_failure_avg:
       average_sums.transaction_failure_avg.sum /
@@ -124,7 +128,9 @@ export const formatOutput = (cachedLedgers: LedgerStat[]) => {
     transaction_success_avg:
       average_sums.transaction_success_avg.sum /
       average_sums.transaction_success_avg.size,
-    closed_times_avg: closedTimes / average_sums.closed_times_avg.length,
+    closed_times_avg: Math.abs(
+      average_sums.closed_times_avg.sum / average_sums.closed_times_avg.size,
+    ),
   };
 
   const output = { data: [] };
@@ -139,7 +145,7 @@ export const formatOutput = (cachedLedgers: LedgerStat[]) => {
   return { ...output, ...average_values };
 };
 
-const getLedgerClosedTimes = (times: string[]): number[] => {
+export const getLedgerClosedTimes = (times: number[]): number[] => {
   const size = times.length;
 
   if (size === 0) {
@@ -157,8 +163,6 @@ const getLedgerClosedTimes = (times: string[]): number[] => {
   return partial.map((value) => Math.round(value));
 };
 
-export const getDateDiffSeconds = (date1: string, date2: string) => {
-  const d1 = new Date(date1).getTime();
-  const d2 = new Date(date2).getTime();
-  return (d1 - d2) / 1000;
+export const getDateDiffSeconds = (time1: number, time2: number) => {
+  return (time1 - time2) / 1000;
 };
