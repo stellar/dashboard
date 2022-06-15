@@ -10,8 +10,15 @@ import { CircularChart } from "components/charts/CircularChart";
 import { BatteryLikeChart } from "components/charts/BatteryLikeChart";
 import { LedgerClosedTime } from "components/LedgerClosedTime";
 
-import { networkConfig } from "constants/settings";
-import { LedgerTransactionHistoryFilterType, Network } from "types";
+import {
+  ledgerTransactionHistoryConfig,
+  networkConfig,
+} from "constants/settings";
+import {
+  ActionStatus,
+  LedgerTransactionHistoryFilterType,
+  Network,
+} from "types";
 
 import { useRedux } from "hooks/useRedux";
 import { fetchLedgersTransactionsHistoryAction } from "ducks/ledgers";
@@ -42,26 +49,31 @@ export const LedgerInfo = ({
   const dispatch = useDispatch();
 
   const {
-    ledgers: { ledgerTransactionsHistory },
+    ledgers: { ledgerTransactionsHistory, status },
   } = useRedux("ledgers");
 
   const [rangeInterval, setRangeInterval] = useState(
     VerticalBarChart.TimeRange.HOUR,
   );
 
+  const selectedTimeInterval = useMemo(
+    () => TIME_RANGE_MAPPING[rangeInterval].label,
+    [rangeInterval],
+  );
+
   useEffect(() => {
     dispatch(
       fetchLedgersTransactionsHistoryAction({
         network,
-        filter: TIME_RANGE_MAPPING[rangeInterval].label,
+        filter: selectedTimeInterval,
       }),
     );
-  }, [network, dispatch, rangeInterval]);
+  }, [network, dispatch, selectedTimeInterval]);
 
   const itemsData = useMemo(
     () =>
       ledgerTransactionsHistory.items.map((item) => ({
-        date: item.date,
+        date: new Date(item.date),
         primaryValue: item.txTransactionCount,
         secondaryValue: item.opCount,
         tooltipTitle: `#${item.sequence}`,
@@ -109,9 +121,10 @@ export const LedgerInfo = ({
     <SectionCard
       title="Ledger Info"
       titleLinkLabel="API"
-      titleLink={`${networkConfig[network].url}/operations?order=desc&limit=20`}
+      titleLink={`/api/ledgers${ledgerTransactionHistoryConfig[selectedTimeInterval].endpointPrefix}/public${networkConfig[network].ledgerTransactionsHistorySuffix}`}
       titleCustom={graphNavOptionsContent}
-      isLoading={!itemsData.length}
+      isLoading={status === ActionStatus.PENDING}
+      noData={!itemsData.length}
     >
       <div className="LedgerInfo">
         <div className="LedgerInfo__main_chart">

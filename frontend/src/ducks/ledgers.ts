@@ -21,6 +21,7 @@ import {
   LedgerItem,
   LedgerTransactionHistoryFilterType,
 } from "types";
+import BigNumber from "bignumber.js";
 
 const LIMIT = 200;
 const LAST_SIZE = 11;
@@ -104,23 +105,32 @@ export const fetchLedgersTransactionsHistoryAction = createAsyncThunk<
     try {
       const historyFilter = ledgerTransactionHistoryConfig[filter];
       const response = await fetch(
-        `/api/ledgers${historyFilter.endpointPrefix}/public${networkConfig[network].ledgerTransactionsHistorySuffix}`,
+        `/api/ledgers${historyFilter.endpointPrefix}${networkConfig[network].ledgerTransactionsHistorySuffix}`,
       );
 
       const data = await response.json();
 
       return {
         items: data.data.map((item: Record<string, unknown>) => ({
-          date: parseDateFromFormat(item.date as string, "yyyy-MM-dd HH:mm:ss"),
-          txTransactionCount: item.transaction_count,
+          date: parseDateFromFormat(
+            item.date as string,
+            "yyyy-MM-dd HH:mm:ss",
+          ).toISOString(),
+          txTransactionCount:
+            (item.transaction_failure as number) +
+            (item.transaction_success as number),
           opCount: item.operation_count,
           sequence: item.sequence,
         })),
         average: {
-          txTransactionSuccess: data.average_transaction_success,
-          txTransactionError: data.average_transaction_error,
-          opCount: data.average_operations,
-          closeTimeAvg: data.average_close_time,
+          txTransactionSuccess: Number(
+            new BigNumber(data.avg_successful_tx_count).toFormat(0),
+          ),
+          txTransactionError: Number(
+            new BigNumber(data.avg_failed_tx_count).toFormat(0),
+          ),
+          opCount: Number(new BigNumber(data.avg_op_count).toFormat(0)),
+          closeTimeAvg: Number(new BigNumber(data.avg_close_time).toFormat(1)),
         },
       };
     } catch (error) {
@@ -241,16 +251,21 @@ const ledgersSlice = createSlice({
       state.status = ActionStatus.ERROR;
       state.errorString = action.payload?.errorString;
     });
+    builder.addCase(fetchLedgersTransactionsHistoryAction.pending, (state) => {
+      state.status = ActionStatus.PENDING;
+    });
     builder.addCase(
       fetchLedgersTransactionsHistoryAction.fulfilled,
       (state, action) => {
         state.ledgerTransactionsHistory = action.payload;
+        state.status = ActionStatus.SUCCESS;
       },
     );
     builder.addCase(
       fetchLedgersTransactionsHistoryAction.rejected,
       (state, action) => {
         state.errorString = action.payload?.errorString;
+        state.status = ActionStatus.ERROR;
       },
     );
   },

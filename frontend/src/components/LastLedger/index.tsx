@@ -24,7 +24,7 @@ export const LastLedger = ({
       titleIcon={<Icon.Box />}
       titleLinkLabel="Recent Ops"
       titleLink={`${networkConfig[network].url}/operations?order=desc&limit=20`}
-      isLoading={ledgers.status === ActionStatus.PENDING}
+      isLoading={!lastLedger && ledgers.status === ActionStatus.PENDING}
       noData={!lastLedger}
     >
       {lastLedger ? (

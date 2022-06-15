@@ -33,6 +33,8 @@ import "./styles.scss";
 
 const X_AXIS_SMALL_PADDING = 25;
 const X_AXIS_BIG_PADDING = 50;
+const Y_AXIS_MIN_WIDTH = 60;
+const Y_AXIS_WIDTH_MULTIPLIER_VALUE = 12;
 
 /**
  * Vertical Bar Chart component. It is used to display a chart with a series-based data.
@@ -146,6 +148,24 @@ export const VerticalBarChart = ({
     });
   }, [baseStartDate, timeRange]);
 
+  const maxValue = useMemo(
+    () =>
+      Math.max(
+        ...data.map((v) => v.primaryValue),
+        ...data.map((v) => v.secondaryValue),
+      ),
+    [data],
+  );
+
+  const yAxisWidth = useMemo(
+    () =>
+      Math.max(
+        Y_AXIS_MIN_WIDTH,
+        maxValue.toString().length * Y_AXIS_WIDTH_MULTIPLIER_VALUE,
+      ),
+    [maxValue],
+  );
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
@@ -190,6 +210,7 @@ export const VerticalBarChart = ({
           tickLine={false}
           tickMargin={10}
           tick={renderTickYAxis}
+          width={yAxisWidth}
         />
         <RechartsTooltip
           active

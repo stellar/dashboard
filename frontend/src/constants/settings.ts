@@ -13,7 +13,7 @@ export const networkConfig = {
   [Network.MAINNET]: {
     url: "https://horizon.stellar.org",
     stellarbeatUrl: "https://api.stellarbeat.io",
-    ledgerTransactionsHistorySuffix: "",
+    ledgerTransactionsHistorySuffix: "/public",
   },
   [Network.TESTNET]: {
     url: "https://horizon-testnet.stellar.org",
