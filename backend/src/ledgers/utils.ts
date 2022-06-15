@@ -1,8 +1,15 @@
-export interface LedgerStat {
-  date: string;
+import { LedgerAverages } from "./data";
+
+export interface LedgerStatData {
   transaction_count: number;
   operation_count: number;
   sequence: number;
+}
+
+export interface LedgerStat {
+  date: string;
+  data: LedgerStatData;
+  averages: LedgerAverages;
 }
 
 export enum INTERVALS {
@@ -49,4 +56,109 @@ export const BIGQUERY_DATES = {
   hour: getBqDate(INTERVALS.hour),
   day: getBqDate(INTERVALS.day),
   month: getBqDate(INTERVALS.month),
+};
+
+const sumAverages = (ledgers: LedgerStat[]) => {
+  let output = ledgers.reduce(
+    (acc, next) => {
+      return {
+        transaction_success_avg: {
+          sum:
+            acc.transaction_success_avg.sum +
+            next.averages.transaction_success_avg.sum,
+          size:
+            acc.transaction_success_avg.size +
+            next.averages.transaction_success_avg.size,
+        },
+        transaction_failure_avg: {
+          sum:
+            acc.transaction_failure_avg.sum +
+            next.averages.transaction_failure_avg.sum,
+          size:
+            acc.transaction_failure_avg.size +
+            next.averages.transaction_failure_avg.size,
+        },
+        operation_avg: {
+          sum: acc.operation_avg.sum + next.averages.operation_avg.sum,
+          size: acc.operation_avg.size + next.averages.operation_avg.size,
+        },
+        closed_times_avg: [
+          ...acc.closed_times_avg,
+          ...next.averages.closed_times_avg,
+        ],
+      };
+    },
+    {
+      transaction_success_avg: {
+        sum: 0,
+        size: 0,
+      },
+      transaction_failure_avg: {
+        sum: 0,
+        size: 0,
+      },
+      operation_avg: {
+        sum: 0,
+        size: 0,
+      },
+      closed_times_avg: [],
+    },
+  );
+
+  return output;
+};
+
+export const formatOutput = (cachedLedgers: LedgerStat[]) => {
+  const average_sums = sumAverages(cachedLedgers);
+  const closedTimes = getLedgerClosedTimes(
+    average_sums.closed_times_avg,
+  ).reduce((acc, next) => {
+    return acc + next;
+  }, 0);
+  const average_values = {
+    transaction_failure_avg:
+      average_sums.transaction_failure_avg.sum /
+      average_sums.transaction_failure_avg.size,
+    operation_avg:
+      average_sums.operation_avg.sum / average_sums.operation_avg.size,
+    transaction_success_avg:
+      average_sums.transaction_success_avg.sum /
+      average_sums.transaction_success_avg.size,
+    closed_times_avg: closedTimes / average_sums.closed_times_avg.length,
+  };
+
+  const output = { data: [] };
+
+  cachedLedgers.forEach((ledger) => {
+    output.data.push({
+      date: ledger.date,
+      ...ledger.data,
+    });
+  });
+
+  return { ...output, ...average_values };
+};
+
+const getLedgerClosedTimes = (times: string[]): number[] => {
+  const size = times.length;
+
+  if (size === 0) {
+    return [];
+  }
+
+  const partial = times.map((t, idx) => {
+    if (idx === size - 1) {
+      return 0;
+    }
+
+    return getDateDiffSeconds(t, times[idx + 1]);
+  });
+
+  return partial.map((value) => Math.round(value));
+};
+
+export const getDateDiffSeconds = (date1: string, date2: string) => {
+  const d1 = new Date(date1).getTime();
+  const d2 = new Date(date2).getTime();
+  return (d1 - d2) / 1000;
 };

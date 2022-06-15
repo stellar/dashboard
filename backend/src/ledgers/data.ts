@@ -5,10 +5,10 @@ import { redisClient } from "../redisSetup";
 import { bqClient, BQHistoryLedger, getBqQueryByDate } from "../bigQuery";
 import {
   BIGQUERY_DATES,
-  dateSorter,
   getLedgerKey,
   INTERVALS,
   LedgerStat,
+  dateSorter,
 } from "./utils";
 import { findIndex } from "lodash";
 
@@ -38,6 +38,23 @@ export const REDIS_LEDGER_KEYS = {
   day: "ledgers_day",
   month: "ledgers_month",
 };
+
+export const REDIS_AVGS_LEDGER_KEYS = {
+  hour: REDIS_LEDGER_KEYS[INTERVALS.hour] + "_avg",
+  day: REDIS_LEDGER_KEYS[INTERVALS.day] + "_avg",
+  month: REDIS_LEDGER_KEYS[INTERVALS.month] + "_avg",
+};
+interface sum {
+  sum: number;
+  size: number;
+}
+
+export interface LedgerAverages {
+  closed_times_avg: string[] | string;
+  transaction_failure_avg: sum;
+  transaction_success_avg: sum;
+  operation_avg: sum;
+}
 
 // TODO - import Horizon type once https://github.com/stellar/js-stellar-sdk/issues/731 resolved
 export type LedgerRecord = {
@@ -157,27 +174,71 @@ export async function updateCache(
     if (index === -1) {
       cachedStats.push({
         date,
-        sequence: ledger.sequence,
-        transaction_count:
-          ledger.successful_transaction_count + ledger.failed_transaction_count,
-        operation_count: ledger.operation_count,
+        data: {
+          sequence: ledger.sequence,
+          transaction_count:
+            ledger.successful_transaction_count +
+            ledger.failed_transaction_count,
+          operation_count: ledger.operation_count,
+        },
+        averages: {
+          closed_times_avg: [ledger.closed_at],
+          operation_avg: {
+            sum: ledger.operation_count,
+            size: 1,
+          },
+          transaction_success_avg: {
+            sum: ledger.failed_transaction_count,
+            size: 1,
+          },
+          transaction_failure_avg: {
+            sum: ledger.successful_transaction_count,
+            size: 1,
+          },
+        },
       });
     } else {
       cachedStats.splice(index, 1, {
         date,
-        sequence: ledger.sequence,
-        transaction_count:
-          cachedStats[index].transaction_count +
-          ledger.successful_transaction_count +
-          ledger.failed_transaction_count,
-        operation_count:
-          cachedStats[index].operation_count + ledger.operation_count,
+        data: {
+          sequence: ledger.sequence,
+          transaction_count:
+            cachedStats[index].data.transaction_count +
+            ledger.successful_transaction_count +
+            ledger.failed_transaction_count,
+          operation_count:
+            cachedStats[index].data.operation_count + ledger.operation_count,
+        },
+        averages: {
+          operation_avg: {
+            sum:
+              cachedStats[index].averages.operation_avg.sum +
+              ledger.operation_count,
+            size: cachedStats[index].averages.operation_avg.size + 1,
+          },
+          transaction_failure_avg: {
+            sum:
+              cachedStats[index].averages.transaction_failure_avg.sum +
+              ledger.failed_transaction_count,
+            size: cachedStats[index].averages.transaction_failure_avg.size + 1,
+          },
+          transaction_success_avg: {
+            sum:
+              cachedStats[index].averages.transaction_success_avg.sum +
+              ledger.successful_transaction_count,
+            size: cachedStats[index].averages.transaction_success_avg.size + 1,
+          },
+          closed_times_avg: [
+            ...cachedStats[index].averages.closed_times_avg,
+            ledger.closed_at,
+          ],
+        },
       });
     }
     pagingToken = ledger.paging_token;
   });
-  cachedStats.sort(dateSorter);
 
+  cachedStats.sort(dateSorter);
   await redisClient.set(
     ledgersKey,
     JSON.stringify(cachedStats.slice(0, LEDGER_ITEM_LIMIT[interval])),

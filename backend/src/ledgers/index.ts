@@ -2,7 +2,7 @@ import { Response, NextFunction } from "express";
 
 import { redisClient, getOrThrow } from "../redisSetup";
 import { REDIS_LEDGER_KEYS } from "./data";
-import { LedgerStat } from "./utils";
+import { formatOutput, LedgerStat } from "./utils";
 
 export async function handler_month(_: any, res: Response, next: NextFunction) {
   try {
@@ -28,7 +28,7 @@ export async function handler_hour(_: any, res: Response, next: NextFunction) {
   try {
     const cachedData = await getOrThrow(redisClient, REDIS_LEDGER_KEYS.hour);
     const ledgers: LedgerStat[] = JSON.parse(cachedData);
-    res.json(ledgers);
+    res.json(formatOutput(ledgers));
   } catch (e) {
     next(e);
   }
