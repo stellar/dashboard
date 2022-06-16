@@ -18,13 +18,8 @@ export const bqClient = new BigQuery(options);
 // TODO - drop the _2 when Hubble 2.0 is live
 const BQHistoryLedgersTable = "crypto-stellar.crypto_stellar_2.history_ledgers";
 
-export function get30DayOldLedgerQuery() {
-  const today = new Date();
-  const before = new Date(today.setDate(today.getDate() - 32));
-  const bqDate = `${before.getFullYear()}-${
-    before.getUTCMonth() + 1
-  }-${before.getUTCDate()}`;
-  return `SELECT * FROM \`${BQHistoryLedgersTable}\` WHERE closed_at >= "${bqDate}" ORDER BY sequence LIMIT 1;`;
+export function getBqQueryByDate(date: string) {
+  return `SELECT id FROM \`${BQHistoryLedgersTable}\` WHERE closed_at >= "${date}" ORDER BY sequence LIMIT 1;`;
 }
 
 export interface BQHistoryLedger {

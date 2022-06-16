@@ -1,5 +1,5 @@
 import { redisClient } from "../src/redisSetup";
-import { updateCache, catchup, LedgerRecord } from "../src/ledgers";
+import { updateCache, catchup, LedgerRecord, INTERVALS } from "../src/ledgers";
 import { updateApiLumens as updateApiLumensV1 } from "../src/lumens";
 import { updateApiLumens as updateApiLumensV2V3 } from "../src/v2v3/lumens";
 
@@ -188,6 +188,7 @@ describe("ledgers", () => {
         ledgers,
         REDIS_LEDGER_KEY_TEST,
         REDIS_PAGING_TOKEN_KEY_TEST,
+        INTERVALS.month,
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
@@ -197,14 +198,16 @@ describe("ledgers", () => {
 
       expect(JSON.parse(cachedLedgers as string)).toEqual([
         {
-          date: "01-12",
+          date: "2022-1-12 00:00:00",
           transaction_count: 80,
           operation_count: 300,
+          sequence: 10003,
         },
         {
-          date: "01-11",
+          date: "2022-1-11 00:00:00",
           transaction_count: 15,
           operation_count: 50,
+          sequence: 10001,
         },
       ]);
       expect(cachedPagingToken).toEqual("103");
@@ -228,6 +231,7 @@ describe("ledgers", () => {
         "168143176454897664",
         REDIS_PAGING_TOKEN_KEY_TEST,
         1000,
+        INTERVALS.month,
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
@@ -236,7 +240,12 @@ describe("ledgers", () => {
       );
 
       expect(JSON.parse(cachedLedgers as string)).toEqual([
-        { date: "01-12", transaction_count: 403018, operation_count: 781390 },
+        {
+          date: "2022-1-12 00:00:00",
+          transaction_count: 403018,
+          operation_count: 781390,
+          sequence: 39149884,
+        },
       ]);
       expect(cachedPagingToken).toEqual("168147471422193664");
     });
@@ -250,6 +259,7 @@ describe("ledgers", () => {
         "now",
         REDIS_PAGING_TOKEN_KEY_TEST,
         0,
+        INTERVALS.month,
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
@@ -295,6 +305,7 @@ describe("ledgers", () => {
         ledgers,
         REDIS_LEDGER_KEY_TEST,
         REDIS_PAGING_TOKEN_KEY_TEST,
+        INTERVALS.month,
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
@@ -303,7 +314,9 @@ describe("ledgers", () => {
       );
 
       expect(JSON.parse(cachedLedgers as string).length).toEqual(30);
-      expect(JSON.parse(cachedLedgers as string)[0].date).toEqual("01-31");
+      expect(JSON.parse(cachedLedgers as string)[0].date).toEqual(
+        "2022-1-31 00:00:00",
+      );
       expect(cachedPagingToken as string).toEqual("163");
     });
   });
