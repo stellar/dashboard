@@ -39,11 +39,6 @@ export const REDIS_LEDGER_KEYS = {
   month: "ledgers_month",
 };
 
-export const REDIS_AVGS_LEDGER_KEYS = {
-  hour: REDIS_LEDGER_KEYS[INTERVALS.hour] + "_avg",
-  day: REDIS_LEDGER_KEYS[INTERVALS.day] + "_avg",
-  month: REDIS_LEDGER_KEYS[INTERVALS.month] + "_avg",
-};
 interface sum {
   sum: number;
   size: number;
