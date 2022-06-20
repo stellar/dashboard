@@ -61,12 +61,6 @@ export const BIGQUERY_DATES = {
 const sumAverages = (ledgers: LedgerStat[]) => {
   let output = ledgers.reduce(
     (acc, next) => {
-      const nextClosedTimesList = getLedgerClosedTimes(
-        next.averages.closed_times_avg.sum,
-      );
-      const nextClosedTimesSum = nextClosedTimesList.reduce(
-        (acc, next) => acc + next,
-      );
       return {
         transaction_success_avg: {
           sum:
@@ -89,8 +83,10 @@ const sumAverages = (ledgers: LedgerStat[]) => {
           size: acc.operation_avg.size + next.averages.operation_avg.size,
         },
         closed_times_avg: {
-          sum: acc.closed_times_avg.sum + nextClosedTimesSum,
-          size: acc.closed_times_avg.size + next.averages.closed_times_avg.size,
+          sum:
+            acc.closed_times_avg.sum +
+            next.averages.closed_times.sum / next.averages.closed_times.size,
+          size: acc.closed_times_avg.size + 1,
         },
       };
     },
@@ -128,9 +124,8 @@ export const formatOutput = (cachedLedgers: LedgerStat[]) => {
     transaction_success_avg:
       average_sums.transaction_success_avg.sum /
       average_sums.transaction_success_avg.size,
-    closed_times_avg: Math.abs(
+    closed_times_avg:
       average_sums.closed_times_avg.sum / average_sums.closed_times_avg.size,
-    ),
   };
 
   const output = { data: [] };

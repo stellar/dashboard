@@ -206,9 +206,10 @@ describe("ledgers", () => {
             sequence: 10003,
           },
           averages: {
-            closed_times_avg: {
-              size: 2,
-              sum: [1641949560000, 1641949620000],
+            closed_times: {
+              lastTimestamp: 1641949620000,
+              size: 1,
+              sum: 60,
             },
             operation_avg: {
               size: 2,
@@ -232,9 +233,10 @@ describe("ledgers", () => {
             sequence: 10001,
           },
           averages: {
-            closed_times_avg: {
-              size: 1,
-              sum: [1641863160000],
+            closed_times: {
+              lastTimestamp: 1641863160000,
+              size: 0,
+              sum: 0,
             },
             operation_avg: {
               size: 1,
@@ -289,11 +291,10 @@ describe("ledgers", () => {
             sequence: 39149884,
           },
           averages: {
-            closed_times_avg: {
-              size: 1000,
-              sum: expect.arrayContaining([
-                1641992863000, 1641992869000, 1641992875000, 1641992881000,
-              ]),
+            closed_times: {
+              lastTimestamp: 1641998730000,
+              size: 999,
+              sum: 5867,
             },
             operation_avg: {
               size: 1000,

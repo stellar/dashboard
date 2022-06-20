@@ -45,8 +45,9 @@ interface sum {
 }
 
 export interface LedgerAverages {
-  closed_times_avg: {
-    sum: number[];
+  closed_times: {
+    lastTimestamp: number;
+    sum: number;
     size: number;
   };
   transaction_failure_avg: sum;
@@ -151,6 +152,8 @@ export async function catchup(
   );
 }
 
+const getTimestamp = (date: string) => new Date(date).getTime();
+
 export async function updateCache(
   ledgers: LedgerRecord[],
   ledgersKey: string,
@@ -179,9 +182,10 @@ export async function updateCache(
           operation_count: ledger.operation_count,
         },
         averages: {
-          closed_times_avg: {
-            sum: [new Date(ledger.closed_at).getTime()],
-            size: 1,
+          closed_times: {
+            lastTimestamp: getTimestamp(ledger.closed_at),
+            sum: 0,
+            size: 0,
           },
           operation_avg: {
             sum: ledger.operation_count,
@@ -228,12 +232,14 @@ export async function updateCache(
               ledger.successful_transaction_count,
             size: cachedStats[index].averages.transaction_success_avg.size + 1,
           },
-          closed_times_avg: {
-            sum: [
-              ...cachedStats[index].averages.closed_times_avg.sum,
-              new Date(ledger.closed_at).getTime(),
-            ],
-            size: cachedStats[index].averages.closed_times_avg.size + 1,
+          closed_times: {
+            lastTimestamp: getTimestamp(ledger.closed_at),
+            sum:
+              cachedStats[index].averages.closed_times.sum +
+              (getTimestamp(ledger.closed_at) -
+                cachedStats[index].averages.closed_times.lastTimestamp) /
+                1000,
+            size: cachedStats[index].averages.closed_times.size + 1,
           },
         },
       });
