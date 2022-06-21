@@ -176,29 +176,12 @@ export async function updateCache(
         date,
         data: {
           sequence: ledger.sequence,
-          transaction_count:
-            ledger.successful_transaction_count +
-            ledger.failed_transaction_count,
           operation_count: ledger.operation_count,
-        },
-        averages: {
-          closed_times: {
-            lastTimestamp: getTimestamp(ledger.closed_at),
-            sum: 0,
-            size: 0,
-          },
-          operation_avg: {
-            sum: ledger.operation_count,
-            size: 1,
-          },
-          transaction_success_avg: {
-            sum: ledger.failed_transaction_count,
-            size: 1,
-          },
-          transaction_failure_avg: {
-            sum: ledger.successful_transaction_count,
-            size: 1,
-          },
+          transaction_success: ledger.successful_transaction_count,
+          transaction_failure: ledger.failed_transaction_count,
+          start: ledger.closed_at,
+          end: ledger.closed_at,
+          total_ledgers: 1,
         },
       });
     } else {
@@ -206,41 +189,17 @@ export async function updateCache(
         date,
         data: {
           sequence: ledger.sequence,
-          transaction_count:
-            cachedStats[index].data.transaction_count +
-            ledger.successful_transaction_count +
+          transaction_success:
+            cachedStats[index].data.transaction_success +
+            ledger.successful_transaction_count,
+          transaction_failure:
+            cachedStats[index].data.transaction_failure +
             ledger.failed_transaction_count,
           operation_count:
             cachedStats[index].data.operation_count + ledger.operation_count,
-        },
-        averages: {
-          operation_avg: {
-            sum:
-              cachedStats[index].averages.operation_avg.sum +
-              ledger.operation_count,
-            size: cachedStats[index].averages.operation_avg.size + 1,
-          },
-          transaction_failure_avg: {
-            sum:
-              cachedStats[index].averages.transaction_failure_avg.sum +
-              ledger.failed_transaction_count,
-            size: cachedStats[index].averages.transaction_failure_avg.size + 1,
-          },
-          transaction_success_avg: {
-            sum:
-              cachedStats[index].averages.transaction_success_avg.sum +
-              ledger.successful_transaction_count,
-            size: cachedStats[index].averages.transaction_success_avg.size + 1,
-          },
-          closed_times: {
-            lastTimestamp: getTimestamp(ledger.closed_at),
-            sum:
-              cachedStats[index].averages.closed_times.sum +
-              (getTimestamp(ledger.closed_at) -
-                cachedStats[index].averages.closed_times.lastTimestamp) /
-                1000,
-            size: cachedStats[index].averages.closed_times.size + 1,
-          },
+          total_ledgers: cachedStats[index].data.total_ledgers + 1,
+          start: cachedStats[index].data.start,
+          end: ledger.closed_at,
         },
       });
     }
