@@ -201,55 +201,25 @@ describe("ledgers", () => {
         {
           date: "2022-1-12 00:00:00",
           data: {
-            transaction_count: 80,
+            end: "2022-01-12T01:07:00Z",
             operation_count: 300,
             sequence: 10003,
-          },
-          averages: {
-            closed_times: {
-              lastTimestamp: 1641949620000,
-              size: 1,
-              sum: 60,
-            },
-            operation_avg: {
-              size: 2,
-              sum: 300,
-            },
-            transaction_failure_avg: {
-              size: 2,
-              sum: 40,
-            },
-            transaction_success_avg: {
-              size: 2,
-              sum: 40,
-            },
+            start: "2022-01-12T01:06:00Z",
+            total_ledgers: 2,
+            transaction_failure: 30,
+            transaction_success: 50,
           },
         },
         {
           date: "2022-1-11 00:00:00",
           data: {
-            transaction_count: 15,
+            end: "2022-01-11T01:06:00Z",
             operation_count: 50,
             sequence: 10001,
-          },
-          averages: {
-            closed_times: {
-              lastTimestamp: 1641863160000,
-              size: 0,
-              sum: 0,
-            },
-            operation_avg: {
-              size: 1,
-              sum: 50,
-            },
-            transaction_failure_avg: {
-              size: 1,
-              sum: 10,
-            },
-            transaction_success_avg: {
-              size: 1,
-              sum: 5,
-            },
+            start: "2022-01-11T01:06:00Z",
+            total_ledgers: 1,
+            transaction_failure: 5,
+            transaction_success: 10,
           },
         },
       ]);
@@ -286,28 +256,13 @@ describe("ledgers", () => {
         {
           date: "2022-1-12 00:00:00",
           data: {
-            transaction_count: 403018,
+            end: "2022-01-12T14:45:30Z",
             operation_count: 781390,
             sequence: 39149884,
-          },
-          averages: {
-            closed_times: {
-              lastTimestamp: 1641998730000,
-              size: 999,
-              sum: 5867,
-            },
-            operation_avg: {
-              size: 1000,
-              sum: 781390,
-            },
-            transaction_failure_avg: {
-              size: 1000,
-              sum: 147813,
-            },
-            transaction_success_avg: {
-              size: 1000,
-              sum: 255205,
-            },
+            start: "2022-01-12T13:07:43Z",
+            total_ledgers: 1000,
+            transaction_failure: 147582,
+            transaction_success: 255436,
           },
         },
       ]);
