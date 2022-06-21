@@ -1,5 +1,3 @@
-import { LedgerAverages } from "./data";
-
 export interface LedgerStatData {
   transaction_success: number;
   transaction_failure: number;
@@ -84,7 +82,7 @@ export const formatOutput = (cachedLedgers: LedgerStat[]) => {
   const first = new Date(cachedLedgers.at(-1).data.start).getTime();
   const last = new Date(cachedLedgers[0].data.end).getTime();
   const avg_close_time = (last - first) / total_ledgers / 1000;
-  const avg_successful_tx_count = total_failed_tx / total_ledgers;
+  const avg_successful_tx_count = total_successful_tx / total_ledgers;
   const avg_failed_tx_count = total_failed_tx / total_ledgers;
   const avg_op_count = total_ops / total_ledgers;
 

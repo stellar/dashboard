@@ -152,8 +152,6 @@ export async function catchup(
   );
 }
 
-const getTimestamp = (date: string) => new Date(date).getTime();
-
 export async function updateCache(
   ledgers: LedgerRecord[],
   ledgersKey: string,
