@@ -11,6 +11,7 @@ export interface Store {
   dex: DexDataInitialState;
   transactions: TransactionsInitialState;
   operations: OperationsInitialState;
+  feeStats: FeeStatsInitialState;
 }
 
 export type StoreKey = keyof Store;
@@ -34,6 +35,13 @@ export interface LedgersInitialState {
   errorString?: string;
 }
 
+export interface FeeStatsInitialState {
+  data: any;
+  isStreaming: boolean;
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
 export interface NetworkNodesInitialState {
   data: NetworkNodesData | null;
   status: ActionStatus | undefined;
@@ -48,6 +56,12 @@ export interface LumenSupplyInitialState {
 
 export interface DexDataInitialState {
   data: DexData | null;
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
+export interface FeeStatsDataInitialState {
+  data: FeeStatsData | null;
   status: ActionStatus | undefined;
   errorString?: string;
 }
@@ -300,3 +314,41 @@ export interface FetchLastOperationsActionResponse {
   shares_received?: string;
   shares?: string;
 }
+
+export type FeeStatsData = {
+  last_ledger: number;
+  last_ledger_base_fee: number;
+  ledger_capacity_usage: number;
+  fee_charged: {
+    max: number;
+    min: number;
+    mode: number;
+    p10: number;
+    p20: number;
+    p30: number;
+    p40: number;
+    p50: number;
+    p60: number;
+    p70: number;
+    p80: number;
+    p90: number;
+    p95: number;
+    p99: number;
+  };
+  max_fee: {
+    max: number;
+    min: number;
+    mode: number;
+    p10: number;
+    p20: number;
+    p30: number;
+    p40: number;
+    p50: number;
+    p60: number;
+    p70: number;
+    p80: number;
+    p90: number;
+    p95: number;
+    p99: number;
+  };
+};
