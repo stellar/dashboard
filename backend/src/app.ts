@@ -10,10 +10,10 @@ async function beginCacheUpdates() {
     console.log("starting lumens cache update");
     await updateLumensCache();
 
-    console.log("[TESTNET] starting ledgers cache update");
-    await updateLedgers(true);
     console.log("[MAINNET] starting ledgers cache update");
     await updateLedgers(false);
+    console.log("[TESTNET] starting ledgers cache update");
+    await updateLedgers(true);
   }
 }
 

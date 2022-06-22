@@ -83,9 +83,10 @@ export async function updateLedgers(isTestnet: boolean) {
 
     const cachedData = (await redisClient.get(REDIS_LEDGER_KEY)) || "[]";
     const cachedLedgers: LedgerStat[] = JSON.parse(cachedData);
-    let pagingToken = "";
-
-    if (cachedLedgers.length < LEDGER_ITEM_LIMIT[interval]) {
+    let pagingToken = isTestnet
+      ? (await redisClient.get(REDIS_PAGING_TOKEN_KEY_VALUE)) || CURSOR_NOW
+      : "";
+    if (cachedLedgers.length < LEDGER_ITEM_LIMIT[interval] && !isTestnet) {
       try {
         const query = getBqQueryByDate(BIGQUERY_DATES[interval]);
         const [job] = await bqClient.createQueryJob(query);
@@ -159,7 +160,6 @@ export async function catchup(
 
   ledgers = resp.records;
   total += resp.records.length;
-  console.log("\nDEBUG: ", horizonServer, total);
 
   if (ledgers.length === 0 || (limit && total > limit)) {
     return;
