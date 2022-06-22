@@ -8,6 +8,7 @@ import { NetworkNodes } from "components/NetworkNodes";
 import { Incidents } from "components/Incidents";
 import { TransactionsPerSecond } from "components/TransactionsPerSecond";
 import { RecentOperations } from "components/RecentOperations";
+import { FeeStats } from "components/FeeStats";
 
 export const Mainnet = () => (
   <div className="ContentWrapper">
@@ -20,6 +21,7 @@ export const Mainnet = () => (
     <ByTheNumbers />
     <LumenSupply />
     <NetworkNodes />
+    <FeeStats />
     <Incidents />
   </div>
 );
