@@ -245,6 +245,7 @@ describe("ledgers", () => {
         REDIS_PAGING_TOKEN_KEY_TEST,
         1000,
         INTERVALS.month,
+        false,
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);
@@ -279,6 +280,7 @@ describe("ledgers", () => {
         REDIS_PAGING_TOKEN_KEY_TEST,
         0,
         INTERVALS.month,
+        false,
       );
 
       const cachedLedgers = await redisClient.get(REDIS_LEDGER_KEY_TEST);

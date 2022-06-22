@@ -9,6 +9,8 @@ import {
   INTERVALS,
   LedgerStat,
   dateSorter,
+  getHorizonServer,
+  getServerNamespace,
 } from "./utils";
 import { findIndex } from "lodash";
 
@@ -64,10 +66,22 @@ export type LedgerRecord = {
   operation_count: number;
 };
 
-export async function updateLedgers() {
+export async function updateLedgers(isTestnet: boolean) {
+  const horizonServer = getHorizonServer(isTestnet);
+  console.info("Updating ledgers using horizon server URL: ", horizonServer);
+
   for (const interval of intervalTypes) {
-    const cachedData =
-      (await redisClient.get(REDIS_LEDGER_KEYS[interval])) || "[]";
+    const REDIS_LEDGER_KEY = getServerNamespace(
+      REDIS_LEDGER_KEYS[interval],
+      isTestnet,
+    );
+
+    const REDIS_PAGING_TOKEN_KEY_VALUE = getServerNamespace(
+      REDIS_PAGING_TOKEN_KEY[interval],
+      isTestnet,
+    );
+
+    const cachedData = (await redisClient.get(REDIS_LEDGER_KEY)) || "[]";
     const cachedLedgers: LedgerStat[] = JSON.parse(cachedData);
     let pagingToken = "";
 
@@ -83,22 +97,29 @@ export async function updateLedgers() {
         console.error("BigQuery error", err);
         pagingToken = CURSOR_NOW;
       }
-      await redisClient.del(REDIS_LEDGER_KEYS[interval]);
+      await redisClient.del(REDIS_LEDGER_KEY);
     } else {
       pagingToken =
-        (await redisClient.get(REDIS_PAGING_TOKEN_KEY[interval])) || CURSOR_NOW;
+        (await redisClient.get(REDIS_PAGING_TOKEN_KEY_VALUE)) || CURSOR_NOW;
     }
 
+    console.log(
+      `${
+        isTestnet ? "[TESTNET]" : "[MAINNET]"
+      }: Starting ledgers catchup. This might take several minutes.`,
+    );
+
     await catchup(
-      REDIS_LEDGER_KEYS[interval],
+      REDIS_LEDGER_KEY,
       pagingToken,
-      REDIS_PAGING_TOKEN_KEY[interval],
+      REDIS_PAGING_TOKEN_KEY_VALUE,
       0,
       interval,
+      isTestnet,
     );
   }
 
-  const horizon = new stellarSdk.Server("https://horizon.stellar.org");
+  const horizon = new stellarSdk.Server(horizonServer);
   horizon
     .ledgers()
     .cursor(CURSOR_NOW)
@@ -122,25 +143,35 @@ export async function catchup(
   pagingToken: string,
   pagingTokenKey: string,
   limit: number,
-  interval,
+  interval: INTERVALS,
+  isTestnet: boolean,
   total: number = 0,
 ) {
-  const horizon = new stellarSdk.Server("https://horizon.stellar.org");
+  const horizonServer = getHorizonServer(isTestnet);
+  const horizon = new stellarSdk.Server(horizonServer);
+  let ledgers: LedgerRecord[] = [];
+
   const resp = await horizon
     .ledgers()
     .cursor(pagingToken)
     .limit(HORIZON_LIMITS[interval])
     .call();
-  let ledgers: LedgerRecord[] = [];
 
   ledgers = resp.records;
   total += resp.records.length;
+  console.log("\nDEBUG: ", horizonServer, total);
 
   if (ledgers.length === 0 || (limit && total > limit)) {
     return;
   }
+
   pagingToken = ledgers[ledgers.length - 1].paging_token;
   await updateCache(ledgers, ledgersKey, pagingTokenKey, interval);
+
+  console.log(
+    `${isTestnet ? "[TESTNET]" : "[MAINNET]"}: Caught up ledgers to:`,
+    ledgers[ledgers.length - 1].closed_at,
+  );
 
   await catchup(
     ledgersKey,
@@ -148,6 +179,7 @@ export async function catchup(
     pagingTokenKey,
     limit,
     interval,
+    isTestnet,
     total,
   );
 }
@@ -210,6 +242,4 @@ export async function updateCache(
     JSON.stringify(cachedStats.slice(0, LEDGER_ITEM_LIMIT[interval])),
   );
   await redisClient.set(pagingTokenKey, pagingToken);
-
-  console.log("ledgers updated to:", ledgers[ledgers.length - 1].closed_at);
 }
