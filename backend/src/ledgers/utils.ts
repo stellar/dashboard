@@ -1,15 +1,16 @@
-import { LedgerAverages } from "./data";
-
 export interface LedgerStatData {
-  transaction_count: number;
+  transaction_success: number;
+  transaction_failure: number;
   operation_count: number;
   sequence: number;
+  total_ledgers: number;
+  start: string;
+  end: string;
 }
 
 export interface LedgerStat {
   date: string;
   data: LedgerStatData;
-  averages: LedgerAverages;
 }
 
 export enum INTERVALS {
@@ -58,78 +59,34 @@ export const BIGQUERY_DATES = {
   month: getBqDate(INTERVALS.month),
 };
 
-const sumAverages = (ledgers: LedgerStat[]) => {
-  let output = ledgers.reduce(
-    (acc, next) => {
-      return {
-        transaction_success_avg: {
-          sum:
-            acc.transaction_success_avg.sum +
-            next.averages.transaction_success_avg.sum,
-          size:
-            acc.transaction_success_avg.size +
-            next.averages.transaction_success_avg.size,
-        },
-        transaction_failure_avg: {
-          sum:
-            acc.transaction_failure_avg.sum +
-            next.averages.transaction_failure_avg.sum,
-          size:
-            acc.transaction_failure_avg.size +
-            next.averages.transaction_failure_avg.size,
-        },
-        operation_avg: {
-          sum: acc.operation_avg.sum + next.averages.operation_avg.sum,
-          size: acc.operation_avg.size + next.averages.operation_avg.size,
-        },
-        closed_times_avg: {
-          sum:
-            acc.closed_times_avg.sum +
-            next.averages.closed_times.sum / next.averages.closed_times.size,
-          size: acc.closed_times_avg.size + 1,
-        },
-      };
-    },
-    {
-      transaction_success_avg: {
-        sum: 0,
-        size: 0,
-      },
-      transaction_failure_avg: {
-        sum: 0,
-        size: 0,
-      },
-      operation_avg: {
-        sum: 0,
-        size: 0,
-      },
-      closed_times_avg: {
-        sum: 0,
-        size: 0,
-      },
-    },
+export const formatOutput = (cachedLedgers: LedgerStat[]) => {
+  const total_ledgers = cachedLedgers.reduce(
+    (a, curr) => a + curr.data.total_ledgers,
+    0,
+  );
+  const total_successful_tx = cachedLedgers.reduce(
+    (a, curr) => a + curr.data.transaction_success,
+    0,
   );
 
-  return output;
-};
+  const total_failed_tx = cachedLedgers.reduce(
+    (a, curr) => a + curr.data.transaction_failure,
+    0,
+  );
 
-export const formatOutput = (cachedLedgers: LedgerStat[]) => {
-  const average_sums = sumAverages(cachedLedgers);
-  const average_values = {
-    transaction_failure_avg:
-      average_sums.transaction_failure_avg.sum /
-      average_sums.transaction_failure_avg.size,
-    operation_avg:
-      average_sums.operation_avg.sum / average_sums.operation_avg.size,
-    transaction_success_avg:
-      average_sums.transaction_success_avg.sum /
-      average_sums.transaction_success_avg.size,
-    closed_times_avg:
-      average_sums.closed_times_avg.sum / average_sums.closed_times_avg.size,
-  };
+  const total_ops = cachedLedgers.reduce(
+    (a, curr) => a + curr.data.operation_count,
+    0,
+  );
+
+  const first = new Date(cachedLedgers.at(-1).data.start).getTime();
+  const last = new Date(cachedLedgers[0].data.end).getTime();
+  const avg_close_time = (last - first) / total_ledgers / 1000;
+  const avg_successful_tx_count = total_successful_tx / total_ledgers;
+  const avg_failed_tx_count = total_failed_tx / total_ledgers;
+  const avg_op_count = total_ops / total_ledgers;
 
   const output = { data: [] };
-
   cachedLedgers.forEach((ledger) => {
     output.data.push({
       date: ledger.date,
@@ -137,27 +94,11 @@ export const formatOutput = (cachedLedgers: LedgerStat[]) => {
     });
   });
 
-  return { ...output, ...average_values };
-};
-
-export const getLedgerClosedTimes = (times: number[]): number[] => {
-  const size = times.length;
-
-  if (size === 0) {
-    return [];
-  }
-
-  const partial = times.map((t, idx) => {
-    if (idx === size - 1) {
-      return 0;
-    }
-
-    return getDateDiffSeconds(t, times[idx + 1]);
-  });
-
-  return partial.map((value) => Math.round(value));
-};
-
-export const getDateDiffSeconds = (time1: number, time2: number) => {
-  return (time1 - time2) / 1000;
+  return {
+    ...output,
+    avg_close_time,
+    avg_successful_tx_count,
+    avg_failed_tx_count,
+    avg_op_count,
+  };
 };
