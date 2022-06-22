@@ -1,5 +1,6 @@
 import { redisClient } from "../src/redisSetup";
-import { updateCache, catchup, LedgerRecord, INTERVALS } from "../src/ledgers";
+import { updateCache, catchup, LedgerRecord } from "../src/ledgers/data";
+import { INTERVALS } from "../src/ledgers/utils";
 import { updateApiLumens as updateApiLumensV1 } from "../src/lumens";
 import { updateApiLumens as updateApiLumensV2V3 } from "../src/v2v3/lumens";
 
@@ -199,15 +200,27 @@ describe("ledgers", () => {
       expect(JSON.parse(cachedLedgers as string)).toEqual([
         {
           date: "2022-1-12 00:00:00",
-          transaction_count: 80,
-          operation_count: 300,
-          sequence: 10003,
+          data: {
+            end: "2022-01-12T01:07:00Z",
+            operation_count: 300,
+            sequence: 10003,
+            start: "2022-01-12T01:06:00Z",
+            total_ledgers: 2,
+            transaction_failure: 30,
+            transaction_success: 50,
+          },
         },
         {
           date: "2022-1-11 00:00:00",
-          transaction_count: 15,
-          operation_count: 50,
-          sequence: 10001,
+          data: {
+            end: "2022-01-11T01:06:00Z",
+            operation_count: 50,
+            sequence: 10001,
+            start: "2022-01-11T01:06:00Z",
+            total_ledgers: 1,
+            transaction_failure: 5,
+            transaction_success: 10,
+          },
         },
       ]);
       expect(cachedPagingToken).toEqual("103");
@@ -242,9 +255,15 @@ describe("ledgers", () => {
       expect(JSON.parse(cachedLedgers as string)).toEqual([
         {
           date: "2022-1-12 00:00:00",
-          transaction_count: 403018,
-          operation_count: 781390,
-          sequence: 39149884,
+          data: {
+            end: "2022-01-12T14:45:30Z",
+            operation_count: 781390,
+            sequence: 39149884,
+            start: "2022-01-12T13:07:43Z",
+            total_ledgers: 1000,
+            transaction_failure: 147582,
+            transaction_success: 255436,
+          },
         },
       ]);
       expect(cachedPagingToken).toEqual("168147471422193664");
