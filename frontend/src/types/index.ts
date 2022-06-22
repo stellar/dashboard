@@ -75,6 +75,12 @@ export interface DexDataInitialState {
   errorString?: string;
 }
 
+export interface FeeStatsDataInitialState {
+  data: FeeStatsData | null;
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
 export enum NetworkNodesType {
   WATCHER_NODES = "watcherNodes",
   VALIDATOR_NODES = "validatorNodes",

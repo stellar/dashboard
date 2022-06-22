@@ -1,6 +1,5 @@
 import StellarSdk from "stellar-sdk";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
 import { RootState } from "config/store";
 import { getErrorString } from "helpers/getErrorString";
 import {
