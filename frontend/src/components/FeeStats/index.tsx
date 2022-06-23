@@ -6,8 +6,7 @@ import BigNumber from "bignumber.js";
 
 import { useRedux } from "hooks/useRedux";
 import { SectionCard } from "components/SectionCard";
-import { fetchFeeStatsAction } from "ducks/feeStats";
-import { Network } from "types";
+import { fetchFeeStatsDataAction } from "ducks/feeStats";
 import "./styles.scss";
 
 export const FeeStats = () => {
@@ -38,12 +37,13 @@ export const FeeStats = () => {
   ];
 
   const getFeeStats = useCallback(() => {
-    dispatch(fetchFeeStatsAction(Network.MAINNET));
+    dispatch(fetchFeeStatsDataAction());
   }, [dispatch]);
 
   useEffect(() => {
     getFeeStats();
     setInterval(() => getFeeStats(), 5 * 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getFeeStats]);
 
   const iconStyle = (value: number) => {

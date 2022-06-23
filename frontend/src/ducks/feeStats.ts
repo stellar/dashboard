@@ -11,13 +11,13 @@ import {
 } from "types";
 import { networkConfig } from "constants/settings";
 
-export const fetchFeeStatsAction = createAsyncThunk<
+export const fetchFeeStatsDataAction = createAsyncThunk<
   FeeStatsData,
-  Network,
+  void,
   { rejectValue: RejectMessage; state: RootState }
->("feeStats/fetchFeeStatsAction", async (network, { rejectWithValue }) => {
+>("feeStats/fetchFeeStatsDataAction", async (_, { rejectWithValue }) => {
   try {
-    const server = new StellarSdk.Server(networkConfig[network].url);
+    const server = new StellarSdk.Server(networkConfig[Network.MAINNET].url);
 
     const response = server.feeStats();
 
@@ -42,21 +42,21 @@ const feeStatsSlice = createSlice({
     resetFeeStatsAction: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchFeeStatsAction.pending, (state = initialState) => {
+    builder.addCase(fetchFeeStatsDataAction.pending, (state = initialState) => {
       state.status = ActionStatus.PENDING;
     });
-    builder.addCase(fetchFeeStatsAction.fulfilled, (state, action) => {
+    builder.addCase(fetchFeeStatsDataAction.fulfilled, (state, action) => {
       state.data = action.payload;
       state.status = ActionStatus.SUCCESS;
     });
-    builder.addCase(fetchFeeStatsAction.rejected, (state, action) => {
+    builder.addCase(fetchFeeStatsDataAction.rejected, (state, action) => {
       state.status = ActionStatus.ERROR;
       state.errorString = action.payload?.errorString;
     });
   },
 });
 
-export const ledgersSelector = (state: RootState) => state.ledgers;
+export const feeStatsSelector = (state: RootState) => state.feeStats;
 
 export const { reducer } = feeStatsSlice;
 export const { resetFeeStatsAction } = feeStatsSlice.actions;

@@ -15,6 +15,7 @@ import { reducer as networkNodes } from "ducks/networkNodes";
 import { reducer as dex } from "ducks/dex";
 import { reducer as transactions } from "ducks/transactions";
 import { reducer as operations } from "ducks/operations";
+import { reducer as feeStats } from "ducks/feeStats";
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -36,6 +37,7 @@ const reducers = combineReducers({
   dex,
   transactions,
   operations,
+  feeStats,
 });
 
 export const resetStoreAction = createAction(RESET_STORE_ACTION_TYPE);
