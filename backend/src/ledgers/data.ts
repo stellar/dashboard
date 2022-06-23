@@ -83,9 +83,8 @@ export async function updateLedgers(isTestnet: boolean) {
 
     const cachedData = (await redisClient.get(REDIS_LEDGER_KEY)) || "[]";
     const cachedLedgers: LedgerStat[] = JSON.parse(cachedData);
-    let pagingToken = isTestnet
-      ? (await redisClient.get(REDIS_PAGING_TOKEN_KEY_VALUE)) || CURSOR_NOW
-      : "";
+    let pagingToken = "";
+
     if (cachedLedgers.length < LEDGER_ITEM_LIMIT[interval] && !isTestnet) {
       try {
         const query = getBqQueryByDate(BIGQUERY_DATES[interval]);
@@ -128,13 +127,27 @@ export async function updateLedgers(isTestnet: boolean) {
     .stream({
       onmessage: async (ledger: LedgerRecord) => {
         for (const interval of intervalTypes) {
+          const REDIS_LEDGER_KEY = getServerNamespace(
+            REDIS_LEDGER_KEYS[interval],
+            isTestnet,
+          );
+
+          const REDIS_PAGING_TOKEN_KEY_VALUE = getServerNamespace(
+            REDIS_PAGING_TOKEN_KEY[interval],
+            isTestnet,
+          );
           await updateCache(
             [ledger],
-            REDIS_LEDGER_KEYS[interval],
-            REDIS_PAGING_TOKEN_KEY[interval],
+            REDIS_LEDGER_KEY,
+            REDIS_PAGING_TOKEN_KEY_VALUE,
             interval,
           );
         }
+        console.log(
+          `${isTestnet ? "[TESTNET]" : "[MAINNET]"}: updated to ledger ${
+            ledger.closed_at
+          }`,
+        );
       },
     });
 }
