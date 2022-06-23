@@ -31,6 +31,9 @@ if (process.env.DEV) {
 app.get("/api/ledgers/hour/public", ledgers.handler_hour);
 app.get("/api/ledgers/day/public", ledgers.handler_day);
 app.get("/api/ledgers/month/public", ledgers.handler_month);
+app.get("/api/ledgers/hour/testnet", ledgers.handler_hour_testnet);
+app.get("/api/ledgers/day/testnet", ledgers.handler_day_testnet);
+app.get("/api/ledgers/month/testnet", ledgers.handler_month_testnet);
 app.get("/api/lumens", lumens.v1Handler);
 
 app.get("/api/dex/24h-payments", dex.get24hPaymentsData);

@@ -19,6 +19,14 @@ export enum INTERVALS {
   month = "month",
 }
 
+export const getServerNamespace = (text: string, isTestnet: boolean) =>
+  isTestnet ? `${text}_testnet` : text;
+
+export const getHorizonServer = (isTestnet) =>
+  isTestnet
+    ? "https://horizon-testnet.stellar.org"
+    : "https://horizon.stellar.org";
+
 export const dateSorter = (a: LedgerStat, b: LedgerStat) => {
   return new Date(b.date).getTime() - new Date(a.date).getTime();
 };
