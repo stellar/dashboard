@@ -1,5 +1,5 @@
 .LedgerInfo {
-  &__title_nav {
+  &__titleNav {
     font-weight: var(--font-weight-medium);
     color: var(--pal-text-primary);
     border-right: 1px solid var(--pal-border-primary);
@@ -18,7 +18,7 @@
     }
   }
 
-  &__cards_row {
+  &__cardsRow {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -26,7 +26,7 @@
     margin-top: 1rem;
   }
 
-  &__main_chart {
+  &__mainChart {
     @media (max-width: 540px) {
       overflow-x: auto;
       overflow-y: visible;
@@ -44,12 +44,12 @@
     }
   }
 
-  &__transactions_chart_container {
+  &__transactionsChartContainer {
     width: 1rem;
     height: 1rem;
   }
 
-  &__operations_chart_container {
+  &__operationsChartContainer {
     width: 0.7rem;
     height: 1rem;
   }

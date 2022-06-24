@@ -97,7 +97,7 @@ export const LedgerInfo = ({
 
   const graphNavOptionsContent = useMemo(
     () => (
-      <div className="LedgerInfo__title_nav">
+      <div className="LedgerInfo__titleNav">
         {Object.entries(TIME_RANGE_MAPPING).map(([key, { label }]) => (
           <TextLink
             key={key}
@@ -105,7 +105,7 @@ export const LedgerInfo = ({
             onClick={() =>
               setRangeInterval(key as keyof typeof TIME_RANGE_MAPPING)
             }
-            className={`LedgerInfo__title_nav--${
+            className={`LedgerInfo__titleNav--${
               rangeInterval === key ? "active" : "inactive"
             }`}
           >
@@ -127,8 +127,8 @@ export const LedgerInfo = ({
       noData={!itemsData.length}
     >
       <div className="LedgerInfo">
-        <div className="LedgerInfo__main_chart">
-          <div className="LedgerInfo__main_chart__container">
+        <div className="LedgerInfo__mainChart">
+          <div className="LedgerInfo__mainChart__container">
             <VerticalBarChart
               data={data.graphData}
               primaryValueName="Transactions"
@@ -139,13 +139,13 @@ export const LedgerInfo = ({
             />
           </div>
         </div>
-        <div className="LedgerInfo__cards_row">
+        <div className="LedgerInfo__cardsRow">
           <AmountInfoCard
             title="AVG Transactions"
             amount={new BigNumber(data.averageTransactions.success).toFormat()}
             amountBy={new BigNumber(data.averageTransactions.error).toFormat()}
             amountPrefixContent={
-              <div className="LedgerInfo__transactions_chart_container">
+              <div className="LedgerInfo__transactionsChartContainer">
                 <CircularChart
                   data={[
                     {
@@ -169,7 +169,7 @@ export const LedgerInfo = ({
             title="AVG Operations"
             amount={new BigNumber(data.averageOperations).toFormat()}
             amountPrefixContent={
-              <div className="LedgerInfo__operations_chart_container">
+              <div className="LedgerInfo__operationsChartContainer">
                 <BatteryLikeChart value={data.averageOperations / 10} />
               </div>
             }

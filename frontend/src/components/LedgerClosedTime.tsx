@@ -22,9 +22,11 @@ type Props = { closedTime: number; showPrefix?: boolean };
 
 export const LedgerClosedTime = ({ closedTime, showPrefix = true }: Props) => (
   <div className="LedgerClosedTime">
-    {showPrefix && <span>closed in {closedTime}s</span>}
+    {showPrefix && <>closed in {closedTime}s</>}
     <Icon.Clock
-      className={`LedgerClosedTime--${getLedgerClosedStatus(closedTime)}`}
+      className={`LedgerClosedTime__icon LedgerClosedTime__icon--${getLedgerClosedStatus(
+        closedTime,
+      )}`}
     />
   </div>
 );
