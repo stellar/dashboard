@@ -10,9 +10,12 @@ import { XAxisProps } from "recharts";
  * @prop {string} [tooltipTitle] - It will be used as
  *    the tooltip title for the group of bars. If not provided,
  *    the title will be the date of the group.
+ * @prop {string} [tooltipSubtitle] - It will be used as
+ *    the tooltip subtitle for the group of bars.
  */
 export type VerticalBarChartDataItem = {
   tooltipTitle?: string;
+  tooltipSubtitle?: string;
   date: Date;
   primaryValue: number;
   secondaryValue: number;
@@ -75,10 +78,18 @@ export type VerticalBarChartProps = {
    */
   primaryValueName?: string;
   /**
+   * Description to be concatenated with the primary value inside the tooltip.
+   */
+  primaryValueTooltipDescription?: string;
+  /**
    * Name/Label of the secondary value, to be showed on the Legend. If not provided,
    * it will show `secondaryValue`.
    */
   secondaryValueName?: string;
+  /**
+   * Description to be concatenated with the secondary value inside the tooltip.
+   */
+  secondaryValueTooltipDescription?: string;
   /**
    * Time range to be used to format the X-Axis ticks.
    * Can be one of the following:

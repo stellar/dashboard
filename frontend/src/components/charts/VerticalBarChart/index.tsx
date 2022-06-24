@@ -15,6 +15,7 @@ import { fromUnixTime } from "date-fns";
 import BigNumber from "bignumber.js";
 
 import { Tooltip } from "components/charts/Tooltip";
+import { useMediaQuery } from "hooks/useMediaQuery";
 
 import { VerticalBarShape } from "./VerticalBarShape";
 
@@ -29,6 +30,11 @@ import {
 import { dateFormatter, getTimeRangeProps, getTooltipProps } from "./utils";
 
 import "./styles.scss";
+
+const X_AXIS_SMALL_PADDING = 25;
+const X_AXIS_BIG_PADDING = 50;
+const Y_AXIS_MIN_WIDTH = 60;
+const Y_AXIS_WIDTH_MULTIPLIER_VALUE = 12;
 
 /**
  * Vertical Bar Chart component. It is used to display a chart with a series-based data.
@@ -52,7 +58,16 @@ export const VerticalBarChart = ({
 
   timeRange = TimeRange.HOUR,
   baseStartDate,
+  primaryValueTooltipDescription,
+  secondaryValueTooltipDescription,
 }: VerticalBarChartProps) => {
+  const smallScreen = useMediaQuery("(max-width: 540px)");
+
+  const contentPadding = useMemo(
+    () => (smallScreen ? X_AXIS_SMALL_PADDING : X_AXIS_BIG_PADDING),
+    [smallScreen],
+  );
+
   const renderTooltip = useCallback(
     (props: VerticalBarChartTooltipInnerProps) => {
       if (!props.payload || props.payload.length < 2) {
@@ -62,11 +77,18 @@ export const VerticalBarChart = ({
       const tooltipProps = getTooltipProps(props, {
         tooltipClassName,
         timeRange,
+        primaryValueTooltipDescription,
+        secondaryValueTooltipDescription,
       });
 
       return <Tooltip {...tooltipProps} />;
     },
-    [timeRange, tooltipClassName],
+    [
+      timeRange,
+      tooltipClassName,
+      primaryValueTooltipDescription,
+      secondaryValueTooltipDescription,
+    ],
   );
 
   const renderTickXAxis = useCallback(
@@ -126,6 +148,24 @@ export const VerticalBarChart = ({
     });
   }, [baseStartDate, timeRange]);
 
+  const maxValue = useMemo(
+    () =>
+      Math.max(
+        ...data.map((v) => v.primaryValue),
+        ...data.map((v) => v.secondaryValue),
+      ),
+    [data],
+  );
+
+  const yAxisWidth = useMemo(
+    () =>
+      Math.max(
+        Y_AXIS_MIN_WIDTH,
+        maxValue.toString().length * Y_AXIS_WIDTH_MULTIPLIER_VALUE,
+      ),
+    [maxValue],
+  );
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
@@ -143,13 +183,13 @@ export const VerticalBarChart = ({
         {/* xaxis to add padding to graph container */}
         <XAxis
           hide
-          padding={{ left: 50, right: 50 }}
+          padding={{ left: contentPadding, right: contentPadding }}
           dataKey="date"
           tickLine={false}
         />
         {/* xaxis to show labels */}
         <XAxis
-          padding={{ left: 25, right: 25 }}
+          padding={{ left: X_AXIS_SMALL_PADDING, right: X_AXIS_SMALL_PADDING }}
           xAxisId="labelsTime"
           dataKey="date"
           interval="preserveStartEnd"
@@ -170,12 +210,13 @@ export const VerticalBarChart = ({
           tickLine={false}
           tickMargin={10}
           tick={renderTickYAxis}
+          width={yAxisWidth}
         />
         <RechartsTooltip
           active
           allowEscapeViewBox={{ x: true, y: false }}
           cursor={false}
-          offset={-5}
+          offset={0}
           content={renderTooltip as TooltipProps<number, string>["content"]}
         />
         <Legend

@@ -1,2 +1,56 @@
 .LedgerInfo {
+  &__titleNav {
+    font-weight: var(--font-weight-medium);
+    color: var(--pal-text-primary);
+    border-right: 1px solid var(--pal-border-primary);
+
+    & > * {
+      margin-right: 1rem;
+    }
+
+    &--active {
+      cursor: not-allowed;
+    }
+
+    &--inactive {
+      cursor: pointer;
+      opacity: var(--opacity-disabled-button);
+    }
+  }
+
+  &__cardsRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  &__mainChart {
+    @media (max-width: 540px) {
+      overflow-x: auto;
+      overflow-y: visible;
+
+      padding-bottom: 0.8rem;
+    }
+
+    &__container {
+      width: 100%;
+      height: 20rem;
+
+      @media (max-width: 540px) {
+        width: 32rem;
+      }
+    }
+  }
+
+  &__transactionsChartContainer {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &__operationsChartContainer {
+    width: 0.7rem;
+    height: 1rem;
+  }
 }

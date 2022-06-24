@@ -21,7 +21,9 @@
     margin-bottom: 2rem;
 
     &__title {
-      margin-left: 0.4rem;
+      &:not(:first-child) {
+        margin-left: 0.4rem;
+      }
       text-transform: uppercase;
     }
 

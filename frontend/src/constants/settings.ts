@@ -1,4 +1,4 @@
-import { Network } from "types";
+import { LedgerTransactionHistoryFilterType, Network } from "types";
 
 export const DASHBOARD_URL = "https://dashboard.stellar.org";
 export const STATUSPAGE_URL = "https://9sl3dhr1twv1.statuspage.io/api/v2";
@@ -13,9 +13,23 @@ export const networkConfig = {
   [Network.MAINNET]: {
     url: "https://horizon.stellar.org",
     stellarbeatUrl: "https://api.stellarbeat.io",
+    ledgerTransactionsHistorySuffix: "/public",
   },
   [Network.TESTNET]: {
     url: "https://horizon-testnet.stellar.org",
     stellarbeatUrl: "https://api-testnet.stellarbeat.io",
+    ledgerTransactionsHistorySuffix: "/testnet",
+  },
+};
+
+export const ledgerTransactionHistoryConfig = {
+  [LedgerTransactionHistoryFilterType["1H"]]: {
+    endpointPrefix: "/hour",
+  },
+  [LedgerTransactionHistoryFilterType["24H"]]: {
+    endpointPrefix: "/day",
+  },
+  [LedgerTransactionHistoryFilterType["30D"]]: {
+    endpointPrefix: "/month",
   },
 };

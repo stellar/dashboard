@@ -46,7 +46,11 @@ export const SectionCard = ({
         <div className="SectionCard__heading__options">
           {titleCustom ?? null}
           {titleLink ? (
-            <TextLink href={titleLink} iconRight={<Icon.ExternalLink />}>
+            <TextLink
+              href={titleLink}
+              target="_blank"
+              iconRight={<Icon.ExternalLink />}
+            >
               {titleLinkLabel}
             </TextLink>
           ) : null}

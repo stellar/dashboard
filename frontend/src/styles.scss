@@ -45,13 +45,16 @@ body.dark-mode {
   align-items: center;
   justify-content: flex-end;
 
+  &__icon {
+    margin-left: 0.5rem;
+  }
+
   svg {
     display: inline-block;
     width: 1rem;
     height: 1rem;
-    margin-left: 0.5rem;
 
-    &.LedgerClosedTime {
+    &.LedgerClosedTime__icon {
       &--normal {
         stroke: var(--pal-success);
       }

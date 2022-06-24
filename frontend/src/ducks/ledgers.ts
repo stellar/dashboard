@@ -2,11 +2,15 @@ import StellarSdk from "stellar-sdk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { RootState } from "config/store";
-import { networkConfig } from "constants/settings";
+import {
+  ledgerTransactionHistoryConfig,
+  networkConfig,
+} from "constants/settings";
 import { getErrorString } from "helpers/getErrorString";
 import { getAverageLedgerClosedTime } from "helpers/getAverageLedgerClosedTime";
 import { getLedgerClosedTimes } from "helpers/getLedgerClosedTimes";
 import { getDateDiffSeconds } from "helpers/getDateDiffSeconds";
+import { parseDateFromFormat } from "helpers/parseDateFromFormat";
 
 import {
   LedgersInitialState,
@@ -15,7 +19,9 @@ import {
   Network,
   LedgerRecord,
   LedgerItem,
+  LedgerTransactionHistoryFilterType,
 } from "types";
+import BigNumber from "bignumber.js";
 
 const LIMIT = 200;
 const LAST_SIZE = 11;
@@ -81,6 +87,60 @@ export const fetchLedgersAction = createAsyncThunk<
   }
 });
 
+type FetchLedgersTransactionsHistoryActionParams = {
+  network: Network;
+  filter: LedgerTransactionHistoryFilterType;
+};
+
+type FetchLedgersTransactionsHistoryActionResponse =
+  LedgersInitialState["ledgerTransactionsHistory"];
+
+export const fetchLedgersTransactionsHistoryAction = createAsyncThunk<
+  FetchLedgersTransactionsHistoryActionResponse,
+  FetchLedgersTransactionsHistoryActionParams,
+  { rejectValue: RejectMessage; state: RootState }
+>(
+  "ledgers/fetchLedgersTransactionsHistoryAction",
+  async ({ network, filter }, { rejectWithValue }) => {
+    try {
+      const historyFilter = ledgerTransactionHistoryConfig[filter];
+      const response = await fetch(
+        `/api/ledgers${historyFilter.endpointPrefix}${networkConfig[network].ledgerTransactionsHistorySuffix}`,
+      );
+
+      const data = await response.json();
+
+      return {
+        items: data.data.map((item: Record<string, unknown>) => ({
+          date: parseDateFromFormat(
+            item.date as string,
+            "yyyy-MM-dd HH:mm:ss",
+          ).toISOString(),
+          txTransactionCount:
+            (item.transaction_failure as number) +
+            (item.transaction_success as number),
+          opCount: item.operation_count,
+          sequence: item.sequence,
+        })),
+        average: {
+          txTransactionSuccess: Number(
+            new BigNumber(data.avg_successful_tx_count).toFormat(0),
+          ),
+          txTransactionError: Number(
+            new BigNumber(data.avg_failed_tx_count).toFormat(0),
+          ),
+          opCount: Number(new BigNumber(data.avg_op_count).toFormat(0)),
+          closeTimeAvg: Number(new BigNumber(data.avg_close_time).toFormat(1)),
+        },
+      };
+    } catch (error) {
+      return rejectWithValue({
+        errorString: getErrorString(error),
+      });
+    }
+  },
+);
+
 export const startLedgerStreamingAction = createAsyncThunk<
   { isStreaming: boolean },
   Network,
@@ -134,6 +194,10 @@ const initialState: LedgersInitialState = {
   lastLedgerRecords: [],
   protocolVersion: null,
   ledgerClosedTimes: [],
+  ledgerTransactionsHistory: {
+    items: [],
+    average: {} as FetchLedgersTransactionsHistoryActionResponse["average"],
+  },
   averageClosedTime: null,
   isStreaming: false,
   status: undefined,
@@ -187,6 +251,23 @@ const ledgersSlice = createSlice({
       state.status = ActionStatus.ERROR;
       state.errorString = action.payload?.errorString;
     });
+    builder.addCase(fetchLedgersTransactionsHistoryAction.pending, (state) => {
+      state.status = ActionStatus.PENDING;
+    });
+    builder.addCase(
+      fetchLedgersTransactionsHistoryAction.fulfilled,
+      (state, action) => {
+        state.ledgerTransactionsHistory = action.payload;
+        state.status = ActionStatus.SUCCESS;
+      },
+    );
+    builder.addCase(
+      fetchLedgersTransactionsHistoryAction.rejected,
+      (state, action) => {
+        state.errorString = action.payload?.errorString;
+        state.status = ActionStatus.ERROR;
+      },
+    );
   },
 });
 

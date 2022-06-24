@@ -18,11 +18,15 @@ const getLedgerClosedStatus = (closedTime: number) => {
   return ClosedStatus.VERY_SLOW;
 };
 
-export const LedgerClosedTime = ({ closedTime }: { closedTime: number }) => (
+type Props = { closedTime: number; showPrefix?: boolean };
+
+export const LedgerClosedTime = ({ closedTime, showPrefix = true }: Props) => (
   <div className="LedgerClosedTime">
-    {`closed in ${closedTime}s`}{" "}
+    {showPrefix && <>closed in {closedTime}s</>}
     <Icon.Clock
-      className={`LedgerClosedTime--${getLedgerClosedStatus(closedTime)}`}
+      className={`LedgerClosedTime__icon LedgerClosedTime__icon--${getLedgerClosedStatus(
+        closedTime,
+      )}`}
     />
   </div>
 );

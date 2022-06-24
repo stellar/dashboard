@@ -1,4 +1,9 @@
 .ChartTooltip {
+  .Tooltip {
+    width: 0.32rem;
+    transform: translateX(-50%);
+  }
+
   &__placeholder {
     opacity: 0;
   }
@@ -10,6 +15,12 @@
 
     &__title {
       opacity: 0.6;
+    }
+
+    &__subtitle {
+      opacity: 0.6;
+      font-weight: var(--font-weight-light);
+      font-size: var(--font-size-small);
     }
 
     &__row {
