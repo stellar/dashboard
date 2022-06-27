@@ -121,7 +121,7 @@ export const LedgerInfo = ({
     <SectionCard
       title="Ledger Info"
       titleLinkLabel="API"
-      titleLink={`/api/ledgers${ledgerTransactionHistoryConfig[selectedTimeInterval].endpointPrefix}/public${networkConfig[network].ledgerTransactionsHistorySuffix}`}
+      titleLink={`/api/ledgers${ledgerTransactionHistoryConfig[selectedTimeInterval].endpointPrefix}${networkConfig[network].ledgerTransactionsHistorySuffix}`}
       titleCustom={graphNavOptionsContent}
       isLoading={status === ActionStatus.PENDING}
       noData={!itemsData.length}
