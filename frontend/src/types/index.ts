@@ -9,6 +9,7 @@ export interface Store {
   lumenSupply: LumenSupplyInitialState;
   networkNodes: NetworkNodesInitialState;
   dex: DexDataInitialState;
+  transactions: TransactionsInitialState;
 }
 
 export type StoreKey = keyof Store;
@@ -200,4 +201,21 @@ export enum LedgerTransactionHistoryFilterType {
   "30D" = "30D",
   "24H" = "24H",
   "1H" = "1H",
+}
+
+export type TransactionHistoryItem = {
+  date: string;
+  txTransactionCount: number;
+};
+
+export interface FetchTransactionsHistoryActionResponse {
+  items: TransactionHistoryItem[];
+}
+
+export interface TransactionsInitialState {
+  transactionsHistory: {
+    items: TransactionHistoryItem[];
+  };
+  status: ActionStatus | undefined;
+  errorString?: string;
 }
