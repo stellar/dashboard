@@ -101,7 +101,7 @@ export const NetworkStatus = ({
         );
         setClosedAgo(diff);
       }
-    }, 5000);
+    }, 1000);
 
     return () => {
       clearInterval(interval);
