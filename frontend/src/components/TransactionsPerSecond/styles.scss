@@ -19,43 +19,11 @@
 
   &__card {
     margin-top: 1rem;
-  }
+    width: 15rem;
 
-  &__cardTitle {
-    color: var(--pal-text-tertiary);
-    font-weight: var(--font-weight-medium);
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    margin-bottom: 2rem;
-    text-transform: uppercase;
-  }
-
-  &__detail {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding-bottom: 0.7rem;
-    margin-top: 1rem;
-
-    border-bottom: 1px solid var(--pal-border-primary);
-
-    &__text {
-      color: var(--pal-text-primary);
-      font-weight: var(--font-weight-medium);
-
-      display: flex;
-      align-items: center;
-
-      &__circularChart {
-        width: 1rem;
-        height: 1rem;
-
-        margin-right: 1rem;
-      }
+    &__icon {
+      width: 1rem;
+      height: 1rem;
     }
   }
 }
