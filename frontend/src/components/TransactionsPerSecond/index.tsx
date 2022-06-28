@@ -1,5 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
+import { Card } from "@stellar/design-system";
+import BigNumber from "bignumber.js";
 
 import { useRedux } from "hooks/useRedux";
 import {
@@ -12,13 +14,15 @@ import {
   VerticalBarChart,
   TimeRange,
 } from "components/charts/VerticalBarChart";
-
-import "./styles.scss";
+import { CircularChart } from "components/charts/CircularChart";
+import { LedgerClosedTime } from "components/LedgerClosedTime";
 import { fetchTransactionsHistoryAction } from "ducks/transactions";
+import "./styles.scss";
 
 export const TransactionsPerSecond = () => {
-  const { transactions } = useRedux("transactions");
+  const { transactions, ledgers } = useRedux("transactions", "ledgers");
   const dispatch = useDispatch();
+  const lastLedger = ledgers.lastLedgerRecords[0];
   const selectedTimeInterval = LedgerTransactionHistoryFilterType["30D"];
 
   useEffect(() => {
@@ -28,7 +32,9 @@ export const TransactionsPerSecond = () => {
   const data = useMemo(() => {
     const result = transactions.transactionsHistory.items.map((item) => ({
       date: new Date(item.date),
-      primaryValue: item.txTransactionCount,
+      primaryValue: new BigNumber(
+        new BigNumber(item.txTransactionCount / 84600).toFormat(2),
+      ).toNumber(),
       secondaryValue: 0,
     }));
 
@@ -47,14 +53,64 @@ export const TransactionsPerSecond = () => {
         <div className="TransactionsPerSecond__mainChart__container">
           <VerticalBarChart
             data={data}
+            primaryValueOnly
             primaryValueName="Transactions"
-            secondaryValueName="Operations"
             timeRange={TimeRange.MONTH}
-            primaryValueTooltipDescription="txns"
-            secondaryValueTooltipDescription="ops"
+            primaryValueTooltipDescription="tps"
           />
         </div>
       </div>
+
+      {lastLedger && (
+        <div className="TransactionsPerSecond__card">
+          <Card>
+            <div className="TransactionsPerSecond__cardTitle">
+              Current transactions
+            </div>
+
+            <div className="TransactionsPerSecond__detail">
+              <div className="AmountInfoCard__detail__title">Transactions</div>
+              <div className="TransactionsPerSecond__detail__text">
+                <div className="TransactionsPerSecond__detail__text__circularChart">
+                  <CircularChart
+                    data={[
+                      { label: "Success", value: lastLedger.txCountSuccessful },
+                      { label: "Error", value: lastLedger.txCountFailed },
+                    ]}
+                    tooltipEnabled={false}
+                    lineWidth={0.5}
+                    colorType={CircularChart.ColorType.SECONDARY}
+                  />
+                </div>
+                {lastLedger.txCountSuccessful} succeeded /{" "}
+                {lastLedger.txCountFailed} failed
+              </div>
+            </div>
+
+            <div className="TransactionsPerSecond__detail">
+              <div className="ATransactionsPerSecond__title">
+                Transactions per second
+              </div>
+              <div className="TransactionsPerSecond__detail__text">
+                {new BigNumber(
+                  (lastLedger.txCountSuccessful + lastLedger.txCountFailed) /
+                    lastLedger.closedTime,
+                ).toFormat(2)}{" "}
+                tps
+              </div>
+            </div>
+
+            <div className="TransactionsPerSecond__detail">
+              <div className="TransactionsPerSecond__title">
+                Ledger closing time
+              </div>
+              <div className="TransactionsPerSecond__detail__text">
+                <LedgerClosedTime closedTime={lastLedger.closedTime} />
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
     </SectionCard>
   );
 };
