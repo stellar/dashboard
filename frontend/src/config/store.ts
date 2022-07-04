@@ -19,13 +19,10 @@ import { reducer as operations } from "ducks/operations";
 export type RootState = ReturnType<typeof store.getState>;
 
 const loggerMiddleware =
-  () =>
-  //storeVal: any
-  (next: any) =>
-  (action: Action<any>) => {
-    // console.log("Dispatching: ", action.type);
+  () => (storeVal: any) => (next: any) => (action: Action<any>) => {
+    console.log("Dispatching: ", action.type);
     const dispatchedAction = next(action);
-    // console.log("NEW STATE: ", storeVal.getState());
+    console.log("NEW STATE: ", storeVal.getState());
     return dispatchedAction;
   };
 
