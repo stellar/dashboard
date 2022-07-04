@@ -9,7 +9,7 @@ import {
 } from "types";
 import { RootState } from "config/store";
 import { getErrorString } from "helpers/getErrorString";
-import { getLedgerClosedTimes } from "helpers/getLedgerClosedTimes";
+import { getDateDiffSeconds } from "helpers/getDateDiffSeconds";
 
 export const fetchLastOperationsAction = createAsyncThunk<
   Array<FetchLastOperationsActionResponse>,
@@ -25,7 +25,7 @@ export const fetchLastOperationsAction = createAsyncThunk<
     const { records } = operations._embedded as OperationsResponse;
 
     const result = records.map((record) => {
-      const [timeAgo] = getLedgerClosedTimes([record.created_at]);
+      const timeAgo = getDateDiffSeconds(String(new Date()), record.created_at);
 
       const operationType =
         record.type === "create_passive_offer" ? "passive_offer" : record.type;
