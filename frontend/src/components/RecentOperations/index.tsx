@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Table } from "@stellar/design-system";
 
@@ -36,9 +36,14 @@ export const RecentOperations = () => {
     },
   ];
 
-  useEffect(() => {
+  const getLastOperations = useCallback(() => {
     dispatch(fetchLastOperationsAction());
   }, [dispatch]);
+
+  useEffect(() => {
+    getLastOperations();
+    setInterval(getLastOperations, 10 * 1000);
+  }, [dispatch, getLastOperations]);
 
   const renderOperations = (operation: FetchLastOperationsActionResponse) => {
     const operationLink = `${horizonURL}/operations/${operation.id}`;
