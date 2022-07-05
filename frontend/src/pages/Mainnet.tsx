@@ -9,6 +9,7 @@ import { Incidents } from "components/Incidents";
 import { TransactionsPerSecond } from "components/TransactionsPerSecond";
 import { RecentOperations } from "components/RecentOperations";
 import { FeeStats } from "components/FeeStats";
+import { XML } from "components/XML";
 
 export const Mainnet = () => (
   <div className="ContentWrapper">
@@ -22,6 +23,7 @@ export const Mainnet = () => (
     <LumenSupply />
     <NetworkNodes />
     <FeeStats />
+    <XML />
     <Incidents />
   </div>
 );
