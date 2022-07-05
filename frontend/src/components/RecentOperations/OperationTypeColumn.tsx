@@ -16,10 +16,12 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
   horizonURL,
 }) => {
   const amount = (
-    am: number,
-    asset_type: string,
-    asset_code: string,
-    asset_issuer: string,
+{
+  amount,
+  assetType,
+  assetCode,
+  assetIssuer,
+}: FormatAmountProps
   ) => {
     // Strip zeros and `.`
     let amount = new BigNumber(am).toFormat(7).replace(/\.*0+$/, "");
