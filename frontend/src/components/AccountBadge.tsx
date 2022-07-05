@@ -38,7 +38,7 @@ export const AccountBadge: React.FC<AccountBadgeProps> = ({
           target="_blank"
           rel="noreferrer"
         >
-          {id.substring(0, 4)}
+          {id.substring(0, 4)}...
         </a>
       </code>
 
@@ -54,7 +54,9 @@ export const AccountBadge: React.FC<AccountBadgeProps> = ({
             <img src={isObjectAccount.icon} alt="" />
           </a>
         ) : (
-          <span className="account-tag">{knownAccounts[convertedId]}</span>
+          <span className="account-tag">
+            {knownAccounts[convertedId].toString().substring(0, 4)}...
+          </span>
         ))}
     </span>
   );

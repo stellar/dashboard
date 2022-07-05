@@ -1,6 +1,8 @@
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Table } from "@stellar/design-system";
+
+import "./styles.scss";
 
 import { useRedux } from "hooks/useRedux";
 import { networkConfig } from "constants/settings";
@@ -9,8 +11,6 @@ import { AccountBadge } from "components/AccountBadge";
 import { OperationTypeColumn } from "./OperationTypeColumn";
 import { fetchLastOperationsAction } from "ducks/operations";
 import { FetchLastOperationsActionResponse, Network } from "types";
-
-import "./styles.scss";
 
 export const RecentOperations = () => {
   const { operations } = useRedux("operations");
@@ -23,8 +23,8 @@ export const RecentOperations = () => {
       label: "Source",
     },
     {
-      id: "operations",
-      label: "Operations",
+      id: "operation",
+      label: "Operation",
     },
     {
       id: "details",
@@ -49,7 +49,7 @@ export const RecentOperations = () => {
     const operationLink = `${horizonURL}/operations/${operation.id}`;
 
     return (
-      <React.Fragment key={Math.random()}>
+      <>
         <td>
           <AccountBadge
             id={operation.source_account}
@@ -71,7 +71,7 @@ export const RecentOperations = () => {
           <OperationTypeColumn horizonURL={horizonURL} operation={operation} />
         </td>
         <td>{operation.timeAgo}s</td>
-      </React.Fragment>
+      </>
     );
   };
 
