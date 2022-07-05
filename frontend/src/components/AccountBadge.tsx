@@ -18,7 +18,7 @@ export const AccountBadge: React.FC<AccountBadgeProps> = ({
   id,
   account,
 }) => {
-  const [isObjectAccount, setIsObjectAccount] = useState({} as ObjectAccount);
+  const [isObjectAccount, setIsObjectAccount] = useState<ObjectAccount>();
 
   const convertedId = id as unknown as keyof typeof knownAccounts;
 
@@ -30,10 +30,10 @@ export const AccountBadge: React.FC<AccountBadgeProps> = ({
   }
 
   return (
-    <span className="account">
+    <span>
       <code>
         <a
-          className="RecentOperations__link"
+          className="RecentOperations__TextLink"
           href={horizonURL + "/accounts/" + id}
           target="_blank"
           rel="noreferrer"

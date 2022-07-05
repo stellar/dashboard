@@ -59,7 +59,7 @@ export const RecentOperations = () => {
         </td>
         <td>
           <a
-            className="RecentOperations__link"
+            className="RecentOperations__TextLink"
             href={operationLink}
             target="_blank"
             rel="noreferrer"

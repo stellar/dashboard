@@ -15,7 +15,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
   operation,
   horizonURL,
 }) => {
-  const amount = (
+  const formatAccount = (
     am: number,
     asset_type: string,
     asset_code: string,
@@ -42,7 +42,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
   if (operation.type === "create_account") {
     return (
       <span>
-        {amount(Number(operation.starting_balance), "native", "", "")}
+        {formatAccount(Number(operation.starting_balance), "native", "", "")}
         &raquo;{" "}
         <AccountBadge
           horizonURL={horizonURL}
@@ -56,7 +56,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
   if (operation.type === "payment") {
     return (
       <span>
-        {amount(
+        {formatAccount(
           operation.amount,
           operation.asset_type,
           operation.asset_code,
@@ -76,14 +76,14 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
     return (
       <span>
         max{" "}
-        {amount(
+        {formatAccount(
           Number(operation.source_max),
           operation.source_asset_type,
           operation.source_asset_code,
           operation.source_asset_issuer,
         )}{" "}
         &raquo;{" "}
-        {amount(
+        {formatAccount(
           operation.amount,
           operation.asset_type,
           operation.asset_code,
@@ -103,14 +103,14 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
     return (
       <span>
         max{" "}
-        {amount(
+        {formatAccount(
           Number(operation.source_max),
           operation.source_asset_type,
           operation.source_asset_code,
           operation.source_asset_issuer,
         )}{" "}
         &raquo;{" "}
-        {amount(
+        {formatAccount(
           operation.amount,
           operation.asset_type,
           operation.asset_code,
@@ -189,7 +189,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
     return (
       <span>
         {action}{" "}
-        {amount(
+        {formatAccount(
           operation.amount,
           operation.selling_asset_type,
           operation.selling_asset_code,
