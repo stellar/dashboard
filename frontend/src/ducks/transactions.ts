@@ -15,7 +15,7 @@ import { RootState } from "config/store";
 import { getErrorString } from "helpers/getErrorString";
 import { parseDateFromFormat } from "helpers/parseDateFromFormat";
 
-export const fetchTransactionsHistoryAction = createAsyncThunk<
+export const fetchTransactionsHistoryMonthAction = createAsyncThunk<
   FetchTransactionsHistoryActionResponse,
   Network,
   { rejectValue: RejectMessage; state: RootState }
@@ -63,20 +63,20 @@ const transactionsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(
-      fetchTransactionsHistoryAction.pending,
+      fetchTransactionsHistoryMonthAction.pending,
       (state = initialState) => {
         state.status = ActionStatus.PENDING;
       },
     );
     builder.addCase(
-      fetchTransactionsHistoryAction.fulfilled,
+      fetchTransactionsHistoryMonthAction.fulfilled,
       (state, action) => {
         state.transactionsHistory = action.payload;
         state.status = ActionStatus.SUCCESS;
       },
     );
     builder.addCase(
-      fetchTransactionsHistoryAction.rejected,
+      fetchTransactionsHistoryMonthAction.rejected,
       (state, action) => {
         state.errorString = action.payload?.errorString;
         state.status = ActionStatus.ERROR;

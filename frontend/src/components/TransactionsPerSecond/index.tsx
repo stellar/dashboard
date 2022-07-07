@@ -13,7 +13,7 @@ import {
   VerticalBarChart,
   TimeRange,
 } from "components/charts/VerticalBarChart";
-import { fetchTransactionsHistoryAction } from "ducks/transactions";
+import { fetchTransactionsHistoryMonthAction } from "ducks/transactions";
 import "./styles.scss";
 import { AmountInfoCard } from "components/AmountInfoCard";
 import { Icon } from "@stellar/design-system";
@@ -29,16 +29,15 @@ export const TransactionsPerSecond = () => {
   const selectedTimeInterval = LedgerTransactionHistoryFilterType["30D"];
 
   useEffect(() => {
-    dispatch(fetchTransactionsHistoryAction(Network.MAINNET));
+    dispatch(fetchTransactionsHistoryMonthAction(Network.MAINNET));
   }, [dispatch]);
 
   const data = useMemo(() => {
     const result = transactions.transactionsHistory.items.map((item) => ({
       date: new Date(item.date),
       primaryValue: new BigNumber(
-        new BigNumber(item.txTransactionCount / 84600).toFormat(2),
+        new BigNumber(item.txTransactionCount / 86400).toFormat(2),
       ).toNumber(),
-      secondaryValue: 0,
     }));
 
     return result;
