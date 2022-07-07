@@ -20,6 +20,7 @@ export interface LedgersInitialState {
   lastLedgerRecords: LedgerItem[];
   protocolVersion: number | null;
   ledgerClosedTimes: string[];
+  ledgerModule: FetchLedgerModuleResponse[];
   ledgerTransactionsHistory: {
     items: LedgerTransactionHistoryItem[];
     average: {
@@ -355,4 +356,11 @@ export interface FeeStatsInitialState {
   fees: AverageTransactionFeeData | null;
   status: ActionStatus | undefined;
   errorString?: string;
+  end: string;
+  operation_count: number;
+}
+
+export interface FetchLedgerModuleResponse {
+  date: Date;
+  primaryValue: number;
 }

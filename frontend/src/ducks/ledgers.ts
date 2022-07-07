@@ -20,6 +20,8 @@ import {
   LedgerRecord,
   LedgerItem,
   LedgerTransactionHistoryFilterType,
+  FetchLedgerModuleResponse,
+  LedgerModuleItem,
 } from "types";
 import BigNumber from "bignumber.js";
 
@@ -141,6 +143,32 @@ export const fetchLedgersTransactionsHistoryAction = createAsyncThunk<
   },
 );
 
+export const fetchLedgersModule = createAsyncThunk<
+  FetchLedgerModuleResponse[],
+  void,
+  { rejectValue: RejectMessage; state: RootState }
+>("ledgers/fetchLedgersModule", async (_, { rejectWithValue }) => {
+  try {
+    const historyFilter = ledgerTransactionHistoryConfig["24H"];
+    const response = await fetch(
+      `/api/ledgers${historyFilter.endpointPrefix}${
+        networkConfig[Network.MAINNET].ledgerTransactionsHistorySuffix
+      }`,
+    );
+
+    const operations = await response.json();
+
+    const result = operations.data.map((operation: LedgerModuleItem) => ({
+      date: new Date(operation.end),
+      primaryValue: operation.operation_count,
+    }));
+
+    return result;
+  } catch (error) {
+    return rejectWithValue({ errorString: getErrorString(error) });
+  }
+});
+
 export const startLedgerStreamingAction = createAsyncThunk<
   { isStreaming: boolean },
   Network,
@@ -194,6 +222,7 @@ const initialState: LedgersInitialState = {
   lastLedgerRecords: [],
   protocolVersion: null,
   ledgerClosedTimes: [],
+  ledgerModule: [],
   ledgerTransactionsHistory: {
     items: [],
     average: {} as FetchLedgersTransactionsHistoryActionResponse["average"],
@@ -268,6 +297,17 @@ const ledgersSlice = createSlice({
         state.status = ActionStatus.ERROR;
       },
     );
+    builder.addCase(fetchLedgersModule.pending, (state = initialState) => {
+      state.status = ActionStatus.PENDING;
+    });
+    builder.addCase(fetchLedgersModule.fulfilled, (state, action) => {
+      state.ledgerModule = action.payload;
+      state.status = ActionStatus.SUCCESS;
+    });
+    builder.addCase(fetchLedgersModule.rejected, (state, action) => {
+      state.errorString = action.payload?.errorString;
+      state.status = ActionStatus.ERROR;
+    });
   },
 });
 

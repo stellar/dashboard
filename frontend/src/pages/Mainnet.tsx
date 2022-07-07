@@ -11,6 +11,7 @@ import { RecentOperations } from "components/RecentOperations";
 import { FeeStats } from "components/FeeStats";
 import { XML } from "components/XML";
 import { AverageTransactionFee } from "components/AverageTransactionFee";
+import { LedgerModule } from "components/LedgerModule";
 
 export const Mainnet = () => (
   <div className="ContentWrapper">
@@ -20,6 +21,7 @@ export const Mainnet = () => (
     <LedgerInfo />
     <TransactionsPerSecond />
     <RecentOperations />
+    <LedgerModule />
     <ByTheNumbers />
     <LumenSupply />
     <NetworkNodes />
