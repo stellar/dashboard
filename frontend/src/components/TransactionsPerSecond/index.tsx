@@ -17,6 +17,10 @@ import { fetchTransactionsHistoryAction } from "ducks/transactions";
 import "./styles.scss";
 import { AmountInfoCard } from "components/AmountInfoCard";
 import { Icon } from "@stellar/design-system";
+import {
+  ledgerTransactionHistoryConfig,
+  networkConfig,
+} from "constants/settings";
 
 export const TransactionsPerSecond = () => {
   const { transactions, ledgers } = useRedux("transactions", "ledgers");
@@ -26,7 +30,7 @@ export const TransactionsPerSecond = () => {
 
   useEffect(() => {
     dispatch(fetchTransactionsHistoryAction(Network.MAINNET));
-  }, [dispatch, selectedTimeInterval]);
+  }, [dispatch]);
 
   const data = useMemo(() => {
     const result = transactions.transactionsHistory.items.map((item) => ({
@@ -44,7 +48,9 @@ export const TransactionsPerSecond = () => {
     <SectionCard
       title="Transactions per second"
       titleLinkLabel="API"
-      titleLink={`/api/ledgers${selectedTimeInterval}/public${Network.MAINNET}`}
+      titleLink={`/api/ledgers${
+        ledgerTransactionHistoryConfig[selectedTimeInterval].endpointPrefix
+      }${networkConfig[Network.MAINNET].ledgerTransactionsHistorySuffix}`}
       isLoading={transactions.status === ActionStatus.PENDING}
       noData={!data.length}
     >
@@ -55,7 +61,7 @@ export const TransactionsPerSecond = () => {
             primaryValueOnly
             primaryValueName="Transactions"
             timeRange={TimeRange.MONTH}
-            primaryValueTooltipDescription="tps"
+            primaryValueTooltipDescription="TPS"
           />
         </div>
       </div>
