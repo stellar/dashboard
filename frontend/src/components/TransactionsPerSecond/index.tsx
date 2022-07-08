@@ -24,9 +24,8 @@ import { AmountInfoCard } from "components/AmountInfoCard";
 import { fetchTransactionsHistoryMonthAction } from "ducks/transactions";
 
 export const TransactionsPerSecond = () => {
-  const { transactions, ledgers } = useRedux("transactions", "ledgers");
+  const { transactions } = useRedux("transactions");
   const dispatch = useDispatch();
-  const lastLedger = ledgers.lastLedgerRecords[0];
   const selectedTimeInterval = LedgerTransactionHistoryFilterType["30D"];
 
   useEffect(() => {
@@ -42,6 +41,22 @@ export const TransactionsPerSecond = () => {
         ).toFormat(2),
       ).toNumber(),
     }));
+
+    return result;
+  }, [transactions.transactionsHistory]);
+
+  const weekData = useMemo(() => {
+    const sliceWeek = transactions.transactionsHistory.items.slice(0, 7);
+
+    const result = sliceWeek.reduce(
+      (acc, cur) => {
+        acc.txCount += cur.txTransactionCount;
+        acc.closedTime += cur.durationInSeconds;
+
+        return acc;
+      },
+      { txCount: 0, closedTime: 0 },
+    );
 
     return result;
   }, [transactions.transactionsHistory]);
@@ -68,13 +83,12 @@ export const TransactionsPerSecond = () => {
         </div>
       </div>
 
-      {lastLedger && (
+      {weekData && (
         <div className="TransactionsPerSecond__card">
           <AmountInfoCard
             title="Current TPS"
             amount={`${new BigNumber(
-              (lastLedger.txCountSuccessful + lastLedger.txCountFailed) /
-                lastLedger.closedTime,
+              weekData.txCount / weekData.closedTime,
             ).toFormat(2)} tps`}
             amountPrefixContent={
               <Icon.Clock className="TransactionsPerSecond__card__icon" />
