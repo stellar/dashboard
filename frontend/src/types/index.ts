@@ -204,6 +204,7 @@ export enum LedgerTransactionHistoryFilterType {
 }
 
 export type TransactionHistoryItem = {
+  durationInSeconds: number;
   date: string;
   txTransactionCount: number;
 };

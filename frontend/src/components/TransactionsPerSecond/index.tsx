@@ -1,26 +1,27 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import BigNumber from "bignumber.js";
+import { Icon } from "@stellar/design-system";
 
-import { useRedux } from "hooks/useRedux";
+import "./styles.scss";
+
 import {
+  Network,
   ActionStatus,
   LedgerTransactionHistoryFilterType,
-  Network,
 } from "types";
-import { SectionCard } from "components/SectionCard";
-import {
-  VerticalBarChart,
-  TimeRange,
-} from "components/charts/VerticalBarChart";
-import { fetchTransactionsHistoryMonthAction } from "ducks/transactions";
-import "./styles.scss";
-import { AmountInfoCard } from "components/AmountInfoCard";
-import { Icon } from "@stellar/design-system";
 import {
   ledgerTransactionHistoryConfig,
   networkConfig,
 } from "constants/settings";
+import {
+  VerticalBarChart,
+  TimeRange,
+} from "components/charts/VerticalBarChart";
+import { useRedux } from "hooks/useRedux";
+import { SectionCard } from "components/SectionCard";
+import { AmountInfoCard } from "components/AmountInfoCard";
+import { fetchTransactionsHistoryMonthAction } from "ducks/transactions";
 
 export const TransactionsPerSecond = () => {
   const { transactions, ledgers } = useRedux("transactions", "ledgers");
@@ -36,7 +37,9 @@ export const TransactionsPerSecond = () => {
     const result = transactions.transactionsHistory.items.map((item) => ({
       date: new Date(item.date),
       primaryValue: new BigNumber(
-        new BigNumber(item.txTransactionCount / 86400).toFormat(2),
+        new BigNumber(
+          item.txTransactionCount / item.durationInSeconds,
+        ).toFormat(2),
       ).toNumber(),
     }));
 

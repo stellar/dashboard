@@ -14,6 +14,7 @@ import {
 import { RootState } from "config/store";
 import { getErrorString } from "helpers/getErrorString";
 import { parseDateFromFormat } from "helpers/parseDateFromFormat";
+import { getDateDiffSeconds } from "helpers/getDateDiffSeconds";
 
 export const fetchTransactionsHistoryMonthAction = createAsyncThunk<
   FetchTransactionsHistoryActionResponse,
@@ -32,6 +33,10 @@ export const fetchTransactionsHistoryMonthAction = createAsyncThunk<
 
       return {
         items: ledgers.map((ledger: Record<string, unknown>) => ({
+          durationInSeconds: getDateDiffSeconds(
+            ledger.end as string,
+            ledger.start as string,
+          ),
           date: parseDateFromFormat(
             ledger.date as string,
             "yyyy-MM-dd HH:mm:ss",

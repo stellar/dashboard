@@ -51,7 +51,7 @@ const TIME_RANGE_PARAMS = {
     },
   },
   [TimeRange.MONTH]: {
-    dateFormatter: (date: Date) => format(date, "d/M/yy"),
+    dateFormatter: (date: Date) => format(date, "M/d/yy"),
     generateTicks: (baseDate: Date) => {
       const start = subDays(baseDate, 30);
       return [
