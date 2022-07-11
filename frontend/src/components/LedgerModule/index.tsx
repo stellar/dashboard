@@ -9,7 +9,7 @@ import { VerticalBarChart } from "components/charts/VerticalBarChart";
 import { useRedux } from "hooks/useRedux";
 import { ActionStatus } from "types";
 
-const limitLine = 17280;
+const limitLine = 518400000;
 
 export const LedgerModule = () => {
   const { ledgers } = useRedux("ledgers");
@@ -33,7 +33,7 @@ export const LedgerModule = () => {
             <VerticalBarChart
               data={ledgers.ledgerModule}
               primaryValueName="Operations"
-              timeRange={VerticalBarChart.TimeRange.HOUR}
+              timeRange={VerticalBarChart.TimeRange.MONTH}
               primaryValueTooltipDescription="ops"
               maxLine={limitLine}
               primaryValueOnly

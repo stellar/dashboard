@@ -149,7 +149,7 @@ export const fetchLedgersModule = createAsyncThunk<
   { rejectValue: RejectMessage; state: RootState }
 >("ledgers/fetchLedgersModule", async (_, { rejectWithValue }) => {
   try {
-    const historyFilter = ledgerTransactionHistoryConfig["24H"];
+    const historyFilter = ledgerTransactionHistoryConfig["30D"];
     const response = await fetch(
       `/api/ledgers${historyFilter.endpointPrefix}${
         networkConfig[Network.MAINNET].ledgerTransactionsHistorySuffix
