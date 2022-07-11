@@ -41,9 +41,6 @@ export const fetchTransactionsHistoryMonthAction = createAsyncThunk<
             ledger.date as string,
             "yyyy-MM-dd HH:mm:ss",
           ).toISOString(),
-          txTransactionCount:
-            (ledger.transaction_failure as number) +
-            (ledger.transaction_success as number),
           txOperationCount: ledger.operation_count,
         })),
       };

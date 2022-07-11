@@ -207,7 +207,6 @@ export type TransactionHistoryItem = {
   durationInSeconds: number;
   date: string;
   txOperationCount: number;
-  txTransactionCount: number;
 };
 
 export interface FetchTransactionsHistoryActionResponse {

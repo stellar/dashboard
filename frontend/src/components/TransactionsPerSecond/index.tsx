@@ -36,9 +36,9 @@ export const TransactionsPerSecond = () => {
     const result = transactions.transactionsHistory.items.map((item) => ({
       date: new Date(item.date),
       primaryValue: new BigNumber(
-        new BigNumber(
-          item.txTransactionCount / item.durationInSeconds,
-        ).toFormat(2),
+        new BigNumber(item.txOperationCount / item.durationInSeconds).toFormat(
+          2,
+        ),
       ).toNumber(),
     }));
 
