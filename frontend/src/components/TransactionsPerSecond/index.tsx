@@ -33,7 +33,11 @@ export const TransactionsPerSecond = () => {
   }, [dispatch]);
 
   const data = useMemo(() => {
-    const result = transactions.transactionsHistory.items.map((item) => ({
+    const formattedItems = [
+      ...transactions.transactionsHistory.items,
+    ].reverse();
+
+    const result = formattedItems.map((item) => ({
       date: new Date(item.date),
       primaryValue: new BigNumber(
         new BigNumber(item.txOperationCount / item.durationInSeconds).toFormat(
