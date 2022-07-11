@@ -50,7 +50,7 @@ export const TransactionsPerSecond = () => {
 
     const result = sliceWeek.reduce(
       (acc, cur) => {
-        acc.txCount += cur.txTransactionCount;
+        acc.txCount += cur.txOperationCount;
         acc.closedTime += cur.durationInSeconds;
 
         return acc;
@@ -93,7 +93,7 @@ export const TransactionsPerSecond = () => {
             amountPrefixContent={
               <Icon.Clock className="TransactionsPerSecond__card__icon" />
             }
-            description="in the last ledger"
+            description="in the last week"
           />
         </div>
       )}

@@ -44,6 +44,7 @@ export const fetchTransactionsHistoryMonthAction = createAsyncThunk<
           txTransactionCount:
             (ledger.transaction_failure as number) +
             (ledger.transaction_success as number),
+          txOperationCount: ledger.operation_count,
         })),
       };
     } catch (error) {
