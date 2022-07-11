@@ -1,3 +1,4 @@
+import StellarSdk from "stellar-sdk";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import {
@@ -6,10 +7,12 @@ import {
   OperationsInitialState,
   OperationsResponse,
   FetchLastOperationsActionResponse,
+  Network,
 } from "types";
 import { RootState } from "config/store";
 import { getErrorString } from "helpers/getErrorString";
 import { getDateDiffSeconds } from "helpers/getDateDiffSeconds";
+import { networkConfig } from "constants/settings";
 
 export const fetchLastOperationsAction = createAsyncThunk<
   Array<FetchLastOperationsActionResponse>,
@@ -17,12 +20,11 @@ export const fetchLastOperationsAction = createAsyncThunk<
   { rejectValue: RejectMessage; state: RootState }
 >("operations/fetchLastOperationsAction", async (_, { rejectWithValue }) => {
   try {
-    const response = await fetch(
-      "https://horizon.stellar.org/operations?order=desc&limit=10",
-    );
+    const server = new StellarSdk.Server(networkConfig[Network.MAINNET].url);
 
-    const operations = await response.json();
-    const { records } = operations._embedded as OperationsResponse;
+    const operations = await server.operations().order("desc").limit(10).call();
+
+    const { records } = operations as OperationsResponse;
 
     const result = records.map((record) => {
       const timeAgo = getDateDiffSeconds(String(new Date()), record.created_at);
