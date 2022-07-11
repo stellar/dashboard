@@ -51,11 +51,7 @@ export const RecentOperations = () => {
     return (
       <>
         <td>
-          <AccountBadge
-            id={operation.source_account}
-            horizonURL={horizonURL}
-            account=""
-          />
+          <AccountBadge id={operation.source_account} horizonURL={horizonURL} />
         </td>
         <td>
           <a

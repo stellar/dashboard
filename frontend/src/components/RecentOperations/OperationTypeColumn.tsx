@@ -61,11 +61,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
             assetType: "native",
           })}
           &raquo;{" "}
-          <AccountBadge
-            horizonURL={horizonURL}
-            id={operation.source_account}
-            account={operation.source_account}
-          />
+          <AccountBadge horizonURL={horizonURL} id={operation.source_account} />
         </span>
       );
 
@@ -78,12 +74,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
             assetCode: operation.asset_code,
             assetIssuer: operation.asset_issuer,
           })}
-          &raquo;{" "}
-          <AccountBadge
-            horizonURL={horizonURL}
-            id={operation.to}
-            account={operation.source_account}
-          />
+          &raquo; <AccountBadge horizonURL={horizonURL} id={operation.to} />
         </span>
       );
 
@@ -104,12 +95,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
             assetCode: operation.asset_code,
             assetIssuer: operation.asset_issuer,
           })}{" "}
-          &raquo;{" "}
-          <AccountBadge
-            horizonURL={horizonURL}
-            id={operation.to}
-            account={operation.source_account}
-          />
+          &raquo; <AccountBadge horizonURL={horizonURL} id={operation.to} />
         </span>
       );
 
@@ -134,11 +120,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
             issuer={operation.asset_issuer}
           />{" "}
           issued by{" "}
-          <AccountBadge
-            horizonURL={horizonURL}
-            id={operation.asset_issuer}
-            account={operation.source_account}
-          />
+          <AccountBadge horizonURL={horizonURL} id={operation.asset_issuer} />
         </span>
       );
 
@@ -146,12 +128,8 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
       return (
         <span>
           {operation.authorize ? "Allowed" : "Disallowed"}{" "}
-          <AccountBadge
-            horizonURL={horizonURL}
-            id={operation.trustor}
-            account={operation.source_account}
-          />{" "}
-          to hold{" "}
+          <AccountBadge horizonURL={horizonURL} id={operation.trustor} /> to
+          hold{" "}
           <AssetLink
             horizonURL={horizonURL}
             code={operation.asset_code}
@@ -196,12 +174,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
     case "account_merge":
       return (
         <span>
-          &raquo;{" "}
-          <AccountBadge
-            horizonURL={horizonURL}
-            id={operation.into!}
-            account={""}
-          />
+          &raquo; <AccountBadge horizonURL={horizonURL} id={operation.into!} />
         </span>
       );
 
