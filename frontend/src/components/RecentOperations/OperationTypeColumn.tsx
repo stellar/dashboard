@@ -22,7 +22,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
   operation,
   horizonURL,
 }) => {
-  const formatAccount = ({
+  const formatAmount = ({
     amount,
     assetType,
     assetCode,
@@ -56,7 +56,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
     case "create_account":
       return (
         <span>
-          {formatAccount({
+          {formatAmount({
             amount: Number(operation.starting_balance),
             assetType: "native",
           })}
@@ -68,7 +68,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
     case "payment":
       return (
         <span>
-          {formatAccount({
+          {formatAmount({
             amount: operation.amount,
             assetType: operation.asset_type,
             assetCode: operation.asset_code,
@@ -82,14 +82,14 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
       return (
         <span>
           max{" "}
-          {formatAccount({
+          {formatAmount({
             amount: Number(operation.source_max),
             assetType: operation.source_asset_type,
             assetCode: operation.source_asset_code,
             assetIssuer: operation.source_asset_issuer,
           })}{" "}
           &raquo;{" "}
-          {formatAccount({
+          {formatAmount({
             amount: operation.amount,
             assetType: operation.asset_type,
             assetCode: operation.asset_code,
@@ -152,7 +152,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
       return (
         <span>
           {action}{" "}
-          {formatAccount({
+          {formatAmount({
             amount: operation.amount,
             assetType: operation.selling_asset_type,
             assetCode: operation.selling_asset_code,
