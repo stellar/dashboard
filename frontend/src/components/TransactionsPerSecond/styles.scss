@@ -1,0 +1,29 @@
+.TransactionsPerSecond {
+  &__mainChart {
+    @media (max-width: 540px) {
+      overflow-x: auto;
+      overflow-y: visible;
+
+      padding-bottom: 0.8rem;
+    }
+
+    &__container {
+      width: 100%;
+      height: 20rem;
+
+      @media (max-width: 540px) {
+        width: 32rem;
+      }
+    }
+  }
+
+  &__card {
+    margin-top: 1rem;
+    width: 15rem;
+
+    &__icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}

@@ -13,6 +13,8 @@ import { reducer as ledgers } from "ducks/ledgers";
 import { reducer as lumenSupply } from "ducks/lumenSupply";
 import { reducer as networkNodes } from "ducks/networkNodes";
 import { reducer as dex } from "ducks/dex";
+import { reducer as transactions } from "ducks/transactions";
+import { reducer as operations } from "ducks/operations";
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -32,6 +34,8 @@ const reducers = combineReducers({
   lumenSupply,
   networkNodes,
   dex,
+  transactions,
+  operations,
 });
 
 export const resetStoreAction = createAction(RESET_STORE_ACTION_TYPE);

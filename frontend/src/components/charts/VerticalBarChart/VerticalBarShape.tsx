@@ -24,7 +24,7 @@ export const VerticalBarShape = ({
   valueIndex,
 }: VerticalBarShapeProps) => {
   const id = useMemo(
-    () => `round-corner-${valueIndex}-${index}`,
+    () => `round-corner-${valueIndex}-${index}-${Math.random()}`,
     [index, valueIndex],
   );
 
