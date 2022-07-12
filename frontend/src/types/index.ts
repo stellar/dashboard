@@ -10,6 +10,7 @@ export interface Store {
   networkNodes: NetworkNodesInitialState;
   dex: DexDataInitialState;
   transactions: TransactionsInitialState;
+  operations: OperationsInitialState;
 }
 
 export type StoreKey = keyof Store;
@@ -219,4 +220,83 @@ export interface TransactionsInitialState {
   };
   status: ActionStatus | undefined;
   errorString?: string;
+}
+
+export interface OperationsInitialState {
+  lastOperations: FetchLastOperationsActionResponse[];
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
+export interface OperationsResponse {
+  records: {
+    id: string;
+    paging_token: string;
+    transaction_successful: boolean;
+    source_account: string;
+    type: string;
+    type_i: number;
+    created_at: string;
+    transaction_hash: string;
+    amount: string;
+    price: string;
+    price_r: {
+      n: number;
+      d: number;
+    };
+    buying_asset_type: string;
+    buying_asset_issuer: string;
+    buying_asset_code: string;
+    selling_asset_type: string;
+    selling_asset_code: string;
+    selling_asset_issuer: string;
+    offer_id: string;
+    to: string;
+    from: string;
+    asset_type: string;
+    asset_code: string;
+    asset_issuer: string;
+    source_asset_type: string;
+    source_asset_issuer: string;
+    source_asset_code: string;
+    trustor: string;
+    source_max?: string;
+    starting_balance?: string;
+    authorize?: string;
+    into?: string;
+    name?: string;
+    shares_received?: string;
+    shares?: string;
+  }[];
+}
+
+export interface FetchLastOperationsActionResponse {
+  id: string;
+  type: string;
+  source_account: string;
+  amount: number;
+  offer_id: number;
+  buying_asset_type: string;
+  buying_asset_issuer: string;
+  buying_asset_code: string;
+  selling_asset_type: string;
+  selling_asset_code: string;
+  selling_asset_issuer: string;
+  to: string;
+  asset_type: string;
+  asset_code: string;
+  asset_issuer: string;
+  source_asset_type: string;
+  source_asset_issuer: string;
+  source_asset_code: string;
+  trustor: string;
+  timeAgo: number;
+  source_max?: string;
+  starting_balance?: string;
+  liquidity_pool_id?: string;
+  authorize?: string;
+  into?: string;
+  name?: string;
+  shares_received?: string;
+  shares?: string;
 }
