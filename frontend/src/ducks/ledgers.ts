@@ -20,7 +20,7 @@ import {
   LedgerRecord,
   LedgerItem,
   LedgerTransactionHistoryFilterType,
-  FetchLedgerModuleResponse,
+  FetchLedgerOperationsResponse,
   LedgerModuleItem,
 } from "types";
 import BigNumber from "bignumber.js";
@@ -143,11 +143,11 @@ export const fetchLedgersTransactionsHistoryAction = createAsyncThunk<
   },
 );
 
-export const fetchLedgersModule = createAsyncThunk<
-  FetchLedgerModuleResponse[],
+export const fetchLedgerOperations = createAsyncThunk<
+  FetchLedgerOperationsResponse[],
   void,
   { rejectValue: RejectMessage; state: RootState }
->("ledgers/fetchLedgersModule", async (_, { rejectWithValue }) => {
+>("ledgers/fetchLedgerOperations", async (_, { rejectWithValue }) => {
   try {
     const historyFilter = ledgerTransactionHistoryConfig["30D"];
     const response = await fetch(
@@ -159,7 +159,10 @@ export const fetchLedgersModule = createAsyncThunk<
     const operations = await response.json();
 
     const result = operations.data.map((operation: LedgerModuleItem) => ({
-      date: new Date(operation.end),
+      date: parseDateFromFormat(
+        operation.end as string,
+        "yyyy-MM-dd HH:mm:ss",
+      ).toISOString(),
       primaryValue: operation.operation_count,
     }));
 
@@ -222,7 +225,7 @@ const initialState: LedgersInitialState = {
   lastLedgerRecords: [],
   protocolVersion: null,
   ledgerClosedTimes: [],
-  ledgerModule: [],
+  ledgerOperations: [],
   ledgerTransactionsHistory: {
     items: [],
     average: {} as FetchLedgersTransactionsHistoryActionResponse["average"],
@@ -297,14 +300,14 @@ const ledgersSlice = createSlice({
         state.status = ActionStatus.ERROR;
       },
     );
-    builder.addCase(fetchLedgersModule.pending, (state = initialState) => {
+    builder.addCase(fetchLedgerOperations.pending, (state = initialState) => {
       state.status = ActionStatus.PENDING;
     });
-    builder.addCase(fetchLedgersModule.fulfilled, (state, action) => {
-      state.ledgerModule = action.payload;
+    builder.addCase(fetchLedgerOperations.fulfilled, (state, action) => {
+      state.ledgerOperations = action.payload;
       state.status = ActionStatus.SUCCESS;
     });
-    builder.addCase(fetchLedgersModule.rejected, (state, action) => {
+    builder.addCase(fetchLedgerOperations.rejected, (state, action) => {
       state.errorString = action.payload?.errorString;
       state.status = ActionStatus.ERROR;
     });
