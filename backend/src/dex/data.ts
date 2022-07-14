@@ -198,6 +198,31 @@ export async function getActiveAccountsData() {
 
   const activeAccounts = await fetchCachedData("dex-activeAccounts", query);
 
-  console.log("accounts ", activeAccounts);
   return activeAccounts[0]?.data;
+}
+
+export async function getFeesData30d() {
+  const query = `
+    SELECT 
+      cast(l.closed_at as date) as closing_date, 
+      (
+        sum(t.fee_charged) / sum(t.operation_count)
+      ) as fee_average
+    FROM ${bigQueryEndpointBase}.history_transactions t
+    JOIN ${bigQueryEndpointBase}.history_ledgers l
+    ON t.ledger_sequence = l.sequence
+    WHERE l.closed_at >= timestamp(date_add(current_date(), INTERVAL -30 DAY))
+    GROUP BY closing_date
+    ORDER BY closing_date
+  `;
+
+  const data = await fetchCachedData("fees-month", query);
+  const output = data.map((fee) => {
+    return {
+      ...fee,
+      closing_date: fee.closing_date.value,
+    };
+  });
+
+  return output;
 }
