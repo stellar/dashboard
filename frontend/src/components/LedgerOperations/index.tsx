@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
 import "./styles.scss";
@@ -26,6 +26,13 @@ export const LedgerOperations = () => {
     dispatch(fetchLedgerOperations());
   }, [dispatch]);
 
+  const data = useMemo(() => {
+    return ledgers.ledgerOperations.map((operation) => ({
+      date: new Date(operation.date),
+      primaryValue: operation.primaryValue,
+    }));
+  }, [ledgers.ledgerOperations]);
+
   return (
     <SectionCard
       title="Ledger Operations"
@@ -40,7 +47,7 @@ export const LedgerOperations = () => {
         <div className="LedgerOperations__mainChart">
           <div className="LedgerOperations__mainChart__container">
             <VerticalBarChart
-              data={ledgers.ledgerOperations}
+              data={data}
               primaryValueName="Operations"
               timeRange={VerticalBarChart.TimeRange.MONTH}
               primaryValueTooltipDescription="ops"

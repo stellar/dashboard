@@ -159,10 +159,7 @@ export const fetchLedgerOperations = createAsyncThunk<
     const operations = await response.json();
 
     const result = operations.data.map((operation: LedgerModuleItem) => ({
-      date: parseDateFromFormat(
-        operation.end as string,
-        "yyyy-MM-dd HH:mm:ss",
-      ).toISOString(),
+      date: operation.end,
       primaryValue: operation.operation_count,
     }));
 
