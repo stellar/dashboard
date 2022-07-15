@@ -6,6 +6,7 @@ import * as lumens from "./lumens";
 import * as lumensV2V3 from "./v2v3/lumens";
 import * as ledgers from "./ledgers";
 import * as dex from "./dex";
+import * as fees from "./fees";
 
 export const app = express();
 app.set("port", process.env.PORT || 5000);
@@ -41,6 +42,8 @@ app.get("/api/dex/24h-trades", dex.getDexTrades24hData);
 app.get("/api/dex/unique-assets", dex.getUniqueAssets);
 app.get("/api/dex/active-accounts", dex.getActiveAccounts);
 app.get("/api/dex/all", dex.getAll);
+
+app.get("/api/fees/stats", fees.getFeeStats);
 
 app.get("/api/v2/lumens", lumensV2V3.v2Handler);
 /* For CoinMarketCap */
