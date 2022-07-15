@@ -3,6 +3,7 @@ import { TextLink } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 import { useRedux } from "hooks/useRedux";
 
+import { fetchDexDataAction } from "ducks/dex";
 import { SectionCard } from "components/SectionCard";
 import {
   TimeRange,

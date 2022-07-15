@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import BigNumber from "bignumber.js";
+import { mock } from "components/AverageTransactionFee/mock";
 
 import { RootState } from "config/store";
 
@@ -22,6 +23,16 @@ export const fetchDexDataAction = createAsyncThunk<
     const { tradesLast24H, paymentsLast24h, uniqueAssets, activeAccounts } =
       await response.json();
 
+    const formattedMonthlyFee = mock.fees.month.map((fee) => ({
+      date: `${fee.closing_date}T00:00:00.000Z`,
+      primaryValue: new BigNumber(fee.fee_average).toFormat(2),
+    }));
+
+    const formattedFeePerHour = mock.fees.hour.map((fee) => ({
+      date: fee.closing_hour,
+      primaryValue: new BigNumber(fee.fee_average).toFormat(2),
+    }));
+
     return {
       trades: {
         fluctuation: new BigNumber(tradesLast24H.change || 0).toNumber(),
@@ -31,6 +42,7 @@ export const fetchDexDataAction = createAsyncThunk<
       payments24HRs: paymentsLast24h,
       totalUniqueAssets: uniqueAssets,
       dailyActiveAccounts: activeAccounts,
+      fees: { month: formattedMonthlyFee, hour: formattedFeePerHour },
     };
   } catch (error) {
     return rejectWithValue({

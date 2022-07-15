@@ -119,11 +119,20 @@ export interface DexItemData {
   fluctuation: number;
 }
 
+interface FeesResponse {
+  date: string;
+  primaryValue: string;
+}
+
 export interface DexData {
   trades: DexItemData;
   totalUniqueAssets: number;
   dailyActiveAccounts: number;
   payments24HRs: number;
+  fees: {
+    month: FeesResponse[];
+    hour: FeesResponse[];
+  };
 }
 
 export enum ActionStatus {
