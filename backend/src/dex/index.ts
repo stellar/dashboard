@@ -1,6 +1,7 @@
 import { Response, NextFunction } from "express";
 import {
   getActiveAccountsData,
+  getFeesData1d,
   getFeesData30d,
   getPaymentsData,
   getTradeData,
@@ -64,6 +65,7 @@ export async function getAll(_: any, res: Response, next: NextFunction) {
       activeAccounts: await getActiveAccountsData(),
       fees: {
         month: await getFeesData30d(),
+        hour: await getFeesData1d(),
       },
     });
   } catch (e) {
