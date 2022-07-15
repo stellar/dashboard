@@ -1,29 +1,54 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { TextLink } from "@stellar/design-system";
+import { useDispatch } from "react-redux";
+import { useRedux } from "hooks/useRedux";
 
+import { fetchDexDataAction } from "ducks/dex";
 import { SectionCard } from "components/SectionCard";
-import { VerticalBarChart } from "components/charts/VerticalBarChart";
+import {
+  TimeRange,
+  VerticalBarChart,
+} from "components/charts/VerticalBarChart";
 import { LedgerTransactionHistoryFilterType } from "types";
 
 const TIME_RANGE_MAPPING = [
   {
-    key: "last24Hours",
+    key: TimeRange.DAY,
     label: LedgerTransactionHistoryFilterType["24H"],
   },
   {
-    key: "last30Days",
+    key: TimeRange.MONTH,
     label: LedgerTransactionHistoryFilterType["30D"],
   },
 ];
 
 export const AverageTransactionFee: React.FC = () => {
-  const [rangeInterval, setRangeInterval] = useState(
-    VerticalBarChart.TimeRange.DAY,
-  );
+  const { dex } = useRedux("dex");
+  const dispatch = useDispatch();
+
+  const [rangeInterval, setRangeInterval] = useState(TimeRange.DAY);
 
   useEffect(() => {
-    setRangeInterval(VerticalBarChart.TimeRange.DAY);
-  }, []);
+    dispatch(fetchDexDataAction());
+  }, [dispatch]);
+
+  const data = useMemo(() => {
+    if (dex.data) {
+      const formattedMonthlyFee = dex.data?.fees.month.map((fee) => ({
+        date: new Date(),
+        primaryValue: Number(fee.primaryValue),
+      }));
+
+      const formattedFeePerHour = dex.data?.fees.hour.map((fee) => ({
+        date: new Date(),
+        primaryValue: Number(fee.primaryValue),
+      }));
+
+      return { day: formattedFeePerHour, month: formattedMonthlyFee };
+    }
+
+    return { day: [], month: [] };
+  }, [dex.data]);
 
   const timeRangeOptions = useMemo(
     () => (
@@ -32,7 +57,7 @@ export const AverageTransactionFee: React.FC = () => {
           <TextLink
             key={range.key}
             variant={TextLink.variant.secondary}
-            onClick={() => console.log("aqui")}
+            onClick={() => setRangeInterval(range.key)}
             className={`LedgerInfo__titleNav--${
               rangeInterval === range.key ? "active" : "inactive"
             }`}
@@ -46,16 +71,23 @@ export const AverageTransactionFee: React.FC = () => {
   );
 
   return (
-    <SectionCard title="Average Transaction Fee" titleCustom={timeRangeOptions}>
+    <SectionCard
+      title="Average Transaction Fee"
+      titleCustom={timeRangeOptions}
+      isLoading={dex.status === "PENDING"}
+      noData={!data.day}
+    >
       <div className="LedgerInfo__mainChart">
         <div className="LedgerInfo__mainChart__container">
-          <VerticalBarChart
-            data={[]}
-            primaryValueName="Transactions"
-            timeRange={rangeInterval}
-            primaryValueTooltipDescription="txns"
-            primaryValueOnly
-          />
+          {dex.data && (
+            <VerticalBarChart
+              data={data[rangeInterval as "month" | "day"]}
+              primaryValueName="Transactions"
+              timeRange={rangeInterval}
+              primaryValueTooltipDescription="txns"
+              primaryValueOnly
+            />
+          )}
         </div>
       </div>
     </SectionCard>
