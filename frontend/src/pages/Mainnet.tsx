@@ -10,6 +10,7 @@ import { TransactionsPerSecond } from "components/TransactionsPerSecond";
 import { RecentOperations } from "components/RecentOperations";
 import { FeeStats } from "components/FeeStats";
 import { XML } from "components/XML";
+import { AverageTransactionFee } from "components/AverageTransactionFee";
 
 export const Mainnet = () => (
   <div className="ContentWrapper">
@@ -24,6 +25,7 @@ export const Mainnet = () => (
     <NetworkNodes />
     <FeeStats />
     <XML />
+    <AverageTransactionFee />
     <Incidents />
   </div>
 );
