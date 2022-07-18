@@ -1,40 +1,14 @@
-import { bqClient } from "../bigQuery";
 import { redisClient, getOrThrow } from "../redisSetup";
-import { getErrorMessage, getPrice } from "./utils";
+import { getPrice } from "./utils";
+import {
+  bigQueryEndpointBase,
+  fetchBigQueryData,
+  fetchCachedData,
+} from "../utils";
 
-const bigQueryEndpointBase = "crypto-stellar.crypto_stellar_2";
 const cache24hKey = "dex-volume-sum-24h";
 const cache48hKey = "dex-volume-sum-48h";
 const cacheOverallKey = "dex-volume-sum-overall";
-
-async function fetchBigQueryData(query: string) {
-  try {
-    const [job] = await bqClient.createQueryJob(query);
-    console.log("running bq query:", query);
-    const [result] = await job.getQueryResults();
-    return result;
-  } catch (error: unknown) {
-    const message = getErrorMessage(error);
-    console.error("QUERY ERROR: ", message);
-    return null;
-  }
-}
-
-async function fetchCachedData(key: string, query: string) {
-  try {
-    const cachedData = await getOrThrow(redisClient, key);
-    const output = JSON.parse(cachedData);
-    return output;
-  } catch (error: unknown) {
-    const message = getErrorMessage(error);
-    if (message == "redis key not found") {
-      const output = await fetchBigQueryData(query);
-      await redisClient.set(key, JSON.stringify(output));
-      return output;
-    }
-    console.error("ERROR: ", message);
-  }
-}
 
 export async function getPaymentsData() {
   const query = `
@@ -198,6 +172,5 @@ export async function getActiveAccountsData() {
 
   const activeAccounts = await fetchCachedData("dex-activeAccounts", query);
 
-  console.log("accounts ", activeAccounts);
   return activeAccounts[0]?.data;
 }

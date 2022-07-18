@@ -23,13 +23,3 @@ export async function getPrice(asset: string): Promise<number | null> {
   const prices = priceData?.price;
   return (prices[0] + prices.at(-1)) / 2;
 }
-
-export function getErrorMessage(error: unknown) {
-  if (typeof error === "string") {
-    return error;
-  }
-
-  if (error instanceof Error) {
-    return error.message;
-  }
-}
