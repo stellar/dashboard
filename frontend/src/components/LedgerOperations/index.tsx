@@ -13,8 +13,8 @@ import {
   networkConfig,
 } from "constants/settings";
 
-// max operations per month = 12*1000*60*24*30 = 518400000
-const limitLine = 518400000;
+// max operations per day = 12*60*24*1000 = 17,280,000
+const limitLine = 17280000;
 
 export const LedgerOperations = () => {
   const { ledgers } = useRedux("ledgers");
@@ -27,7 +27,9 @@ export const LedgerOperations = () => {
   }, [dispatch]);
 
   const data = useMemo(() => {
-    return ledgers.ledgerOperations.map((operation) => ({
+    const reversedOperations = [...ledgers.ledgerOperations].reverse();
+
+    return reversedOperations.map((operation) => ({
       date: new Date(operation.date),
       primaryValue: operation.primaryValue,
     }));
