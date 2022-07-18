@@ -3,6 +3,8 @@ import { TextLink } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 import { useRedux } from "hooks/useRedux";
 
+import "./styles.scss";
+
 import { fetchDexDataAction } from "ducks/dex";
 import { SectionCard } from "components/SectionCard";
 import {
@@ -35,12 +37,12 @@ export const AverageTransactionFee: React.FC = () => {
   const data = useMemo(() => {
     if (dex.data) {
       const formattedMonthlyFee = dex.data?.fees.month.map((fee) => ({
-        date: new Date(),
+        date: new Date(fee.date),
         primaryValue: Number(fee.primaryValue),
       }));
 
       const formattedFeePerHour = dex.data?.fees.hour.map((fee) => ({
-        date: new Date(),
+        date: new Date(fee.date),
         primaryValue: Number(fee.primaryValue),
       }));
 
@@ -76,9 +78,12 @@ export const AverageTransactionFee: React.FC = () => {
       titleCustom={timeRangeOptions}
       isLoading={dex.status === "PENDING"}
       noData={!data.day}
+      titleLinkLabel="API"
+      // temp link
+      titleLink="http://localhost:3000/api/dex/all"
     >
-      <div className="LedgerInfo__mainChart">
-        <div className="LedgerInfo__mainChart__container">
+      <div className="AverageTransactionFee__mainChart">
+        <div className="AverageTransactionFee__mainChart__container">
           {dex.data && (
             <VerticalBarChart
               data={data[rangeInterval as "month" | "day"]}
