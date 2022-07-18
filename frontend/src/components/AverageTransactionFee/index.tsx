@@ -3,6 +3,8 @@ import { TextLink } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 import { useRedux } from "hooks/useRedux";
 
+import "./styles.scss";
+
 import { fetchDexDataAction } from "ducks/dex";
 import { SectionCard } from "components/SectionCard";
 import {
