@@ -39,7 +39,7 @@ export async function getFeesData1d() {
     GROUP BY closing_hour
     ORDER BY closing_hour
   `;
-  const data = await fetchCachedData("fees-hour", query);
+  const data = await fetchCachedData("fees-day", query);
 
   const output = data.map((fee) => {
     return {
