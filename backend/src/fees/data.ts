@@ -35,7 +35,7 @@ export async function getFeesData1d() {
     FROM ${bigQueryEndpointBase}.history_transactions t
     JOIN ${bigQueryEndpointBase}.history_ledgers l
     ON t.ledger_sequence = l.sequence
-    WHERE l.closed_at >= timestamp(date_add(current_date(), INTERVAL -1 DAY))
+    WHERE l.closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -24 HOUR) 
     GROUP BY closing_hour
     ORDER BY closing_hour
   `;
