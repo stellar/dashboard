@@ -23,14 +23,18 @@ import { SectionCard } from "components/SectionCard";
 import { AmountInfoCard } from "components/AmountInfoCard";
 import { fetchTransactionsHistoryMonthAction } from "ducks/transactions";
 
-export const TransactionsPerSecond = () => {
+export const TransactionsPerSecond = ({
+  network = Network.MAINNET,
+}: {
+  network?: Network;
+}) => {
   const { transactions } = useRedux("transactions");
   const dispatch = useDispatch();
   const selectedTimeInterval = LedgerTransactionHistoryFilterType["30D"];
 
   useEffect(() => {
-    dispatch(fetchTransactionsHistoryMonthAction(Network.MAINNET));
-  }, [dispatch]);
+    dispatch(fetchTransactionsHistoryMonthAction(network));
+  }, [dispatch, network]);
 
   const data = useMemo(() => {
     const formattedItems = [
