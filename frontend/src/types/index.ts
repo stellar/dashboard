@@ -75,12 +75,6 @@ export interface DexDataInitialState {
   errorString?: string;
 }
 
-export interface FeeStatsDataInitialState {
-  data: FeeStatsData | null;
-  status: ActionStatus | undefined;
-  errorString?: string;
-}
-
 export enum NetworkNodesType {
   WATCHER_NODES = "watcherNodes",
   VALIDATOR_NODES = "validatorNodes",
@@ -119,20 +113,11 @@ export interface DexItemData {
   fluctuation: number;
 }
 
-interface FeesResponse {
-  date: string;
-  primaryValue: string;
-}
-
 export interface DexData {
   trades: DexItemData;
   totalUniqueAssets: number;
   dailyActiveAccounts: number;
   payments24HRs: number;
-  fees: {
-    month: FeesResponse[];
-    hour: FeesResponse[];
-  };
 }
 
 export enum ActionStatus {
