@@ -4,12 +4,14 @@ import { RootState } from "config/store";
 import { getErrorString } from "helpers/getErrorString";
 import {
   ActionStatus,
+  AverageTransactionFeeData,
   FeeStatsData,
-  FeeStatsDataInitialState,
+  FeeStatsInitialState,
   Network,
   RejectMessage,
 } from "types";
 import { networkConfig } from "constants/settings";
+import BigNumber from "bignumber.js";
 
 export const fetchFeeStatsDataAction = createAsyncThunk<
   FeeStatsData,
@@ -29,8 +31,44 @@ export const fetchFeeStatsDataAction = createAsyncThunk<
   }
 });
 
-const initialState: FeeStatsDataInitialState = {
+export const fetchAverageTransactionsFeeData = createAsyncThunk<
+  AverageTransactionFeeData,
+  void,
+  { rejectValue: RejectMessage; state: RootState }
+>(
+  "feeStats/fetchAverageTransactionsFeeData",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch("api/fees/stats");
+
+      const { day, month } = await response.json();
+
+      const formattedMonthlyFee = month.map(
+        (fee: { closing_date: string; fee_average: string }) => ({
+          date: `${fee.closing_date}T00:00:00.000Z`,
+          primaryValue: new BigNumber(fee.fee_average).toFormat(2),
+        }),
+      );
+
+      const formattedDailyFee = day.map(
+        (fee: { closing_hour: string; fee_average: string }) => ({
+          date: fee.closing_hour,
+          primaryValue: new BigNumber(fee.fee_average).toFormat(2),
+        }),
+      );
+
+      return { month: formattedMonthlyFee, day: formattedDailyFee };
+    } catch (error) {
+      return rejectWithValue({
+        errorString: getErrorString(error),
+      });
+    }
+  },
+);
+
+const initialState: FeeStatsInitialState = {
   data: null,
+  fees: null,
   status: undefined,
   errorString: undefined,
 };
@@ -53,6 +91,26 @@ const feeStatsSlice = createSlice({
       state.status = ActionStatus.ERROR;
       state.errorString = action.payload?.errorString;
     });
+    builder.addCase(
+      fetchAverageTransactionsFeeData.pending,
+      (state = initialState) => {
+        state.status = ActionStatus.PENDING;
+      },
+    );
+    builder.addCase(
+      fetchAverageTransactionsFeeData.fulfilled,
+      (state, action) => {
+        state.fees = action.payload;
+        state.status = ActionStatus.SUCCESS;
+      },
+    );
+    builder.addCase(
+      fetchAverageTransactionsFeeData.rejected,
+      (state, action) => {
+        state.status = ActionStatus.ERROR;
+        state.errorString = action.payload?.errorString;
+      },
+    );
   },
 });
 

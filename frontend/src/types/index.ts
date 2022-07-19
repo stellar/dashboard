@@ -35,13 +35,6 @@ export interface LedgersInitialState {
   errorString?: string;
 }
 
-export interface FeeStatsInitialState {
-  data: any;
-  isStreaming: boolean;
-  status: ActionStatus | undefined;
-  errorString?: string;
-}
-
 export interface NetworkNodesInitialState {
   data: NetworkNodesData | null;
   status: ActionStatus | undefined;
@@ -56,12 +49,6 @@ export interface LumenSupplyInitialState {
 
 export interface DexDataInitialState {
   data: DexData | null;
-  status: ActionStatus | undefined;
-  errorString?: string;
-}
-
-export interface FeeStatsDataInitialState {
-  data: FeeStatsData | null;
   status: ActionStatus | undefined;
   errorString?: string;
 }
@@ -104,20 +91,11 @@ export interface DexItemData {
   fluctuation: number;
 }
 
-interface FeesResponse {
-  date: string;
-  primaryValue: string;
-}
-
 export interface DexData {
   trades: DexItemData;
   totalUniqueAssets: number;
   dailyActiveAccounts: number;
   payments24HRs: number;
-  fees: {
-    month: FeesResponse[];
-    hour: FeesResponse[];
-  };
 }
 
 export enum ActionStatus {
@@ -324,7 +302,12 @@ export interface FetchLastOperationsActionResponse {
   shares?: string;
 }
 
-export type FeeStatsData = {
+export interface FeesResponse {
+  date: string;
+  primaryValue: string;
+}
+
+export interface FeeStatsData {
   last_ledger: number;
   last_ledger_base_fee: number;
   ledger_capacity_usage: number;
@@ -360,4 +343,16 @@ export type FeeStatsData = {
     p95: number;
     p99: number;
   };
-};
+}
+
+export interface AverageTransactionFeeData {
+  month: FeesResponse[];
+  day: FeesResponse[];
+}
+
+export interface FeeStatsInitialState {
+  data: FeeStatsData | null;
+  fees: AverageTransactionFeeData | null;
+  status: ActionStatus | undefined;
+  errorString?: string;
+}

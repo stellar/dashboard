@@ -43,7 +43,6 @@ export const FeeStats = () => {
   useEffect(() => {
     getFeeStats();
     setInterval(() => getFeeStats(), 5 * 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getFeeStats]);
 
   const iconStyle = (value: number) => {
@@ -74,28 +73,31 @@ export const FeeStats = () => {
     return <Icon.ArrowRight color="white" />;
   };
 
-  const renderFee = (data: { id: string; name: string }) => {
-    let feeResult;
-    const isCapacityUsage = data.id === "ledger_capacity_usage";
-    const value = get(feeStats.data, data.id);
+  const renderFee = useCallback(
+    (data: { id: string; name: string }) => {
+      let feeResult;
+      const isCapacityUsage = data.id === "ledger_capacity_usage";
+      const value = get(feeStats.data, data.id);
 
-    if (isCapacityUsage) {
-      feeResult = `${Math.round(value * 100)}%`;
-    } else {
-      const formattedValue = new BigNumber(value).toFormat();
-      feeResult = formattedValue;
-    }
+      if (isCapacityUsage) {
+        feeResult = `${Math.round(value * 100)}%`;
+      } else {
+        const formattedValue = new BigNumber(value).toFormat();
+        feeResult = formattedValue;
+      }
 
-    return (
-      <React.Fragment key={data.id}>
-        <td className="FeeStats__metric">{data.name}</td>
-        <td className="FeeStats__value">
-          {feeResult}
-          {isCapacityUsage ? capacityStyle(value) : iconStyle(value)}
-        </td>
-      </React.Fragment>
-    );
-  };
+      return (
+        <React.Fragment key={data.id}>
+          <td className="FeeStats__metric">{data.name}</td>
+          <td className="FeeStats__value">
+            {feeResult}
+            {isCapacityUsage ? capacityStyle(value) : iconStyle(value)}
+          </td>
+        </React.Fragment>
+      );
+    },
+    [feeStats.data],
+  );
 
   return (
     <SectionCard title="Fee Stats (Last 5 ledgers), Fee unit in stroops.">

@@ -5,13 +5,13 @@ import { useRedux } from "hooks/useRedux";
 
 import "./styles.scss";
 
-import { fetchDexDataAction } from "ducks/dex";
 import { SectionCard } from "components/SectionCard";
 import {
   TimeRange,
   VerticalBarChart,
 } from "components/charts/VerticalBarChart";
 import { LedgerTransactionHistoryFilterType } from "types";
+import { fetchAverageTransactionsFeeData } from "ducks/feeStats";
 
 const TIME_RANGE_MAPPING = [
   {
@@ -25,23 +25,23 @@ const TIME_RANGE_MAPPING = [
 ];
 
 export const AverageTransactionFee: React.FC = () => {
-  const { dex } = useRedux("dex");
+  const { feeStats } = useRedux("feeStats");
   const dispatch = useDispatch();
 
   const [rangeInterval, setRangeInterval] = useState(TimeRange.DAY);
 
   useEffect(() => {
-    dispatch(fetchDexDataAction());
+    dispatch(fetchAverageTransactionsFeeData());
   }, [dispatch]);
 
   const data = useMemo(() => {
-    if (dex.data) {
-      const formattedMonthlyFee = dex.data?.fees.month.map((fee) => ({
+    if (feeStats.fees) {
+      const formattedMonthlyFee = feeStats.fees.month.map((fee) => ({
         date: new Date(fee.date),
         primaryValue: Number(fee.primaryValue),
       }));
 
-      const formattedFeePerHour = dex.data?.fees.hour.map((fee) => ({
+      const formattedFeePerHour = feeStats.fees.day.map((fee) => ({
         date: new Date(fee.date),
         primaryValue: Number(fee.primaryValue),
       }));
@@ -50,7 +50,7 @@ export const AverageTransactionFee: React.FC = () => {
     }
 
     return { day: [], month: [] };
-  }, [dex.data]);
+  }, [feeStats.fees]);
 
   const timeRangeOptions = useMemo(
     () => (
@@ -76,23 +76,17 @@ export const AverageTransactionFee: React.FC = () => {
     <SectionCard
       title="Average Transaction Fee"
       titleCustom={timeRangeOptions}
-      isLoading={dex.status === "PENDING"}
-      noData={!data.day}
-      titleLinkLabel="API"
-      // temp link
-      titleLink="http://localhost:3000/api/dex/all"
+      noData={!feeStats.fees}
     >
       <div className="AverageTransactionFee__mainChart">
         <div className="AverageTransactionFee__mainChart__container">
-          {dex.data && (
-            <VerticalBarChart
-              data={data[rangeInterval as "month" | "day"]}
-              primaryValueName="Transactions"
-              timeRange={rangeInterval}
-              primaryValueTooltipDescription="txns"
-              primaryValueOnly
-            />
-          )}
+          <VerticalBarChart
+            data={data[rangeInterval as "day" | "month"]}
+            primaryValueName="Transactions"
+            timeRange={rangeInterval}
+            primaryValueTooltipDescription="txns"
+            primaryValueOnly
+          />
         </div>
       </div>
     </SectionCard>
