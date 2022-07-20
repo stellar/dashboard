@@ -21,7 +21,7 @@ export const fetchFeeStatsDataAction = createAsyncThunk<
   try {
     const server = new StellarSdk.Server(networkConfig[Network.MAINNET].url);
 
-    const response = server.feeStats();
+    const response = await server.feeStats();
 
     return response;
   } catch (error) {

@@ -46,11 +46,23 @@ export const AverageTransactionFee: React.FC = () => {
         primaryValue: Number(fee.primaryValue),
       }));
 
-      return { day: formattedFeePerHour, month: formattedMonthlyFee };
+      const amountFees = feeStats.fees.day.length - 1;
+
+      const baseDate = new Date(
+        feeStats.fees[rangeInterval as "day" | "month"][amountFees].date,
+      );
+
+      return {
+        fees: {
+          day: formattedFeePerHour,
+          month: formattedMonthlyFee,
+          baseDate,
+        },
+      };
     }
 
-    return { day: [], month: [] };
-  }, [feeStats.fees]);
+    return { fees: { day: [], month: [], baseDate: new Date() } };
+  }, [feeStats.fees, rangeInterval]);
 
   const timeRangeOptions = useMemo(
     () => (
@@ -81,11 +93,12 @@ export const AverageTransactionFee: React.FC = () => {
       <div className="AverageTransactionFee__mainChart">
         <div className="AverageTransactionFee__mainChart__container">
           <VerticalBarChart
-            data={data[rangeInterval as "day" | "month"]}
+            data={data.fees[rangeInterval as "day" | "month"]}
             primaryValueName="Transactions"
             timeRange={rangeInterval}
-            primaryValueTooltipDescription="txns"
+            primaryValueTooltipDescription="stroops"
             primaryValueOnly
+            baseStartDate={data.fees.baseDate}
           />
         </div>
       </div>
