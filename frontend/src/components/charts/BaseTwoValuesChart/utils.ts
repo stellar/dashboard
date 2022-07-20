@@ -38,7 +38,7 @@ const TIME_RANGE_PARAMS = {
     },
   },
   [TimeRange.DAY]: {
-    dateFormatter: (date: Date) => format(date, "d/M h:mm a"),
+    dateFormatter: (date: Date) => format(date, "M/d h:mm a"),
     generateTicks: (baseDate: Date) => {
       const start = subDays(baseDate, 1);
       return [
