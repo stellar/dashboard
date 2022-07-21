@@ -262,7 +262,7 @@ export async function getOpStats() {
   const query = `
     SELECT 
       FORMAT_DATE('%Y-%m', cast(closed_at as date)) as closing_date,
-      SUM(operation_count) as operations 
+      SUM(tx_set_operation_count) as operations 
     FROM ${bigQueryEndpointBase}.history_ledgers 
     GROUP BY closing_date 
     ORDER BY closing_date
