@@ -11,6 +11,7 @@ export interface Store {
   dex: DexDataInitialState;
   transactions: TransactionsInitialState;
   operations: OperationsInitialState;
+  feeStats: FeeStatsInitialState;
 }
 
 export type StoreKey = keyof Store;
@@ -299,4 +300,59 @@ export interface FetchLastOperationsActionResponse {
   name?: string;
   shares_received?: string;
   shares?: string;
+}
+
+export interface FeesResponse {
+  date: string;
+  primaryValue: string;
+}
+
+export interface FeeStatsData {
+  last_ledger: number;
+  last_ledger_base_fee: number;
+  ledger_capacity_usage: number;
+  fee_charged: {
+    max: number;
+    min: number;
+    mode: number;
+    p10: number;
+    p20: number;
+    p30: number;
+    p40: number;
+    p50: number;
+    p60: number;
+    p70: number;
+    p80: number;
+    p90: number;
+    p95: number;
+    p99: number;
+  };
+  max_fee: {
+    max: number;
+    min: number;
+    mode: number;
+    p10: number;
+    p20: number;
+    p30: number;
+    p40: number;
+    p50: number;
+    p60: number;
+    p70: number;
+    p80: number;
+    p90: number;
+    p95: number;
+    p99: number;
+  };
+}
+
+export interface AverageTransactionFeeData {
+  month: FeesResponse[];
+  day: FeesResponse[];
+}
+
+export interface FeeStatsInitialState {
+  data: FeeStatsData | null;
+  fees: AverageTransactionFeeData | null;
+  status: ActionStatus | undefined;
+  errorString?: string;
 }
