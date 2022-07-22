@@ -149,18 +149,13 @@ export const fetchLedgerOperations = createAsyncThunk<
   { rejectValue: RejectMessage; state: RootState }
 >("ledgers/fetchLedgerOperations", async (_, { rejectWithValue }) => {
   try {
-    const historyFilter = ledgerTransactionHistoryConfig["30D"];
-    const response = await fetch(
-      `/api/ledgers${historyFilter.endpointPrefix}${
-        networkConfig[Network.MAINNET].ledgerTransactionsHistorySuffix
-      }`,
-    );
+    const response = await fetch("api/ledgers/op_stats");
 
     const operations = await response.json();
 
-    const result = operations.data.map((operation: LedgerModuleItem) => ({
-      date: operation.end,
-      primaryValue: operation.operation_count,
+    const result = operations.map((operation: LedgerModuleItem) => ({
+      date: operation.closing_date,
+      primaryValue: operation.operations,
     }));
 
     return result;

@@ -207,8 +207,8 @@ export enum LedgerTransactionHistoryFilterType {
 }
 
 export interface LedgerModuleItem {
-  end: string;
-  operation_count: number;
+  closing_date: string;
+  operations: number;
 }
 
 export interface FetchLedgerOperationsResponse {
@@ -366,8 +366,6 @@ export interface FeeStatsInitialState {
   fees: AverageTransactionFeeData | null;
   status: ActionStatus | undefined;
   errorString?: string;
-  end: string;
-  operation_count: number;
 }
 
 export interface FetchLedgerModuleResponse {

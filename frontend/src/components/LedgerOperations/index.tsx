@@ -1,8 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
-import "./styles.scss";
-
 import { useRedux } from "hooks/useRedux";
 import { ActionStatus, Network } from "types";
 import { fetchLedgerOperations } from "ducks/ledgers";
@@ -12,6 +10,8 @@ import {
   ledgerTransactionHistoryConfig,
   networkConfig,
 } from "constants/settings";
+
+import "./styles.scss";
 
 // max operations per day = 12*60*24*1000 = 17,280,000
 const limitLine = 17280000;
@@ -45,20 +45,18 @@ export const LedgerOperations = () => {
       isLoading={ledgers.status === ActionStatus.PENDING}
       noData={!ledgers.ledgerOperations.length}
     >
-      {ledgers.ledgerOperations.length > 0 && (
-        <div className="LedgerOperations__mainChart">
-          <div className="LedgerOperations__mainChart__container">
-            <VerticalBarChart
-              data={data}
-              primaryValueName="Operations"
-              timeRange={VerticalBarChart.TimeRange.MONTH}
-              primaryValueTooltipDescription="ops"
-              maxLine={limitLine}
-              primaryValueOnly
-            />
-          </div>
+      <div className="LedgerOperations__mainChart">
+        <div className="LedgerOperations__mainChart__container">
+          <VerticalBarChart
+            data={data}
+            primaryValueName="Operations"
+            timeRange={VerticalBarChart.TimeRange.MONTH}
+            primaryValueTooltipDescription="ops"
+            maxLine={limitLine}
+            primaryValueOnly
+          />
         </div>
-      )}
+      </div>
     </SectionCard>
   );
 };

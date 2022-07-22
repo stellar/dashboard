@@ -6,13 +6,12 @@ import { ByTheNumbers } from "components/ByTheNumbers";
 import { LumenSupply } from "components/LumenSupply";
 import { NetworkNodes } from "components/NetworkNodes";
 import { Incidents } from "components/Incidents";
-import { LedgerOperations } from "components/LedgerOperations";
 import { TransactionsPerSecond } from "components/TransactionsPerSecond";
 import { RecentOperations } from "components/RecentOperations";
 import { FeeStats } from "components/FeeStats";
 import { XML } from "components/XML";
 import { AverageTransactionFee } from "components/AverageTransactionFee";
-import { LedgerModule } from "components/LedgerModule";
+import { LedgerOperations } from "components/LedgerOperations";
 
 export const Mainnet = () => (
   <div className="ContentWrapper">
@@ -23,7 +22,6 @@ export const Mainnet = () => (
     <LedgerOperations />
     <TransactionsPerSecond />
     <RecentOperations />
-    <LedgerModule />
     <ByTheNumbers />
     <LumenSupply />
     <NetworkNodes />
