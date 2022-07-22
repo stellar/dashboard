@@ -16,7 +16,7 @@ import { networkConfig } from "constants/settings";
 
 export const fetchLastOperationsAction = createAsyncThunk<
   Array<FetchLastOperationsActionResponse>,
-  void,
+  undefined,
   { rejectValue: RejectMessage; state: RootState }
 >("operations/fetchLastOperationsAction", async (_, { rejectWithValue }) => {
   try {

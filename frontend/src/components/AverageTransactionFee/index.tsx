@@ -3,8 +3,6 @@ import { TextLink } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 import { useRedux } from "hooks/useRedux";
 
-import "./styles.scss";
-
 import { SectionCard } from "components/SectionCard";
 import {
   TimeRange,
@@ -12,6 +10,8 @@ import {
 } from "components/charts/VerticalBarChart";
 import { LedgerTransactionHistoryFilterType } from "types";
 import { fetchAverageTransactionsFeeData } from "ducks/feeStats";
+
+import "./styles.scss";
 
 const TIME_RANGE_MAPPING = [
   {
