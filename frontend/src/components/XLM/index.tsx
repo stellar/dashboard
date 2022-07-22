@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import BigNumber from "bignumber.js";
 
 import { useRedux } from "hooks/useRedux";
 import { AmountInfoCard } from "components/AmountInfoCard";
@@ -20,9 +19,7 @@ export const XLM = () => {
       }, 0);
 
       const average = String(feesResults / daysInMonth);
-      const formattedAverage = formatBigNumbers(
-        new BigNumber(average).toFormat(2),
-      );
+      const formattedAverage = formatBigNumbers(average);
 
       return `${formattedAverage} XLM`;
     }
