@@ -25,6 +25,7 @@ import { fetchLedgersTransactionsHistoryAction } from "ducks/ledgers";
 import { formatDate } from "helpers/formatDate";
 
 import "./styles.scss";
+import { TimeRange } from "components/charts/BaseTwoValuesChart";
 
 const TIME_RANGE_MAPPING = {
   [VerticalBarChart.TimeRange.HOUR]: {
@@ -52,7 +53,7 @@ export const LedgerInfo = ({
     ledgers: { ledgerTransactionsHistory, status },
   } = useRedux("ledgers");
 
-  const [rangeInterval, setRangeInterval] = useState(
+  const [rangeInterval, setRangeInterval] = useState<"hour" | "day" | "month">(
     VerticalBarChart.TimeRange.HOUR,
   );
 
@@ -133,7 +134,7 @@ export const LedgerInfo = ({
               data={data.graphData}
               primaryValueName="Transactions"
               secondaryValueName="Operations"
-              timeRange={rangeInterval}
+              timeRange={rangeInterval as TimeRange}
               primaryValueTooltipDescription="txns"
               secondaryValueTooltipDescription="ops"
             />

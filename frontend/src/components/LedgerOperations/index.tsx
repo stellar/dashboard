@@ -13,8 +13,8 @@ import {
 
 import "./styles.scss";
 
-// max operations per day = 12*60*24*1000 = 17,280,000
-const limitLine = 17280000;
+// max operations per month = 12*1000*60*24*30 = 518400000
+const limitLine = 518400000;
 
 export const LedgerOperations = () => {
   const { ledgers } = useRedux("ledgers");
@@ -29,10 +29,18 @@ export const LedgerOperations = () => {
   const data = useMemo(() => {
     const reversedOperations = [...ledgers.ledgerOperations].reverse();
 
-    return reversedOperations.map((operation) => ({
-      date: new Date(operation.date),
-      primaryValue: operation.primaryValue,
-    }));
+    if (reversedOperations.length) {
+      const fisrtDate = new Date(reversedOperations[0].date);
+
+      const operations = reversedOperations.map((operation) => ({
+        date: new Date(operation.date),
+        primaryValue: operation.primaryValue,
+      }));
+
+      return { operations, fisrtDate };
+    }
+
+    return { operations: [], fisrtDate: new Date() };
   }, [ledgers.ledgerOperations]);
 
   return (
@@ -48,12 +56,13 @@ export const LedgerOperations = () => {
       <div className="LedgerOperations__mainChart">
         <div className="LedgerOperations__mainChart__container">
           <VerticalBarChart
-            data={data}
+            data={data.operations}
             primaryValueName="Operations"
-            timeRange={VerticalBarChart.TimeRange.MONTH}
+            timeRange={VerticalBarChart.TimeRange.YEAR}
             primaryValueTooltipDescription="ops"
             maxLine={limitLine}
             primaryValueOnly
+            baseStartDate={data.fisrtDate}
           />
         </div>
       </div>

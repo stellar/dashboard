@@ -1,5 +1,6 @@
 import StellarSdk from "stellar-sdk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import BigNumber from "bignumber.js";
 
 import { RootState } from "config/store";
 import {
@@ -11,7 +12,6 @@ import { getAverageLedgerClosedTime } from "helpers/getAverageLedgerClosedTime";
 import { getLedgerClosedTimes } from "helpers/getLedgerClosedTimes";
 import { getDateDiffSeconds } from "helpers/getDateDiffSeconds";
 import { parseDateFromFormat } from "helpers/parseDateFromFormat";
-
 import {
   LedgersInitialState,
   ActionStatus,
@@ -23,7 +23,6 @@ import {
   FetchLedgerOperationsResponse,
   LedgerModuleItem,
 } from "types";
-import BigNumber from "bignumber.js";
 
 const LIMIT = 200;
 const LAST_SIZE = 11;
@@ -158,7 +157,9 @@ export const fetchLedgerOperations = createAsyncThunk<
       primaryValue: operation.operations,
     }));
 
-    return result;
+    const organizedOperations = [...result].reverse();
+
+    return organizedOperations;
   } catch (error) {
     return rejectWithValue({ errorString: getErrorString(error) });
   }

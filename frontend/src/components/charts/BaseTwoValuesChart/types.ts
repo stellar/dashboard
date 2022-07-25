@@ -52,6 +52,7 @@ export enum TimeRange {
   HOUR = "hour",
   DAY = "day",
   MONTH = "month",
+  YEAR = "year",
 }
 
 /**
@@ -109,6 +110,7 @@ export type BaseTwoValuesChartProps = {
    * - `TimeRange.HOUR` - Will use an interval of 1 hour, and render with format: `2:00 pm` - This is the default
    * - `TimeRange.DAY` - Will use an interval of 1 day, and render with format: `30/12 2:00 pm`
    * - `TimeRange.MONTH` - Will use an interval of 1 month, and render with format: `30/12/20`
+   * - `TimeRange.YEAR` - Will use an interval of 1 year from the baseStartDate, and render with format: `12/2022`
    *
    * The interval will use the `baseStartDate` prop to calculate the ticks, or, if it is not provided,
    * it will use the date when the chart is being rendered (`new Date()`).
