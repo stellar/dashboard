@@ -367,9 +367,3 @@ export interface AverageTransactionFeeData {
   month: FeesResponse[];
   day: FeesResponse[];
 }
-
-export interface FetchLedgerModuleResponse {
-  date: Date;
-  primaryValue: number;
-}
-
