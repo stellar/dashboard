@@ -1,5 +1,6 @@
 import StellarSdk from "stellar-sdk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import BigNumber from "bignumber.js";
 
 import { RootState } from "config/store";
 import {
@@ -11,7 +12,6 @@ import { getAverageLedgerClosedTime } from "helpers/getAverageLedgerClosedTime";
 import { getLedgerClosedTimes } from "helpers/getLedgerClosedTimes";
 import { getDateDiffSeconds } from "helpers/getDateDiffSeconds";
 import { parseDateFromFormat } from "helpers/parseDateFromFormat";
-
 import {
   LedgersInitialState,
   ActionStatus,
@@ -20,8 +20,9 @@ import {
   LedgerRecord,
   LedgerItem,
   LedgerTransactionHistoryFilterType,
+  FetchLedgerOperationsResponse,
+  LedgerModuleItem,
 } from "types";
-import BigNumber from "bignumber.js";
 
 const LIMIT = 200;
 const LAST_SIZE = 11;
@@ -141,6 +142,29 @@ export const fetchLedgersTransactionsHistoryAction = createAsyncThunk<
   },
 );
 
+export const fetchLedgerOperations = createAsyncThunk<
+  FetchLedgerOperationsResponse[],
+  undefined,
+  { rejectValue: RejectMessage; state: RootState }
+>("ledgers/fetchLedgerOperations", async (_, { rejectWithValue }) => {
+  try {
+    const response = await fetch("api/ledgers/op_stats");
+
+    const operations = await response.json();
+
+    const result = operations.map((operation: LedgerModuleItem) => ({
+      date: operation.closing_date,
+      primaryValue: operation.operations,
+    }));
+
+    const organizedOperations = [...result].reverse();
+
+    return organizedOperations;
+  } catch (error) {
+    return rejectWithValue({ errorString: getErrorString(error) });
+  }
+});
+
 export const startLedgerStreamingAction = createAsyncThunk<
   { isStreaming: boolean },
   Network,
@@ -194,6 +218,7 @@ const initialState: LedgersInitialState = {
   lastLedgerRecords: [],
   protocolVersion: null,
   ledgerClosedTimes: [],
+  ledgerOperations: [],
   ledgerTransactionsHistory: {
     items: [],
     average: {} as FetchLedgersTransactionsHistoryActionResponse["average"],
@@ -268,6 +293,17 @@ const ledgersSlice = createSlice({
         state.status = ActionStatus.ERROR;
       },
     );
+    builder.addCase(fetchLedgerOperations.pending, (state = initialState) => {
+      state.status = ActionStatus.PENDING;
+    });
+    builder.addCase(fetchLedgerOperations.fulfilled, (state, action) => {
+      state.ledgerOperations = action.payload;
+      state.status = ActionStatus.SUCCESS;
+    });
+    builder.addCase(fetchLedgerOperations.rejected, (state, action) => {
+      state.errorString = action.payload?.errorString;
+      state.status = ActionStatus.ERROR;
+    });
   },
 });
 

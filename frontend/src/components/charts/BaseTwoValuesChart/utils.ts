@@ -8,6 +8,7 @@ import {
   addDays,
   addHours,
   addMinutes,
+  differenceInDays,
   format,
   setMinutes,
   subDays,
@@ -61,6 +62,24 @@ const TIME_RANGE_PARAMS = {
         addDays(start, 22),
         addDays(start, 30),
       ];
+    },
+  },
+  [TimeRange.YEAR]: {
+    dateFormatter: (date: Date) => format(date, "MM/yyyy"),
+    generateTicks: (baseDate: Date) => {
+      const start = subDays(baseDate, 30);
+
+      const amountOfYears = Math.round(
+        differenceInDays(new Date(), baseDate) / 365,
+      );
+
+      const result = [baseDate];
+
+      for (let i = 1; i <= amountOfYears; i++) {
+        result.push(addDays(start, 365 * i));
+      }
+
+      return result;
     },
   },
 };

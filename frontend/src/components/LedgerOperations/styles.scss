@@ -1,0 +1,19 @@
+.LedgerOperations {
+  &__mainChart {
+    @media (max-width: 540px) {
+      overflow-x: auto;
+      overflow-y: visible;
+
+      padding-bottom: 0.8rem;
+    }
+
+    &__container {
+      width: 100%;
+      height: 20rem;
+
+      @media (max-width: 540px) {
+        width: 32rem;
+      }
+    }
+  }
+}

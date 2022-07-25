@@ -20,6 +20,7 @@ export interface LedgersInitialState {
   lastLedgerRecords: LedgerItem[];
   protocolVersion: number | null;
   ledgerClosedTimes: string[];
+  ledgerOperations: FetchLedgerOperationsResponse[];
   ledgerTransactionsHistory: {
     items: LedgerTransactionHistoryItem[];
     average: {
@@ -224,6 +225,16 @@ export enum LedgerTransactionHistoryFilterType {
   "30D" = "30D",
   "24H" = "24H",
   "1H" = "1H",
+}
+
+export interface LedgerModuleItem {
+  closing_date: string;
+  operations: number;
+}
+
+export interface FetchLedgerOperationsResponse {
+  date: Date;
+  primaryValue: number;
 }
 
 export type TransactionHistoryItem = {

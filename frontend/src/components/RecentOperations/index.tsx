@@ -12,10 +12,14 @@ import { OperationTypeColumn } from "./OperationTypeColumn";
 import { fetchLastOperationsAction } from "ducks/operations";
 import { FetchLastOperationsActionResponse, Network } from "types";
 
-export const RecentOperations = () => {
+export const RecentOperations = ({
+  network = Network.MAINNET,
+}: {
+  network?: Network;
+}) => {
   const { operations } = useRedux("operations");
   const dispatch = useDispatch();
-  const horizonURL = "https://horizon.stellar.org";
+  const horizonURL = networkConfig[network].url;
 
   const labels = [
     {
@@ -37,8 +41,8 @@ export const RecentOperations = () => {
   ];
 
   const getLastOperations = useCallback(() => {
-    dispatch(fetchLastOperationsAction());
-  }, [dispatch]);
+    dispatch(fetchLastOperationsAction(network));
+  }, [dispatch, network]);
 
   useEffect(() => {
     getLastOperations();
@@ -75,9 +79,7 @@ export const RecentOperations = () => {
     <SectionCard
       title="Recent Operations: Live Network"
       titleLinkLabel="API"
-      titleLink={`${
-        networkConfig[Network.MAINNET].url
-      }/operations?order=desc&limit=20`}
+      titleLink={`${horizonURL}/operations?order=desc&limit=20`}
     >
       <Table
         id="last-10-operations"
