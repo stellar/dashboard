@@ -144,7 +144,7 @@ export const fetchLedgersTransactionsHistoryAction = createAsyncThunk<
 
 export const fetchLedgerOperations = createAsyncThunk<
   FetchLedgerOperationsResponse[],
-  void,
+  undefined,
   { rejectValue: RejectMessage; state: RootState }
 >("ledgers/fetchLedgerOperations", async (_, { rejectWithValue }) => {
   try {
