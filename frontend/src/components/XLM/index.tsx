@@ -1,14 +1,13 @@
 import { useMemo } from "react";
-import BigNumber from "bignumber.js";
-
-import "./styles.scss";
 
 import { useRedux } from "hooks/useRedux";
 import { AmountInfoCard } from "components/AmountInfoCard";
 import { SectionCard } from "components/SectionCard";
 import { formatBigNumbers } from "helpers/formatBigNumbers";
 
-export const XML = () => {
+import "./styles.scss";
+
+export const XLM = () => {
   const { feeStats } = useRedux("feeStats");
 
   const data = useMemo(() => {
@@ -20,24 +19,22 @@ export const XML = () => {
       }, 0);
 
       const average = String(feesResults / daysInMonth);
-      const formattedAverage = formatBigNumbers(
-        new BigNumber(average).toFormat(2),
-      );
+      const formattedAverage = formatBigNumbers(average);
 
-      return formattedAverage + " XML";
+      return `${formattedAverage} XLM`;
     }
 
-    return "0 XML";
+    return "0 XLM";
   }, [feeStats.fees?.month]);
 
   return (
-    <SectionCard title="XML">
-      <div className="XMLContainer">
+    <SectionCard title="XLM">
+      <div className="XLMContainer">
         <AmountInfoCard title="Average Transaction Fee" amount={data} />
 
-        <AmountInfoCard title="Base operation fee" amount="0.00001 XML" />
+        <AmountInfoCard title="Base operation fee" amount="0.00001 XLM" />
 
-        <AmountInfoCard title="Base reserve" amount="0.5 XML" />
+        <AmountInfoCard title="Base reserve" amount="0.5 XLM" />
       </div>
     </SectionCard>
   );

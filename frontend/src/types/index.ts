@@ -36,6 +36,27 @@ export interface LedgersInitialState {
   errorString?: string;
 }
 
+export interface TransactionsInitialState {
+  transactionsHistory: {
+    items: TransactionHistoryItem[];
+  };
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
+export interface OperationsInitialState {
+  lastOperations: FetchLastOperationsActionResponse[];
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
+export interface FeeStatsInitialState {
+  data: FeeStatsData | null;
+  fees: AverageTransactionFeeData | null;
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
 export interface NetworkNodesInitialState {
   data: NetworkNodesData | null;
   status: ActionStatus | undefined;
@@ -226,20 +247,6 @@ export interface FetchTransactionsHistoryActionResponse {
   items: TransactionHistoryItem[];
 }
 
-export interface TransactionsInitialState {
-  transactionsHistory: {
-    items: TransactionHistoryItem[];
-  };
-  status: ActionStatus | undefined;
-  errorString?: string;
-}
-
-export interface OperationsInitialState {
-  lastOperations: FetchLastOperationsActionResponse[];
-  status: ActionStatus | undefined;
-  errorString?: string;
-}
-
 export interface OperationsResponse {
   records: {
     id: string;
@@ -361,14 +368,8 @@ export interface AverageTransactionFeeData {
   day: FeesResponse[];
 }
 
-export interface FeeStatsInitialState {
-  data: FeeStatsData | null;
-  fees: AverageTransactionFeeData | null;
-  status: ActionStatus | undefined;
-  errorString?: string;
-}
-
 export interface FetchLedgerModuleResponse {
   date: Date;
   primaryValue: number;
 }
+

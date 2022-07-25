@@ -1,6 +1,5 @@
 import StellarSdk from "stellar-sdk";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import BigNumber from "bignumber.js";
 
 import { RootState } from "config/store";
 import { getErrorString } from "helpers/getErrorString";
@@ -17,7 +16,7 @@ import { formatBigNumbers } from "helpers/formatBigNumbers";
 
 export const fetchFeeStatsDataAction = createAsyncThunk<
   FeeStatsData,
-  void,
+  undefined,
   { rejectValue: RejectMessage; state: RootState }
 >("feeStats/fetchFeeStatsDataAction", async (_, { rejectWithValue }) => {
   try {
@@ -35,7 +34,7 @@ export const fetchFeeStatsDataAction = createAsyncThunk<
 
 export const fetchAverageTransactionsFeeData = createAsyncThunk<
   AverageTransactionFeeData,
-  void,
+  undefined,
   { rejectValue: RejectMessage; state: RootState }
 >(
   "feeStats/fetchAverageTransactionsFeeData",
@@ -48,18 +47,14 @@ export const fetchAverageTransactionsFeeData = createAsyncThunk<
       const formattedMonthlyFee = month.map(
         (fee: { closing_date: string; fee_average: string }) => ({
           date: `${fee.closing_date} 00:00:00`,
-          primaryValue: formatBigNumbers(
-            new BigNumber(fee.fee_average).toFormat(2),
-          ),
+          primaryValue: formatBigNumbers(fee.fee_average),
         }),
       );
 
       const formattedDailyFee = day.map(
         (fee: { closing_hour: string; fee_average: string }) => ({
           date: fee.closing_hour.replace("T", " ").replace(".000Z", ""),
-          primaryValue: formatBigNumbers(
-            new BigNumber(fee.fee_average).toFormat(2),
-          ),
+          primaryValue: formatBigNumbers(fee.fee_average),
         }),
       );
 

@@ -15,7 +15,7 @@ export const FeeStats = () => {
 
   const labels = [
     { id: "metric", label: "Metric" },
-    { id: "value", label: "value" },
+    { id: "value", label: "Value" },
   ];
 
   const nameMap = [
@@ -42,7 +42,12 @@ export const FeeStats = () => {
 
   useEffect(() => {
     getFeeStats();
-    setInterval(() => getFeeStats(), 5 * 1000);
+
+    const interval = setInterval(() => getFeeStats(), 5 * 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [getFeeStats]);
 
   const iconStyle = (value: number) => {
@@ -82,8 +87,7 @@ export const FeeStats = () => {
       if (isCapacityUsage) {
         feeResult = `${Math.round(value * 100)}%`;
       } else {
-        const formattedValue = new BigNumber(value).toFormat();
-        feeResult = formattedValue;
+        feeResult = new BigNumber(value).toFormat();
       }
 
       return (
