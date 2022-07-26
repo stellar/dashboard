@@ -9,7 +9,6 @@ import { Incidents } from "components/Incidents";
 import { TransactionsPerSecond } from "components/TransactionsPerSecond";
 import { RecentOperations } from "components/RecentOperations";
 import { FeeStats } from "components/FeeStats";
-import { XLM } from "components/XLM";
 import { AverageTransactionFee } from "components/AverageTransactionFee";
 import { LedgerOperations } from "components/LedgerOperations";
 
@@ -26,7 +25,6 @@ export const Mainnet = () => (
     <LumenSupply />
     <NetworkNodes />
     <FeeStats />
-    <XLM />
     <AverageTransactionFee />
     <Incidents />
   </div>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { Icon, Table } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 import { get } from "lodash";
@@ -8,6 +8,7 @@ import { useRedux } from "hooks/useRedux";
 import { SectionCard } from "components/SectionCard";
 import { fetchFeeStatsDataAction } from "ducks/feeStats";
 import "./styles.scss";
+import { AmountInfoCard } from "components/AmountInfoCard";
 
 export const FeeStats = () => {
   const { feeStats } = useRedux("feeStats");
@@ -92,8 +93,8 @@ export const FeeStats = () => {
 
       return (
         <React.Fragment key={data.id}>
-          <td className="FeeStats__metric">{data.name}</td>
-          <td className="FeeStats__value">
+          <td className="FeeStats__tableContainer__metric">{data.name}</td>
+          <td className="FeeStats__tableContainer__value">
             {feeResult}
             {isCapacityUsage ? capacityStyle(value) : iconStyle(value)}
           </td>
@@ -103,16 +104,55 @@ export const FeeStats = () => {
     [feeStats.data],
   );
 
+  const data = useMemo(() => {
+    if (feeStats.fees?.month) {
+      const daysInMonth = feeStats.fees.month.length;
+      const feesResults = feeStats.fees.month.reduce((acc, currentValue) => {
+        acc += Number(currentValue.primaryValue);
+        return acc;
+      }, 0);
+
+      const baseOperationFee = 0.00001;
+
+      const average = String((feesResults / daysInMonth) * baseOperationFee);
+
+      const formattedAverage = new BigNumber(average).toFormat(5);
+
+      return `${formattedAverage} XLM`;
+    }
+
+    return "0 XLM";
+  }, [feeStats.fees?.month]);
+
   return (
-    <SectionCard title="Fee Stats (Last 5 ledgers), Fee unit in stroops.">
+    <SectionCard title="Transaction Fee Info:">
       <div className="FeeStats">
-        <Table
-          id="fee-stats"
-          data={nameMap}
-          columnLabels={labels}
-          hideNumberColumn
-          renderItemRow={renderFee}
-        />
+        <div className="FeeStats__cardsContainer">
+          <AmountInfoCard title="Average Transaction Fee" amount={data} />
+          <AmountInfoCard title="Base operation fee" amount="0.00001 XLM" />
+          <AmountInfoCard title="Base reserve" amount="0.5 XLM" />
+        </div>
+
+        <div className="FeeStats__tableContainer">
+          <div className="FeeStats__tableContainer__title">
+            Fee Stats (Last 5 ledgers), Fee unit in{" "}
+            <a
+              className="FeeStats__tableContainer__link"
+              href="https://developers.stellar.org/docs/glossary/fees/#base-fee"
+              target="_blanck"
+            >
+              stroops.
+            </a>
+          </div>
+
+          <Table
+            id="fee-stats"
+            data={nameMap}
+            columnLabels={labels}
+            hideNumberColumn
+            renderItemRow={renderFee}
+          />
+        </div>
       </div>
     </SectionCard>
   );
