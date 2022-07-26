@@ -99,7 +99,7 @@ export const TransactionsPerSecond = ({
           <VerticalBarChart
             data={data}
             primaryValueOnly
-            primaryValueName="Average Daily Transactions"
+            primaryValueName="Average TPS by Day"
             timeRange={TimeRange.MONTH}
             primaryValueTooltipDescription="TPS"
           />
