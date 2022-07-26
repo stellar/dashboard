@@ -6,9 +6,10 @@ import BigNumber from "bignumber.js";
 
 import { useRedux } from "hooks/useRedux";
 import { SectionCard } from "components/SectionCard";
+import { AmountInfoCard } from "components/AmountInfoCard";
 import { fetchFeeStatsDataAction } from "ducks/feeStats";
 import "./styles.scss";
-import { AmountInfoCard } from "components/AmountInfoCard";
+import { AverageTransactionFee } from "components/AverageTransactionFee";
 
 export const FeeStats = () => {
   const { feeStats } = useRedux("feeStats");
@@ -153,6 +154,8 @@ export const FeeStats = () => {
             renderItemRow={renderFee}
           />
         </div>
+
+        <AverageTransactionFee />
       </div>
     </SectionCard>
   );

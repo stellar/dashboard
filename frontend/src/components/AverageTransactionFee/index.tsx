@@ -86,7 +86,7 @@ export const AverageTransactionFee: React.FC = () => {
 
   return (
     <SectionCard
-      title="Average Transaction Fee"
+      title="Average Transaction Fee by Day (In Stroops):"
       titleCustom={timeRangeOptions}
       noData={!feeStats.fees}
     >
