@@ -137,11 +137,7 @@ export const FeeStats = () => {
         <div className="FeeStats__tableContainer">
           <div className="FeeStats__tableContainer__title">
             Fee Stats (Last 5 ledgers), Fee unit in{" "}
-            <TextLink
-              className="FeeStats__tableContainer__link"
-              href="https://developers.stellar.org/docs/glossary/fees/#base-fee"
-              target="_blanck"
-            >
+            <TextLink href="https://developers.stellar.org/docs/glossary/fees/#base-fee">
               stroops
             </TextLink>
           </div>
