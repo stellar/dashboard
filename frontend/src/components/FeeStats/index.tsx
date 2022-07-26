@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from "react";
-import { Icon, Table } from "@stellar/design-system";
+import { Icon, Table, TextLink } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 import { get } from "lodash";
 import BigNumber from "bignumber.js";
@@ -7,9 +7,9 @@ import BigNumber from "bignumber.js";
 import { useRedux } from "hooks/useRedux";
 import { SectionCard } from "components/SectionCard";
 import { AmountInfoCard } from "components/AmountInfoCard";
+import { AverageTransactionFee } from "components/AverageTransactionFee";
 import { fetchFeeStatsDataAction } from "ducks/feeStats";
 import "./styles.scss";
-import { AverageTransactionFee } from "components/AverageTransactionFee";
 
 export const FeeStats = () => {
   const { feeStats } = useRedux("feeStats");
@@ -126,7 +126,7 @@ export const FeeStats = () => {
   }, [feeStats.fees?.month]);
 
   return (
-    <SectionCard title="Transaction Fee Info:">
+    <SectionCard title="Transaction Fee Info">
       <div className="FeeStats">
         <div className="FeeStats__cardsContainer">
           <AmountInfoCard title="Average Transaction Fee" amount={data} />
@@ -137,13 +137,13 @@ export const FeeStats = () => {
         <div className="FeeStats__tableContainer">
           <div className="FeeStats__tableContainer__title">
             Fee Stats (Last 5 ledgers), Fee unit in{" "}
-            <a
+            <TextLink
               className="FeeStats__tableContainer__link"
               href="https://developers.stellar.org/docs/glossary/fees/#base-fee"
               target="_blanck"
             >
-              stroops.
-            </a>
+              stroops
+            </TextLink>
           </div>
 
           <Table
