@@ -79,18 +79,6 @@ export const TransactionsPerSecond = ({
       isLoading={transactions.status === ActionStatus.PENDING}
       noData={!data.length}
     >
-      <div className="TransactionsPerSecond__mainChart">
-        <div className="TransactionsPerSecond__mainChart__container">
-          <VerticalBarChart
-            data={data}
-            primaryValueOnly
-            primaryValueName="Transactions"
-            timeRange={TimeRange.MONTH}
-            primaryValueTooltipDescription="TPS"
-          />
-        </div>
-      </div>
-
       {weekData && (
         <div className="TransactionsPerSecond__card">
           <AmountInfoCard
@@ -105,6 +93,18 @@ export const TransactionsPerSecond = ({
           />
         </div>
       )}
+
+      <div className="TransactionsPerSecond__mainChart">
+        <div className="TransactionsPerSecond__mainChart__container">
+          <VerticalBarChart
+            data={data}
+            primaryValueOnly
+            primaryValueName="Average Daily Transactions"
+            timeRange={TimeRange.MONTH}
+            primaryValueTooltipDescription="TPS"
+          />
+        </div>
+      </div>
     </SectionCard>
   );
 };
