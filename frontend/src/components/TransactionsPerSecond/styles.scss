@@ -1,4 +1,15 @@
 .TransactionsPerSecond {
+  &__card {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    width: 15rem;
+
+    &__icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
   &__mainChart {
     @media (max-width: 540px) {
       overflow-x: auto;
@@ -14,16 +25,6 @@
       @media (max-width: 540px) {
         width: 32rem;
       }
-    }
-  }
-
-  &__card {
-    margin-top: 1rem;
-    width: 15rem;
-
-    &__icon {
-      width: 1rem;
-      height: 1rem;
     }
   }
 }

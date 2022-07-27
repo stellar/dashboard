@@ -36,6 +36,8 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
 
     if (assetType === "native") {
       code = <i>XLM</i>;
+    } else if (!assetType) {
+      code = "";
     } else {
       code = assetCode;
     }
@@ -180,15 +182,12 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
 
     case "manage_data":
       const { name } = operation;
-      return (
+      return name ? (
         <span>
-          Key:{" "}
-          <code>
-            {name && name.length <= 20
-              ? operation.name
-              : name?.substring(0, 20) + "..."}
-          </code>
+          Key: <code>{name.substring(0, 20) + "..."}</code>
         </span>
+      ) : (
+        <></>
       );
 
     case "liquidity_pool_deposit":
