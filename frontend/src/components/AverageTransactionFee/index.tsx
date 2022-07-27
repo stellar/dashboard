@@ -88,6 +88,8 @@ export const AverageTransactionFee: React.FC = () => {
     <SectionCard
       title="Average Transaction Fee by Day (In Stroops):"
       titleCustom={timeRangeOptions}
+      titleLinkLabel="API"
+      titleLink="api/fees/stats"
       noData={!feeStats.fees}
     >
       <div className="AverageTransactionFee__mainChart">
