@@ -214,6 +214,41 @@ export const startLedgerStreamingAction = createAsyncThunk<
   },
 );
 
+export const fetchLedgerProtocolHistory = createAsyncThunk<
+  string,
+  undefined,
+  { rejectValue: RejectMessage; state: RootState }
+>("ledgers/fetchLedgerProtocolHistory", async (_, { rejectWithValue }) => {
+  try {
+    let url =
+      "https://api.stellar.expert/explorer/public/ledger/protocol-history";
+
+    let options = {
+      method: "GET",
+      headers: {
+        cookie:
+          "SPSI=f8cd3a691ac14f8f56b430c00150ca97; SPSE=znsd7HV%2F8dTB6QgdiNyP3n3EygRGWdZ8efJttSa8V4TOtZbHjFZBnzi%2F96nBHhch8sAwfUMCZ2eAPPIMY5okIw%3D%3D; ",
+      },
+    };
+
+    fetch(url, options)
+      .then((res) => res.json())
+      .then((json) => console.log(json))
+      .catch((err) => console.error("error:" + err));
+
+    // const response = await fetch("https://api.stellar.expert/explorer/public/ledger/protocol-history")
+
+    // const protocolHistory = await response.json()
+
+    // console.log(protocolHistory);
+    return "ola";
+  } catch (error) {
+    return rejectWithValue({
+      errorString: getErrorString(error),
+    });
+  }
+});
+
 const initialState: LedgersInitialState = {
   lastLedgerRecords: [],
   protocolVersion: null,
@@ -223,6 +258,7 @@ const initialState: LedgersInitialState = {
     items: [],
     average: {} as FetchLedgersTransactionsHistoryActionResponse["average"],
   },
+  ledgerProtocolHistory: "",
   averageClosedTime: null,
   isStreaming: false,
   status: undefined,
@@ -301,6 +337,20 @@ const ledgersSlice = createSlice({
       state.status = ActionStatus.SUCCESS;
     });
     builder.addCase(fetchLedgerOperations.rejected, (state, action) => {
+      state.errorString = action.payload?.errorString;
+      state.status = ActionStatus.ERROR;
+    });
+    builder.addCase(
+      fetchLedgerProtocolHistory.pending,
+      (state = initialState) => {
+        state.status = ActionStatus.PENDING;
+      },
+    );
+    builder.addCase(fetchLedgerProtocolHistory.fulfilled, (state, action) => {
+      state.ledgerProtocolHistory = action.payload;
+      state.status = ActionStatus.SUCCESS;
+    });
+    builder.addCase(fetchLedgerProtocolHistory.rejected, (state, action) => {
       state.errorString = action.payload?.errorString;
       state.status = ActionStatus.ERROR;
     });
