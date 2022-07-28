@@ -12,6 +12,7 @@ import {
 } from "constants/settings";
 
 import "./styles.scss";
+import { RecentOperations } from "components/RecentOperations";
 
 // max operations per month = 12*1000*60*24*30 = 518400000
 const limitLine = 518400000;
@@ -45,7 +46,7 @@ export const LedgerOperations = () => {
 
   return (
     <SectionCard
-      title="Ledger Operations"
+      title="Total monthly operations"
       titleLinkLabel="API"
       titleLink={`/api/ledgers${historyFilter.endpointPrefix}${
         networkConfig[Network.MAINNET].ledgerTransactionsHistorySuffix
@@ -66,6 +67,8 @@ export const LedgerOperations = () => {
           />
         </div>
       </div>
+
+      <RecentOperations />
     </SectionCard>
   );
 };

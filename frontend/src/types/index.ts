@@ -30,7 +30,6 @@ export interface LedgersInitialState {
       closeTimeAvg: number;
     };
   };
-  ledgerProtocolHistory: string;
   averageClosedTime: number | null;
   isStreaming: boolean;
   status: ActionStatus | undefined;

@@ -3,7 +3,6 @@ import { Card, TextLink, Icon, Tag } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 
 import {
-  fetchLedgerProtocolHistory,
   fetchLedgersAction,
   startLedgerStreamingAction,
   stopLedgerStreamingAction,
@@ -108,10 +107,6 @@ export const NetworkStatus = ({
       clearInterval(interval);
     };
   }, [lastLedgerClosedAt]);
-
-  useEffect(() => {
-    dispatch(fetchLedgerProtocolHistory());
-  }, [dispatch]);
 
   const networkState = getNetworkState(closedAgo, averageClosedTime || 0);
 
