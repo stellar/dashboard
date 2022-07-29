@@ -12,10 +12,10 @@ export const Testnet = () => (
   <div className="ContentWrapper">
     <NetworkStatus network={Network.TESTNET} />
     <LastLedger network={Network.TESTNET} />
-    <LastLedgersInfo network={Network.TESTNET} />
     <LedgerInfo network={Network.TESTNET} />
-    <TransactionsPerSecond network={Network.TESTNET} />
+    <LastLedgersInfo network={Network.TESTNET} />
     <RecentOperations network={Network.TESTNET} />
+    <TransactionsPerSecond network={Network.TESTNET} />
     <LumenSupply network={Network.TESTNET} />
     <NetworkNodes network={Network.TESTNET} />
   </div>
