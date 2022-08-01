@@ -293,7 +293,7 @@ export interface FetchLastOperationsActionResponse {
   id: string;
   type: string;
   source_account: string;
-  amount: number;
+  amount: string | undefined;
   offer_id: number;
   buying_asset_type: string;
   buying_asset_issuer: string;
