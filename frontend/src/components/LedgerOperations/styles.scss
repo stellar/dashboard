@@ -1,5 +1,7 @@
 .LedgerOperations {
   &__mainChart {
+    margin-bottom: 3rem;
+
     @media (max-width: 540px) {
       overflow-x: auto;
       overflow-y: visible;

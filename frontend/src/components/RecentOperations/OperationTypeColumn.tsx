@@ -12,7 +12,7 @@ interface OperationTypeColumnProps {
 }
 
 interface FormatAccountProps {
-  amount: number;
+  amount: string | undefined;
   assetType: string;
   assetCode?: string;
   assetIssuer?: string;
@@ -29,6 +29,11 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
     assetIssuer,
   }: FormatAccountProps) => {
     // Strip zeros and `.`
+
+    if (!amount) {
+      return null;
+    }
+
     let formattedAccount = new BigNumber(amount)
       .toFormat(7)
       .replace(/\.*0+$/, "");
@@ -59,7 +64,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
       return (
         <span>
           {formatAmount({
-            amount: Number(operation.starting_balance),
+            amount: operation.starting_balance,
             assetType: "native",
           })}
           &raquo;{" "}
@@ -85,7 +90,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
         <span>
           max{" "}
           {formatAmount({
-            amount: Number(operation.source_max),
+            amount: operation.source_max,
             assetType: operation.source_asset_type,
             assetCode: operation.source_asset_code,
             assetIssuer: operation.source_asset_issuer,

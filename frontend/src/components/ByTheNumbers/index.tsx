@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { SectionCard } from "components/SectionCard";
 import { DexCard } from "components/DexCard";
 import { AmountInfoCard } from "components/AmountInfoCard";
+import { LumenSupply } from "components/LumenSupply";
+import { NetworkNodes } from "components/NetworkNodes";
 
 import { useRedux } from "hooks/useRedux";
 import { fetchDexDataAction } from "ducks/dex";
@@ -48,7 +50,7 @@ export const ByTheNumbers = () => {
       noData={!dexData}
     >
       {dexData && (
-        <>
+        <div className="ByTheNumbers__container">
           <div className="ByTheNumbers__dex_cards_container">
             <DexCard
               title="DEX TRADES"
@@ -75,8 +77,12 @@ export const ByTheNumbers = () => {
               amount={dexData.payments24HRs}
             />
           </div>
-        </>
+        </div>
       )}
+
+      <LumenSupply />
+
+      <NetworkNodes />
     </SectionCard>
   );
 };

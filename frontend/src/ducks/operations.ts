@@ -47,7 +47,7 @@ export const fetchLastOperationsAction = createAsyncThunk<
           id: record.id,
           type: operationType,
           source_account: record.source_account,
-          amount: Number(record.amount),
+          amount: record.amount,
           offer_id: Number(record.offer_id),
           buying_asset_type: record.buying_asset_type,
           buying_asset_issuer: record.buying_asset_issuer,
