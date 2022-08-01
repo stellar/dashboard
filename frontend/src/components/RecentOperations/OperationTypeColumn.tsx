@@ -31,7 +31,7 @@ export const OperationTypeColumn: React.FC<OperationTypeColumnProps> = ({
     // Strip zeros and `.`
 
     if (!amount) {
-      return <></>;
+      return null;
     }
 
     let formattedAccount = new BigNumber(amount)
