@@ -54,30 +54,30 @@ export const FeeStats = () => {
 
   const iconStyle = (value: number) => {
     if (value <= 200) {
-      return <Icon.ArrowUp color="green" />;
+      return <Icon.ArrowUp color="var(--pal-success)" />;
     } else if (value > 200 && value <= 500) {
-      return <Icon.ArrowRight color="orange" />;
+      return <Icon.ArrowRight color="var(--pal-warning)" />;
     } else if (value > 500 && value <= 1000) {
-      return <Icon.ArrowDown color="red" />;
+      return <Icon.ArrowDown color="var(--pal-error)" />;
     } else if (value > 1000) {
-      return <Icon.ArrowDown color="red" />;
+      return <Icon.ArrowDown color="var(--pal-error)" />;
     }
 
-    return <Icon.ArrowRight color="white" />;
+    return <div className="FeeStats__tableContainer__value__empty" />;
   };
 
   const capacityStyle = (cap: number) => {
     if (cap <= 0.5) {
-      return <Icon.ArrowUp color="green" />;
+      return <Icon.ArrowUp color="var(--pal-success)" />;
     } else if (cap > 0.5 && cap <= 0.7) {
-      return <Icon.ArrowRight color="orange" />;
+      return <Icon.ArrowRight color="var(--pal-warning)" />;
     } else if (cap > 0.7 && cap <= 0.9) {
-      return <Icon.ArrowDown color="red" />;
+      return <Icon.ArrowDown color="var(--pal-error)" />;
     } else if (cap > 0.9) {
-      return <Icon.ArrowDown color="brown" />;
+      return <Icon.ArrowDown color="var(--pal-error)" />;
     }
 
-    return <Icon.ArrowRight color="white" />;
+    return <div className="FeeStats__tableContainer__value__empty" />;
   };
 
   const renderFee = useCallback(
