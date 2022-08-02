@@ -11,6 +11,7 @@ interface SectionCardProps {
   isLoading?: boolean;
   noData?: boolean;
   marginTop?: number | string;
+  noShadow?: boolean;
   children: React.ReactNode;
 }
 
@@ -23,6 +24,7 @@ export const SectionCard = ({
   isLoading,
   noData,
   marginTop = 0,
+  noShadow,
   children,
 }: SectionCardProps) => {
   const renderContent = () => {
@@ -39,7 +41,7 @@ export const SectionCard = ({
 
   return (
     <div className="SectionCard" style={{ marginTop }}>
-      <Card>
+      <Card noShadow={noShadow}>
         <div className="SectionCard__heading">
           <div className="SectionCard__heading__title">
             {titleIcon ?? null}

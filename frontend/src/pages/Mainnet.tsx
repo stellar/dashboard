@@ -5,8 +5,8 @@ import { LedgerInfo } from "components/LedgerInfo";
 import { ByTheNumbers } from "components/ByTheNumbers";
 import { Incidents } from "components/Incidents";
 import { TransactionsPerSecond } from "components/TransactionsPerSecond";
-import { FeeStats } from "components/FeeStats";
-import { LedgerOperations } from "components/LedgerOperations";
+import { TransactionFeeInfo } from "components/TransactionFeeInfo";
+import { TotalMonthlyOperations } from "components/TotalMonthlyOperations";
 
 export const Mainnet = () => (
   <div className="ContentWrapper">
@@ -14,9 +14,9 @@ export const Mainnet = () => (
     <LastLedger />
     <LedgerInfo />
     <LastLedgersInfo />
-    <LedgerOperations />
+    <TotalMonthlyOperations />
     <TransactionsPerSecond />
-    <FeeStats />
+    <TransactionFeeInfo />
     <ByTheNumbers />
     <Incidents />
   </div>

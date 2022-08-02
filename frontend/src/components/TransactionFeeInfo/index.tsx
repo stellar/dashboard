@@ -11,7 +11,7 @@ import { AverageTransactionFee } from "components/AverageTransactionFee";
 import { fetchFeeStatsDataAction } from "ducks/feeStats";
 import "./styles.scss";
 
-export const FeeStats = () => {
+export const TransactionFeeInfo = () => {
   const { feeStats } = useRedux("feeStats");
   const dispatch = useDispatch();
 

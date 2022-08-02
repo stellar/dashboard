@@ -91,6 +91,7 @@ export const AverageTransactionFee: React.FC = () => {
       titleLinkLabel="API"
       titleLink="api/fees/stats"
       noData={!feeStats.fees}
+      noShadow
     >
       <div className="AverageTransactionFee__mainChart">
         <div className="AverageTransactionFee__mainChart__container">
