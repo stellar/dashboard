@@ -12,6 +12,7 @@ interface SectionCardProps {
   noData?: boolean;
   marginTop?: number | string;
   noShadow?: boolean;
+  height?: number | string;
   children: React.ReactNode;
 }
 
@@ -24,6 +25,7 @@ export const SectionCard = ({
   isLoading,
   noData,
   marginTop = 0,
+  height = "auto",
   noShadow,
   children,
 }: SectionCardProps) => {
@@ -40,7 +42,7 @@ export const SectionCard = ({
   };
 
   return (
-    <div className="SectionCard" style={{ marginTop }}>
+    <div className="SectionCard" style={{ marginTop, height }}>
       <Card noShadow={noShadow}>
         <div className="SectionCard__heading">
           <div className="SectionCard__heading__title">

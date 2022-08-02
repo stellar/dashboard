@@ -1,5 +1,9 @@
 import { ReactNode, SVGProps } from "react";
 import { XAxisProps } from "recharts";
+import {
+  HorizontalAlignmentType,
+  VerticalAlignmentType,
+} from "recharts/types/component/DefaultLegendContent";
 
 /**
  * Item for the BaseTwoValuesChart data
@@ -151,4 +155,22 @@ export type BaseTwoValuesChartProps = {
    * @default false
    */
   xContentPaddingEnabled?: boolean;
+  /**
+   * Legend position in chart component
+   *
+   * @default top
+   */
+  legendPosition?: VerticalAlignmentType;
+  /**
+   * Legend align in chart component
+   *
+   * @default left
+   */
+  legendAlign?: HorizontalAlignmentType;
+  /**
+   * Height cahrt component calculate by percentage
+   *
+   * @default 100%
+   */
+  height?: number | string;
 };

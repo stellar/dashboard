@@ -78,31 +78,39 @@ export const TransactionsPerSecond = ({
       }${networkConfig[Network.MAINNET].ledgerTransactionsHistorySuffix}`}
       isLoading={transactions.status === ActionStatus.PENDING}
       noData={!data.length}
+      height="19rem"
     >
-      {weekData && (
-        <div className="TransactionsPerSecond__card">
-          <AmountInfoCard
-            title="Current TPS"
-            amount={`${new BigNumber(
-              weekData.txCount / weekData.closedTime,
-            ).toFormat(2)} tps`}
-            amountPrefixContent={
-              <Icon.Clock className="TransactionsPerSecond__card__icon" />
-            }
-            description="in the last week"
-          />
-        </div>
-      )}
+      <div className="TransactionsPerSecond">
+        {weekData && (
+          <div className="TransactionsPerSecond__card">
+            <AmountInfoCard
+              title="Current TPS"
+              amount={`${new BigNumber(
+                weekData.txCount / weekData.closedTime,
+              ).toFormat(2)} tps`}
+              amountPrefixContent={
+                <Icon.Clock className="TransactionsPerSecond__card__icon" />
+              }
+              description="in the last week"
+            />
+          </div>
+        )}
 
-      <div className="TransactionsPerSecond__mainChart">
-        <div className="TransactionsPerSecond__mainChart__container">
-          <VerticalBarChart
-            data={data}
-            primaryValueOnly
-            primaryValueName="Average TPS by Day"
-            timeRange={TimeRange.MONTH}
-            primaryValueTooltipDescription="TPS"
-          />
+        <div className="TransactionsPerSecond__containerMainChart">
+          <div className="TransactionsPerSecond__containerMainChart__mainChart">
+            <div className="TransactionsPerSecond__containerMainChart__mainChart__container">
+              <VerticalBarChart
+                data={data}
+                primaryValueOnly
+                primaryValueName="Average TPS by Day"
+                timeRange={TimeRange.MONTH}
+                primaryValueTooltipDescription="TPS"
+                legendPosition="bottom"
+                legendAlign="right"
+                height="65%"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </SectionCard>
