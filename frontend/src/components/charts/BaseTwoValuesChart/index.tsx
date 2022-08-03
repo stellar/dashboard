@@ -264,11 +264,7 @@ export const BaseTwoValuesChart = ({
           tickLine={false}
           tickMargin={10}
           tick={renderTickYAxis}
-          domain={
-            typeof maxLine === "number"
-              ? [0, maxLine + maxLineOffset]
-              : undefined
-          }
+          domain={[0, maxLineOffset]}
           width={yAxisWidth}
         />
         <RechartsTooltip

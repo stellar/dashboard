@@ -129,7 +129,10 @@ export const TransactionFeeInfo = () => {
     <SectionCard title="Transaction Fee Info">
       <div className="FeeStats">
         <div className="FeeStats__cardsContainer">
-          <AmountInfoCard title="Average Transaction Fee" amount={data} />
+          <AmountInfoCard
+            title="Average Transaction Fee (24HR)"
+            amount={data}
+          />
           <AmountInfoCard title="Base operation fee" amount="0.00001 XLM" />
           <AmountInfoCard title="Base reserve" amount="0.5 XLM" />
         </div>
