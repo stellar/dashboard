@@ -14,10 +14,11 @@ import {
 import "./styles.scss";
 import { RecentOperations } from "components/RecentOperations";
 
-// max operations per month = 12*1000*60*24*30 = 518400000
-const limitLine = 518400000;
-
-export const LedgerOperations = () => {
+export const TotalMonthlyOperations = ({
+  network = Network.MAINNET,
+}: {
+  network?: Network;
+}) => {
   const { ledgers } = useRedux("ledgers");
   const dispatch = useDispatch();
 
@@ -61,14 +62,14 @@ export const LedgerOperations = () => {
             primaryValueName="Operations"
             timeRange={VerticalBarChart.TimeRange.YEAR}
             primaryValueTooltipDescription="ops"
-            maxLine={limitLine}
             primaryValueOnly
             baseStartDate={data.fisrtDate}
+            maxLineOffset={550000000}
           />
         </div>
       </div>
 
-      <RecentOperations />
+      <RecentOperations network={network} />
     </SectionCard>
   );
 };

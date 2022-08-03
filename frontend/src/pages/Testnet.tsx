@@ -5,7 +5,7 @@ import { LedgerInfo } from "components/LedgerInfo";
 import { LumenSupply } from "components/LumenSupply";
 import { NetworkNodes } from "components/NetworkNodes";
 import { TransactionsPerSecond } from "components/TransactionsPerSecond";
-import { RecentOperations } from "components/RecentOperations";
+import { TotalMonthlyOperations } from "components/TotalMonthlyOperations";
 import { Network } from "types";
 
 export const Testnet = () => (
@@ -14,7 +14,7 @@ export const Testnet = () => (
     <LastLedger network={Network.TESTNET} />
     <LedgerInfo network={Network.TESTNET} />
     <LastLedgersInfo network={Network.TESTNET} />
-    <RecentOperations network={Network.TESTNET} />
+    <TotalMonthlyOperations network={Network.TESTNET} />
     <TransactionsPerSecond network={Network.TESTNET} />
     <LumenSupply network={Network.TESTNET} />
     <NetworkNodes network={Network.TESTNET} />

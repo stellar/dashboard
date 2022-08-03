@@ -8,14 +8,12 @@
   &__legend {
     display: flex;
     align-items: baseline;
-    height: 2.5rem;
     color: var(--pal-text-tertiary);
     font-size: var(--font-size-secondary);
     font-weight: var(--font-weight-medium);
     text-transform: uppercase;
 
     &__item {
-      margin-right: 1.2rem;
       display: flex;
       align-items: baseline;
     }

@@ -65,6 +65,9 @@ export const BaseTwoValuesChart = ({
   xContentPaddingEnabled = false,
   primaryValueTooltipDescription,
   secondaryValueTooltipDescription,
+  legendPosition = "top",
+  legendAlign = "left",
+  height = "100%",
 }: BaseTwoValuesChartProps) => {
   const smallScreen = useMediaQuery("(max-width: 540px)");
 
@@ -136,24 +139,35 @@ export const BaseTwoValuesChart = ({
     [],
   );
 
-  const renderLegendContent = useCallback(({ payload }: LegendContentProps) => {
-    return (
-      <div className="BaseTwoValuesChart__legend">
-        {payload?.map((entry, index) => (
-          <div
-            key={`item-${index}`}
-            className="BaseTwoValuesChart__legend__item"
-          >
-            <span
-              className="BaseTwoValuesChart__legend__indicator"
-              style={{ backgroundColor: entry.color }}
-            ></span>
-            <span>{entry.value}</span>
-          </div>
-        ))}
-      </div>
-    );
-  }, []);
+  const renderLegendContent = useCallback(
+    ({ payload }: LegendContentProps) => {
+      return (
+        <div
+          className="BaseTwoValuesChart__legend"
+          style={{
+            marginTop: legendPosition === "bottom" ? "1rem" : 0,
+            marginRight: legendPosition === "bottom" ? 0 : "1.2rem",
+            height: legendPosition === "bottom" ? "1rem" : "2.5rem",
+            justifyContent: legendAlign,
+          }}
+        >
+          {payload?.map((entry, index) => (
+            <div
+              key={`item-${index}`}
+              className="BaseTwoValuesChart__legend__item"
+            >
+              <span
+                className="BaseTwoValuesChart__legend__indicator"
+                style={{ backgroundColor: entry.color }}
+              ></span>
+              <span>{entry.value}</span>
+            </div>
+          ))}
+        </div>
+      );
+    },
+    [legendPosition, legendAlign],
+  );
 
   const timeRangeData = useMemo(() => {
     return getTimeRangeProps({
@@ -203,7 +217,7 @@ export const BaseTwoValuesChart = ({
   }, [maxLine, maxValue]);
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height={height}>
       <ComposedChart
         className="BaseTwoValuesChart"
         data={data}
@@ -250,11 +264,7 @@ export const BaseTwoValuesChart = ({
           tickLine={false}
           tickMargin={10}
           tick={renderTickYAxis}
-          domain={
-            typeof maxLine === "number"
-              ? [0, maxLine + maxLineOffset]
-              : undefined
-          }
+          domain={[0, maxLineOffset]}
           width={yAxisWidth}
         />
         <RechartsTooltip
@@ -265,8 +275,7 @@ export const BaseTwoValuesChart = ({
           content={renderTooltip as TooltipProps<number, string>["content"]}
         />
         <Legend
-          verticalAlign="top"
-          align="left"
+          verticalAlign={legendPosition}
           iconType="circle"
           iconSize={8}
           content={renderLegendContent as LegendProps["content"]}

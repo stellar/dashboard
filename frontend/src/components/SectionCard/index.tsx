@@ -10,6 +10,9 @@ interface SectionCardProps {
   titleCustom?: React.ReactNode;
   isLoading?: boolean;
   noData?: boolean;
+  marginTop?: number | string;
+  noShadow?: boolean;
+  height?: number | string;
   children: React.ReactNode;
 }
 
@@ -21,6 +24,9 @@ export const SectionCard = ({
   titleCustom,
   isLoading,
   noData,
+  marginTop = 0,
+  height = "auto",
+  noShadow,
   children,
 }: SectionCardProps) => {
   const renderContent = () => {
@@ -36,27 +42,29 @@ export const SectionCard = ({
   };
 
   return (
-    <Card>
-      <div className="SectionCard__heading">
-        <div className="SectionCard__heading__title">
-          {titleIcon ?? null}
-          {title}
-        </div>
+    <div className="SectionCard" style={{ marginTop, height }}>
+      <Card noShadow={noShadow}>
+        <div className="SectionCard__heading">
+          <div className="SectionCard__heading__title">
+            {titleIcon ?? null}
+            {title}
+          </div>
 
-        <div className="SectionCard__heading__options">
-          {titleCustom ?? null}
-          {titleLink ? (
-            <TextLink
-              href={titleLink}
-              target="_blank"
-              iconRight={<Icon.ExternalLink />}
-            >
-              {titleLinkLabel}
-            </TextLink>
-          ) : null}
+          <div className="SectionCard__heading__options">
+            {titleCustom ?? null}
+            {titleLink ? (
+              <TextLink
+                href={titleLink}
+                target="_blank"
+                iconRight={<Icon.ExternalLink />}
+              >
+                {titleLinkLabel}
+              </TextLink>
+            ) : null}
+          </div>
         </div>
-      </div>
-      {renderContent()}
-    </Card>
+        {renderContent()}
+      </Card>
+    </div>
   );
 };

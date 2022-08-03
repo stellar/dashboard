@@ -63,6 +63,8 @@ export const NetworkNodes = ({
       }`}
       isLoading={networkNodes.status === ActionStatus.PENDING}
       noData={!data}
+      marginTop="1rem"
+      noShadow
     >
       <div className="NetworkNodes">
         {data
