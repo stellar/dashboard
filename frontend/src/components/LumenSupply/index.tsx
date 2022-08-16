@@ -107,6 +107,7 @@ export const LumenSupply = ({
       titleLink="https://developers.stellar.org/docs/glossary/lumen-supply/"
       isLoading={lumenSupply.status === ActionStatus.PENDING}
       noData={!data}
+      noShadow
     >
       {data ? (
         <div className="LumenSupply">

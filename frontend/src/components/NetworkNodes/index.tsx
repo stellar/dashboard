@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { SectionCard } from "components/SectionCard";
-import { AreaChart } from "components/charts/AreaChart";
+import { SimpleAreaChart } from "components/charts/SimpleAreaChart";
 import { fetchNetworkNodesAction } from "ducks/networkNodes";
 import { useRedux } from "hooks/useRedux";
 import { ActionStatus, Network, NetworkNodesType } from "types";
@@ -63,6 +63,8 @@ export const NetworkNodes = ({
       }`}
       isLoading={networkNodes.status === ActionStatus.PENDING}
       noData={!data}
+      marginTop="1rem"
+      noShadow
     >
       <div className="NetworkNodes">
         {data
@@ -70,7 +72,7 @@ export const NetworkNodes = ({
               <div className="NetworkNodes__node" key={n.id}>
                 <div className="NetworkNodes__node__label">{n.label}</div>
                 <div className="NetworkNodes__node__chart">
-                  <AreaChart data={data[n.id].historyStats} />
+                  <SimpleAreaChart data={data[n.id].historyStats} />
                 </div>
                 <div className="NetworkNodes__node__count">
                   {data[n.id].current}

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Card, TextLink, Icon, Tag } from "@stellar/design-system";
+import { Card, Tag } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 
 import {
@@ -117,14 +117,6 @@ export const NetworkStatus = ({
           <div className="NetworkStatus__title">
             Protocol version: {protocolVersion}
           </div>
-          {/* TODO: get updated date and link */}
-          <TextLink
-            href="#"
-            variant={TextLink.variant.secondary}
-            iconRight={<Icon.ExternalLink />}
-          >
-            Updated 11/04/21
-          </TextLink>
         </div>
 
         <div className="NetworkStatus__status">

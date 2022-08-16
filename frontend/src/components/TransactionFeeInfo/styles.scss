@@ -1,0 +1,42 @@
+.FeeStats {
+  &__cardsContainer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__tableContainer {
+    margin-bottom: 2rem;
+
+    &__title {
+      color: var(--pal-text-primary);
+      font-weight: var(--font-weight-medium);
+
+      text-transform: uppercase;
+      margin: 4rem 0 2rem;
+    }
+
+    &__value {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      svg {
+        height: 0.9rem;
+        width: 0.9rem;
+        margin-left: 0.8rem;
+      }
+
+      &__empty {
+        width: 1rem;
+        height: 1rem;
+        margin-left: 0.7rem;
+      }
+    }
+
+    &__link {
+      color: var(--pal-brand-primary);
+    }
+  }
+}

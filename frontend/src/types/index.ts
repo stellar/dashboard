@@ -9,6 +9,9 @@ export interface Store {
   lumenSupply: LumenSupplyInitialState;
   networkNodes: NetworkNodesInitialState;
   dex: DexDataInitialState;
+  transactions: TransactionsInitialState;
+  operations: OperationsInitialState;
+  feeStats: FeeStatsInitialState;
 }
 
 export type StoreKey = keyof Store;
@@ -17,6 +20,7 @@ export interface LedgersInitialState {
   lastLedgerRecords: LedgerItem[];
   protocolVersion: number | null;
   ledgerClosedTimes: string[];
+  ledgerOperations: FetchLedgerOperationsResponse[];
   ledgerTransactionsHistory: {
     items: LedgerTransactionHistoryItem[];
     average: {
@@ -28,6 +32,27 @@ export interface LedgersInitialState {
   };
   averageClosedTime: number | null;
   isStreaming: boolean;
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
+export interface TransactionsInitialState {
+  transactionsHistory: {
+    items: TransactionHistoryItem[];
+  };
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
+export interface OperationsInitialState {
+  lastOperations: FetchLastOperationsActionResponse[];
+  status: ActionStatus | undefined;
+  errorString?: string;
+}
+
+export interface FeeStatsInitialState {
+  data: FeeStatsData | null;
+  fees: AverageTransactionFeeData | null;
   status: ActionStatus | undefined;
   errorString?: string;
 }
@@ -200,4 +225,145 @@ export enum LedgerTransactionHistoryFilterType {
   "30D" = "30D",
   "24H" = "24H",
   "1H" = "1H",
+}
+
+export interface LedgerModuleItem {
+  closing_date: string;
+  operations: number;
+}
+
+export interface FetchLedgerOperationsResponse {
+  date: Date;
+  primaryValue: number;
+}
+
+export type TransactionHistoryItem = {
+  durationInSeconds: number;
+  date: string;
+  txOperationCount: number;
+};
+
+export interface FetchTransactionsHistoryActionResponse {
+  items: TransactionHistoryItem[];
+}
+
+export interface OperationsResponse {
+  records: {
+    id: string;
+    paging_token: string;
+    transaction_successful: boolean;
+    source_account: string;
+    type: string;
+    type_i: number;
+    created_at: string;
+    transaction_hash: string;
+    amount: string;
+    price: string;
+    price_r: {
+      n: number;
+      d: number;
+    };
+    buying_asset_type: string;
+    buying_asset_issuer: string;
+    buying_asset_code: string;
+    selling_asset_type: string;
+    selling_asset_code: string;
+    selling_asset_issuer: string;
+    offer_id: string;
+    to: string;
+    from: string;
+    asset_type: string;
+    asset_code: string;
+    asset_issuer: string;
+    source_asset_type: string;
+    source_asset_issuer: string;
+    source_asset_code: string;
+    trustor: string;
+    source_max?: string;
+    starting_balance?: string;
+    authorize?: string;
+    into?: string;
+    name?: string;
+    shares_received?: string;
+    shares?: string;
+  }[];
+}
+
+export interface FetchLastOperationsActionResponse {
+  id: string;
+  type: string;
+  source_account: string;
+  amount: string | undefined;
+  offer_id: number;
+  buying_asset_type: string;
+  buying_asset_issuer: string;
+  buying_asset_code: string;
+  selling_asset_type: string;
+  selling_asset_code: string;
+  selling_asset_issuer: string;
+  to: string;
+  asset_type: string;
+  asset_code: string;
+  asset_issuer: string;
+  source_asset_type: string;
+  source_asset_issuer: string;
+  source_asset_code: string;
+  trustor: string;
+  timeAgo: number;
+  source_max?: string;
+  starting_balance?: string;
+  liquidity_pool_id?: string;
+  authorize?: string;
+  into?: string;
+  name?: string;
+  shares_received?: string;
+  shares?: string;
+}
+
+export interface FeesResponse {
+  date: string;
+  primaryValue: string;
+}
+
+export interface FeeStatsData {
+  last_ledger: number;
+  last_ledger_base_fee: number;
+  ledger_capacity_usage: number;
+  fee_charged: {
+    max: number;
+    min: number;
+    mode: number;
+    p10: number;
+    p20: number;
+    p30: number;
+    p40: number;
+    p50: number;
+    p60: number;
+    p70: number;
+    p80: number;
+    p90: number;
+    p95: number;
+    p99: number;
+  };
+  max_fee: {
+    max: number;
+    min: number;
+    mode: number;
+    p10: number;
+    p20: number;
+    p30: number;
+    p40: number;
+    p50: number;
+    p60: number;
+    p70: number;
+    p80: number;
+    p90: number;
+    p95: number;
+    p99: number;
+  };
+}
+
+export interface AverageTransactionFeeData {
+  month: FeesResponse[];
+  day: FeesResponse[];
 }

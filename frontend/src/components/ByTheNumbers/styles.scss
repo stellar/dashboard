@@ -1,4 +1,8 @@
 .ByTheNumbers {
+  &__container {
+    margin-bottom: 1rem;
+  }
+
   &__cards_row {
     display: flex;
     flex-direction: row;

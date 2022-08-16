@@ -13,6 +13,7 @@ import {
   getServerNamespace,
 } from "./utils";
 import { findIndex } from "lodash";
+import { bigQueryEndpointBase, fetchCachedData } from "../utils";
 
 const intervalTypes = [INTERVALS.hour, INTERVALS.day, INTERVALS.month];
 const CURSOR_NOW = "now";
@@ -255,4 +256,19 @@ export async function updateCache(
     JSON.stringify(cachedStats.slice(0, LEDGER_ITEM_LIMIT[interval])),
   );
   await redisClient.set(pagingTokenKey, pagingToken);
+}
+
+export async function getOpStats() {
+  const query = `
+    SELECT 
+      FORMAT_DATE('%Y-%m', cast(closed_at as date)) as closing_date,
+      SUM(tx_set_operation_count) as operations 
+    FROM ${bigQueryEndpointBase}.history_ledgers 
+    GROUP BY closing_date 
+    ORDER BY closing_date
+  `;
+
+  const output = await fetchCachedData("ledger-operation-stats", query);
+
+  return output;
 }

@@ -115,6 +115,9 @@ module.exports = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
+    alias: {
+      styles: path.join(__dirname, "src/styles"),
+    },
     plugins: [
       // This handles aliases and resolves Design System CSS font paths properly
       new TsconfigPathsPlugin({

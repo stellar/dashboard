@@ -14,7 +14,7 @@ import {
 
 export const fetchDexDataAction = createAsyncThunk<
   DexData,
-  void,
+  undefined,
   { rejectValue: RejectMessage; state: RootState }
 >("dex/fetchDexDataAction", async (_, { rejectWithValue }) => {
   try {

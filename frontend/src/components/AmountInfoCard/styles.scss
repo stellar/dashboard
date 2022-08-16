@@ -8,6 +8,7 @@
     flex-direction: column;
     justify-content: space-between;
     gap: 0.4rem;
+    height: 9rem;
   }
 
   &__card_title {
@@ -17,8 +18,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-
-    margin-bottom: 2rem;
 
     &__title {
       &:not(:first-child) {
