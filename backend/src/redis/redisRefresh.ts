@@ -15,7 +15,7 @@ const MONTH = "month";
 (async () => {
   let resetKeys = [];
   if (process.argv[2] === DAY) {
-    const resetKeys = [
+    resetKeys = [
       REDIS_FEES_KEYS.FEES_DAY,
       REDIS_FEES_KEYS.FEES_MONTH,
       REDIS_DEX_KEYS.PAYMENTS_24H,
