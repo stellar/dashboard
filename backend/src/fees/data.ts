@@ -1,5 +1,10 @@
 import { bigQueryEndpointBase, fetchCachedData } from "../utils";
 
+export const REDIS_FEES_KEYS = {
+  FEES_MONTH: "fees-month",
+  FEES_DAY: "fees-day",
+};
+
 export async function getFeesData30d() {
   const query = `
     SELECT 
@@ -15,7 +20,7 @@ export async function getFeesData30d() {
     ORDER BY closing_date
   `;
 
-  const data = await fetchCachedData("fees-month", query);
+  const data = await fetchCachedData(REDIS_FEES_KEYS.FEES_MONTH, query);
   const output = data.map((fee) => {
     return {
       ...fee,
@@ -39,7 +44,7 @@ export async function getFeesData1d() {
     GROUP BY closing_hour
     ORDER BY closing_hour
   `;
-  const data = await fetchCachedData("fees-day", query);
+  const data = await fetchCachedData(REDIS_FEES_KEYS.FEES_DAY, query);
 
   const output = data.map((fee) => {
     return {

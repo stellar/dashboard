@@ -11,7 +11,9 @@
     "start": "UPDATE_DATA=true DEV=true ts-node ./src/app.ts",
     "clean": "rm -rf node_modules && rm -rf build",
     "test": "jest --forceExit",
-    "build": "tsc --project ."
+    "build": "tsc --project .",
+    "redis:reset_day": "ts-node ./src/redis/redisRefresh.ts day",
+    "redis:reset_month": "ts-node ./src/redis/redisRefresh.ts month"
   },
   "dependencies": {
     "@google-cloud/bigquery": "^5.11.0",

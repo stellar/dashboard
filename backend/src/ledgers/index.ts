@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 
-import { redisClient, getOrThrow } from "../redisSetup";
+import { redisClient, getOrThrow } from "../redis/redisSetup";
 import { getOpStats, REDIS_LEDGER_KEYS } from "./data";
 import { formatOutput, getServerNamespace, LedgerStat } from "./utils";
 
