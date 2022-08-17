@@ -34,7 +34,3 @@ export async function getOrThrow(
   }
   return cachedData;
 }
-
-export async function clearRedisData(rc: RedisClientType, key: string) {
-  rc.del(key);
-}
