@@ -1,5 +1,5 @@
 import request from "supertest";
-import { redisClient } from "../src/redisSetup";
+import { redisClient } from "../src/redis/redisSetup";
 import { app, updateLumensCache } from "../src/routes";
 
 describe("integration", () => {
