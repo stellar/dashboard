@@ -1,5 +1,5 @@
 import { Response, NextFunction } from "express";
-import { redisClient, getOrThrow } from "./redisSetup";
+import { redisClient, getOrThrow } from "./redis/redisSetup";
 import * as commonLumens from "../../common/lumens.js";
 
 interface CachedData {

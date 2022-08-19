@@ -1,4 +1,4 @@
-import { redisClient } from "../src/redisSetup";
+import { redisClient } from "../src/redis/redisSetup";
 import { updateCache, catchup, LedgerRecord } from "../src/ledgers/data";
 import { INTERVALS } from "../src/ledgers/utils";
 import { updateApiLumens as updateApiLumensV1 } from "../src/lumens";

@@ -1,4 +1,4 @@
-import { redisClient, getOrThrow } from "../redisSetup";
+import { redisClient, getOrThrow } from "../redis/redisSetup";
 import { getPrice } from "./utils";
 import {
   bigQueryEndpointBase,
@@ -6,9 +6,14 @@ import {
   fetchCachedData,
 } from "../utils";
 
-const cache24hKey = "dex-volume-sum-24h";
-const cache48hKey = "dex-volume-sum-48h";
-const cacheOverallKey = "dex-volume-sum-overall";
+export const REDIS_DEX_KEYS = {
+  PAYMENTS_24H: "payments24h",
+  DEX_TRADES_24H: "dex-trades24h",
+  DEX_TRADES_48H: "dex-trades48h",
+  DEX_TRADES_OVERALL: "dex-trades-overall",
+  DEX_UNIQUE_ASSETS: "dex-uniqueAssets",
+  DEX_ACTIVE_ACCOUNTS: "dex-activeAccounts",
+};
 
 export async function getPaymentsData() {
   const query = `
@@ -18,7 +23,7 @@ export async function getPaymentsData() {
     AND closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -24 HOUR) 
     AND successful is true
   `;
-  const payments = await fetchCachedData("payments24h", query);
+  const payments = await fetchCachedData(REDIS_DEX_KEYS.PAYMENTS_24H, query);
 
   return payments[0]?.data;
 }
@@ -39,10 +44,16 @@ export async function getTradeData() {
   `);
   const tradesOverall = tradesBase();
 
-  const results24h = await fetchCachedData("dex-trades24h", tradesQuery24h);
-  const results48h = await fetchCachedData("dex-trades48h", tradesQuery48h);
+  const results24h = await fetchCachedData(
+    REDIS_DEX_KEYS.DEX_TRADES_24H,
+    tradesQuery24h,
+  );
+  const results48h = await fetchCachedData(
+    REDIS_DEX_KEYS.DEX_TRADES_48H,
+    tradesQuery48h,
+  );
   const resultsOverall = await fetchCachedData(
-    "dex-trades-overall",
+    REDIS_DEX_KEYS.DEX_TRADES_OVERALL,
     tradesOverall,
   );
 
@@ -71,10 +82,34 @@ export async function getUniqueAssetsData() {
     where tl.asset_code is not null;
   `;
 
-  const payments = await fetchCachedData("dex-uniqueAssets", query);
+  const payments = await fetchCachedData(
+    REDIS_DEX_KEYS.DEX_UNIQUE_ASSETS,
+    query,
+  );
 
   return payments[0]?.data;
 }
+
+export async function getActiveAccountsData() {
+  const query = `
+    SELECT COUNT(DISTINCT(op_source_account)) as data
+    FROM ${bigQueryEndpointBase}.enriched_history_operations 
+    where type in (1, 2, 6, 13)
+    AND closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -24 HOUR);
+  `;
+
+  const activeAccounts = await fetchCachedData(
+    REDIS_DEX_KEYS.DEX_ACTIVE_ACCOUNTS,
+    query,
+  );
+
+  return activeAccounts[0]?.data;
+}
+
+//TODO: Currently unused due to a pending update to how we fetch asset prices. Once they're available we should refactor and make use of the function below again.
+const cache24hKey = "dex-volume-sum-24h";
+const cache48hKey = "dex-volume-sum-48h";
+const cacheOverallKey = "dex-volume-sum-overall";
 
 async function sumVolume(name: string, query: string) {
   const cachedOutput = await getOrThrow(redisClient, name, false);
@@ -112,7 +147,6 @@ async function sumVolume(name: string, query: string) {
   return output;
 }
 
-//TODO: Currently unused due to a pending update to how we fetch asset prices. Once they're available we should refactor and make use of the function below again.
 export async function getVolumeData() {
   const baseQuery = (filter = "") => `
       WITH bought_trades AS
@@ -160,17 +194,4 @@ export async function getVolumeData() {
     change,
     overall: sumOverall,
   };
-}
-
-export async function getActiveAccountsData() {
-  const query = `
-    SELECT COUNT(DISTINCT(op_source_account)) as data
-    FROM ${bigQueryEndpointBase}.enriched_history_operations 
-    where type in (1, 2, 6, 13)
-    AND closed_at >= TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL -24 HOUR);
-  `;
-
-  const activeAccounts = await fetchCachedData("dex-activeAccounts", query);
-
-  return activeAccounts[0]?.data;
 }

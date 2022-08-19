@@ -1,7 +1,7 @@
 import { QueryRowsResponse } from "@google-cloud/bigquery";
 import stellarSdk from "stellar-sdk";
 
-import { redisClient } from "../redisSetup";
+import { redisClient } from "../redis/redisSetup";
 import { bqClient, BQHistoryLedger, getBqQueryByDate } from "../bigQuery";
 import {
   BIGQUERY_DATES,
@@ -40,6 +40,7 @@ export const REDIS_LEDGER_KEYS = {
   hour: "ledgers_hour",
   day: "ledgers_day",
   month: "ledgers_month",
+  operation_stats: "ledger-operation-stats",
 };
 
 interface sum {
@@ -268,7 +269,10 @@ export async function getOpStats() {
     ORDER BY closing_date
   `;
 
-  const output = await fetchCachedData("ledger-operation-stats", query);
+  const output = await fetchCachedData(
+    REDIS_LEDGER_KEYS.operation_stats,
+    query,
+  );
 
   return output;
 }
