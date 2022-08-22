@@ -52,4 +52,3 @@ This project is pulling from SDF's `crypto-stellar` public data set, so no speci
 Directions for creating a service account [can be found here](https://cloud.google.com/docs/authentication/getting-started).
 
 Once you've created a service account, add the service account key json file to the `gcloud` folder under the name `service-account.json`. An example json file shows what the file structure should look like.
-
