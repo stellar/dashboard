@@ -62,3 +62,4 @@ the `gcloud` folder under the name `service-account.json`. An example json file
 shows what the file structure should look like. You also must update your .env
 file, `BQ_PROJECT_ID` should point to the project id associated with your gcloud
 service account.
+
