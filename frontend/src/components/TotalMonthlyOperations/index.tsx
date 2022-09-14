@@ -6,10 +6,6 @@ import { ActionStatus, Network } from "types";
 import { fetchLedgerOperations } from "ducks/ledgers";
 import { SectionCard } from "components/SectionCard";
 import { VerticalBarChart } from "components/charts/VerticalBarChart";
-import {
-  ledgerTransactionHistoryConfig,
-  networkConfig,
-} from "constants/settings";
 
 import "./styles.scss";
 import { RecentOperations } from "components/RecentOperations";
@@ -21,8 +17,6 @@ export const TotalMonthlyOperations = ({
 }) => {
   const { ledgers } = useRedux("ledgers");
   const dispatch = useDispatch();
-
-  const historyFilter = ledgerTransactionHistoryConfig["30D"];
 
   useEffect(() => {
     dispatch(fetchLedgerOperations());
@@ -46,30 +40,34 @@ export const TotalMonthlyOperations = ({
   }, [ledgers.ledgerOperations]);
 
   return (
-    <SectionCard
-      title="Total monthly operations"
-      titleLinkLabel="API"
-      titleLink={`/api/ledgers${historyFilter.endpointPrefix}${
-        networkConfig[Network.MAINNET].ledgerTransactionsHistorySuffix
-      }`}
-      isLoading={ledgers.status === ActionStatus.PENDING}
-      noData={!ledgers.ledgerOperations.length}
-    >
-      <div className="LedgerOperations__mainChart">
-        <div className="LedgerOperations__mainChart__container">
-          <VerticalBarChart
-            data={data.operations}
-            primaryValueName="Operations"
-            timeRange={VerticalBarChart.TimeRange.YEAR}
-            primaryValueTooltipDescription="ops"
-            primaryValueOnly
-            baseStartDate={data.fisrtDate}
-            maxLineOffset={550000000}
-          />
-        </div>
-      </div>
+    <>
+      {network === Network.MAINNET ? (
+        <SectionCard
+          title="Total monthly operations"
+          titleLinkLabel="API"
+          titleLink={`/api/ledgers/op_stats`}
+          isLoading={ledgers.status === ActionStatus.PENDING}
+          noData={!ledgers.ledgerOperations.length}
+        >
+          <div className="LedgerOperations__mainChart">
+            <div className="LedgerOperations__mainChart__container">
+              <VerticalBarChart
+                data={data.operations}
+                primaryValueName="Operations"
+                timeRange={VerticalBarChart.TimeRange.YEAR}
+                primaryValueTooltipDescription="ops"
+                primaryValueOnly
+                baseStartDate={data.fisrtDate}
+                maxLineOffset={550000000}
+              />
+            </div>
+          </div>
 
-      <RecentOperations network={network} />
-    </SectionCard>
+          <RecentOperations network={network} />
+        </SectionCard>
+      ) : (
+        <RecentOperations network={network} />
+      )}
+    </>
   );
 };
