@@ -14,8 +14,10 @@ import { FetchLastOperationsActionResponse, Network } from "types";
 
 export const RecentOperations = ({
   network = Network.MAINNET,
+  noShadow = false,
 }: {
   network?: Network;
+  noShadow?: boolean;
 }) => {
   const { operations } = useRedux("operations");
   const dispatch = useDispatch();
@@ -80,6 +82,7 @@ export const RecentOperations = ({
       title="Recent Operations: Live Network"
       titleLinkLabel="API"
       titleLink={`${horizonURL}/operations?order=desc&limit=20`}
+      noShadow={noShadow}
     >
       <Table
         id="last-10-operations"

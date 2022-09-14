@@ -63,7 +63,7 @@ export const TotalMonthlyOperations = ({
             </div>
           </div>
 
-          <RecentOperations network={network} />
+          <RecentOperations network={network} noShadow={true} />
         </SectionCard>
       ) : (
         <RecentOperations network={network} />
