@@ -46,5 +46,5 @@ const MONTH = "month";
     await getOpStats();
   }
 
-  await redisClient.quit();
+  process.exit();
 })();
