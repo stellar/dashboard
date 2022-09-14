@@ -80,7 +80,6 @@ export const RecentOperations = ({
       title="Recent Operations: Live Network"
       titleLinkLabel="API"
       titleLink={`${horizonURL}/operations?order=desc&limit=20`}
-      noShadow
     >
       <Table
         id="last-10-operations"
