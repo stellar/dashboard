@@ -233,7 +233,7 @@ export interface LedgerModuleItem {
 }
 
 export interface FetchLedgerOperationsResponse {
-  date: Date;
+  date: string;
   primaryValue: number;
 }
 
