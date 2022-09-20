@@ -29,7 +29,11 @@ export const TotalMonthlyOperations = ({
       const fisrtDate = new Date(reversedOperations[0].date);
 
       const operations = reversedOperations.map((operation) => ({
-        date: new Date(operation.date),
+        date: new Date(
+          parseInt(operation.date.split("-")[0]),
+          // monthIndex starts at 0
+          parseInt(operation.date.split("-")[1]) - 1,
+        ),
         primaryValue: operation.primaryValue,
       }));
 

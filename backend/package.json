@@ -12,8 +12,7 @@
     "clean": "rm -rf node_modules && rm -rf build",
     "test": "jest --forceExit",
     "build": "tsc --project .",
-    "redis:reset_day": "DEV=true ts-node ./src/redis/redisRefresh.ts day",
-    "redis:reset_month": "DEV=true ts-node ./src/redis/redisRefresh.ts month"
+    "redis:reset_day": "DEV=true ts-node ./src/redis/redisRefresh.ts day"
   },
   "dependencies": {
     "@google-cloud/bigquery": "^5.11.0",

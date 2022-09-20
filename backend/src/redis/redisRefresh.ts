@@ -24,9 +24,8 @@ const MONTH = "month";
       REDIS_DEX_KEYS.DEX_TRADES_OVERALL,
       REDIS_DEX_KEYS.DEX_UNIQUE_ASSETS,
       REDIS_DEX_KEYS.DEX_ACTIVE_ACCOUNTS,
+      REDIS_LEDGER_KEYS.operation_stats,
     ];
-  } else if (process.argv[2] === MONTH) {
-    resetKeys = [REDIS_LEDGER_KEYS.operation_stats];
   }
 
   for (const k of resetKeys) {
@@ -42,7 +41,6 @@ const MONTH = "month";
     await getTradeData();
     await getUniqueAssetsData();
     await getActiveAccountsData();
-  } else if (process.argv[2] === MONTH) {
     await getOpStats();
   }
 
