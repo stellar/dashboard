@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "main": "app.js",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "scripts": {
     "start": "UPDATE_DATA=true DEV=true ts-node ./src/app.ts",
