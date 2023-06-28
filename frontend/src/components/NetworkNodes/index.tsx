@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+import { AppDispatch } from "config/store";
 import { SectionCard } from "components/SectionCard";
 import { SimpleAreaChart } from "components/charts/SimpleAreaChart";
 import { fetchNetworkNodesAction } from "ducks/networkNodes";
@@ -21,7 +22,7 @@ export const NetworkNodes = ({
 }) => {
   const { networkNodes } = useRedux("networkNodes");
   const { data } = networkNodes;
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchNetworkNodesAction(network));

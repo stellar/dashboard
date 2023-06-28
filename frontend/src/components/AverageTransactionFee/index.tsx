@@ -3,6 +3,7 @@ import { TextLink } from "@stellar/design-system";
 import { useDispatch } from "react-redux";
 import { useRedux } from "hooks/useRedux";
 
+import { AppDispatch } from "config/store";
 import { SectionCard } from "components/SectionCard";
 import {
   TimeRange,
@@ -26,7 +27,7 @@ const TIME_RANGE_MAPPING = [
 
 export const AverageTransactionFee: React.FC = () => {
   const { feeStats } = useRedux("feeStats");
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const [rangeInterval, setRangeInterval] = useState(TimeRange.DAY);
 

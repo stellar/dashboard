@@ -5,6 +5,7 @@ import { get } from "lodash";
 import BigNumber from "bignumber.js";
 
 import { useRedux } from "hooks/useRedux";
+import { AppDispatch } from "config/store";
 import { SectionCard } from "components/SectionCard";
 import { AmountInfoCard } from "components/AmountInfoCard";
 import { AverageTransactionFee } from "components/AverageTransactionFee";
@@ -13,7 +14,7 @@ import "./styles.scss";
 
 export const TransactionFeeInfo = () => {
   const { feeStats } = useRedux("feeStats");
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const labels = [
     { id: "metric", label: "Metric" },

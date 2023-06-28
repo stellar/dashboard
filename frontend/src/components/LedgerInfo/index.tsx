@@ -14,6 +14,7 @@ import {
   ledgerTransactionHistoryConfig,
   networkConfig,
 } from "constants/settings";
+import { AppDispatch } from "config/store";
 import {
   ActionStatus,
   LedgerTransactionHistoryFilterType,
@@ -47,7 +48,7 @@ export const LedgerInfo = ({
 }: {
   network?: Network;
 }) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const {
     ledgers: { ledgerTransactionsHistory, status },

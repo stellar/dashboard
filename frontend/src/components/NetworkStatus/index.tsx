@@ -8,6 +8,7 @@ import {
   stopLedgerStreamingAction,
 } from "ducks/ledgers";
 import { useRedux } from "hooks/useRedux";
+import { AppDispatch } from "config/store";
 import { Network } from "types";
 
 import "./styles.scss";
@@ -65,7 +66,7 @@ export const NetworkStatus = ({
   network?: Network;
 }) => {
   const { ledgers } = useRedux("ledgers");
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const { isStreaming, lastLedgerRecords, protocolVersion, averageClosedTime } =
     ledgers;

@@ -9,6 +9,7 @@ import {
   CircularChartData,
 } from "components/charts/CircularChart";
 import { DASHBOARD_URL, FRIENDBOT_PUBLIC_ADDRESS } from "constants/settings";
+import { AppDispatch } from "config/store";
 import { fetchLumenSupplyAction } from "ducks/lumenSupply";
 import { formatAmount } from "helpers/formatAmount";
 import { useRedux } from "hooks/useRedux";
@@ -25,7 +26,7 @@ export const LumenSupply = ({
 }) => {
   const { lumenSupply } = useRedux("lumenSupply");
   const { data } = lumenSupply;
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const isTestnet = useMemo(() => network === Network.TESTNET, [network]);
 
   useEffect(() => {

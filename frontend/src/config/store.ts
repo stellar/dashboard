@@ -18,6 +18,7 @@ import { reducer as operations } from "ducks/operations";
 import { reducer as feeStats } from "ducks/feeStats";
 
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 const loggerMiddleware =
   (storeVal: any) => (next: any) => (action: Action<any>) => {

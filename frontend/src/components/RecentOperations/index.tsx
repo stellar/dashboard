@@ -6,6 +6,7 @@ import "./styles.scss";
 
 import { useRedux } from "hooks/useRedux";
 import { networkConfig } from "constants/settings";
+import { AppDispatch } from "config/store";
 import { SectionCard } from "components/SectionCard";
 import { AccountBadge } from "components/AccountBadge";
 import { OperationTypeColumn } from "./OperationTypeColumn";
@@ -18,7 +19,7 @@ export const RecentOperations = ({
   network?: Network;
 }) => {
   const { operations } = useRedux("operations");
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const horizonURL = networkConfig[network].url;
 
   const labels = [

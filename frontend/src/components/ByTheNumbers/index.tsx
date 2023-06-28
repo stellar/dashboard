@@ -3,6 +3,7 @@ import { Icon } from "@stellar/design-system";
 import BigNumber from "bignumber.js";
 import { useDispatch } from "react-redux";
 
+import { AppDispatch } from "config/store";
 import { SectionCard } from "components/SectionCard";
 import { DexCard } from "components/DexCard";
 import { AmountInfoCard } from "components/AmountInfoCard";
@@ -18,7 +19,7 @@ import "./styles.scss";
 export const ByTheNumbers = () => {
   const { dex } = useRedux("dex");
   const { data } = dex;
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchDexDataAction());

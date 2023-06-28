@@ -14,6 +14,7 @@ import {
   ledgerTransactionHistoryConfig,
   networkConfig,
 } from "constants/settings";
+import { AppDispatch } from "config/store";
 import {
   VerticalBarChart,
   TimeRange,
@@ -29,7 +30,7 @@ export const TransactionsPerSecond = ({
   network?: Network;
 }) => {
   const { transactions } = useRedux("transactions");
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const selectedTimeInterval = LedgerTransactionHistoryFilterType["30D"];
 
   useEffect(() => {

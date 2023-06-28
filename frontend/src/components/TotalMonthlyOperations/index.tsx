@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useRedux } from "hooks/useRedux";
 import { ActionStatus, Network } from "types";
 import { fetchLedgerOperations } from "ducks/ledgers";
+import { AppDispatch } from "config/store";
 import { SectionCard } from "components/SectionCard";
 import { VerticalBarChart } from "components/charts/VerticalBarChart";
 
@@ -16,7 +17,7 @@ export const TotalMonthlyOperations = ({
   network?: Network;
 }) => {
   const { ledgers } = useRedux("ledgers");
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchLedgerOperations());
