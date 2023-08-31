@@ -16,7 +16,7 @@ if (process.env.DEV) {
 export const bqClient = new BigQuery(options);
 
 // TODO - drop the _2 when Hubble 2.0 is live
-const BQHistoryLedgersTable = "crypto-stellar.crypto_stellar_2.history_ledgers";
+const BQHistoryLedgersTable = "crypto-stellar.crypto_stellar.history_ledgers";
 
 export function getBqQueryByDate(date: string) {
   return `SELECT id FROM \`${BQHistoryLedgersTable}\` WHERE closed_at >= "${date}" ORDER BY sequence LIMIT 1;`;
