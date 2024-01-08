@@ -52,6 +52,8 @@ export const AverageTransactionFee: React.FC = () => {
         feeStats.fees[rangeInterval as "day" | "month"][amountFees].date,
       );
 
+      console.log(">>> baseDate: ", baseDate);
+
       return {
         fees: {
           day: formattedFeePerHour,
