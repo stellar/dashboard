@@ -1,7 +1,7 @@
 import { bqClient } from "./bigQuery";
 import { getOrThrow, redisClient } from "./redis/redisSetup";
 
-export const bigQueryEndpointBase = "crypto-stellar.crypto_stellar";
+export const bigQueryEndpointBase = "crypto-stellar.crypto_stellar_2";
 
 export async function fetchBigQueryData(query: string) {
   try {
