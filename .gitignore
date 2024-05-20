@@ -14,6 +14,8 @@
 /dist
 */**/dist
 */**/build
+/lib/
+*/**/lib
 
 # misc
 .DS_Store
