@@ -258,12 +258,12 @@ describe("ledgers", () => {
           date: "2022-1-12 00:00:00",
           data: {
             end: "2022-01-12T14:45:30Z",
-            operation_count: 781390,
+            operation_count: 147605,
             sequence: 39149884,
-            start: "2022-01-12T13:07:43Z",
-            total_ledgers: 1000,
-            transaction_failure: 147582,
-            transaction_success: 255436,
+            start: "2022-01-12T14:26:08Z",
+            total_ledgers: 200,
+            transaction_failure: 30887,
+            transaction_success: 48791,
           },
         },
       ]);
