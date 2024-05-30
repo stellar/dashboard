@@ -1,4 +1,4 @@
-import StellarSdk from "stellar-sdk";
+import { Horizon } from "@stellar/stellar-sdk";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { RootState } from "config/store";
@@ -20,8 +20,7 @@ export const fetchFeeStatsDataAction = createAsyncThunk<
   { rejectValue: RejectMessage; state: RootState }
 >("feeStats/fetchFeeStatsDataAction", async (_, { rejectWithValue }) => {
   try {
-    const server = new StellarSdk.Server(networkConfig[Network.MAINNET].url);
-
+    const server = new Horizon.Server(networkConfig[Network.MAINNET].url);
     const response = await server.feeStats();
 
     return response;

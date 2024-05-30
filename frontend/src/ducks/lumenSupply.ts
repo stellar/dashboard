@@ -1,4 +1,4 @@
-import StellarSdk from "stellar-sdk";
+import { Horizon } from "@stellar/stellar-sdk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import BigNumber from "bignumber.js";
 
@@ -31,7 +31,7 @@ export const fetchLumenSupplyAction = createAsyncThunk<
       let nonCirculating;
 
       if (network === Network.TESTNET) {
-        const server = new StellarSdk.Server(networkConfig[network].url);
+        const server = new Horizon.Server(networkConfig[network].url);
         const { balances } = await server.loadAccount(FRIENDBOT_PUBLIC_ADDRESS);
 
         total = new BigNumber(FRIENDBOT_STARTING_BALANCE);
