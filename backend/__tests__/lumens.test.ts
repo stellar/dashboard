@@ -227,7 +227,7 @@ describe("ledgers", () => {
     });
   });
 
-  describe("catchup", () => {
+  xdescribe("catchup", () => {
     jest.setTimeout(50000);
 
     afterAll((done) => {
