@@ -184,22 +184,19 @@ export const startLedgerStreamingAction = createAsyncThunk<
         .ledgers()
         .cursor("now")
         .stream({
-          onmessage: (ledger) => {
+          onmessage: (ledger: any) => {
             const { lastLedgerRecords } = ledgersSelector(getState());
 
             if (!lastLedgerRecords[0]) {
               return;
             }
 
-            const ledgerRecord = ledger.records[0];
             const timeDiff = getDateDiffSeconds(
-              ledgerRecord.closed_at,
+              ledger.closed_at,
               lastLedgerRecords[0].closedAt,
             );
 
-            dispatch(
-              updateLedgersAction(formatLedgerRecord(ledgerRecord, timeDiff)),
-            );
+            dispatch(updateLedgersAction(formatLedgerRecord(ledger, timeDiff)));
           },
           onerror: () => {
             // do nothing
