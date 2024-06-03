@@ -1,5 +1,5 @@
 import { QueryRowsResponse } from "@google-cloud/bigquery";
-import stellarSdk from "stellar-sdk";
+import { Horizon } from "@stellar/stellar-sdk";
 
 import { redisClient } from "../redis/redisSetup";
 import { bqClient, BQHistoryLedger, getBqQueryByDate } from "../bigQuery";
@@ -58,15 +58,6 @@ export interface LedgerAverages {
   transaction_success_avg: sum;
   operation_avg: sum;
 }
-// TODO - import Horizon type once https://github.com/stellar/js-stellar-sdk/issues/731 resolved
-export type LedgerRecord = {
-  closed_at: string;
-  paging_token: string;
-  sequence: number;
-  successful_transaction_count: number;
-  failed_transaction_count: number;
-  operation_count: number;
-};
 
 export async function updateLedgers(isTestnet: boolean) {
   const horizonServer = getHorizonServer(isTestnet);
@@ -121,13 +112,13 @@ export async function updateLedgers(isTestnet: boolean) {
     );
   }
 
-  const horizon = new stellarSdk.Server(horizonServer);
+  const horizon = new Horizon.Server(horizonServer);
   horizon
     .ledgers()
     .cursor(CURSOR_NOW)
     .limit(200)
     .stream({
-      onmessage: async (ledger: LedgerRecord) => {
+      onmessage: async (ledger) => {
         for (const interval of intervalTypes) {
           const REDIS_LEDGER_KEY = getServerNamespace(
             REDIS_LEDGER_KEYS[interval],
@@ -139,7 +130,8 @@ export async function updateLedgers(isTestnet: boolean) {
             isTestnet,
           );
           await updateCache(
-            [ledger],
+            // TODO: remove any when this is resolved https://github.com/stellar/js-stellar-sdk/issues/972
+            [ledger as any as Horizon.ServerApi.LedgerRecord],
             REDIS_LEDGER_KEY,
             REDIS_PAGING_TOKEN_KEY_VALUE,
             interval,
@@ -147,7 +139,7 @@ export async function updateLedgers(isTestnet: boolean) {
         }
         console.log(
           `${isTestnet ? "[TESTNET]" : "[MAINNET]"}: updated to ledger ${
-            ledger.closed_at
+            (ledger as any as Horizon.ServerApi.LedgerRecord).closed_at
           }`,
         );
       },
@@ -164,8 +156,8 @@ export async function catchup(
   total: number = 0,
 ) {
   const horizonServer = getHorizonServer(isTestnet);
-  const horizon = new stellarSdk.Server(horizonServer);
-  let ledgers: LedgerRecord[] = [];
+  const horizon = new Horizon.Server(horizonServer);
+  let ledgers: Horizon.ServerApi.LedgerRecord[] = [];
 
   const resp = await horizon
     .ledgers()
@@ -200,7 +192,7 @@ export async function catchup(
 }
 
 export async function updateCache(
-  ledgers: LedgerRecord[],
+  ledgers: Array<Horizon.ServerApi.LedgerRecord>,
   ledgersKey: string,
   pagingTokenKey: string,
   interval,
@@ -213,7 +205,7 @@ export async function updateCache(
   const cachedStats: LedgerStat[] = JSON.parse(json);
   let pagingToken = "";
 
-  ledgers.forEach((ledger: LedgerRecord) => {
+  ledgers.forEach((ledger: Horizon.ServerApi.LedgerRecord) => {
     const date: string = getLedgerKey[interval](new Date(ledger.closed_at));
     const index: number = findIndex(cachedStats, { date });
     if (index === -1) {
