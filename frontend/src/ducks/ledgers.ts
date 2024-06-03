@@ -1,4 +1,4 @@
-import StellarSdk from "stellar-sdk";
+import { Horizon } from "@stellar/stellar-sdk";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import BigNumber from "bignumber.js";
 
@@ -54,7 +54,7 @@ export const fetchLedgersAction = createAsyncThunk<
   Network,
   { rejectValue: RejectMessage; state: RootState }
 >("ledgers/fetchLedgersAction", async (network, { rejectWithValue }) => {
-  const server = new StellarSdk.Server(networkConfig[network].url);
+  const server = new Horizon.Server(networkConfig[network].url);
 
   try {
     const ledgerResponse = await server
@@ -177,14 +177,14 @@ export const startLedgerStreamingAction = createAsyncThunk<
         isStreaming: true,
       };
     }
-    const server = new StellarSdk.Server(networkConfig[network].url);
+    const server = new Horizon.Server(networkConfig[network].url);
 
     try {
       ledgerStreamRunner = server
         .ledgers()
         .cursor("now")
         .stream({
-          onmessage: (ledger: LedgerRecord) => {
+          onmessage: (ledger: any) => {
             const { lastLedgerRecords } = ledgersSelector(getState());
 
             if (!lastLedgerRecords[0]) {

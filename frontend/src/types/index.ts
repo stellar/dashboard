@@ -1,3 +1,5 @@
+import { Horizon } from "@stellar/stellar-sdk";
+
 export enum Network {
   MAINNET = "mainnet",
   TESTNET = "testnet",
@@ -182,27 +184,7 @@ export type Incident = {
   startedAt: string;
 };
 
-export type LedgerRecord = {
-  id: string;
-  hash: string;
-  sequence: number;
-  /* eslint-disable camelcase */
-  paging_token: string;
-  prev_hash: string;
-  successful_transaction_count: number;
-  failed_transaction_count: number;
-  operation_count: number;
-  tx_set_operation_count: number;
-  closed_at: string;
-  total_coins: string;
-  fee_pool: string;
-  base_fee_in_stroops: number;
-  base_reserve_in_stroops: number;
-  max_tx_set_size: number;
-  protocol_version: number;
-  header_xdr: string;
-  /* eslint-enable camelcase */
-};
+export type LedgerRecord = Horizon.ServerApi.LedgerRecord;
 
 export type LedgerItem = {
   sequenceNumber: number;
@@ -325,43 +307,7 @@ export interface FeesResponse {
   primaryValue: string;
 }
 
-export interface FeeStatsData {
-  last_ledger: number;
-  last_ledger_base_fee: number;
-  ledger_capacity_usage: number;
-  fee_charged: {
-    max: number;
-    min: number;
-    mode: number;
-    p10: number;
-    p20: number;
-    p30: number;
-    p40: number;
-    p50: number;
-    p60: number;
-    p70: number;
-    p80: number;
-    p90: number;
-    p95: number;
-    p99: number;
-  };
-  max_fee: {
-    max: number;
-    min: number;
-    mode: number;
-    p10: number;
-    p20: number;
-    p30: number;
-    p40: number;
-    p50: number;
-    p60: number;
-    p70: number;
-    p80: number;
-    p90: number;
-    p95: number;
-    p99: number;
-  };
-}
+export type FeeStatsData = Horizon.HorizonApi.FeeStatsResponse;
 
 export interface AverageTransactionFeeData {
   month: FeesResponse[];

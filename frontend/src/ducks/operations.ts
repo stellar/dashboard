@@ -1,4 +1,4 @@
-import StellarSdk from "stellar-sdk";
+import { Horizon } from "@stellar/stellar-sdk";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import {
@@ -22,7 +22,7 @@ export const fetchLastOperationsAction = createAsyncThunk<
   "operations/fetchLastOperationsAction",
   async (network, { rejectWithValue }) => {
     try {
-      const server = new StellarSdk.Server(networkConfig[network].url);
+      const server = new Horizon.Server(networkConfig[network].url);
 
       const operations = await server
         .operations()
@@ -30,7 +30,8 @@ export const fetchLastOperationsAction = createAsyncThunk<
         .limit(10)
         .call();
 
-      const { records } = operations as OperationsResponse;
+      // Need to convert to unknown first because there is not enough overlap
+      const { records } = operations as unknown as OperationsResponse;
 
       const result = records.map((record) => {
         const timeAgo = getDateDiffSeconds(
