@@ -5,7 +5,7 @@
   "description": "",
   "main": "app.js",
   "engines": {
-    "node": "16.x"
+    "node": ">=16 <=18"
   },
   "scripts": {
     "start": "gulp",

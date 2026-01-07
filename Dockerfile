@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM node:16-bullseye
 
 MAINTAINER SDF Ops Team <ops@stellar.org>
 
