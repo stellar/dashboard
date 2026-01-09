@@ -8,6 +8,7 @@ export function directDevelopmentAll(): Promise<string>;
 export function distributionEcosystemSupport(): Promise<string>;
 export function distributionUseCaseInvestment(): Promise<string>;
 export function distributionUserAcquisition(): Promise<string>;
+export function distributionAll(): Promise<BigNumber>;
 export function getUpgradeReserve(): string;
 export function sdfAccounts(): Promise<BigNumber>;
 export function totalSupply(): Promise<BigNumber>;

@@ -6,8 +6,8 @@ import clone from "lodash/clone";
 import each from "lodash/each";
 import defaults from "lodash/defaults";
 import get from "lodash/get";
-import AccountBadge from "./AccountBadge";
-import AssetLink from "./AssetLink";
+import AccountBadge from "./AccountBadge.jsx";
+import AssetLink from "./AssetLink.jsx";
 import BigNumber from "bignumber.js";
 import { ago } from "../common/time";
 

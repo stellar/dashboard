@@ -1,10 +1,9 @@
 import React from "react";
-import AmountWidget from "./AmountWidget";
-import BigNumber from "bignumber.js";
-import Panel from "muicss/lib/react/panel";
-import { circulatingSupply } from "../../common/lumens.js";
+import AmountWidget from "./AmountWidget.jsx";
+import * as lumens from "../../common/lumens.mjs";
+const { totalSupply } = lumens;
 
-export default class LumensCirculating extends AmountWidget {
+export default class TotalCoins extends AmountWidget {
   constructor(props) {
     super(props);
   }
@@ -19,19 +18,16 @@ export default class LumensCirculating extends AmountWidget {
   }
 
   updateAmount() {
-    circulatingSupply().then((amount) => {
-      this.setState({
-        amount: amount,
-        code: "XLM",
-        loading: false,
-      });
+    totalSupply().then((amount) => {
+      let code = "XLM";
+      this.setState({ amount, code, loading: false });
     });
   }
 
   renderName() {
     return (
       <div>
-        <span>Circulating Supply</span>
+        <span>Total Supply</span>
         <a href="/api/v2/lumens/" target="_blank" className="api-link">
           API
         </a>

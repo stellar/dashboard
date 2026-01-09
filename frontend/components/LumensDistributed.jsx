@@ -1,10 +1,11 @@
 import React from "react";
-import AmountWidget from "./AmountWidget";
+import AmountWidget from "./AmountWidget.jsx";
 import Panel from "muicss/lib/react/panel";
 import BigNumber from "bignumber.js";
 import axios from "axios";
 import find from "lodash/find";
-import { distributionAll } from "../../common/lumens.js";
+import * as lumens from "../../common/lumens.mjs";
+const { distributionAll } = lumens;
 
 export default class LumensDistributed extends AmountWidget {
   constructor(props) {

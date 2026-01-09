@@ -1,16 +1,30 @@
 import React from "react";
 import Panel from "muicss/lib/react/panel";
 import axios from "axios";
-import { scale, format } from "d3";
-import BarChart from "react-d3-components/lib/BarChart";
+import * as d3 from "d3";
+import D3BarChartNoXLabels from "./D3BarChartNoXLabels.jsx";
 import clone from "lodash/clone";
 import each from "lodash/each";
 
-export default class FailedTransactionsChart extends React.Component {
+export default class TransactionsChart extends React.Component {
   constructor(props) {
     super(props);
     this.panel = null;
-    this.colorScale = scale.category10();
+    // Use the same colors as the original react-d3-components
+    this.colorScale = d3
+      .scaleOrdinal()
+      .range([
+        "#1f77b4",
+        "#ff7f0e",
+        "#2ca02c",
+        "#d62728",
+        "#9467bd",
+        "#8c564b",
+        "#e377c2",
+        "#7f7f7f",
+        "#bcbd22",
+        "#17becf",
+      ]);
     this.state = {
       loading: true,
       chartWidth: 400,
@@ -41,7 +55,7 @@ export default class FailedTransactionsChart extends React.Component {
     });
     data[1].values.push({
       x: ledger.sequence.toString(),
-      y: ledger.failed_transaction_count,
+      y: ledger.operation_count - ledger.successful_transaction_count,
     });
     data[0].values.shift();
     data[1].values.shift();
@@ -52,11 +66,11 @@ export default class FailedTransactionsChart extends React.Component {
     axios.get(this.url).then((response) => {
       let data = [
         {
-          label: "Success",
+          label: "Transactions",
           values: [],
         },
         {
-          label: "Fail",
+          label: "Operations",
           values: [],
         },
       ];
@@ -67,7 +81,7 @@ export default class FailedTransactionsChart extends React.Component {
         });
         data[1].values.unshift({
           x: ledger.sequence.toString(),
-          y: ledger.failed_transaction_count,
+          y: ledger.operation_count - ledger.successful_transaction_count,
         });
       });
       this.setState({ loading: false, data });
@@ -88,12 +102,10 @@ export default class FailedTransactionsChart extends React.Component {
       >
         <Panel>
           <div className="widget-name">
-            <span style={{ borderBottom: "2px solid #0074B7" }}>
-              Successful
-            </span>{" "}
-            &amp;{" "}
-            <span style={{ borderBottom: "2px solid #FF6F00" }}>Failed</span>{" "}
-            Txs in the last {this.props.limit} ledgers: {this.props.network}
+            Successful{" "}
+            <span style={{ borderBottom: "2px solid #1f77b4" }}>Txs</span> &amp;{" "}
+            <span style={{ borderBottom: "2px solid #ff7f0e" }}>Ops</span> in
+            the last {this.props.limit} ledgers: {this.props.network}
             <a href={this.url} target="_blank" className="api-link">
               API
             </a>
@@ -101,13 +113,15 @@ export default class FailedTransactionsChart extends React.Component {
           {this.state.loading ? (
             "Loading..."
           ) : (
-            <BarChart
+            <D3BarChartNoXLabels
               tickFormat={d3.format("d")}
               data={this.state.data}
               width={this.state.chartWidth}
               colorScale={this.colorScale}
               height={this.state.chartHeigth}
-              margin={{ top: 10, bottom: 8, left: 50, right: 10 }}
+              margin={{ top: 10, bottom: 8, left: 40, right: 10 }}
+              yAxisMax={450}
+              yAxisStep={50}
             />
           )}
         </Panel>

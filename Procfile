@@ -1,1 +1,1 @@
-web: node app.js
+web: npx tsx backend/app.ts

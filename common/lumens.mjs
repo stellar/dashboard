@@ -1,10 +1,9 @@
-// This file contains functions used both in backend and frontend code.
-// Will be helpful to build distribution stats API.
-const axios = require("axios");
-const BigNumber = require("bignumber.js");
-const map = require("lodash/map");
-const reduce = require("lodash/reduce");
-const find = require("lodash/find");
+// ES module version of lumens.js for frontend use
+import axios from "axios";
+import BigNumber from "bignumber.js";
+import map from "lodash/map";
+import reduce from "lodash/reduce";
+import find from "lodash/find";
 
 const horizonLiveURL = "https://horizon.stellar.org";
 
@@ -49,10 +48,9 @@ const accounts = {
 
 const ORIGINAL_SUPPLY_AMOUNT = "100000000000";
 
-exports.ORIGINAL_SUPPLY_AMOUNT = ORIGINAL_SUPPLY_AMOUNT;
+export { ORIGINAL_SUPPLY_AMOUNT };
 
-exports.getLumenBalance = getLumenBalance;
-function getLumenBalance(horizonURL, accountId) {
+export function getLumenBalance(horizonURL, accountId) {
   return axios
     .get(`${horizonURL}/accounts/${accountId}`)
     .then((response) => {
@@ -63,9 +61,21 @@ function getLumenBalance(horizonURL, accountId) {
       return xlmBalance.balance;
     })
     .catch((error) => {
-      if (error.response && error.response.status == 404) {
-        return "0.0"; // consider the balance of an account zero if the account does not exist or has been deleted from the network
-      } else throw error; // something else happened, and at this point we shouldn't trust the computed balance
+      if (
+        error.response &&
+        (error.response.status == 404 || error.response.status == 400)
+      ) {
+        console.warn(
+          `Account ${accountId} not found or invalid (${error.response.status}), treating as 0 balance`,
+        );
+        return "0.0"; // consider the balance of an account zero if the account does not exist, has been deleted, or is invalid
+      } else {
+        console.error(
+          `Error fetching balance for account ${accountId}:`,
+          error,
+        );
+        throw error; // something else happened, and at this point we shouldn't trust the computed balance
+      }
     });
 }
 
@@ -82,8 +92,7 @@ function sumRelevantAccounts(accounts) {
   );
 }
 
-exports.totalLumens = totalLumens;
-function totalLumens(horizonURL) {
+export function totalLumens(horizonURL) {
   return axios
     .get(`${horizonURL}/ledgers/?order=desc&limit=1`)
     .then((response) => {
@@ -91,8 +100,7 @@ function totalLumens(horizonURL) {
     });
 }
 
-exports.inflationLumens = inflationLumens;
-function inflationLumens() {
+export function inflationLumens() {
   return Promise.all([
     totalLumens(horizonLiveURL),
     ORIGINAL_SUPPLY_AMOUNT,
@@ -102,8 +110,7 @@ function inflationLumens() {
   });
 }
 
-exports.feePool = feePool;
-function feePool() {
+export function feePool() {
   return axios
     .get(`${horizonLiveURL}/ledgers/?order=desc&limit=1`)
     .then((response) => {
@@ -111,8 +118,7 @@ function feePool() {
     });
 }
 
-exports.burnedLumens = burnedLumens;
-function burnedLumens() {
+export function burnedLumens() {
   return axios
     .get(`${horizonLiveURL}/accounts/${voidAccount}`)
     .then((response) => {
@@ -124,8 +130,7 @@ function burnedLumens() {
     });
 }
 
-exports.directDevelopmentAll = directDevelopmentAll;
-function directDevelopmentAll() {
+export function directDevelopmentAll() {
   const {
     directDevelopment,
     // directDevelopmentHot1,
@@ -144,8 +149,7 @@ function directDevelopmentAll() {
   ]);
 }
 
-exports.distributionEcosystemSupport = distributionEcosystemSupport;
-function distributionEcosystemSupport() {
+export function distributionEcosystemSupport() {
   const {
     infrastructureGrants,
     currencySupport,
@@ -162,14 +166,12 @@ function distributionEcosystemSupport() {
   ]);
 }
 
-exports.distributionUseCaseInvestment = distributionUseCaseInvestment;
-function distributionUseCaseInvestment() {
+export function distributionUseCaseInvestment() {
   const { enterpriseFund, newProducts } = accounts;
   return sumRelevantAccounts([enterpriseFund, newProducts]);
 }
 
-exports.distributionUserAcquisition = distributionUserAcquisition;
-function distributionUserAcquisition() {
+export function distributionUserAcquisition() {
   const {
     inAppDistribution,
     inAppDistributionHot,
@@ -187,8 +189,7 @@ function distributionUserAcquisition() {
   ]);
 }
 
-exports.distributionAll = distributionAll;
-function distributionAll() {
+export function distributionAll() {
   return Promise.all([
     distributionEcosystemSupport(),
     distributionUseCaseInvestment(),
@@ -202,13 +203,11 @@ function distributionAll() {
   });
 }
 
-exports.getUpgradeReserve = getUpgradeReserve;
-function getUpgradeReserve() {
+export function getUpgradeReserve() {
   return getLumenBalance(horizonLiveURL, networkUpgradeReserveAccount);
 }
 
-exports.sdfAccounts = sdfAccounts;
-function sdfAccounts() {
+export function sdfAccounts() {
   var balanceMap = map(accounts, (id) => getLumenBalance(horizonLiveURL, id));
   return Promise.all(balanceMap).then((balances) => {
     return reduce(
@@ -219,8 +218,7 @@ function sdfAccounts() {
   });
 }
 
-exports.totalSupply = totalSupply;
-function totalSupply() {
+export function totalSupply() {
   return Promise.all([inflationLumens(), burnedLumens()]).then((result) => {
     let [inflationLumens, burnedLumens] = result;
 
@@ -230,8 +228,7 @@ function totalSupply() {
   });
 }
 
-exports.noncirculatingSupply = noncirculatingSupply;
-function noncirculatingSupply() {
+export function noncirculatingSupply() {
   return Promise.all([getUpgradeReserve(), feePool(), sdfAccounts()]).then(
     (balances) => {
       return reduce(
@@ -243,8 +240,7 @@ function noncirculatingSupply() {
   );
 }
 
-exports.circulatingSupply = circulatingSupply;
-function circulatingSupply() {
+export function circulatingSupply() {
   return Promise.all([totalSupply(), noncirculatingSupply()]).then((result) => {
     let [totalLumens, noncirculatingSupply] = result;
 

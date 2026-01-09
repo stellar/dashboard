@@ -3,24 +3,25 @@ import Panel from "muicss/lib/react/panel";
 import { EventEmitter } from "fbemitter";
 import axios from "axios";
 import moment from "moment";
-import { Server } from "stellar-sdk";
+import * as StellarSdk from "@stellar/stellar-sdk";
 
-import AppBar from "./AppBar";
-import AccountBalance from "./AccountBalance";
-import FeeStats from "./FeeStats";
-import NetworkStatus from "./NetworkStatus";
-import Incidents from "./Incidents";
-import LedgerCloseChart from "./LedgerCloseChart";
-import LumensCirculating from "./LumensCirculating";
-import LumensNonCirculating from "./LumensNonCirculating";
-import PublicNetworkLedgersHistoryChart from "./PublicNetworkLedgersHistoryChart";
-import RecentOperations from "./RecentOperations";
-import TotalCoins from "./TotalCoins";
-import TransactionsChart from "./TransactionsChart";
-import FailedTransactionsChart from "./FailedTransactionsChart";
+import AppBar from "./AppBar.jsx";
+import AccountBalance from "./AccountBalance.jsx";
+import FeeStats from "./FeeStats.jsx";
+import NetworkStatus from "./NetworkStatus.jsx";
+import Incidents from "./Incidents.jsx";
+// D3 components - now updated to D3 v7
+import LedgerCloseChart from "./LedgerCloseChart.jsx";
+import PublicNetworkLedgersHistoryChart from "./PublicNetworkLedgersHistoryChart.jsx";
+import TransactionsChart from "./TransactionsChart.jsx";
+import FailedTransactionsChart from "./FailedTransactionsChart.jsx";
+import LumensCirculating from "./LumensCirculating.jsx";
+import LumensNonCirculating from "./LumensNonCirculating.jsx";
+import RecentOperations from "./RecentOperations.jsx";
+import TotalCoins from "./TotalCoins.jsx";
 import { LIVE_NEW_LEDGER, TEST_NEW_LEDGER } from "../events";
 import { setTimeOffset } from "../common/time";
-import { ScheduledMaintenance } from "./ScheduledMaintenance";
+import { ScheduledMaintenance } from "./ScheduledMaintenance.jsx";
 import sanitizeHtml from "../utilities/sanitizeHtml.js";
 
 const horizonLive = "https://horizon.stellar.org";
@@ -134,17 +135,29 @@ export default class App extends React.Component {
 
   streamLedgers(horizonURL, eventName) {
     // Get last ledger
-    axios.get(`${horizonURL}/ledgers?order=desc&limit=1`).then((response) => {
-      let lastLedger = response.data._embedded.records[0];
+    axios
+      .get(`${horizonURL}/ledgers?order=desc&limit=1`)
+      .then((response) => {
+        let lastLedger = response.data._embedded.records[0];
 
-      new Server(horizonURL)
-        .ledgers()
-        .cursor(lastLedger.paging_token)
-        .limit(200)
-        .stream({
-          onmessage: (ledger) => this.emitter.emit(eventName, ledger),
-        });
-    });
+        new StellarSdk.Horizon.Server(horizonURL)
+          .ledgers()
+          .cursor(lastLedger.paging_token)
+          .limit(200)
+          .stream({
+            onmessage: (ledger) => this.emitter.emit(eventName, ledger),
+            onerror: (error) => {
+              console.warn("Stellar streaming error:", error);
+              // Retry after 5 seconds
+              setTimeout(() => this.streamLedgers(horizonURL, eventName), 5000);
+            },
+          });
+      })
+      .catch((error) => {
+        console.warn("Failed to get initial ledger:", error);
+        // Retry after 5 seconds
+        setTimeout(() => this.streamLedgers(horizonURL, eventName), 5000);
+      });
   }
 
   turnOffForceTheme() {

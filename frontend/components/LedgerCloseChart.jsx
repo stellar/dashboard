@@ -1,8 +1,8 @@
 import React from "react";
 import Panel from "muicss/lib/react/panel";
 import axios from "axios";
-import { scale } from "d3";
-import BarChart from "react-d3-components/lib/BarChart";
+import * as d3 from "d3";
+import D3BarChart from "./D3BarChart.jsx";
 import each from "lodash/each";
 import clone from "lodash/clone";
 
@@ -10,7 +10,21 @@ export default class LedgerChartClose extends React.Component {
   constructor(props) {
     super(props);
     this.panel = null;
-    this.colorScale = scale.category10();
+    // Use the same colors as the original react-d3-components
+    this.colorScale = d3
+      .scaleOrdinal()
+      .range([
+        "#1f77b4",
+        "#ff7f0e",
+        "#2ca02c",
+        "#d62728",
+        "#9467bd",
+        "#8c564b",
+        "#e377c2",
+        "#7f7f7f",
+        "#bcbd22",
+        "#17becf",
+      ]);
     this.state = {
       loading: true,
       chartWidth: 400,
@@ -94,12 +108,12 @@ export default class LedgerChartClose extends React.Component {
           {this.state.loading ? (
             "Loading..."
           ) : (
-            <BarChart
+            <D3BarChart
               data={this.state.data}
               width={this.state.chartWidth}
               colorScale={this.colorScale}
               height={this.state.chartHeigth}
-              margin={{ top: 10, bottom: 8, left: 50, right: 10 }}
+              margin={{ top: 10, bottom: 8, left: 40, right: 10 }}
             />
           )}
         </Panel>
