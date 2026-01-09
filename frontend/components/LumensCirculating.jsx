@@ -2,7 +2,7 @@ import React from "react";
 import AmountWidget from "./AmountWidget.jsx";
 import BigNumber from "bignumber.js";
 import Panel from "muicss/lib/react/panel";
-import * as lumens from "../../common/lumens.mjs";
+import * as lumens from "../../common/lumens.js";
 const { circulatingSupply } = lumens;
 
 export default class LumensCirculating extends AmountWidget {

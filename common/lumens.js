@@ -1,10 +1,10 @@
 // This file contains functions used both in backend and frontend code.
 // Will be helpful to build distribution stats API.
-const axios = require("axios");
-const BigNumber = require("bignumber.js");
-const map = require("lodash/map");
-const reduce = require("lodash/reduce");
-const find = require("lodash/find");
+import axios from "axios";
+import BigNumber from "bignumber.js";
+import map from "lodash/map.js";
+import reduce from "lodash/reduce.js";
+import find from "lodash/find.js";
 
 const horizonLiveURL = "https://horizon.stellar.org";
 
@@ -47,85 +47,74 @@ const accounts = {
     "GBI5PADO5TEDY3R6WFAO2HEKBTTZS4LGR77XM4AHGN52H45ENBWGDFOH",
 };
 
-const ORIGINAL_SUPPLY_AMOUNT = "100000000000";
+export const ORIGINAL_SUPPLY_AMOUNT = "100000000000";
 
-exports.ORIGINAL_SUPPLY_AMOUNT = ORIGINAL_SUPPLY_AMOUNT;
-
-exports.getLumenBalance = getLumenBalance;
-function getLumenBalance(horizonURL, accountId) {
-  return axios
-    .get(`${horizonURL}/accounts/${accountId}`)
-    .then((response) => {
-      var xlmBalance = find(
-        response.data.balances,
-        (b) => b.asset_type == "native",
+export async function getLumenBalance(horizonURL, accountId) {
+  try {
+    const response = await axios.get(`${horizonURL}/accounts/${accountId}`);
+    const xlmBalance = find(
+      response.data.balances,
+      (b) => b.asset_type === "native",
+    );
+    return xlmBalance.balance;
+  } catch (error) {
+    if (
+      error.response &&
+      (error.response.status === 404 || error.response.status === 400)
+    ) {
+      console.warn(
+        `Account ${accountId} not found or invalid (${error.response.status}), treating as 0 balance`,
       );
-      return xlmBalance.balance;
-    })
-    .catch((error) => {
-      if (error.response && error.response.status == 404) {
-        return "0.0"; // consider the balance of an account zero if the account does not exist or has been deleted from the network
-      } else throw error; // something else happened, and at this point we shouldn't trust the computed balance
-    });
+      return "0.0"; // consider the balance of an account zero if the account does not exist, has been deleted, or is invalid
+    } else {
+      console.error(`Error fetching balance for account ${accountId}:`, error);
+      throw error; // something else happened, and at this point we shouldn't trust the computed balance
+    }
+  }
 }
 
-function sumRelevantAccounts(accounts) {
-  return Promise.all(
-    accounts.map((acct) => getLumenBalance(horizonLiveURL, acct)),
-  ).then((data) =>
-    data
-      .reduce(
-        (sum, currentBalance) => new BigNumber(currentBalance).plus(sum),
-        new BigNumber(0),
-      )
-      .toString(),
+async function sumRelevantAccounts(accountList) {
+  const balances = await Promise.all(
+    accountList.map((acct) => getLumenBalance(horizonLiveURL, acct)),
   );
+  return balances
+    .reduce(
+      (sum, currentBalance) => new BigNumber(currentBalance).plus(sum),
+      new BigNumber(0),
+    )
+    .toString();
 }
 
-exports.totalLumens = totalLumens;
-function totalLumens(horizonURL) {
-  return axios
-    .get(`${horizonURL}/ledgers/?order=desc&limit=1`)
-    .then((response) => {
-      return response.data._embedded.records[0].total_coins;
-    });
+export async function totalLumens(horizonURL) {
+  const response = await axios.get(`${horizonURL}/ledgers/?order=desc&limit=1`);
+  return response.data._embedded.records[0].total_coins;
 }
 
-exports.inflationLumens = inflationLumens;
-function inflationLumens() {
-  return Promise.all([
+export async function inflationLumens() {
+  const [totalLumensValue, originalSupply] = await Promise.all([
     totalLumens(horizonLiveURL),
     ORIGINAL_SUPPLY_AMOUNT,
-  ]).then((result) => {
-    let [totalLumens, originalSupply] = result;
-    return new BigNumber(totalLumens).minus(originalSupply);
-  });
+  ]);
+  return new BigNumber(totalLumensValue).minus(originalSupply);
 }
 
-exports.feePool = feePool;
-function feePool() {
-  return axios
-    .get(`${horizonLiveURL}/ledgers/?order=desc&limit=1`)
-    .then((response) => {
-      return response.data._embedded.records[0].fee_pool;
-    });
+export async function feePool() {
+  const response = await axios.get(
+    `${horizonLiveURL}/ledgers/?order=desc&limit=1`,
+  );
+  return response.data._embedded.records[0].fee_pool;
 }
 
-exports.burnedLumens = burnedLumens;
-function burnedLumens() {
-  return axios
-    .get(`${horizonLiveURL}/accounts/${voidAccount}`)
-    .then((response) => {
-      var xlmBalance = find(
-        response.data.balances,
-        (b) => b.asset_type == "native",
-      );
-      return xlmBalance.balance;
-    });
+export async function burnedLumens() {
+  const response = await axios.get(`${horizonLiveURL}/accounts/${voidAccount}`);
+  const xlmBalance = find(
+    response.data.balances,
+    (b) => b.asset_type === "native",
+  );
+  return xlmBalance.balance;
 }
 
-exports.directDevelopmentAll = directDevelopmentAll;
-function directDevelopmentAll() {
+export async function directDevelopmentAll() {
   const {
     directDevelopment,
     // directDevelopmentHot1,
@@ -144,8 +133,7 @@ function directDevelopmentAll() {
   ]);
 }
 
-exports.distributionEcosystemSupport = distributionEcosystemSupport;
-function distributionEcosystemSupport() {
+export async function distributionEcosystemSupport() {
   const {
     infrastructureGrants,
     currencySupport,
@@ -162,14 +150,12 @@ function distributionEcosystemSupport() {
   ]);
 }
 
-exports.distributionUseCaseInvestment = distributionUseCaseInvestment;
-function distributionUseCaseInvestment() {
+export async function distributionUseCaseInvestment() {
   const { enterpriseFund, newProducts } = accounts;
   return sumRelevantAccounts([enterpriseFund, newProducts]);
 }
 
-exports.distributionUserAcquisition = distributionUserAcquisition;
-function distributionUserAcquisition() {
+export async function distributionUserAcquisition() {
   const {
     inAppDistribution,
     inAppDistributionHot,
@@ -187,67 +173,62 @@ function distributionUserAcquisition() {
   ]);
 }
 
-exports.distributionAll = distributionAll;
-function distributionAll() {
-  return Promise.all([
+export async function distributionAll() {
+  const results = await Promise.all([
     distributionEcosystemSupport(),
     distributionUseCaseInvestment(),
     distributionUserAcquisition(),
     directDevelopmentAll(),
-  ]).then((results) => {
-    return results.reduce(
-      (sum, balance) => new BigNumber(sum).plus(balance),
-      new BigNumber(0),
-    );
-  });
-}
-
-exports.getUpgradeReserve = getUpgradeReserve;
-function getUpgradeReserve() {
-  return getLumenBalance(horizonLiveURL, networkUpgradeReserveAccount);
-}
-
-exports.sdfAccounts = sdfAccounts;
-function sdfAccounts() {
-  var balanceMap = map(accounts, (id) => getLumenBalance(horizonLiveURL, id));
-  return Promise.all(balanceMap).then((balances) => {
-    return reduce(
-      balances,
-      (sum, balance) => sum.plus(balance),
-      new BigNumber(0),
-    );
-  });
-}
-
-exports.totalSupply = totalSupply;
-function totalSupply() {
-  return Promise.all([inflationLumens(), burnedLumens()]).then((result) => {
-    let [inflationLumens, burnedLumens] = result;
-
-    return new BigNumber(ORIGINAL_SUPPLY_AMOUNT)
-      .plus(inflationLumens)
-      .minus(burnedLumens);
-  });
-}
-
-exports.noncirculatingSupply = noncirculatingSupply;
-function noncirculatingSupply() {
-  return Promise.all([getUpgradeReserve(), feePool(), sdfAccounts()]).then(
-    (balances) => {
-      return reduce(
-        balances,
-        (sum, balance) => sum.plus(balance),
-        new BigNumber(0),
-      );
-    },
+  ]);
+  return results.reduce(
+    (sum, balance) => new BigNumber(sum).plus(balance),
+    new BigNumber(0),
   );
 }
 
-exports.circulatingSupply = circulatingSupply;
-function circulatingSupply() {
-  return Promise.all([totalSupply(), noncirculatingSupply()]).then((result) => {
-    let [totalLumens, noncirculatingSupply] = result;
+export async function getUpgradeReserve() {
+  return getLumenBalance(horizonLiveURL, networkUpgradeReserveAccount);
+}
 
-    return new BigNumber(totalLumens).minus(noncirculatingSupply);
-  });
+export async function sdfAccounts() {
+  const balanceMap = map(accounts, (id) => getLumenBalance(horizonLiveURL, id));
+  const balances = await Promise.all(balanceMap);
+  return reduce(
+    balances,
+    (sum, balance) => sum.plus(balance),
+    new BigNumber(0),
+  );
+}
+
+export async function totalSupply() {
+  const [inflationLumensValue, burnedLumensValue] = await Promise.all([
+    inflationLumens(),
+    burnedLumens(),
+  ]);
+
+  return new BigNumber(ORIGINAL_SUPPLY_AMOUNT)
+    .plus(inflationLumensValue)
+    .minus(burnedLumensValue);
+}
+
+export async function noncirculatingSupply() {
+  const balances = await Promise.all([
+    getUpgradeReserve(),
+    feePool(),
+    sdfAccounts(),
+  ]);
+  return reduce(
+    balances,
+    (sum, balance) => sum.plus(balance),
+    new BigNumber(0),
+  );
+}
+
+export async function circulatingSupply() {
+  const [totalLumensValue, noncirculatingSupplyValue] = await Promise.all([
+    totalSupply(),
+    noncirculatingSupply(),
+  ]);
+
+  return new BigNumber(totalLumensValue).minus(noncirculatingSupplyValue);
 }

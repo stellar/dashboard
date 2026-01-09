@@ -1,7 +1,7 @@
 import React from "react";
 import AmountWidget from "./AmountWidget.jsx";
 import Panel from "muicss/lib/react/panel";
-import * as lumens from "../../common/lumens.mjs";
+import * as lumens from "../../common/lumens.js";
 const { noncirculatingSupply } = lumens;
 
 export default class LumensNonCirculating extends AmountWidget {

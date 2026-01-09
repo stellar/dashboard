@@ -1,6 +1,6 @@
 import React from "react";
 import AmountWidget from "./AmountWidget.jsx";
-import * as lumens from "../../common/lumens.mjs";
+import * as lumens from "../../common/lumens.js";
 const { totalSupply } = lumens;
 
 export default class TotalCoins extends AmountWidget {
