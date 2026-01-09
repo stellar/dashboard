@@ -32,12 +32,7 @@ const globalLimiter = rateLimit({
 app.use(globalLimiter);
 
 // Rate limiting configuration
-const createRateLimit = (
-  windowMs: number,
-  max: number,
-  message: string,
-  name: string = "API",
-) => {
+const createRateLimit = (windowMs: number, max: number, message: string) => {
   return rateLimit({
     windowMs,
     max,
@@ -50,15 +45,6 @@ const createRateLimit = (
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     // Skip rate limiting in development
     skip: () => process.env.DEV === "true",
-    // Log rate limit hits
-    onLimitReached: (req) => {
-      console.warn(`Rate limit exceeded for ${name}:`, {
-        ip: req.ip,
-        userAgent: req.get("User-Agent"),
-        path: req.path,
-        timestamp: new Date().toISOString(),
-      });
-    },
   });
 };
 
@@ -67,7 +53,6 @@ const generalApiLimiter = createRateLimit(
   15 * 60 * 1000, // 15 minutes
   100,
   "Too many API requests from this IP, please try again later.",
-  "General API",
 );
 
 // Strict rate limit for resource-intensive endpoints: 20 requests per 5 minutes
@@ -75,7 +60,6 @@ const strictApiLimiter = createRateLimit(
   5 * 60 * 1000, // 5 minutes
   20,
   "This endpoint is rate limited due to high resource usage. Please try again later.",
-  "Strict API",
 );
 
 // Very strict rate limit for external service endpoints (CoinMarketCap): 10 requests per minute
@@ -83,7 +67,6 @@ const externalServiceLimiter = createRateLimit(
   60 * 1000, // 1 minute
   10,
   "This endpoint is heavily rate limited. Please cache responses and avoid frequent requests.",
-  "External Service",
 );
 
 // Apply general rate limiting to all API routes
