@@ -24,7 +24,7 @@ if (process.env.DEV) {
     }),
   );
 } else {
-  app.use(express.static("dist"));
+  app.use(express.static("."));
 }
 
 app.get("/api/ledgers/public", ledgers.handler);
