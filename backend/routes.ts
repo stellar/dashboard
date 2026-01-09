@@ -2,6 +2,7 @@ import express from "express";
 import proxy from "express-http-proxy";
 import logger from "morgan";
 import path from "path";
+import rateLimit from "express-rate-limit";
 
 import * as lumens from "./lumens";
 import * as lumensV2V3 from "./v2v3/lumens";
@@ -12,6 +13,81 @@ app.set("port", process.env.PORT || 5000);
 app.set("json spaces", 2);
 
 app.use(logger("combined"));
+
+// Global rate limiting for all requests (including static files)
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // Limit each IP to 1000 requests per windowMs
+  message: {
+    error: "Too Many Requests",
+    message: "Too many requests from this IP, please try again later.",
+    retryAfter: 900, // 15 minutes in seconds
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => process.env.DEV === "true",
+});
+
+// Apply global rate limiting to all requests
+app.use(globalLimiter);
+
+// Rate limiting configuration
+const createRateLimit = (
+  windowMs: number,
+  max: number,
+  message: string,
+  name: string = "API",
+) => {
+  return rateLimit({
+    windowMs,
+    max,
+    message: {
+      error: "Too Many Requests",
+      message,
+      retryAfter: Math.ceil(windowMs / 1000),
+    },
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    // Skip rate limiting in development
+    skip: () => process.env.DEV === "true",
+    // Log rate limit hits
+    onLimitReached: (req) => {
+      console.warn(`Rate limit exceeded for ${name}:`, {
+        ip: req.ip,
+        userAgent: req.get("User-Agent"),
+        path: req.path,
+        timestamp: new Date().toISOString(),
+      });
+    },
+  });
+};
+
+// General API rate limit: 100 requests per 15 minutes
+const generalApiLimiter = createRateLimit(
+  15 * 60 * 1000, // 15 minutes
+  100,
+  "Too many API requests from this IP, please try again later.",
+  "General API",
+);
+
+// Strict rate limit for resource-intensive endpoints: 20 requests per 5 minutes
+const strictApiLimiter = createRateLimit(
+  5 * 60 * 1000, // 5 minutes
+  20,
+  "This endpoint is rate limited due to high resource usage. Please try again later.",
+  "Strict API",
+);
+
+// Very strict rate limit for external service endpoints (CoinMarketCap): 10 requests per minute
+const externalServiceLimiter = createRateLimit(
+  60 * 1000, // 1 minute
+  10,
+  "This endpoint is heavily rate limited. Please cache responses and avoid frequent requests.",
+  "External Service",
+);
+
+// Apply general rate limiting to all API routes
+app.use("/api/", generalApiLimiter);
 
 if (process.env.DEV) {
   // Development: proxy to Vite dev server
@@ -125,23 +201,38 @@ if (process.env.DEV) {
   });
 }
 
-app.get("/api/ledgers/public", ledgers.handler);
+// API Routes with appropriate rate limiting
+app.get("/api/ledgers/public", strictApiLimiter, ledgers.handler);
 app.get("/api/lumens", lumens.v1Handler);
 
 app.get("/api/v2/lumens", lumensV2V3.v2Handler);
-/* For CoinMarketCap */
-app.get("/api/v2/lumens/total-supply", lumensV2V3.v2TotalSupplyHandler);
+/* For CoinMarketCap - heavily rate limited */
+app.get(
+  "/api/v2/lumens/total-supply",
+  externalServiceLimiter,
+  lumensV2V3.v2TotalSupplyHandler,
+);
 app.get(
   "/api/v2/lumens/circulating-supply",
+  externalServiceLimiter,
   lumensV2V3.v2CirculatingSupplyHandler,
 );
 
 app.get("/api/v3/lumens", lumensV2V3.v3Handler);
-app.get("/api/v3/lumens/all", lumensV2V3.totalSupplyCheckHandler);
-/* For CoinMarketCap */
-app.get("/api/v3/lumens/total-supply", lumensV2V3.v3TotalSupplyHandler);
+app.get(
+  "/api/v3/lumens/all",
+  strictApiLimiter,
+  lumensV2V3.totalSupplyCheckHandler,
+);
+/* For CoinMarketCap - heavily rate limited */
+app.get(
+  "/api/v3/lumens/total-supply",
+  externalServiceLimiter,
+  lumensV2V3.v3TotalSupplyHandler,
+);
 app.get(
   "/api/v3/lumens/circulating-supply",
+  externalServiceLimiter,
   lumensV2V3.v3CirculatingSupplyHandler,
 );
 
