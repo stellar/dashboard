@@ -17,5 +17,11 @@ EXPOSE 80
 
 RUN node_modules/typescript/bin/tsc
 
+# Copy common directory to dist for runtime access
+RUN cp -r common dist/
+
+# Change working directory to dist for runtime
+WORKDIR /app/src/dist
+
 ENTRYPOINT ["/usr/bin/node"]
 CMD ["./backend/app.js"]

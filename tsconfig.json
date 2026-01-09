@@ -26,10 +26,18 @@
     "module": "commonjs",
     "baseUrl": "./",
     "jsx": "react-jsx",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "outDir": "./dist"
   },
   "ts-node": {
     "files": true
   },
-  "include": ["./backend", "./test", "./common"]
+  "include": ["./backend/**/*", "./test/**/*", "./common/**/*.d.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "frontend",
+    "common/**/*.js",
+    "common/**/*.mjs"
+  ]
 }
