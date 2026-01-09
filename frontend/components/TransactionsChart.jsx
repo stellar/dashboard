@@ -29,6 +29,8 @@ export default class TransactionsChart extends React.Component {
       loading: true,
       chartWidth: 400,
       chartHeigth: this.props.chartHeigth || 120,
+      yAxisMax: 450, // Default value, will be updated dynamically
+      yAxisStep: 50, // Default value, will be updated dynamically
     };
     this.url = `${this.props.horizonURL}/ledgers?order=desc&limit=${this.props.limit}`;
   }
@@ -47,6 +49,60 @@ export default class TransactionsChart extends React.Component {
     }
   }
 
+  calculateDynamicYAxisParams(data) {
+    // For stacked charts, we need to find the maximum combined value
+    let maxValue = 0;
+
+    if (data.length === 2) {
+      // For stacked data, calculate the sum of both series at each point
+      const xValues = data[0].values.map((d) => d.x);
+
+      xValues.forEach((x, index) => {
+        const bottomValue = data[0].values[index].y;
+        const topValue = data[1].values[index].y;
+        const combinedValue = bottomValue + topValue;
+
+        if (combinedValue > maxValue) {
+          maxValue = combinedValue;
+        }
+      });
+    } else {
+      // Fallback for non-stacked charts
+      data.forEach((series) => {
+        series.values.forEach((point) => {
+          if (point.y > maxValue) {
+            maxValue = point.y;
+          }
+        });
+      });
+    }
+
+    // Determine step size based on network type
+    let stepSize;
+    if (this.props.network === "Test network") {
+      stepSize = 1; // Test network uses step size of 1
+    } else {
+      // Live network: choose between 50 and 100 based on resulting tick count
+      const ticksWith50 = Math.ceil(maxValue / 50);
+      stepSize = ticksWith50 <= 10 ? 50 : 100;
+    }
+
+    const yAxisMax = Math.ceil(maxValue / stepSize) * stepSize;
+
+    // Ensure minimum values for better chart readability
+    let minYAxisMax;
+    if (this.props.network === "Test network") {
+      minYAxisMax = 10; // Smaller minimum for test network
+    } else {
+      minYAxisMax = stepSize === 50 ? 100 : 200;
+    }
+
+    return {
+      yAxisMax: Math.max(yAxisMax, minYAxisMax),
+      yAxisStep: stepSize,
+    };
+  }
+
   onNewLedger(ledger) {
     let data = clone(this.state.data);
     data[0].values.push({
@@ -59,7 +115,11 @@ export default class TransactionsChart extends React.Component {
     });
     data[0].values.shift();
     data[1].values.shift();
-    this.setState({ loading: false, data });
+
+    // Calculate dynamic yAxisMax and yAxisStep based on data
+    const { yAxisMax, yAxisStep } = this.calculateDynamicYAxisParams(data);
+
+    this.setState({ loading: false, data, yAxisMax, yAxisStep });
   }
 
   getLedgers() {
@@ -84,7 +144,11 @@ export default class TransactionsChart extends React.Component {
           y: ledger.operation_count - ledger.successful_transaction_count,
         });
       });
-      this.setState({ loading: false, data });
+
+      // Calculate dynamic yAxisMax and yAxisStep based on data
+      const { yAxisMax, yAxisStep } = this.calculateDynamicYAxisParams(data);
+
+      this.setState({ loading: false, data, yAxisMax, yAxisStep });
       // Start listening to events
       this.props.emitter.addListener(
         this.props.newLedgerEventName,
@@ -120,8 +184,8 @@ export default class TransactionsChart extends React.Component {
               colorScale={this.colorScale}
               height={this.state.chartHeigth}
               margin={{ top: 10, bottom: 8, left: 40, right: 10 }}
-              yAxisMax={450}
-              yAxisStep={50}
+              yAxisMax={this.state.yAxisMax}
+              yAxisStep={this.state.yAxisStep}
             />
           )}
         </Panel>

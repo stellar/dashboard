@@ -71,20 +71,69 @@ export default function D3BarChartNoXLabels({
     // Calculate bar width - always use fixed width for all bars
     const barWidth = fixedBarWidth; // All bars are exactly 5px wide
 
-    // Add bars for each series
-    data.forEach((series, seriesIndex) => {
-      g.selectAll(`.bar-${seriesIndex}`)
-        .data(series.values)
+    // Add bars for each series - create stacked bars
+    // First, we need to calculate the cumulative values for stacking
+    const stackedData = [];
+
+    // Assume we have exactly 2 series for stacking
+    if (data.length === 2) {
+      const xValues = data[0].values.map((d) => d.x);
+
+      xValues.forEach((x, index) => {
+        const bottomValue = data[0].values[index].y; // First series (bottom)
+        const topValue = data[1].values[index].y; // Second series (top)
+
+        stackedData.push({
+          x: x,
+          bottom: bottomValue,
+          top: topValue,
+          bottomHeight: bottomValue,
+          topHeight: topValue,
+          totalHeight: bottomValue + topValue,
+        });
+      });
+
+      // Draw bottom bars (first series)
+      g.selectAll(".bar-bottom")
+        .data(stackedData)
         .enter()
         .append("rect")
-        .attr("class", `bar-${seriesIndex}`)
-        .attr("x", (d) => xScale(d.x) - fixedBarWidth / 2) // Center the bar on the scale point
-        .attr("y", (d) => yScale(d.y))
-        .attr("width", barWidth) // Always 5px wide
-        .attr("height", (d) => innerHeight - yScale(d.y))
-        .attr("fill", colors(seriesIndex))
-        .style("shape-rendering", "crispEdges"); // Crisp edges like original
-    });
+        .attr("class", "bar-bottom")
+        .attr("x", (d) => xScale(d.x) - fixedBarWidth / 2)
+        .attr("y", (d) => yScale(d.bottomHeight))
+        .attr("width", barWidth)
+        .attr("height", (d) => innerHeight - yScale(d.bottomHeight))
+        .attr("fill", colors(0))
+        .style("shape-rendering", "crispEdges");
+
+      // Draw top bars (second series) - stacked on top of bottom bars
+      g.selectAll(".bar-top")
+        .data(stackedData)
+        .enter()
+        .append("rect")
+        .attr("class", "bar-top")
+        .attr("x", (d) => xScale(d.x) - fixedBarWidth / 2)
+        .attr("y", (d) => yScale(d.totalHeight))
+        .attr("width", barWidth)
+        .attr("height", (d) => yScale(d.bottomHeight) - yScale(d.totalHeight))
+        .attr("fill", colors(1))
+        .style("shape-rendering", "crispEdges");
+    } else {
+      // Fallback to original behavior for non-stacked charts
+      data.forEach((series, seriesIndex) => {
+        g.selectAll(`.bar-${seriesIndex}`)
+          .data(series.values)
+          .enter()
+          .append("rect")
+          .attr("class", `bar-${seriesIndex}`)
+          .attr("x", (d) => xScale(d.x) - fixedBarWidth / 2)
+          .attr("y", (d) => yScale(d.y))
+          .attr("width", barWidth)
+          .attr("height", (d) => innerHeight - yScale(d.y))
+          .attr("fill", colors(seriesIndex))
+          .style("shape-rendering", "crispEdges");
+      });
+    }
 
     // Add x-axis with NO labels
     const xAxis = d3
