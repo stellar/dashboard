@@ -1,29 +1,54 @@
-name: Test and build
+name: Test and Build
+
 on:
   push:
     branches:
-    - master
+      - master
+      - main
   pull_request:
 
 jobs:
-  build:
+  test-and-build:
     runs-on: ubuntu-latest
+
     services:
       redis:
-        image: redis
+        image: redis:7-alpine
         # Set health checks to wait until redis has started
         options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-cmd "redis-cli ping" --health-interval 10s --health-timeout
+          5s --health-retries 5
         ports:
-        - 6379:6379
+          - 6379:6379
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-      - run: yarn install
-      - run: yarn test
-      - run: yarn build
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npx eslint backend/ --ext .ts
+
+      - name: Run tests
+        run: npm test
+        env:
+          DEV: true
+
+      - name: Build application
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: build-files
+          path: dist/
+          retention-days: 7
