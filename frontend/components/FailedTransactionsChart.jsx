@@ -28,7 +28,7 @@ export default class FailedTransactionsChart extends React.Component {
     this.state = {
       loading: true,
       chartWidth: 400,
-      chartHeigth: this.props.chartHeigth || 120,
+      chartHeight: this.props.chartHeight || 120,
       yAxisMax: 300, // Default value, will be updated dynamically
       yAxisStep: 100, // Default value, will be updated dynamically
     };
@@ -184,7 +184,7 @@ export default class FailedTransactionsChart extends React.Component {
               data={this.state.data}
               width={this.state.chartWidth}
               colorScale={this.colorScale}
-              height={this.state.chartHeigth}
+              height={this.state.chartHeight}
               margin={{ top: 10, bottom: 8, left: 40, right: 10 }}
               yAxisMax={this.state.yAxisMax}
               yAxisStep={this.state.yAxisStep}

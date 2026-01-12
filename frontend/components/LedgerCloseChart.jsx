@@ -28,7 +28,7 @@ export default class LedgerChartClose extends React.Component {
     this.state = {
       loading: true,
       chartWidth: 400,
-      chartHeigth: this.props.chartHeigth || 120,
+      chartHeight: this.props.chartHeight || 120,
     };
     this.url = `${this.props.horizonURL}/ledgers?order=desc&limit=${this.props.limit}`;
   }
@@ -112,7 +112,7 @@ export default class LedgerChartClose extends React.Component {
               data={this.state.data}
               width={this.state.chartWidth}
               colorScale={this.colorScale}
-              height={this.state.chartHeigth}
+              height={this.state.chartHeight}
               margin={{ top: 10, bottom: 8, left: 40, right: 10 }}
             />
           )}
