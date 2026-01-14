@@ -71,20 +71,18 @@
       type="text/css"
       media="screen"
     />
-    <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
     <div id="app"></div>
 
-    <script type="text/javascript" src="vendor.js"></script>
-    <script type="text/javascript" src="app.js"></script>
+    <script type="module" src="/frontend/main.jsx"></script>
 
     <script>
-      (function(i, s, o, g, r, a, m) {
+      (function (i, s, o, g, r, a, m) {
         i["GoogleAnalyticsObject"] = r;
         (i[r] =
           i[r] ||
-          function() {
+          function () {
             (i[r].q = i[r].q || []).push(arguments);
           }),
           (i[r].l = 1 * new Date());

@@ -1,4 +1,4 @@
-import stellarSdk from "stellar-sdk";
+import { Horizon } from "@stellar/stellar-sdk";
 import { findIndex } from "lodash";
 import { Response, NextFunction } from "express";
 
@@ -64,7 +64,7 @@ export async function updateLedgers() {
 
   await catchup(REDIS_LEDGER_KEY, pagingToken, REDIS_PAGING_TOKEN_KEY, 0);
 
-  const horizon = new stellarSdk.Server("https://horizon.stellar.org");
+  const horizon = new Horizon.Server("https://horizon.stellar.org");
   horizon
     .ledgers()
     .cursor(CURSOR_NOW)
@@ -82,7 +82,7 @@ export async function catchup(
   pagingTokenKey: string,
   limit: number, // if 0, catchup until now
 ) {
-  const horizon = new stellarSdk.Server("https://horizon.stellar.org");
+  const horizon = new Horizon.Server("https://horizon.stellar.org");
   let ledgers: LedgerRecord[] = [];
   let total = 0;
   let pagingToken = pagingTokenStart;

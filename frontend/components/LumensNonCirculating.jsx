@@ -1,12 +1,10 @@
 import React from "react";
-import AmountWidget from "./AmountWidget";
+import AmountWidget from "./AmountWidget.jsx";
 import Panel from "muicss/lib/react/panel";
-import BigNumber from "bignumber.js";
-import axios from "axios";
-import find from "lodash/find";
-import { distributionAll } from "../../common/lumens.js";
+import * as lumens from "../../common/lumens.js";
+const { noncirculatingSupply } = lumens;
 
-export default class LumensDistributed extends AmountWidget {
+export default class LumensNonCirculating extends AmountWidget {
   constructor(props) {
     super(props);
   }
@@ -21,7 +19,7 @@ export default class LumensDistributed extends AmountWidget {
   }
 
   updateAmount() {
-    distributionAll().then((amount) => {
+    noncirculatingSupply().then((amount) => {
       this.setState({ amount, code: "XLM", loading: false });
     });
   }
@@ -29,8 +27,8 @@ export default class LumensDistributed extends AmountWidget {
   renderName() {
     return (
       <div>
-        <span>Lumens Distributed</span>
-        <a href="/api/lumens" target="_blank" className="api-link">
+        <span>Non-Circulating Supply</span>
+        <a href="/api/v2/lumens/" target="_blank" className="api-link">
           API
         </a>
       </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import AmountWidget from "./AmountWidget";
+import AmountWidget from "./AmountWidget.jsx";
 import Panel from "muicss/lib/react/panel";
 import axios from "axios";
 import find from "lodash/find";

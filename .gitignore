@@ -1,6 +1,10 @@
 /node_modules
-/.tmp
 /dist
 *.eslintcache
 *service-account.json
 *.env
+/.vscode
+/.idea
+/.kiro
+/.cursor
+dump.rdb

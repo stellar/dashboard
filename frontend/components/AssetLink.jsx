@@ -1,5 +1,5 @@
 import React from "react";
-import AccountBadge from "./AccountBadge";
+import AccountBadge from "./AccountBadge.jsx";
 
 export default class AssetLink extends React.Component {
   render() {

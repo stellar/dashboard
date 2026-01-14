@@ -4,9 +4,9 @@ import axios from "axios";
 import moment from "moment";
 import each from "lodash/each";
 import defaults from "lodash/defaults";
-import AccountBadge from "./AccountBadge";
-import LiquidityPoolBadge from "./LiquidityPoolBadge";
-import AssetLink from "./AssetLink";
+import AccountBadge from "./AccountBadge.jsx";
+import LiquidityPoolBadge from "./LiquidityPoolBadge.jsx";
+import AssetLink from "./AssetLink.jsx";
 import BigNumber from "bignumber.js";
 import { ago } from "../common/time";
 

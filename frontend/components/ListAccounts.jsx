@@ -4,7 +4,7 @@ import axios from "axios";
 import clone from "lodash/clone";
 import find from "lodash/find";
 import reduce from "lodash/reduce";
-import AccountBadge from "./AccountBadge";
+import AccountBadge from "./AccountBadge.jsx";
 import BigNumber from "bignumber.js";
 
 export default class ListAccounts extends React.Component {

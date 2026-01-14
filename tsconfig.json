@@ -1,13 +1,43 @@
 {
-  "extends": "@stellar/tsconfig",
   "compilerOptions": {
+    "allowJs": true,
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
     "isolatedModules": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "pretty": true,
+    "preserveWatchOutput": false,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "stripInternal": true,
     "target": "es6",
     "module": "commonjs",
     "baseUrl": "./",
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "outDir": "./dist"
   },
   "ts-node": {
     "files": true
   },
-  "include": ["./backend"] 
+  "include": ["./backend/**/*", "./test/**/*", "./common/**/*.d.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "frontend",
+    "common/**/*.js",
+    "common/**/*.mjs"
+  ]
 }
