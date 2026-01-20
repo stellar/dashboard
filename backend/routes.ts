@@ -12,6 +12,10 @@ export const app = express();
 app.set("port", process.env.PORT || 5000);
 app.set("json spaces", 2);
 
+// Trust proxy to get real client IPs behind NGINX Ingress
+// This allows rate limiting to work per actual client IP instead of per ingress pod IP
+app.set("trust proxy", true);
+
 app.use(logger("combined"));
 
 // Global rate limiting for all requests (including static files)
