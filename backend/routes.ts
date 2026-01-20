@@ -14,7 +14,7 @@ app.set("json spaces", 2);
 
 // Trust proxy to get real client IPs behind NGINX Ingress
 // This allows rate limiting to work per actual client IP instead of per ingress pod IP
-app.set("trust proxy", true);
+app.set("trust proxy", 1);
 
 app.use(logger("combined"));
 
