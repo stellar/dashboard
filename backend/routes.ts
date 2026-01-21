@@ -1,5 +1,6 @@
 import express from "express";
 import proxy from "express-http-proxy";
+import proxyAddr from "proxy-addr";
 import logger from "morgan";
 import path from "path";
 import rateLimit from "express-rate-limit";
@@ -14,9 +15,15 @@ app.set("json spaces", 2);
 
 // Trust proxy to get real client IPs behind proxies/load balancers.
 const defaultTrustProxy = "loopback,linklocal,uniquelocal";
-const trustProxy = process.env.TRUST_PROXY || defaultTrustProxy;
-console.log(`Setting trust proxy to: ${trustProxy}`);
-app.set("trust proxy", trustProxy);
+const trustProxyCidrs = (process.env.TRUST_PROXY || defaultTrustProxy)
+  .split(",")
+  .map((cidr) => cidr.trim())
+  .filter(Boolean);
+
+console.log(
+  `Setting trust proxy to TRUST_PROXY: ${trustProxyCidrs.join(",")}`,
+);
+app.set("trust proxy", proxyAddr.compile(trustProxyCidrs));
 
 app.use(logger("combined"));
 

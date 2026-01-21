@@ -34,6 +34,7 @@
     "@google-cloud/bigquery": "^5.10.0",
     "@stellar/prettier-config": "^1.0.1",
     "@stellar/stellar-sdk": "^14.4.3",
+    "@types/proxy-addr": "^2.0.3",
     "axios": "^1.13.2",
     "bignumber.js": "^9.0.1",
     "bourbon": "^7.3.0",
