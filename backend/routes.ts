@@ -12,9 +12,11 @@ export const app = express();
 app.set("port", process.env.PORT || 5000);
 app.set("json spaces", 2);
 
-// Trust proxy to get real client IPs behind NGINX Ingress
-// This allows rate limiting to work per actual client IP instead of per ingress pod IP
-app.set("trust proxy", "loopback,linklocal,uniquelocal");
+// Trust proxy to get real client IPs behind proxies/load balancers.
+const defaultTrustProxy = "loopback,linklocal,uniquelocal";
+const trustProxy = process.env.TRUST_PROXY || defaultTrustProxy;
+console.log(`Setting trust proxy to: ${trustProxy}`);
+app.set("trust proxy", trustProxy);
 
 app.use(logger("combined"));
 
