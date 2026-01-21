@@ -12,6 +12,12 @@ export const app = express();
 app.set("port", process.env.PORT || 5000);
 app.set("json spaces", 2);
 
+// Trust proxy to get real client IPs behind proxies/load balancers.
+const defaultTrustProxy = "loopback,linklocal,uniquelocal";
+const trustProxy = process.env.TRUST_PROXY || defaultTrustProxy;
+console.log(`Setting trust proxy to: ${trustProxy}`);
+app.set("trust proxy", trustProxy);
+
 app.use(logger("combined"));
 
 // Global rate limiting for all requests (including static files)
