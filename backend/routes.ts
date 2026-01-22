@@ -20,9 +20,7 @@ const trustProxyCidrs = (process.env.TRUST_PROXY || defaultTrustProxy)
   .map((cidr) => cidr.trim())
   .filter(Boolean);
 
-console.log(
-  `Setting trust proxy to TRUST_PROXY: ${trustProxyCidrs.join(",")}`,
-);
+console.log(`Setting trust proxy to TRUST_PROXY: ${trustProxyCidrs.join(",")}`);
 app.set("trust proxy", proxyAddr.compile(trustProxyCidrs));
 
 app.use(logger("combined"));
@@ -85,7 +83,7 @@ const externalServiceLimiter = createRateLimit(
 // Apply general rate limiting to all API routes
 app.use("/api/", generalApiLimiter);
 
-if (process.env.DEV) {
+if (process.env.DEV === "true") {
   // Development: proxy to Vite dev server
   app.use(
     "/",
