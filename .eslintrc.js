@@ -21,4 +21,12 @@ module.exports = {
     eqeqeq: "warn",
   },
   ignorePatterns: ["node_modules/", "dist/", "*.min.js"],
+  overrides: [
+    {
+      files: ["test/**/*.ts"],
+      env: {
+        mocha: true,
+      },
+    },
+  ],
 };

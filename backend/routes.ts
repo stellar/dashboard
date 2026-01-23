@@ -1,5 +1,6 @@
 import express from "express";
 import proxy from "express-http-proxy";
+import proxyAddr from "proxy-addr";
 import logger from "morgan";
 import path from "path";
 import rateLimit from "express-rate-limit";
@@ -13,10 +14,17 @@ app.set("port", process.env.PORT || 5000);
 app.set("json spaces", 2);
 
 // Trust proxy to get real client IPs behind proxies/load balancers.
-const defaultTrustProxy = "loopback,linklocal,uniquelocal";
-const trustProxy = process.env.TRUST_PROXY || defaultTrustProxy;
-console.log(`Setting trust proxy to: ${trustProxy}`);
-app.set("trust proxy", trustProxy);
+export function parseTrustProxy(trustProxyEnv?: string): string[] {
+  const defaultTrustProxy = "loopback,linklocal,uniquelocal";
+  return (trustProxyEnv || defaultTrustProxy)
+    .split(",")
+    .map((cidr) => cidr.trim())
+    .filter(Boolean);
+}
+
+const trustProxyCidrs = parseTrustProxy(process.env.TRUST_PROXY);
+console.log(`Setting trust proxy to TRUST_PROXY: ${trustProxyCidrs.join(",")}`);
+app.set("trust proxy", proxyAddr.compile(trustProxyCidrs));
 
 app.use(logger("combined"));
 
@@ -78,7 +86,7 @@ const externalServiceLimiter = createRateLimit(
 // Apply general rate limiting to all API routes
 app.use("/api/", generalApiLimiter);
 
-if (process.env.DEV) {
+if (process.env.DEV === "true") {
   // Development: proxy to Vite dev server
   app.use(
     "/",
@@ -225,9 +233,12 @@ app.get(
   lumensV2V3.v3CirculatingSupplyHandler,
 );
 
-app.listen(app.get("port"), () => {
-  console.log("Listening on port", app.get("port"));
-});
+// Start listening only when this file is executed directly (not when required by tests)
+if (require.main === module && process.env.NODE_ENV !== "test") {
+  app.listen(app.get("port"), () => {
+    console.log("Listening on port", app.get("port"));
+  });
+}
 
 export async function updateLumensCache() {
   await lumens.updateApiLumens();

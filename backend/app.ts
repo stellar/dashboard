@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 // Run backend with cache updates.
-import { updateLumensCache } from "./routes";
+import { app, updateLumensCache } from "./routes";
 import { updateLedgers } from "./ledgers";
 
 async function beginCacheUpdates() {
@@ -15,4 +15,15 @@ async function beginCacheUpdates() {
   }
 }
 
+function startServer() {
+  if (process.env.NODE_ENV === "test") {
+    return;
+  }
+
+  app.listen(app.get("port"), () => {
+    console.log("Listening on port", app.get("port"));
+  });
+}
+
 beginCacheUpdates();
+startServer();
