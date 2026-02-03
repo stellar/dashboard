@@ -1,7 +1,7 @@
 # Tech Stack Overview
 
 The Stellar Dashboard can be viewed at
-[dashboard.stellar.org](dashboard.stellar.org).
+[dashboard.stellar.org](https://dashboard.stellar.org).
 
 ## Architecture at a Glance
 
@@ -43,6 +43,11 @@ connect to BigQuery
 ```bash
 UPDATE_DATA=true        # Enable periodic cache updates
 DEV=true                # Development mode
+BQ_PROJECT_ID=...       # BigQuery project ID used by backend/bigQuery.ts
+REDIS_URL=...           # Production Redis connection URL used by backend/redis.ts
+PORT=5000               # Server port configuration (defaults to 5000) used by backend/routes.ts
+TRUST_PROXY=...         # Trusted proxy CIDRs configuration used by backend/routes.ts
+
 ```
 
 ---
