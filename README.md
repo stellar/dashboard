@@ -1,5 +1,8 @@
 # Dashboard
 
+Check out [Tech Stack Overview](./TECH_STACK_OVERVIEW.md) document to get
+started.
+
 ## Dependencies
 
 To build this project, you must have the following dependencies installed:
