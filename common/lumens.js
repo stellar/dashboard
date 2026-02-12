@@ -15,36 +15,31 @@ const accounts = {
   // escrowJan2021: "GBA6XT7YBQOERXT656T74LYUVJ6MEIOC5EUETGAQNHQHEPUFPKCW5GYM",
   escrowJan2022: "GD2D6JG6D3V52ZMPIYSVHYFKVNIMXGYVLYJQ3HYHG5YDPGJ3DCRGPLTP",
   escrowJan2023: "GA2VRL65L3ZFEDDJ357RGI3MAOKPJZ2Z3IJTPSC24I4KDTNFSVEQURRA",
-  developerSupportHot:
-    "GCKJZ2YVECFGLUDJ5T7NZMJPPWERBNYHCXT2MZPXKELFHUSYQR5TVHJQ",
-  developerSupportHot2:
-    "GC3ITNZSVVPOWZ5BU7S64XKNI5VPTRSBEXXLS67V4K6LEUETWBMTE7IH",
+  // Direct Development accounts
   directDevelopment: "GB6NVEN5HSUBKMYCE5ZOWSK5K23TBWRUQLZY3KNMXUZ3AQ2ESC4MY4AQ",
-  // directDevelopmentHot1:
-  //   "GCEZYB47RSSSR6RMHQDTBWL4L6RY5CY2SPJU3QHP3YPB6ALPVRLPN7OQ",
   directDevelopmentHot2:
     "GATL3ETTZ3XDGFXX2ELPIKCZL7S5D2HY3VK4T7LRPD6DW5JOLAEZSZBA",
-  // directDevelopmentHot3:
-  //   "GCVLWV5B3L3YE6DSCCMHLCK7QIB365NYOLQLW3ZKHI5XINNMRLJ6YHVX",
   directDevelopmentHot4:
     "GAKGC35HMNB7A3Q2V5SQU6VJC2JFTZB6I7ZW77SJSMRCOX2ZFBGJOCHH",
   directDevelopmentHot5:
     "GAPV2C4BTHXPL2IVYDXJ5PUU7Q3LAXU7OAQDP7KVYHLCNM2JTAJNOQQI",
-  infrastructureGrants:
-    "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
-  currencySupport: "GAMGGUQKKJ637ILVDOSCT5X7HYSZDUPGXSUW67B2UKMG2HEN5TPWN3LQ",
-  currencySupportHot:
-    "GANII5Y2LABEBK74NWNKS4NREX2T52YTBGQDRDKVBFRIIF5VE4ORYOVY",
-  enterpriseFund: "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
-  newProducts: "GCPWKVQNLDPD4RNP5CAXME4BEDTKSSYRR4MMEL4KG65NEGCOGNJW7QI2",
-  inAppDistribution: "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
-  inAppDistributionHot:
-    "GAX3BRBNB5WTJ2GNEFFH7A4CZKT2FORYABDDBZR5FIIT3P7FLS2EFOZZ",
-  inAppDistributionHot2:
+  // Growth accounts (formerly Use Case Investment)
+  sdfGrowth: "GCVJDBALC2RQFLD2HYGQGWNFZBCOD2CPOTN3LE7FWRZ44H2WRAVZLFCU",
+  sdfGrowthHot: "GC3ITNZSVVPOWZ5BU7S64XKNI5VPTRSBEXXLS67V4K6LEUETWBMTE7IH",
+  sdfGrowthHot2: "GBEVKAYIPWC5AQT6D4N7FC3XGKRRBMPCAMTO3QZWMHHACLHTMAHAM2TP",
+  sdfGrowthHot3: "GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4",
+  // Product and Innovation accounts (formerly Ecosystem Support)
+  sdfProductAndInnovation:
+    "GCPWKVQNLDPD4RNP5CAXME4BEDTKSSYRR4MMEL4KG65NEGCOGNJW7QI2",
+  sdfProductAndInnovationHot:
+    "GDKIJJIKXLOM2NRMPNQZUUYK24ZPVFC6426GZAEP3KUK6KEJLACCWNMX",
+  sdfProductAndInnovationHot2:
     "GDWXQOTIIDO2EUK4DIGIBLEHLME2IAJRNU6JDFS5B2ZTND65P7J36WQZ",
-  marketingSupport: "GBEVKAYIPWC5AQT6D4N7FC3XGKRRBMPCAMTO3QZWMHHACLHTMAHAM2TP",
-  marketingSupportHot:
-    "GBI5PADO5TEDY3R6WFAO2HEKBTTZS4LGR77XM4AHGN52H45ENBWGDFOH",
+  // Assets and Liquidity accounts (formerly User Acquisition)
+  sdfAssetsAndLiquidity:
+    "GAMGGUQKKJ637ILVDOSCT5X7HYSZDUPGXSUW67B2UKMG2HEN5TPWN3LQ",
+  sdfAssetsAndLiquidityHot:
+    "GANII5Y2LABEBK74NWNKS4NREX2T52YTBGQDRDKVBFRIIF5VE4ORYOVY",
 };
 
 export const ORIGINAL_SUPPLY_AMOUNT = "100000000000";
@@ -117,67 +112,55 @@ export async function burnedLumens() {
 export async function directDevelopmentAll() {
   const {
     directDevelopment,
-    // directDevelopmentHot1,
     directDevelopmentHot2,
-    // directDevelopmentHot3,
     directDevelopmentHot4,
     directDevelopmentHot5,
   } = accounts;
   return sumRelevantAccounts([
     directDevelopment,
-    // directDevelopmentHot1,
     directDevelopmentHot2,
-    // directDevelopmentHot3,
     directDevelopmentHot4,
     directDevelopmentHot5,
   ]);
 }
 
-export async function distributionEcosystemSupport() {
+export async function distributionProductAndInnovation() {
   const {
-    infrastructureGrants,
-    currencySupport,
-    currencySupportHot,
-    developerSupportHot,
-    developerSupportHot2,
+    sdfProductAndInnovation,
+    sdfProductAndInnovationHot,
+    sdfProductAndInnovationHot2,
   } = accounts;
   return sumRelevantAccounts([
-    infrastructureGrants,
-    currencySupport,
-    currencySupportHot,
-    developerSupportHot,
-    developerSupportHot2,
+    sdfProductAndInnovation,
+    sdfProductAndInnovationHot,
+    sdfProductAndInnovationHot2,
   ]);
 }
 
-export async function distributionUseCaseInvestment() {
-  const { enterpriseFund, newProducts } = accounts;
-  return sumRelevantAccounts([enterpriseFund, newProducts]);
+export async function distributionGrowth() {
+  const { sdfGrowth, sdfGrowthHot, sdfGrowthHot2, sdfGrowthHot3 } = accounts;
+  return sumRelevantAccounts([
+    sdfGrowth,
+    sdfGrowthHot,
+    sdfGrowthHot2,
+    sdfGrowthHot3,
+  ]);
 }
 
-export async function distributionUserAcquisition() {
-  const {
-    inAppDistribution,
-    inAppDistributionHot,
-    inAppDistributionHot2,
-    marketingSupport,
-    marketingSupportHot,
-  } = accounts;
+export async function distributionAssetsAndLiquidity() {
+  const { sdfAssetsAndLiquidity, sdfAssetsAndLiquidityHot } = accounts;
 
   return sumRelevantAccounts([
-    inAppDistribution,
-    inAppDistributionHot,
-    inAppDistributionHot2,
-    marketingSupport,
-    marketingSupportHot,
+    sdfAssetsAndLiquidity,
+    sdfAssetsAndLiquidityHot,
   ]);
 }
 
 export async function distributionAll() {
   const results = await Promise.all([
-    distributionEcosystemSupport(),
-    distributionUseCaseInvestment(),
-    distributionUserAcquisition(),
+    distributionProductAndInnovation(),
+    distributionGrowth(),
+    distributionAssetsAndLiquidity(),
     directDevelopmentAll(),
   ]);
   return results.reduce(
