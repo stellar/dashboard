@@ -8,9 +8,9 @@ interface CachedData {
   availableCoins: string;
   programs: {
     directDevelopment: string;
-    ecosystemSupport: string;
-    useCaseInvestment: string;
-    userAcquisition: string;
+    productAndInnovation: string;
+    growth: string;
+    assetsAndLiquidity: string;
   };
 }
 
@@ -29,18 +29,18 @@ export function updateApiLumens() {
     commonLumens.totalSupply(),
     commonLumens.circulatingSupply(),
     commonLumens.directDevelopmentAll(),
-    commonLumens.distributionEcosystemSupport(),
-    commonLumens.distributionUseCaseInvestment(),
-    commonLumens.distributionUserAcquisition(),
+    commonLumens.distributionProductAndInnovation(),
+    commonLumens.distributionGrowth(),
+    commonLumens.distributionAssetsAndLiquidity(),
   ])
     .then(
       async ([
         totalCoins,
         availableCoins,
         directDevelopment,
-        ecosystemSupport,
-        useCaseInvestment,
-        userAcquisition,
+        productAndInnovation,
+        growth,
+        assetsAndLiquidity,
       ]) => {
         const cachedData = {
           updatedAt: new Date(),
@@ -48,9 +48,9 @@ export function updateApiLumens() {
           availableCoins,
           programs: {
             directDevelopment,
-            ecosystemSupport,
-            useCaseInvestment,
-            userAcquisition,
+            productAndInnovation,
+            growth,
+            assetsAndLiquidity,
           },
         };
         await redisClient.set("lumensV1", JSON.stringify(cachedData));

@@ -35,9 +35,9 @@ describe("lumens v1", function () {
         .to.be.an("object")
         .that.has.all.keys([
           "directDevelopment",
-          "ecosystemSupport",
-          "useCaseInvestment",
-          "userAcquisition",
+          "productAndInnovation",
+          "growth",
+          "assetsAndLiquidity",
         ]);
     });
   });
