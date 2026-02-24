@@ -41,20 +41,20 @@ describe("integration", function () {
         .expect(body.programs)
         .to.have.all.keys([
           "directDevelopment",
-          "ecosystemSupport",
-          "useCaseInvestment",
-          "userAcquisition",
+          "productAndInnovation",
+          "growth",
+          "assetsAndLiquidity",
         ]);
       chai
         .expect(body.programs.directDevelopment)
         .to.match(DECIMAL_NUMBER_REGEX);
       chai
-        .expect(body.programs.ecosystemSupport)
+        .expect(body.programs.productAndInnovation)
         .to.match(DECIMAL_NUMBER_REGEX);
       chai
-        .expect(body.programs.useCaseInvestment)
+        .expect(body.programs.growth)
         .to.match(DECIMAL_NUMBER_REGEX);
-      chai.expect(body.programs.userAcquisition).to.match(DECIMAL_NUMBER_REGEX);
+      chai.expect(body.programs.assetsAndLiquidity).to.match(DECIMAL_NUMBER_REGEX);
     });
 
     it("/api/v2/lumens should return successfuly with data", async function () {
