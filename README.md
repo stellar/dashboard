@@ -63,3 +63,12 @@ Directions for creating a service account
 Once you've created a service account, add the service account key json file to
 the `gcloud` folder under the name `service-account.json`. An example json file
 shows what the file structure should look like.
+
+## Deployment
+
+Merging to `main` does **not** auto-deploy. A maintainer must manually approve
+the [Jenkins job](https://buildmeister-v3.stellar-ops.com/job/ProductEngineering/job/stellar-dashboard-k8s/)
+before [ArgoCD](https://argo-prd-eks.stellar-ops.com/applications/stellar-dashboard-prd)
+deploys to production. If the job timed out, restart it to trigger the approval
+step again. Verify the deploy by checking ArgoCD shows **Synced/Healthy** and
+confirming changes on [dashboard.stellar.org](https://dashboard.stellar.org).
