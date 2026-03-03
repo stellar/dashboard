@@ -91,8 +91,12 @@ This pins `ua-parser-js` to prevent dependency vulnerabilities.
 
 ### Deployment Platforms
 
-- **Heroku**: Configured via `Procfile` and `heroku-postbuild` script
+- **EKS**: Hosted on Amazon EKS (`stellar-dashboard-prd` cluster)
 - **Docker**: `Dockerfile` available for containerized deployment
+- **Jenkins**: Builds and pushes images via
+  [`ProductEngineering/stellar-dashboard-k8s`](https://buildmeister-v3.stellar-ops.com/job/ProductEngineering/job/stellar-dashboard-k8s/)
+  (requires manual approval)
+- **ArgoCD**: Deploys approved images to the production cluster
 
 ### Environment
 
