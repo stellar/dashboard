@@ -1,0 +1,130 @@
+name: Build and deploy stellar-dashboard
+
+# Deployed to: https://github.com/stellar/dashboard
+#
+# Converted from the Jenkins pipeline (Jenkinsfile). Builds the dashboard image
+# and pushes it to the dev ECR namespace, then — after manual approval —
+# promotes the same image to the prd namespace. Runs on pushes to master and
+# dashboard-v2. Slack notifications are posted for each environment.
+#
+# NOTE: the "Promote to prd?" manual gate is implemented with a protected
+# GitHub Environment. Configure the `production` environment in the repo
+# settings with "Required reviewers" so the promote-to-prd job pauses for
+# approval (the Jenkins `input` step). GitHub's approval wait replaces the
+# original 60-minute timeout (it can wait up to 30 days).
+
+on:
+  push:
+    branches:
+      - master
+      - dashboard-v2
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  SLACK_CHANNEL: alerts-product-eng
+
+jobs:
+  build-and-push-dev:
+    runs-on: ubuntu-latest
+    outputs:
+      label: ${{ steps.vars.outputs.label }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Determine image label
+        id: vars
+        run: echo "label=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: ECR login
+        id: ecr-login
+        uses: stellar/actions/sdf-ecr-login@main
+
+      - name: Build and push to dev
+        env:
+          ECR_REGISTRY: ${{ steps.ecr-login.outputs.ecr-registry }}
+          LABEL: ${{ steps.vars.outputs.label }}
+        run: |
+          set -eu
+          export TAG="${ECR_REGISTRY}/dev/stellar-dashboard:${LABEL}"
+          make docker-build
+          ecr-push "${TAG}"
+
+      - name: Slack notification — dev success
+        if: success()
+        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: "${{ env.SLACK_CHANNEL }}"
+            text: "Dashboard *dev* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|build> complete for <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ steps.vars.outputs.label }}>."
+
+      - name: Slack notification — dev failure
+        if: failure()
+        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: "${{ env.SLACK_CHANNEL }}"
+            text: "Dashboard *dev* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|build> failed for <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ steps.vars.outputs.label }}>."
+
+  promote-to-prd:
+    needs: build-and-push-dev
+    runs-on: ubuntu-latest
+    # Protected environment — configure "Required reviewers" on `production`
+    # to reproduce the Jenkins "Deploy to production?" approval gate.
+    environment: production
+    env:
+      LABEL: ${{ needs.build-and-push-dev.outputs.label }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: ECR login
+        id: ecr-login
+        uses: stellar/actions/sdf-ecr-login@main
+
+      - name: Tag and push to prd
+        env:
+          ECR_REGISTRY: ${{ steps.ecr-login.outputs.ecr-registry }}
+        run: |
+          set -eu
+          # Images built from the dashboard-v2 branch get a different name to
+          # avoid clashing with dashboard v1 built from master.
+          if [ "${GITHUB_REF}" = "refs/heads/dashboard-v2" ]; then
+            TAG_PRD="${ECR_REGISTRY}/prd/stellar-dashboardv2:${LABEL}"
+          else
+            TAG_PRD="${ECR_REGISTRY}/prd/stellar-dashboard:${LABEL}"
+          fi
+
+          TAG="${ECR_REGISTRY}/dev/stellar-dashboard:${LABEL}"
+
+          docker pull "${TAG}"
+          docker tag "${TAG}" "${TAG_PRD}"
+          ecr-push "${TAG_PRD}"
+
+      - name: Slack notification — prd success
+        if: success()
+        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: "${{ env.SLACK_CHANNEL }}"
+            text: "Dashboard *prd* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|build> complete for <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ env.LABEL }}>."
+
+      - name: Slack notification — prd failure
+        if: failure()
+        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: "${{ env.SLACK_CHANNEL }}"
+            text: "Dashboard *prd* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|build> failed for <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ env.LABEL }}>."
