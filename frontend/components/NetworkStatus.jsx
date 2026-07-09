@@ -290,7 +290,9 @@ export default class NetworkStatus extends React.Component {
                     ? "Copied ✓"
                     : this.state.shareState === "downloaded"
                       ? "Downloaded ✓"
-                      : "Copy image"}
+                      : this.state.shareState === "error"
+                        ? "Couldn't copy"
+                        : "Copy image"}
                 </button>
               ) : null}
               {!this.state.loading && this.props.onEnterLive ? (

@@ -138,11 +138,26 @@ export async function renderStatusCard({
   ctx.fillText(ts, W - left, footerY);
   ctx.textAlign = "left";
 
-  return new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+  // toBlob calls back with null if the browser can't encode — reject so
+  // callers can surface a failure instead of throwing on a null Blob.
+  return new Promise((resolve, reject) =>
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob);
+      } else {
+        reject(new Error("Could not render the status image"));
+      }
+    }, "image/png"),
+  );
 }
 
 export async function copyStatusCard(options) {
-  const blob = await renderStatusCard(options);
+  let blob;
+  try {
+    blob = await renderStatusCard(options);
+  } catch (e) {
+    return "error";
+  }
   try {
     await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
     return "copied";
