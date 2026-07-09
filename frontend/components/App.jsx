@@ -310,10 +310,10 @@ export default class App extends React.Component {
             <div className="card">
               <div className="card-body nodes-cta">
                 <span>
-                  View network nodes on Stellarbeat and visualize consensus.
+                  View network nodes on OBSRVR Radar and visualize consensus.
                 </span>
                 <a
-                  href="https://stellarbeat.io"
+                  href="https://radar.withobsrvr.com"
                   target="_blank"
                   rel="noreferrer"
                 >

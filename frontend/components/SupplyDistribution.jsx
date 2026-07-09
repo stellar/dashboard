@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import BigNumber from "bignumber.js";
 import Card from "./ui/Card.jsx";
+import { createTooltip, tooltipRow } from "./ui/chartUtils.js";
 
 // Segment colors validated (CVD/contrast, dark & light) with the segment
 // order below — order and color travel together.
@@ -29,12 +30,27 @@ export default class SupplyDistribution extends React.Component {
   }
 
   componentDidMount() {
+    this.tooltip = createTooltip();
     this.timerID = setInterval(() => this.loadSupply(), 60 * 60 * 1000);
     this.loadSupply();
   }
 
   componentWillUnmount() {
     clearInterval(this.timerID);
+    this.tooltip.destroy();
+  }
+
+  showSegmentTooltip(event, segment, value, pct) {
+    this.tooltip.show(
+      `<div style="opacity:.6;margin-bottom:4px;">${segment.label}</div>` +
+        tooltipRow(
+          segment.color,
+          "XLM",
+          `${formatBillions(value)} · ${pct.toFixed(1)}%`,
+        ),
+      event.clientX,
+      event.clientY,
+    );
   }
 
   loadSupply() {
@@ -84,9 +100,10 @@ export default class SupplyDistribution extends React.Component {
                     key={segment.key}
                     className="supply-segment"
                     style={{ width: `${pct}%`, background: segment.color }}
-                    title={`${segment.label}: ${formatBillions(
-                      value,
-                    )} XLM (${pct.toFixed(1)}%)`}
+                    onMouseMove={(e) =>
+                      this.showSegmentTooltip(e, segment, value, pct)
+                    }
+                    onMouseLeave={() => this.tooltip.hide()}
                   ></div>
                 );
               })}
