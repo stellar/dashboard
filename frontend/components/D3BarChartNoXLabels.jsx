@@ -1,206 +1,206 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import {
+  getChartTheme,
+  roundedTopRect,
+  createTooltip,
+  tooltipRow,
+} from "./ui/chartUtils.js";
 
+// Stacked two-series bar chart without x labels (txs/ops, successful/failed).
 export default function D3BarChartNoXLabels({
   data,
   width = 400,
   height = 120,
-  margin = { top: 10, right: 10, bottom: 8, left: 50 }, // Reduced bottom margin since no X labels
-  colorScale,
+  margin = { top: 10, right: 10, bottom: 8, left: 50 },
   tickFormat,
-  yAxisMax = 450, // Maximum Y value
-  yAxisStep = 50, // Y axis increment step
+  yAxisMax = 450,
+  yAxisStep = 50,
+  tooltipTitle,
+  valueFormat,
 }) {
   const svgRef = useRef();
+  // Charts re-render when the theme changes so D3 picks up the new palette.
+  const [themeTick, setThemeTick] = useState(0);
+
+  useEffect(() => {
+    const onThemeChange = () => setThemeTick((t) => t + 1);
+    window.addEventListener("themechange", onThemeChange);
+    return () => window.removeEventListener("themechange", onThemeChange);
+  }, []);
 
   useEffect(() => {
     if (!data || data.length === 0) return;
 
+    const theme = getChartTheme(svgRef.current);
+    const seriesColors = [theme.seriesA, theme.seriesB];
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove(); // Clear previous render
 
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
-    // Flatten all values from all series for domain calculation
-    const allValues = data.flatMap((series) => series.values);
-    const xValues = allValues.map((d) => d.x);
-    const yValues = allValues.map((d) => d.y);
+    const xValues = data[0].values.map((d) => d.x);
 
-    // Create scales - use scalePoint for fixed spacing instead of scaleBand
     const xScale = d3
       .scalePoint()
       .domain(xValues)
       .range([0, innerWidth])
-      .padding(1.0); // Double the gap - more space from Y-axis
+      .padding(1.0);
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, yAxisMax]) // Use fixed max instead of data max
+      .domain([0, yAxisMax])
       .range([innerHeight, 0]);
 
-    // Fixed bar dimensions
-    const fixedBarWidth = 5; // Fixed 5px bar width
-    const fixedGapWidth = 3; // Fixed 3px gap between bars
+    const barWidth = 5;
+    const segmentGap = 2; // surface gap between stacked segments
 
-    // Create color scale - match original react-d3-components colors
-    const colors =
-      colorScale ||
-      d3
-        .scaleOrdinal()
-        .range([
-          "#1f77b4",
-          "#ff7f0e",
-          "#2ca02c",
-          "#d62728",
-          "#9467bd",
-          "#8c564b",
-          "#e377c2",
-          "#7f7f7f",
-          "#bcbd22",
-          "#17becf",
-        ]);
-
-    // Create main group
     const g = svg
       .attr("width", width)
       .attr("height", height)
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Calculate bar width - always use fixed width for all bars
-    const barWidth = fixedBarWidth; // All bars are exactly 5px wide
+    // Recessive horizontal gridlines carry the scale; no axis spines.
+    // Let D3 pick round tick values within the fixed domain.
+    const yTickValues = yScale.ticks(4);
+    g.append("g")
+      .attr("class", "chart-grid")
+      .selectAll("line")
+      .data(yTickValues)
+      .enter()
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", innerWidth)
+      .attr("y1", (d) => yScale(d))
+      .attr("y2", (d) => yScale(d))
+      .style("stroke", theme.grid);
 
-    // Add bars for each series - create stacked bars
-    // First, we need to calculate the cumulative values for stacking
+    // Stack the two series (bottom = series 0, top = series 1).
     const stackedData = [];
-
-    // Assume we have exactly 2 series for stacking
     if (data.length === 2) {
-      const xValues = data[0].values.map((d) => d.x);
-
       xValues.forEach((x, index) => {
-        const bottomValue = data[0].values[index].y; // First series (bottom)
-        const topValue = data[1].values[index].y; // Second series (top)
-
         stackedData.push({
           x: x,
-          bottom: bottomValue,
-          top: topValue,
-          bottomHeight: bottomValue,
-          topHeight: topValue,
-          totalHeight: bottomValue + topValue,
+          bottom: data[0].values[index].y,
+          top: data[1].values[index].y,
         });
       });
 
-      // Draw bottom bars (first series)
-      g.selectAll(".bar-bottom")
+      const bars = g
+        .selectAll(".bar-group")
         .data(stackedData)
         .enter()
-        .append("rect")
-        .attr("class", "bar-bottom")
-        .attr("x", (d) => xScale(d.x) - fixedBarWidth / 2)
-        .attr("y", (d) => yScale(d.bottomHeight))
-        .attr("width", barWidth)
-        .attr("height", (d) => innerHeight - yScale(d.bottomHeight))
-        .attr("fill", colors(0))
-        .style("shape-rendering", "crispEdges");
+        .append("g")
+        .attr("class", "bar-group");
 
-      // Draw top bars (second series) - stacked on top of bottom bars
-      g.selectAll(".bar-top")
-        .data(stackedData)
-        .enter()
-        .append("rect")
-        .attr("class", "bar-top")
-        .attr("x", (d) => xScale(d.x) - fixedBarWidth / 2)
-        .attr("y", (d) => yScale(d.totalHeight))
-        .attr("width", barWidth)
-        .attr("height", (d) => yScale(d.bottomHeight) - yScale(d.totalHeight))
-        .attr("fill", colors(1))
-        .style("shape-rendering", "crispEdges");
+      // Bottom segment: flat unless it is the data end, rounded when alone.
+      bars
+        .append("path")
+        .attr("d", (d) => {
+          const x = xScale(d.x) - barWidth / 2;
+          const yTop = yScale(d.bottom);
+          const h = innerHeight - yTop;
+          if (d.top > 0) {
+            return h > 0
+              ? `M${x},${yTop} H${x + barWidth} V${innerHeight} H${x} Z`
+              : "";
+          }
+          return roundedTopRect(x, yTop, barWidth, h, 2);
+        })
+        .attr("fill", seriesColors[0]);
+
+      // Top segment: rounded data end, separated by a surface gap.
+      bars
+        .append("path")
+        .attr("d", (d) => {
+          if (d.top <= 0) {
+            return "";
+          }
+          const x = xScale(d.x) - barWidth / 2;
+          const yTotal = yScale(d.bottom + d.top);
+          const yBottom = yScale(d.bottom);
+          const h = Math.max(yBottom - yTotal - segmentGap, 0.5);
+          return roundedTopRect(x, yTotal, barWidth, h, 2);
+        })
+        .attr("fill", seriesColors[1]);
     } else {
-      // Fallback to original behavior for non-stacked charts
+      // Fallback for non-stacked charts.
       data.forEach((series, seriesIndex) => {
         g.selectAll(`.bar-${seriesIndex}`)
           .data(series.values)
           .enter()
-          .append("rect")
+          .append("path")
           .attr("class", `bar-${seriesIndex}`)
-          .attr("x", (d) => xScale(d.x) - fixedBarWidth / 2)
-          .attr("y", (d) => yScale(d.y))
-          .attr("width", barWidth)
-          .attr("height", (d) => innerHeight - yScale(d.y))
-          .attr("fill", colors(seriesIndex))
-          .style("shape-rendering", "crispEdges");
+          .attr("d", (d) =>
+            roundedTopRect(
+              xScale(d.x) - barWidth / 2,
+              yScale(d.y),
+              barWidth,
+              innerHeight - yScale(d.y),
+              2,
+            ),
+          )
+          .attr("fill", seriesColors[seriesIndex % seriesColors.length]);
       });
     }
 
-    // Add x-axis with NO labels
-    const xAxis = d3
-      .axisBottom(xScale)
-      .tickSize(6)
-      .tickPadding(3)
-      .tickFormat(""); // No labels
-
-    const xAxisGroup = g
-      .append("g")
-      .attr("class", "axis")
-      .attr("transform", `translate(0,${innerHeight})`)
-      .call(xAxis);
-
-    // Style x-axis lines only (no text)
-    xAxisGroup
-      .selectAll("line")
-      .style("stroke", "#000")
-      .style("shape-rendering", "crispEdges");
-
-    xAxisGroup
-      .select(".domain")
-      .style("stroke", "#000")
-      .style("shape-rendering", "crispEdges");
-
-    // Add y-axis with custom ticks
-    const yAxisTicks = d3.range(0, yAxisMax + yAxisStep, yAxisStep); // [0, 50, 100, 150, ..., yAxisMax]
-
+    // Y axis: text only.
     const yAxis = d3
       .axisLeft(yScale)
-      .tickSize(6)
-      .tickPadding(3)
-      .tickValues(yAxisTicks);
-
-    if (tickFormat) {
-      yAxis.tickFormat(tickFormat);
-    } else {
-      yAxis.tickFormat(d3.format("d")); // Format as integers
-    }
+      .tickSize(0)
+      .tickPadding(8)
+      .tickValues(yTickValues)
+      .tickFormat(tickFormat || d3.format("d"));
 
     const yAxisGroup = g.append("g").attr("class", "axis").call(yAxis);
+    yAxisGroup.select(".domain").remove();
+    yAxisGroup.selectAll("text").style("fill", theme.axisText);
 
-    // Style y-axis to match original
-    yAxisGroup
-      .selectAll("text")
-      .style("font-size", "10px")
-      .style("font-family", "sans-serif")
-      .style("fill", "#000");
+    // Hover layer: full-height hit targets, one per bar.
+    const tooltip = createTooltip();
+    if (data.length === 2) {
+      const step = Math.max(
+        innerWidth / Math.max(xValues.length, 1),
+        barWidth,
+      );
+      g.selectAll(".hit")
+        .data(stackedData)
+        .enter()
+        .append("rect")
+        .attr("class", "hit")
+        .attr("x", (d) => xScale(d.x) - step / 2)
+        .attr("y", 0)
+        .attr("width", step)
+        .attr("height", innerHeight)
+        .attr("fill", "transparent")
+        .on("mousemove", (event, d) => {
+          const title = tooltipTitle ? tooltipTitle(d.x) : d.x;
+          const fmt = valueFormat || ((v) => v.toLocaleString("en-US"));
+          tooltip.show(
+            `<div style="opacity:.6;margin-bottom:4px;">${title}</div>` +
+              tooltipRow(seriesColors[0], data[0].label, fmt(d.bottom)) +
+              tooltipRow(seriesColors[1], data[1].label, fmt(d.top)),
+            event.clientX,
+            event.clientY,
+          );
+        })
+        .on("mouseleave", () => tooltip.hide());
+    }
 
-    yAxisGroup
-      .selectAll("line")
-      .style("stroke", "#000")
-      .style("shape-rendering", "crispEdges");
-
-    yAxisGroup
-      .select(".domain")
-      .style("stroke", "#000")
-      .style("shape-rendering", "crispEdges");
+    return () => tooltip.destroy();
   }, [
     data,
     width,
     height,
     margin,
-    colorScale,
     tickFormat,
     yAxisMax,
     yAxisStep,
+    tooltipTitle,
+    valueFormat,
+    themeTick,
   ]);
 
   return <svg ref={svgRef} style={{ display: "block" }}></svg>;

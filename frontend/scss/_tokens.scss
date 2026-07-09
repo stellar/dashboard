@@ -28,10 +28,11 @@
   --color-warning: #ff9f0a;
   --color-link: #fdda24;
 
-  // charts
+  // charts — categorical pair validated for CVD/contrast on both surfaces;
+  // gold is reserved for single-series marks so it stays scarce
   --chart-primary: #fdda24;
-  --chart-secondary: #b7ace8;
-  --chart-tertiary: #00a7b5;
+  --chart-series-a: #00a7b5;
+  --chart-series-b: #8f7fd6;
   --chart-muted: rgba(214, 210, 196, 0.55);
   --chart-grid: rgba(246, 247, 248, 0.07);
   --chart-axis-text: #6e6e6e;

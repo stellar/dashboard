@@ -1,36 +1,22 @@
 import React from "react";
-import Panel from "muicss/lib/react/panel";
 import axios from "axios";
-import * as d3 from "d3";
 import D3BarChart from "./D3BarChart.jsx";
 import each from "lodash/each";
 import clone from "lodash/clone";
+import Card from "./ui/Card.jsx";
 
 export default class LedgerChartClose extends React.Component {
   constructor(props) {
     super(props);
     this.panel = null;
-    // Use the same colors as the original react-d3-components
-    this.colorScale = d3
-      .scaleOrdinal()
-      .range([
-        "#1f77b4",
-        "#ff7f0e",
-        "#2ca02c",
-        "#d62728",
-        "#9467bd",
-        "#8c564b",
-        "#e377c2",
-        "#7f7f7f",
-        "#bcbd22",
-        "#17becf",
-      ]);
     this.state = {
       loading: true,
       chartWidth: 400,
       chartHeight: this.props.chartHeight || 120,
     };
     this.url = `${this.props.horizonURL}/ledgers?order=desc&limit=${this.props.limit}`;
+    this.tooltipTitle = (x) => `Ledger #${x}`;
+    this.valueFormat = (y) => `${Math.round(y * 100) / 100}s`;
   }
 
   componentDidMount() {
@@ -41,7 +27,7 @@ export default class LedgerChartClose extends React.Component {
   }
 
   updateSize() {
-    let value = this.panel.offsetWidth - 20;
+    let value = this.panel.offsetWidth - 42;
     if (this.state.chartWidth != value) {
       this.setState({ chartWidth: value });
     }
@@ -51,7 +37,7 @@ export default class LedgerChartClose extends React.Component {
     axios.get(this.url).then((response) => {
       let data = [
         {
-          label: "Ledger Close",
+          label: "Close time",
           values: [],
         },
       ];
@@ -98,25 +84,26 @@ export default class LedgerChartClose extends React.Component {
           this.panel = el;
         }}
       >
-        <Panel>
-          <div className="widget-name">
-            Last {this.props.limit} ledgers close times: {this.props.network}
-            <a href={this.url} target="_blank" className="api-link">
-              API
-            </a>
-          </div>
+        <Card
+          title={`Ledger close times · last ${this.props.limit}`}
+          apiUrl={this.url}
+        >
           {this.state.loading ? (
-            "Loading..."
+            <div
+              className="skeleton"
+              style={{ height: this.state.chartHeight }}
+            ></div>
           ) : (
             <D3BarChart
               data={this.state.data}
               width={this.state.chartWidth}
-              colorScale={this.colorScale}
               height={this.state.chartHeight}
               margin={{ top: 10, bottom: 8, left: 40, right: 10 }}
+              tooltipTitle={this.tooltipTitle}
+              valueFormat={this.valueFormat}
             />
           )}
-        </Panel>
+        </Card>
       </div>
     );
   }
