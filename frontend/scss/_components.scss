@@ -149,39 +149,6 @@
 
 .network-hero {
   border-bottom: 1px solid var(--color-border);
-  position: relative;
-  overflow: hidden;
-
-  // Brand halftone texture (dot size falls off organically, as on
-  // stellar.org). The SVG is a mask so each theme colors it via tokens:
-  // lavender on dark surfaces, gold on light ones (brand guidelines).
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 620px;
-    max-width: 42%;
-    height: 100%;
-    background-color: rgba(183, 172, 232, 0.5);
-    -webkit-mask-image: url("../assets/halftone.svg");
-    mask-image: url("../assets/halftone.svg");
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-position: right center;
-    mask-position: right center;
-    -webkit-mask-size: auto 100%;
-    mask-size: auto 100%;
-    pointer-events: none;
-
-    @media (max-width: 1180px) {
-      display: none;
-    }
-  }
-}
-
-:root[data-theme="light"] .network-hero::after {
-  background-color: rgba(253, 218, 36, 0.75);
 }
 
 .network-hero-inner {

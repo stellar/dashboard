@@ -17,33 +17,6 @@ function loadImage(src) {
   });
 }
 
-function drawHalftone(ctx) {
-  // Deterministic halftone field, denser toward the top-right corner.
-  const spacing = 26;
-  ctx.fillStyle = "rgba(183, 172, 232, 0.4)";
-  for (let y = 0; y <= H; y += spacing) {
-    for (let x = 0; x <= W; x += spacing) {
-      const tx = x / W;
-      const ty = 1 - y / H;
-      const falloff = Math.max(tx * 0.7 + ty * 0.3 - 0.45, 0) ** 2.4;
-      // pseudo-random jitter from the coordinates themselves
-      const jitter = 0.6 + 0.8 * Math.abs(Math.sin(x * 12.9898 + y * 78.233));
-      const r = 7 * falloff * jitter;
-      if (r > 0.5) {
-        ctx.beginPath();
-        ctx.arc(
-          x + (y % (spacing * 2) ? spacing / 2 : 0),
-          y,
-          Math.min(r, 6),
-          0,
-          Math.PI * 2,
-        );
-        ctx.fill();
-      }
-    }
-  }
-}
-
 export async function renderStatusCard({
   eyebrow,
   statusText,
@@ -67,7 +40,6 @@ export async function renderStatusCard({
   // Surface
   ctx.fillStyle = "#0f0f0f";
   ctx.fillRect(0, 0, W, H);
-  drawHalftone(ctx);
 
   const left = 80;
 
