@@ -252,6 +252,133 @@
 }
 
 // ---------------------------------------------------------------------------
+// Live mode (fullscreen big-screen view: conferences, wall monitors)
+
+.live-mode {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+  padding: 48px;
+  background: var(--color-bg);
+  text-align: center;
+
+  .live-mode-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .live-mode-logo {
+    display: block;
+    height: clamp(28px, 3vw, 46px);
+    width: auto;
+  }
+
+  .live-mode-eyebrow {
+    font-size: clamp(14px, 1.2vw, 20px);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+  }
+
+  .status-hero {
+    margin: 0;
+    gap: clamp(16px, 2vw, 32px);
+    justify-content: center;
+  }
+
+  .status-dot {
+    width: clamp(16px, 1.8vw, 28px);
+    height: clamp(16px, 1.8vw, 28px);
+  }
+
+  .status-word {
+    font-size: clamp(48px, 8vw, 140px);
+    letter-spacing: -0.015em;
+  }
+
+  .live-mode-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(28px, 5vw, 96px);
+    text-align: left;
+
+    .stat-label {
+      font-size: clamp(12px, 1vw, 17px);
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: clamp(26px, 3vw, 52px);
+      font-variant-numeric: tabular-nums;
+      border-radius: var(--radius-chip);
+    }
+  }
+
+  .live-mode-footer {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    translate: -50% 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .live-mode-url {
+    font-size: clamp(13px, 1vw, 17px);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+
+  .live-mode-hint {
+    padding: 4px 10px;
+    border: none;
+    background: none;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--color-text-faint);
+    cursor: pointer;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+// The applause moment: protocol version just changed.
+@media (prefers-reduced-motion: no-preference) {
+  .stat-value.flash {
+    animation: protocol-flash 1.5s ease-out 4;
+  }
+}
+
+@keyframes protocol-flash {
+  0% {
+    color: inherit;
+    text-shadow: none;
+  }
+
+  25% {
+    color: var(--color-accent);
+    text-shadow: 0 0 24px rgba(253, 218, 36, 0.45);
+  }
+
+  100% {
+    color: inherit;
+    text-shadow: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Cards
 
 .card {

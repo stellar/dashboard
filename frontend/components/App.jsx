@@ -50,6 +50,19 @@ function networkFromPath(pathname) {
   return pathname.indexOf("/testnet") === 0 ? "test" : "live";
 }
 
+// "/live" and "/testnet/live" show the fullscreen big-screen view.
+function liveViewFromPath(pathname) {
+  return /(^|\/)live\/?$/.test(pathname);
+}
+
+function pathFor(network, liveView) {
+  const base = NETWORKS[network].path;
+  if (!liveView) {
+    return base;
+  }
+  return base === "/" ? "/live" : `${base}/live`;
+}
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -110,6 +123,7 @@ export default class App extends React.Component {
       forceTheme,
       may4,
       network: networkFromPath(window.location.pathname),
+      liveView: liveViewFromPath(window.location.pathname),
     };
   }
 
@@ -119,9 +133,10 @@ export default class App extends React.Component {
 
     this.onPopState = () => {
       const network = networkFromPath(window.location.pathname);
+      const liveView = liveViewFromPath(window.location.pathname);
       this.ensureStream(network);
       document.title = NETWORKS[network].title;
-      this.setState({ network });
+      this.setState({ network, liveView });
     };
     window.addEventListener("popstate", this.onPopState);
 
@@ -155,7 +170,16 @@ export default class App extends React.Component {
     window.history.pushState({}, "", NETWORKS[network].path);
     this.ensureStream(network);
     document.title = NETWORKS[network].title;
-    this.setState({ network });
+    this.setState({ network, liveView: false });
+  }
+
+  setLiveView(liveView) {
+    window.history.pushState(
+      {},
+      "",
+      pathFor(this.state.network, liveView),
+    );
+    this.setState({ liveView });
   }
 
   getStatusPageData() {
@@ -232,6 +256,7 @@ export default class App extends React.Component {
           horizonURL={net.horizonURL}
           newLedgerEventName={net.newLedgerEventName}
           emitter={this.emitter}
+          onEnterLive={() => this.setLiveView(true)}
         />
         <div className="container">
           <section className="section">
@@ -336,6 +361,7 @@ export default class App extends React.Component {
           horizonURL={net.horizonURL}
           newLedgerEventName={net.newLedgerEventName}
           emitter={this.emitter}
+          onEnterLive={() => this.setLiveView(true)}
         />
         <div className="container">
           <section className="section">
@@ -388,6 +414,23 @@ export default class App extends React.Component {
   }
 
   render() {
+    if (this.state.liveView) {
+      const net = NETWORKS[this.state.network];
+      return (
+        <div id="main" className={this.state.forceTheme ? "force" : null}>
+          <NetworkStatus
+            key={`live-${this.state.network}`}
+            live
+            network={net.label}
+            horizonURL={net.horizonURL}
+            newLedgerEventName={net.newLedgerEventName}
+            emitter={this.emitter}
+            onExitLive={() => this.setLiveView(false)}
+          />
+        </div>
+      );
+    }
+
     return (
       <div id="main" className={this.state.forceTheme ? "force" : null}>
         <AppBar

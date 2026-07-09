@@ -3,6 +3,7 @@ import axios from "axios";
 import round from "lodash/round";
 import { ago, agoSeconds } from "../common/time";
 import { copyStatusCard } from "./ui/statusCard.js";
+import logoUrl from "../assets/stellar-logo-white.svg";
 
 // ledgersInAverageCalculation defines how many last ledgers should be
 // considered when calculating average ledger length.
@@ -112,12 +113,20 @@ export default class NetworkStatus extends React.Component {
 
       this.setState({ closedAgo });
     }, 1000);
+    this.onKeyDown = (e) => {
+      if (e.key === "Escape" && this.props.live && this.props.onExitLive) {
+        this.props.onExitLive();
+      }
+    };
+    window.addEventListener("keydown", this.onKeyDown);
     this.getLastLedgers();
   }
 
   componentWillUnmount() {
     clearInterval(this.timerID);
     clearTimeout(this.shareResetTimer);
+    clearTimeout(this.protocolFlashTimer);
+    window.removeEventListener("keydown", this.onKeyDown);
     if (this.newLedgerListener) {
       this.newLedgerListener.remove();
     }
@@ -148,6 +157,69 @@ export default class NetworkStatus extends React.Component {
     });
   }
 
+  // Fullscreen view for big screens: conference projections, wall monitors,
+  // protocol-upgrade watch parties.
+  renderLive(statusClass, statusText, averageLedgerLength) {
+    return (
+      <section className="live-mode">
+        <div className="live-mode-header">
+          <img
+            className="live-mode-logo site-logo"
+            src={logoUrl}
+            alt="Stellar"
+          />
+          <div className="live-mode-eyebrow">{this.props.network}</div>
+        </div>
+        <div className="status-hero">
+          <div className={"status-dot " + statusClass}></div>
+          <h1 className="status-word">{statusText}</h1>
+        </div>
+        {!this.state.loading ? (
+          <div className="live-mode-stats">
+            <div className="stat">
+              <div className="stat-label">Last ledger</div>
+              <div className="stat-value">#{this.state.lastLedgerSequence}</div>
+            </div>
+            <div className="stat">
+              <div className="stat-label">Avg close</div>
+              <div className="stat-value">
+                {round(averageLedgerLength, 2)}s
+              </div>
+            </div>
+            {this.state.opsPerMinute ? (
+              <div className="stat">
+                <div className="stat-label">Ops per minute</div>
+                <div className="stat-value">
+                  {this.state.opsPerMinute.toLocaleString("en-US")}
+                </div>
+              </div>
+            ) : null}
+            <div className="stat">
+              <div className="stat-label">Protocol</div>
+              <div
+                className={
+                  this.state.protocolFlash ? "stat-value flash" : "stat-value"
+                }
+              >
+                {this.state.protocolVersion}
+              </div>
+            </div>
+          </div>
+        ) : null}
+        <div className="live-mode-footer">
+          <div className="live-mode-url">dashboard.stellar.org</div>
+          <button
+            type="button"
+            className="live-mode-hint"
+            onClick={() => this.props.onExitLive && this.props.onExitLive()}
+          >
+            Esc to exit
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   render() {
     let statusClass = "";
     let statusText;
@@ -174,6 +246,10 @@ export default class NetworkStatus extends React.Component {
       }
     }
 
+    if (this.props.live) {
+      return this.renderLive(statusClass, statusText, averageLedgerLength);
+    }
+
     return (
       <section className="network-hero">
         <div className="container network-hero-inner">
@@ -198,6 +274,16 @@ export default class NetworkStatus extends React.Component {
                     : this.state.shareState === "downloaded"
                       ? "Downloaded ✓"
                       : "Copy image"}
+                </button>
+              ) : null}
+              {!this.state.loading && this.props.onEnterLive ? (
+                <button
+                  type="button"
+                  className="share-button"
+                  onClick={() => this.props.onEnterLive()}
+                  title="Fullscreen live view for big screens"
+                >
+                  Live view
                 </button>
               ) : null}
             </div>
