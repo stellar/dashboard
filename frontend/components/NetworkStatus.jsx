@@ -191,13 +191,13 @@ export default class NetworkStatus extends React.Component {
                   onClick={() =>
                     this.shareCard(statusText, statusClass, averageLedgerLength)
                   }
-                  title="Copy a shareable status image"
+                  title="Copy the network status as a shareable image"
                 >
                   {this.state.shareState === "copied"
                     ? "Copied ✓"
                     : this.state.shareState === "downloaded"
                       ? "Downloaded ✓"
-                      : "Copy status card"}
+                      : "Copy image"}
                 </button>
               ) : null}
             </div>
