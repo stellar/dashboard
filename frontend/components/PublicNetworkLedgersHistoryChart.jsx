@@ -82,10 +82,11 @@ export default class PublicNetworkLedgersHistoryChart extends React.Component {
               data={this.state.data}
               width={this.state.chartWidth}
               height={this.state.chartHeight}
-              margin={{ top: 10, bottom: 8, left: 40, right: 10 }}
+              margin={{ top: 10, bottom: 26, left: 40, right: 10 }}
               yAxisMax={10000000}
               yAxisStep={1000000}
               tickFormat={d3.format(".1s")}
+              xLabelEvery={5}
             />
           )}
         </Card>

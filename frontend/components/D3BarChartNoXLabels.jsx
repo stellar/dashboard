@@ -18,6 +18,7 @@ export default function D3BarChartNoXLabels({
   yAxisStep = 50,
   tooltipTitle,
   valueFormat,
+  xLabelEvery = 0, // 0 = no x labels; N = label every Nth point
 }) {
   const svgRef = useRef();
   // Charts re-render when the theme changes so D3 picks up the new palette.
@@ -158,6 +159,24 @@ export default function D3BarChartNoXLabels({
     yAxisGroup.select(".domain").remove();
     yAxisGroup.selectAll("text").style("fill", theme.axisText);
 
+    // Optional sparse x labels (e.g. dates on the 30-day chart).
+    if (xLabelEvery > 0) {
+      const xTickValues = xValues.filter((_, i) => i % xLabelEvery === 0);
+      const xAxis = d3
+        .axisBottom(xScale)
+        .tickSize(0)
+        .tickPadding(8)
+        .tickValues(xTickValues);
+
+      const xAxisGroup = g
+        .append("g")
+        .attr("class", "axis")
+        .attr("transform", `translate(0,${innerHeight})`)
+        .call(xAxis);
+      xAxisGroup.select(".domain").remove();
+      xAxisGroup.selectAll("text").style("fill", theme.axisText);
+    }
+
     // Hover layer: full-height hit targets, one per bar.
     const tooltip = createTooltip();
     if (data.length === 2) {
@@ -200,6 +219,7 @@ export default function D3BarChartNoXLabels({
     yAxisStep,
     tooltipTitle,
     valueFormat,
+    xLabelEvery,
     themeTick,
   ]);
 
