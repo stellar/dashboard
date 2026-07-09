@@ -127,9 +127,18 @@ export default class App extends React.Component {
     };
   }
 
+  // Self-hosted pixel font for the May 4th theme, fetched only when the
+  // theme is on so normal visits don't download it.
+  loadForceThemeFont() {
+    if (this.state.forceTheme) {
+      import("@fontsource/press-start-2p");
+    }
+  }
+
   componentDidMount() {
     this.ensureStream(this.state.network);
     document.title = NETWORKS[this.state.network].title;
+    this.loadForceThemeFont();
 
     this.onPopState = () => {
       const network = networkFromPath(window.location.pathname);

@@ -1,4 +1,6 @@
-@import url("https://fonts.googleapis.com/css?family=Press+Start+2P");
+// The "Press Start 2P" font is self-hosted and loaded lazily by App.jsx
+// only when the force theme activates (see turnOnForceThemeFont), so normal
+// visits never pay for it and there's no font CDN request.
 
 // May the 4th easter egg — see forceTheme in App.jsx.
 #main.force {
