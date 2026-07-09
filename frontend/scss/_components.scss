@@ -101,6 +101,136 @@
   }
 }
 
+.site-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+
+.network-switcher {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-chip);
+
+  a {
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+
+    &:hover {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    &.active {
+      background: var(--color-accent);
+      color: var(--color-accent-contrast);
+    }
+  }
+
+  @media (max-width: 600px) {
+    a {
+      padding: 3px 7px;
+      font-size: 11px;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Network hero
+
+.network-hero {
+  border-bottom: 1px solid var(--color-border);
+  background-image: var(--header-glow);
+  position: relative;
+  overflow: hidden;
+
+  // Brand fine-dot texture drifting off the right edge.
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 420px;
+    height: 100%;
+    background-image: radial-gradient(
+      rgba(183, 172, 232, 0.22) 1px,
+      transparent 1px
+    );
+    background-size: 12px 12px;
+    -webkit-mask-image: linear-gradient(105deg, transparent 30%, #000 85%);
+    mask-image: linear-gradient(105deg, transparent 30%, #000 85%);
+    pointer-events: none;
+  }
+}
+
+:root[data-theme="light"] .network-hero::after {
+  background-image: radial-gradient(
+    rgba(15, 15, 15, 0.14) 1px,
+    transparent 1px
+  );
+}
+
+.network-hero-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding-block: 36px 32px;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 1180px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+
+.network-hero-status {
+  .stat-label {
+    margin-bottom: 10px;
+  }
+
+  .status-hero {
+    margin-bottom: 0;
+    gap: 16px;
+  }
+
+  .status-dot {
+    width: 14px;
+    height: 14px;
+  }
+
+  .status-word {
+    font-size: 40px;
+    letter-spacing: -0.01em;
+
+    @media (max-width: 600px) {
+      font-size: 28px;
+    }
+  }
+}
+
+.network-hero-stats {
+  display: flex;
+  gap: 36px;
+  flex-wrap: wrap;
+
+  .stat-value {
+    font-size: 17px;
+  }
+
+  @media (max-width: 900px) {
+    gap: 20px 28px;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Cards
 
@@ -695,6 +825,40 @@
   color: var(--color-text-faint);
   font-size: 12px;
   font-variant-numeric: tabular-nums;
+}
+
+// ---------------------------------------------------------------------------
+// Supply distribution bar
+
+.supply-bar {
+  display: flex;
+  gap: 2px;
+  height: 24px;
+  border-radius: var(--radius-chip);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.supply-segment {
+  min-width: 2px;
+  transition: opacity var(--transition-fast);
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.supply-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+
+  .supply-legend-value {
+    color: var(--color-text-faint);
+    font-variant-numeric: tabular-nums;
+  }
 }
 
 // ---------------------------------------------------------------------------

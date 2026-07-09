@@ -18,6 +18,7 @@ import LumensCirculating from "./LumensCirculating.jsx";
 import LumensNonCirculating from "./LumensNonCirculating.jsx";
 import RecentOperations from "./RecentOperations.jsx";
 import TotalCoins from "./TotalCoins.jsx";
+import SupplyDistribution from "./SupplyDistribution.jsx";
 import { LIVE_NEW_LEDGER, TEST_NEW_LEDGER } from "../events";
 import { setTimeOffset } from "../common/time";
 import { ScheduledMaintenance } from "./ScheduledMaintenance.jsx";
@@ -25,6 +26,29 @@ import sanitizeHtml from "../utilities/sanitizeHtml.js";
 
 const horizonLive = "https://horizon.stellar.org";
 const horizonTest = "https://horizon-testnet.stellar.org";
+
+// Route → network. "/" shows mainnet; "/testnet" shows the test network.
+// The production server already falls back to index.html for any GET.
+const NETWORKS = {
+  live: {
+    label: "Live network",
+    horizonURL: horizonLive,
+    newLedgerEventName: LIVE_NEW_LEDGER,
+    path: "/",
+    title: "Stellar Network Dashboard",
+  },
+  test: {
+    label: "Test network",
+    horizonURL: horizonTest,
+    newLedgerEventName: TEST_NEW_LEDGER,
+    path: "/testnet",
+    title: "Stellar Network Dashboard · Testnet",
+  },
+};
+
+function networkFromPath(pathname) {
+  return pathname.indexOf("/testnet") === 0 ? "test" : "live";
+}
 
 export default class App extends React.Component {
   constructor(props) {
@@ -81,12 +105,25 @@ export default class App extends React.Component {
       may4 = true;
     }
 
-    this.state = { forceTheme, may4 };
+    this.startedStreams = {};
+    this.state = {
+      forceTheme,
+      may4,
+      network: networkFromPath(window.location.pathname),
+    };
   }
 
   componentDidMount() {
-    this.streamLedgers(horizonLive, LIVE_NEW_LEDGER);
-    this.streamLedgers(horizonTest, TEST_NEW_LEDGER);
+    this.ensureStream(this.state.network);
+    document.title = NETWORKS[this.state.network].title;
+
+    this.onPopState = () => {
+      const network = networkFromPath(window.location.pathname);
+      this.ensureStream(network);
+      document.title = NETWORKS[network].title;
+      this.setState({ network });
+    };
+    window.addEventListener("popstate", this.onPopState);
 
     this.getStatusPageData();
     this.statusPageUpdateInterval = setInterval(
@@ -97,6 +134,28 @@ export default class App extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.statusPageUpdateInterval);
+    window.removeEventListener("popstate", this.onPopState);
+  }
+
+  // Open the Horizon ledger stream for a network once, on first visit.
+  ensureStream(network) {
+    if (!this.startedStreams[network]) {
+      this.startedStreams[network] = true;
+      this.streamLedgers(
+        NETWORKS[network].horizonURL,
+        NETWORKS[network].newLedgerEventName,
+      );
+    }
+  }
+
+  switchNetwork(network) {
+    if (network === this.state.network) {
+      return;
+    }
+    window.history.pushState({}, "", NETWORKS[network].path);
+    this.ensureStream(network);
+    document.title = NETWORKS[network].title;
+    this.setState({ network });
   }
 
   getStatusPageData() {
@@ -164,12 +223,178 @@ export default class App extends React.Component {
     return false;
   }
 
+  renderLiveMain() {
+    const net = NETWORKS.live;
+    return (
+      <main key="live">
+        <NetworkStatus
+          network={net.label}
+          horizonURL={net.horizonURL}
+          newLedgerEventName={net.newLedgerEventName}
+          emitter={this.emitter}
+        />
+        <div className="container">
+          <section className="section">
+            <h1 className="section-title">Network activity</h1>
+            <div className="grid">
+              <div className="col-4 stack">
+                <Incidents />
+                <FeeStats horizonURL={net.horizonURL} />
+                <RecentOperations
+                  limit="20"
+                  label={net.label}
+                  horizonURL={net.horizonURL}
+                  emitter={this.emitter}
+                />
+              </div>
+              <div className="col-8 stack">
+                <LedgerCloseChart
+                  chartHeight={150}
+                  network={net.label}
+                  horizonURL={net.horizonURL}
+                  limit="100"
+                  newLedgerEventName={net.newLedgerEventName}
+                  emitter={this.emitter}
+                />
+                <TransactionsChart
+                  chartHeight={150}
+                  network={net.label}
+                  horizonURL={net.horizonURL}
+                  limit="100"
+                  newLedgerEventName={net.newLedgerEventName}
+                  emitter={this.emitter}
+                />
+                <FailedTransactionsChart
+                  chartHeight={150}
+                  network={net.label}
+                  horizonURL={net.horizonURL}
+                  limit="100"
+                  newLedgerEventName={net.newLedgerEventName}
+                  emitter={this.emitter}
+                />
+                <PublicNetworkLedgersHistoryChart chartHeight={150} />
+              </div>
+            </div>
+          </section>
+
+          <section className="section">
+            <h1 className="section-title">Lumen supply</h1>
+            <div className="grid">
+              <div className="col-4">
+                <TotalCoins />
+              </div>
+              <div className="col-4">
+                <LumensNonCirculating />
+              </div>
+              <div className="col-4">
+                <LumensCirculating />
+              </div>
+              <div className="col-12">
+                <SupplyDistribution />
+              </div>
+            </div>
+            <p className="section-footnote">
+              How these numbers are calculated:{" "}
+              <a
+                href="https://www.stellar.org/developers/guides/lumen-supply-metrics.html"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Lumen supply metrics
+              </a>
+            </p>
+          </section>
+
+          <section className="section">
+            <h1 className="section-title">Network nodes</h1>
+            <div className="card">
+              <div className="card-body nodes-cta">
+                <span>
+                  View network nodes on Stellarbeat and visualize consensus.
+                </span>
+                <a
+                  href="https://stellarbeat.io"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Explore nodes &rarr;
+                </a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
+  renderTestMain() {
+    const net = NETWORKS.test;
+    return (
+      <main key="test">
+        <NetworkStatus
+          network={net.label}
+          horizonURL={net.horizonURL}
+          newLedgerEventName={net.newLedgerEventName}
+          emitter={this.emitter}
+        />
+        <div className="container">
+          <section className="section">
+            <h1 className="section-title">Network activity</h1>
+            <div className="grid">
+              <div className="col-4 stack">
+                <AccountBalance
+                  horizonURL={net.horizonURL}
+                  name="Friendbot"
+                  id="GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR"
+                />
+                <RecentOperations
+                  limit="20"
+                  label={net.label}
+                  horizonURL={net.horizonURL}
+                  emitter={this.emitter}
+                />
+              </div>
+              <div className="col-8 stack">
+                <LedgerCloseChart
+                  chartHeight={150}
+                  network={net.label}
+                  horizonURL={net.horizonURL}
+                  limit="100"
+                  newLedgerEventName={net.newLedgerEventName}
+                  emitter={this.emitter}
+                />
+                <TransactionsChart
+                  chartHeight={150}
+                  network={net.label}
+                  horizonURL={net.horizonURL}
+                  limit="100"
+                  newLedgerEventName={net.newLedgerEventName}
+                  emitter={this.emitter}
+                />
+                <FailedTransactionsChart
+                  chartHeight={150}
+                  network={net.label}
+                  horizonURL={net.horizonURL}
+                  limit="100"
+                  newLedgerEventName={net.newLedgerEventName}
+                  emitter={this.emitter}
+                />
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
   render() {
     return (
       <div id="main" className={this.state.forceTheme ? "force" : null}>
         <AppBar
           forceTheme={this.state.forceTheme}
           turnOffForceTheme={this.turnOffForceTheme.bind(this)}
+          network={this.state.network}
+          onSwitchNetwork={this.switchNetwork.bind(this)}
         />
 
         <div className="container">
@@ -237,150 +462,9 @@ export default class App extends React.Component {
           ) : null}
         </div>
 
-        <main className="container">
-          <section className="section">
-            <h1 className="section-title">Live network</h1>
-            <div className="grid">
-              <div className="col-4 stack">
-                <NetworkStatus
-                  network="Live network"
-                  horizonURL={horizonLive}
-                  newLedgerEventName={LIVE_NEW_LEDGER}
-                  emitter={this.emitter}
-                />
-                <Incidents />
-                <FeeStats horizonURL={horizonLive} />
-                <RecentOperations
-                  limit="20"
-                  label="Live network"
-                  horizonURL={horizonLive}
-                  emitter={this.emitter}
-                />
-              </div>
-              <div className="col-8 stack">
-                <LedgerCloseChart
-                  chartHeight={150}
-                  network="Live network"
-                  horizonURL={horizonLive}
-                  limit="100"
-                  newLedgerEventName={LIVE_NEW_LEDGER}
-                  emitter={this.emitter}
-                />
-                <TransactionsChart
-                  chartHeight={150}
-                  network="Live network"
-                  horizonURL={horizonLive}
-                  limit="100"
-                  newLedgerEventName={LIVE_NEW_LEDGER}
-                  emitter={this.emitter}
-                />
-                <FailedTransactionsChart
-                  chartHeight={150}
-                  network="Live network"
-                  horizonURL={horizonLive}
-                  limit="100"
-                  newLedgerEventName={LIVE_NEW_LEDGER}
-                  emitter={this.emitter}
-                />
-                <PublicNetworkLedgersHistoryChart chartHeight={150} />
-              </div>
-            </div>
-          </section>
-
-          <section className="section">
-            <h1 className="section-title">Lumen supply</h1>
-            <div className="grid">
-              <div className="col-4">
-                <TotalCoins />
-              </div>
-              <div className="col-4">
-                <LumensNonCirculating />
-              </div>
-              <div className="col-4">
-                <LumensCirculating />
-              </div>
-            </div>
-            <p className="section-footnote">
-              How these numbers are calculated:{" "}
-              <a
-                href="https://www.stellar.org/developers/guides/lumen-supply-metrics.html"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Lumen supply metrics
-              </a>
-            </p>
-          </section>
-
-          <section className="section">
-            <h1 className="section-title">Network nodes</h1>
-            <div className="card">
-              <div className="card-body nodes-cta">
-                <span>
-                  View network nodes on Stellarbeat and visualize consensus.
-                </span>
-                <a
-                  href="https://stellarbeat.io"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Explore nodes &rarr;
-                </a>
-              </div>
-            </div>
-          </section>
-
-          <section className="section">
-            <h1 className="section-title">Test network</h1>
-            <div className="grid">
-              <div className="col-4 stack">
-                <NetworkStatus
-                  network="Test network"
-                  horizonURL={horizonTest}
-                  newLedgerEventName={TEST_NEW_LEDGER}
-                  emitter={this.emitter}
-                />
-                <AccountBalance
-                  horizonURL={horizonTest}
-                  name="Friendbot"
-                  id="GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR"
-                />
-                <RecentOperations
-                  limit="20"
-                  label="Test network"
-                  horizonURL={horizonTest}
-                  emitter={this.emitter}
-                />
-              </div>
-              <div className="col-8 stack">
-                <LedgerCloseChart
-                  chartHeight={150}
-                  network="Test network"
-                  horizonURL={horizonTest}
-                  limit="100"
-                  newLedgerEventName={TEST_NEW_LEDGER}
-                  emitter={this.emitter}
-                />
-                <TransactionsChart
-                  chartHeight={150}
-                  network="Test network"
-                  horizonURL={horizonTest}
-                  limit="100"
-                  newLedgerEventName={TEST_NEW_LEDGER}
-                  emitter={this.emitter}
-                />
-                <FailedTransactionsChart
-                  chartHeight={150}
-                  network="Test network"
-                  horizonURL={horizonTest}
-                  limit="100"
-                  newLedgerEventName={TEST_NEW_LEDGER}
-                  emitter={this.emitter}
-                />
-              </div>
-            </div>
-          </section>
-        </main>
+        {this.state.network === "live"
+          ? this.renderLiveMain()
+          : this.renderTestMain()}
 
         <footer className="site-footer">
           <div className="container">
