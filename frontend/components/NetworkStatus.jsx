@@ -2,6 +2,14 @@ import React from "react";
 import axios from "axios";
 import round from "lodash/round";
 import { ago, agoSeconds } from "../common/time";
+import { copyStatusCard } from "./ui/statusCard.js";
+
+const STATUS_COLORS = {
+  "": "#fdda24",
+  slow: "#ff9f0a",
+  "very-slow": "#e5484d",
+  down: "#e5484d",
+};
 
 // ledgersInAverageCalculation defines how many last ledgers should be
 // considered when calculating average ledger length.
@@ -116,9 +124,35 @@ export default class NetworkStatus extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.timerID);
+    clearTimeout(this.shareResetTimer);
     if (this.newLedgerListener) {
       this.newLedgerListener.remove();
     }
+  }
+
+  shareCard(statusText, statusClass, averageLedgerLength) {
+    copyStatusCard({
+      eyebrow: `${this.props.network} status`,
+      statusText,
+      statusColor: STATUS_COLORS[statusClass] || "#fdda24",
+      stats: [
+        { label: "Last ledger", value: `#${this.state.lastLedgerSequence}` },
+        {
+          label: "Closed",
+          value: `~${ago(this.state.closedAt)} ago in ${
+            this.state.lastLedgerLength / 1000
+          }s`,
+        },
+        { label: "Avg close", value: `${round(averageLedgerLength, 2)}s` },
+        { label: "Protocol", value: `${this.state.protocolVersion}` },
+      ],
+    }).then((result) => {
+      this.setState({ shareState: result });
+      this.shareResetTimer = setTimeout(
+        () => this.setState({ shareState: null }),
+        2000,
+      );
+    });
   }
 
   render() {
@@ -151,7 +185,25 @@ export default class NetworkStatus extends React.Component {
       <section className="network-hero">
         <div className="container network-hero-inner">
           <div className="network-hero-status">
-            <div className="stat-label">{this.props.network} status</div>
+            <div className="network-hero-eyebrow">
+              <span className="stat-label">{this.props.network} status</span>
+              {!this.state.loading ? (
+                <button
+                  type="button"
+                  className="share-button"
+                  onClick={() =>
+                    this.shareCard(statusText, statusClass, averageLedgerLength)
+                  }
+                  title="Copy a shareable status image"
+                >
+                  {this.state.shareState === "copied"
+                    ? "Copied ✓"
+                    : this.state.shareState === "downloaded"
+                      ? "Downloaded ✓"
+                      : "Copy status card"}
+                </button>
+              ) : null}
+            </div>
             <div className="status-hero">
               <div className={"status-dot " + statusClass}></div>
               <h1 className="status-word">{statusText}</h1>

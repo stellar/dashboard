@@ -2,6 +2,11 @@ import React from "react";
 import axios from "axios";
 import get from "lodash/get";
 import Card from "./ui/Card.jsx";
+import {
+  getChartTheme,
+  createTooltip,
+  tooltipRow,
+} from "./ui/chartUtils.js";
 
 export default class FeeStats extends React.Component {
   constructor(props) {
@@ -53,12 +58,27 @@ export default class FeeStats extends React.Component {
   }
 
   componentDidMount() {
+    this.tooltip = createTooltip();
     this.getStats();
     this.timerID = setInterval(() => this.getStats(), 5 * 1000);
   }
 
   componentWillUnmount() {
     clearInterval(this.timerID);
+    this.tooltip.destroy();
+  }
+
+  showPercentileTooltip(event, percentile, value) {
+    this.tooltip.show(
+      `<div style="opacity:.6;margin-bottom:4px;">${percentile} percentile</div>` +
+        tooltipRow(
+          getChartTheme(event.currentTarget).primary,
+          "Accepted fee",
+          `${value.toLocaleString("en-US")} stroops`,
+        ),
+      event.clientX,
+      event.clientY,
+    );
   }
 
   capacityClass(cap) {
@@ -138,7 +158,10 @@ export default class FeeStats extends React.Component {
                   <div
                     key={d.p}
                     className="fee-bar"
-                    title={`${d.p}: ${d.value.toLocaleString("en-US")} stroops`}
+                    onMouseMove={(e) =>
+                      this.showPercentileTooltip(e, d.p, d.value)
+                    }
+                    onMouseLeave={() => this.tooltip.hide()}
                   >
                     <div
                       className="fee-bar-fill"

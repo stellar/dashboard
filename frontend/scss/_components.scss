@@ -152,30 +152,36 @@
   position: relative;
   overflow: hidden;
 
-  // Brand fine-dot texture drifting off the right edge.
+  // Brand halftone texture (dot size falls off organically, as on
+  // stellar.org). The SVG is a mask so each theme colors it via tokens:
+  // lavender on dark surfaces, gold on light ones (brand guidelines).
   &::after {
     content: "";
     position: absolute;
     top: 0;
     right: 0;
-    width: 420px;
+    width: 620px;
+    max-width: 42%;
     height: 100%;
-    background-image: radial-gradient(
-      rgba(183, 172, 232, 0.22) 1px,
-      transparent 1px
-    );
-    background-size: 12px 12px;
-    -webkit-mask-image: linear-gradient(105deg, transparent 30%, #000 85%);
-    mask-image: linear-gradient(105deg, transparent 30%, #000 85%);
+    background-color: rgba(183, 172, 232, 0.5);
+    -webkit-mask-image: url("../assets/halftone.svg");
+    mask-image: url("../assets/halftone.svg");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: right center;
+    mask-position: right center;
+    -webkit-mask-size: auto 100%;
+    mask-size: auto 100%;
     pointer-events: none;
+
+    @media (max-width: 1180px) {
+      display: none;
+    }
   }
 }
 
 :root[data-theme="light"] .network-hero::after {
-  background-image: radial-gradient(
-    rgba(15, 15, 15, 0.14) 1px,
-    transparent 1px
-  );
+  background-color: rgba(253, 218, 36, 0.75);
 }
 
 .network-hero-inner {
@@ -194,9 +200,39 @@
   }
 }
 
+.network-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.share-button {
+  padding: 2px 8px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-chip);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-faint);
+  cursor: pointer;
+  transition: color var(--transition-fast),
+    border-color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-faint);
+  }
+}
+
 .network-hero-status {
   .stat-label {
     margin-bottom: 10px;
+  }
+
+  > .network-hero-eyebrow .stat-label {
+    margin-bottom: 0;
   }
 
   .status-hero {

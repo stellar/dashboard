@@ -31,14 +31,14 @@ const horizonTest = "https://horizon-testnet.stellar.org";
 // The production server already falls back to index.html for any GET.
 const NETWORKS = {
   live: {
-    label: "Live network",
+    label: "Mainnet",
     horizonURL: horizonLive,
     newLedgerEventName: LIVE_NEW_LEDGER,
     path: "/",
     title: "Stellar Network Dashboard",
   },
   test: {
-    label: "Test network",
+    label: "Testnet",
     horizonURL: horizonTest,
     newLedgerEventName: TEST_NEW_LEDGER,
     path: "/testnet",

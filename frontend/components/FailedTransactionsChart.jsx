@@ -72,7 +72,7 @@ export default class FailedTransactionsChart extends React.Component {
 
     // Determine step size based on network type
     let stepSize;
-    if (this.props.network === "Test network") {
+    if (this.props.network === "Testnet") {
       stepSize = 1; // Test network uses step size of 1
     } else {
       // Live network: choose between 50 and 100 based on resulting tick count
@@ -84,7 +84,7 @@ export default class FailedTransactionsChart extends React.Component {
 
     // Ensure minimum values for better chart readability
     let minYAxisMax;
-    if (this.props.network === "Test network") {
+    if (this.props.network === "Testnet") {
       minYAxisMax = 10; // Smaller minimum for test network
     } else {
       minYAxisMax = stepSize === 50 ? 100 : 200;
