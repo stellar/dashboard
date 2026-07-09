@@ -157,21 +157,3 @@ th,
   font-size: 12px;
   margin: 16px 0 0;
 }
-
-// ---------------------------------------------------------------------------
-// Brand texture (Brand Guidelines 2026: fine-dotted textures)
-
-.dot-texture {
-  background-image: radial-gradient(
-    rgba(183, 172, 232, 0.25) 1px,
-    transparent 1px
-  );
-  background-size: 12px 12px;
-}
-
-:root[data-theme="light"] .dot-texture {
-  background-image: radial-gradient(
-    rgba(15, 15, 15, 0.12) 1px,
-    transparent 1px
-  );
-}
