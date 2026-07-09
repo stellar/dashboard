@@ -21,6 +21,18 @@ export default defineConfig({
     }),
   ],
 
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          "stellar-sdk": ["@stellar/stellar-sdk"],
+          d3: ["d3"],
+        },
+      },
+    },
+  },
+
   // API proxy to backend
   server: {
     proxy: {
