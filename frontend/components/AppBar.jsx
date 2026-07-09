@@ -39,14 +39,38 @@ export default class AppBar extends React.Component {
     return (
       <header className="site-header">
         <div className="container site-header-inner">
-          <a
-            className="site-brand"
-            href="https://www.stellar.org"
-            title="Back to Stellar.org"
-          >
-            <img className="site-logo" src={logoUrl} alt="Stellar" />
-            <span className="site-brand-suffix">Network Dashboard</span>
-          </a>
+          <div className="site-header-left">
+            <a
+              className="site-brand"
+              href="https://www.stellar.org"
+              title="Back to Stellar.org"
+            >
+              <img className="site-logo" src={logoUrl} alt="Stellar" />
+              <span className="site-brand-suffix">Network Dashboard</span>
+            </a>
+            <nav className="network-switcher" aria-label="Network">
+              <a
+                href="/"
+                className={this.props.network === "live" ? "active" : null}
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.props.onSwitchNetwork("live");
+                }}
+              >
+                Mainnet
+              </a>
+              <a
+                href="/testnet"
+                className={this.props.network === "test" ? "active" : null}
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.props.onSwitchNetwork("test");
+                }}
+              >
+                Testnet
+              </a>
+            </nav>
+          </div>
           <nav className="site-nav">
             <a
               className="hide-mobile"

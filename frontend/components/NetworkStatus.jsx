@@ -2,11 +2,12 @@ import React from "react";
 import axios from "axios";
 import round from "lodash/round";
 import { ago, agoSeconds } from "../common/time";
-import Card from "./ui/Card.jsx";
 
 // ledgersInAverageCalculation defines how many last ledgers should be
 // considered when calculating average ledger length.
 const ledgersInAverageCalculation = 200;
+// opsRateWindow defines how many recent ledgers feed the ops/min figure.
+const opsRateWindow = 20;
 
 export default class NetworkStatus extends React.Component {
   constructor(props) {
@@ -38,7 +39,25 @@ export default class NetworkStatus extends React.Component {
       lastLedgerLength,
       ledgerLengthSum,
       protocolVersion,
+      opsPerMinute: this.opsPerMinute(),
     });
+  }
+
+  // Operations per minute over the most recent ledgers.
+  opsPerMinute() {
+    const window = this.records.slice(0, opsRateWindow);
+    if (window.length < 2) {
+      return null;
+    }
+    const ops = window.reduce(
+      (sum, ledger) => sum + (ledger.operation_count || 0),
+      0,
+    );
+    const minutes =
+      (new Date(window[0].closed_at) -
+        new Date(window[window.length - 1].closed_at)) /
+      60000;
+    return minutes > 0 ? Math.round(ops / minutes) : null;
   }
 
   getLastLedgers() {
@@ -70,10 +89,11 @@ export default class NetworkStatus extends React.Component {
           lastLedgerSequence,
           ledgerLengthSum,
           protocolVersion,
+          opsPerMinute: this.opsPerMinute(),
           loading: false,
         });
         // Start listening to events
-        this.props.emitter.addListener(
+        this.newLedgerListener = this.props.emitter.addListener(
           this.props.newLedgerEventName,
           this.onNewLedger.bind(this),
         );
@@ -96,6 +116,9 @@ export default class NetworkStatus extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.timerID);
+    if (this.newLedgerListener) {
+      this.newLedgerListener.remove();
+    }
   }
 
   render() {
@@ -125,48 +148,58 @@ export default class NetworkStatus extends React.Component {
     }
 
     return (
-      <Card title={`Network status · ${this.props.network}`}>
-        <div className="status-hero">
-          <div className={"status-dot " + statusClass}></div>
-          <div className="status-word">{statusText}</div>
+      <section className="network-hero">
+        <div className="container network-hero-inner">
+          <div className="network-hero-status">
+            <div className="stat-label">{this.props.network} status</div>
+            <div className="status-hero">
+              <div className={"status-dot " + statusClass}></div>
+              <h1 className="status-word">{statusText}</h1>
+            </div>
+          </div>
+          {!this.state.loading ? (
+            <div className="network-hero-stats">
+              <div className="stat">
+                <div className="stat-label">Last ledger</div>
+                <div className="stat-value">
+                  #{this.state.lastLedgerSequence}
+                </div>
+              </div>
+              <div className="stat">
+                <div className="stat-label">Closed</div>
+                <div className="stat-value">
+                  ~{ago(this.state.closedAt)} ago in{" "}
+                  {this.state.lastLedgerLength / 1000}s
+                </div>
+              </div>
+              <div className="stat">
+                <div className="stat-label">
+                  Avg close · {ledgersInAverageCalculation} ledgers
+                </div>
+                <div className="stat-value">
+                  {round(averageLedgerLength, 2)}s
+                </div>
+              </div>
+              {this.state.opsPerMinute ? (
+                <div className="stat">
+                  <div className="stat-label">Ops per minute</div>
+                  <div className="stat-value">
+                    {this.state.opsPerMinute.toLocaleString("en-US")}
+                  </div>
+                </div>
+              ) : null}
+              <div className="stat">
+                <div className="stat-label">Protocol</div>
+                <div className="stat-value">{this.state.protocolVersion}</div>
+              </div>
+            </div>
+          ) : (
+            <div className="network-hero-stats">
+              <span className="skeleton" style={{ width: 320 }}></span>
+            </div>
+          )}
         </div>
-        {!this.state.loading ? (
-          <div className="status-grid">
-            <div className="stat">
-              <div className="stat-label">Last ledger</div>
-              <div className="stat-value">
-                #{this.state.lastLedgerSequence}
-              </div>
-            </div>
-            <div className="stat">
-              <div className="stat-label">Protocol</div>
-              <div className="stat-value">{this.state.protocolVersion}</div>
-            </div>
-            <div className="stat">
-              <div className="stat-label">Closed</div>
-              <div className="stat-value">
-                ~{ago(this.state.closedAt)} ago in{" "}
-                {this.state.lastLedgerLength / 1000}s
-              </div>
-            </div>
-            <div className="stat">
-              <div className="stat-label">
-                Avg close · {ledgersInAverageCalculation} ledgers
-              </div>
-              <div className="stat-value">
-                {round(averageLedgerLength, 2)}s
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="status-grid">
-            <span className="skeleton"></span>
-            <span className="skeleton"></span>
-            <span className="skeleton"></span>
-            <span className="skeleton"></span>
-          </div>
-        )}
-      </Card>
+      </section>
     );
   }
 }

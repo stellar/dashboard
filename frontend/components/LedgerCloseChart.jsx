@@ -23,7 +23,14 @@ export default class LedgerChartClose extends React.Component {
     this.getLedgers();
     // Update chart width
     this.updateSize();
-    setInterval(() => this.updateSize(), 5000);
+    this.sizeInterval = setInterval(() => this.updateSize(), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.sizeInterval);
+    if (this.newLedgerListener) {
+      this.newLedgerListener.remove();
+    }
   }
 
   updateSize() {
@@ -55,7 +62,7 @@ export default class LedgerChartClose extends React.Component {
       });
       this.setState({ loading: false, data });
       // Start listening to events
-      this.props.emitter.addListener(
+      this.newLedgerListener = this.props.emitter.addListener(
         this.props.newLedgerEventName,
         this.onNewLedger.bind(this),
       );

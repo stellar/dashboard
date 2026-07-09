@@ -18,10 +18,15 @@ export default class PublicNetworkLedgersHistoryChart extends React.Component {
 
   componentDidMount() {
     this.getLedgers();
-    setInterval(() => this.getLedgers(), 1000 * 60 * 5);
+    this.refreshInterval = setInterval(() => this.getLedgers(), 1000 * 60 * 5);
     // Update chart width
     this.updateSize();
-    setInterval(() => this.updateSize(), 5000);
+    this.sizeInterval = setInterval(() => this.updateSize(), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.sizeInterval);
+    clearInterval(this.refreshInterval);
   }
 
   updateSize() {
