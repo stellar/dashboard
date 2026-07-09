@@ -140,5 +140,12 @@ export default function D3BarChart({
     themeTick,
   ]);
 
-  return <svg ref={svgRef} style={{ display: "block" }}></svg>;
+  return (
+    <svg
+      ref={svgRef}
+      style={{ display: "block" }}
+      role="img"
+      aria-label={data && data.length ? `${data[0].label} bar chart` : "chart"}
+    ></svg>
+  );
 }

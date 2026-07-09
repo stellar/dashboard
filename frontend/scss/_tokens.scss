@@ -71,6 +71,8 @@
   // gold fails WCAG as text on light backgrounds — use navy for links there
   --color-link: #002e5d;
 
+  // brand gold fails 3:1 on white — validated darker step for light charts
+  --chart-primary: #b8860b;
   --chart-grid: rgba(15, 15, 15, 0.07);
   --chart-axis-text: #8a8a8a;
   --shadow-card: 0 1px 2px rgba(15, 15, 15, 0.06);
