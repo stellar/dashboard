@@ -35,8 +35,22 @@ export default class NetworkStatus extends React.Component {
         new Date(this.records[1].closed_at)) /
         1000;
     this.records.pop();
+    // Protocol upgrades are the moment this page gets projected on big
+    // screens — flash the stat when the version flips.
+    if (
+      this.state.protocolVersion &&
+      protocolVersion !== this.state.protocolVersion
+    ) {
+      clearTimeout(this.protocolFlashTimer);
+      this.setState({ protocolFlash: true });
+      this.protocolFlashTimer = setTimeout(
+        () => this.setState({ protocolFlash: false }),
+        6000,
+      );
+    }
     this.setState({
       closedAt,
+      closedAgo: agoSeconds(closedAt),
       lastLedgerSequence,
       lastLedgerLength,
       ledgerLengthSum,
@@ -87,6 +101,9 @@ export default class NetworkStatus extends React.Component {
 
         this.setState({
           closedAt,
+          // Set closedAgo right away — waiting for the next 1s timer tick
+          // briefly renders a wrong "network slow" status on first paint.
+          closedAgo: agoSeconds(closedAt),
           lastLedgerLength,
           lastLedgerSequence,
           ledgerLengthSum,
