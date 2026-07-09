@@ -43,6 +43,10 @@
     letter-spacing: 0.02em;
     color: var(--color-text-secondary);
     white-space: nowrap;
+
+    @media (max-width: 760px) {
+      display: none;
+    }
   }
 }
 
@@ -241,6 +245,14 @@
   box-shadow: var(--shadow-card);
   overflow: hidden;
   transition: border-color var(--transition-fast);
+  min-width: 0;
+
+  // Charts get a fixed pixel width via JS; while the resize observer catches
+  // up (e.g. after a viewport change) let them scale down instead of
+  // overflowing the layout.
+  svg {
+    max-width: 100%;
+  }
 
   &:hover {
     border-color: var(--color-border-strong);
