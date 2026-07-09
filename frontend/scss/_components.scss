@@ -374,23 +374,18 @@
   }
 }
 
-.account-tag {
+.account-known {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 1px 5px;
-  margin-left: 4px;
+  letter-spacing: 0.03em;
+  padding: 1px 6px;
   border-radius: var(--radius-chip);
   background: var(--color-border);
-  color: var(--color-text-secondary);
 }
 
-.account img {
-  height: 12px;
-  margin-left: 4px;
-  vertical-align: -1px;
+:root[data-theme="light"] .account-known {
+  background: #ececec;
 }
 
 // ---------------------------------------------------------------------------
