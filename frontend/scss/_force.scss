@@ -1,73 +1,70 @@
-@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
+@import url("https://fonts.googleapis.com/css?family=Press+Start+2P");
 
+// May the 4th easter egg — see forceTheme in App.jsx.
 #main.force {
   background: black;
 
   h1.may4 {
     color: white;
-    font-family: 'Press Start 2P', cursive;
+    font-family: "Press Start 2P", cursive;
     font-size: 1em;
     text-align: center;
+    padding: 24px 0 8px;
   }
 
-  section > h1 {
-    color: white;
-    text-shadow: none;
-  }
+  --color-bg: #000;
+  --color-surface: #111;
+  --color-surface-raised: #1a1a1a;
+  --color-accent: #b20014;
+  --color-accent-contrast: #fff;
+  --color-link: #ff2237;
+  --chart-primary: #b20014;
+  --header-glow: radial-gradient(
+    60% 220px at 50% 0,
+    rgba(178, 0, 20, 0.25),
+    transparent
+  );
 
-  section > h2 {
-    color: white;
-    text-shadow: none;
-  }
+  .site-header {
+    background-color: #7e0010;
+    border-bottom-color: #a00016;
 
-  a {
-    color: #b20014;
-  }
-
-  .mui-appbar {
-    background-color: #7E0010;
-
-    .icons i {
+    .site-nav a,
+    .site-brand-suffix {
       color: white;
     }
-
-    .icons a {
-      color: white;
-    }
   }
 
-  .mui-panel {
-    background-color: #222;
-    color: white;
+  .section-title::before,
+  .capacity-meter-fill {
+    background: #b20014;
+  }
+
+  .card-api-link {
+    border-color: #b20014;
+    color: #ff2237;
+
+    &:hover {
+      background-color: #b20014;
+      color: white;
+    }
   }
 
   .account-tag {
     background-color: black;
   }
 
-  .tag {
-    color: #b20014;
-  }
-
-  .api-link {
-    background-color: #7E0010;
-    color: white;
-  }
-
-  .recharts-wrapper {
-    background-color: white;
-  }
-
-  footer {
-    background-color: black;
-    color: white;
-  }
-
   @mixin glow($color) {
     @keyframes glow_#{$color} {
-      from { color: #{$color}; box-shadow: 0 0 9px #{$color}; }
-      50% { color: #{$color}; box-shadow: 0 0 50px #{$color}; }
-      to { color: #{$color}; box-shadow: 0 0 9px #{$color}; }
+      from {
+        box-shadow: 0 0 6px #{$color};
+      }
+      50% {
+        box-shadow: 0 0 24px #{$color};
+      }
+      to {
+        box-shadow: 0 0 6px #{$color};
+      }
     }
   }
 
@@ -76,59 +73,31 @@
   @include glow("red");
   @include glow("gray");
 
-  .pulse-container {
-    width: 180px;
-    height: 30px;
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 30px;
+  // Lightsaber blades instead of status dots.
+  .status-dot {
+    width: 120px;
+    height: 8px;
+    border-radius: 0 12px 12px 0;
+    background: lime;
+    animation: glow_lime 1.5s linear infinite;
 
-    .pulse {
-      opacity: 1;
-      width: 180px;
-      height: 9px;
-      background-color: white;
+    &::after {
+      display: none;
+    }
 
-      &.pulse1 {
-        animation: glow_lime 1.5s linear infinite;
-        box-shadow: 0px 0px 10px, 0px 0px 2px inset;
-        border-top-left-radius: 0;
-        border-top-right-radius: 20px 10px;
-        border-bottom-right-radius: 20px 10px;
-        border-bottom-left-radius: 0;
-      }
+    &.slow {
+      background: orange;
+      animation-name: glow_orange;
+    }
 
-      &.pulse2 {
-        animation: none;
-        height: 5px;
-        margin-top: 2px;
-        width: 30px;
-        margin-left: -30px;
-        border-right: 1px solid black;
+    &.very-slow {
+      background: red;
+      animation-name: glow_red;
+    }
 
-        border-top-left-radius: 2px;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border-bottom-left-radius: 2px;
-
-        @include prefixer(background, linear-gradient(to right, #fff 0%, #999 10%, #fff 20%, #999 30%, #fff 40%, #999 50%, #fff 70%, #999 70%, #fff 80%, #999 90%, #fff 100%), webkit moz spec);
-      }
-
-      &.pulse1.slow {
-        animation: glow_orange 1.5s linear infinite;
-        background-color: orange;
-      }
-
-      &.pulse1.very-slow {
-        animation: glow_red 1.5s linear infinite;
-        background-color: red;
-      }
-
-      &.pulse1.down {
-        animation: glow_gray 1.5s linear infinite;
-        background-color: black;
-      }
+    &.down {
+      background: gray;
+      animation-name: glow_gray;
     }
   }
 }

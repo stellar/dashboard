@@ -1,47 +1,51 @@
 import React from "react";
+import logoUrl from "../assets/stellar-logo-white.svg";
 
 export default class AppBar extends React.Component {
   render() {
     return (
-      <div>
-        <div className="mui-appbar">
-          <div className="left">
-            <div className="back">
-              <a href="https://www.stellar.org">&laquo; Stellar.org</a>
-            </div>
-            <div className="mui--text-headline">Stellar.org Dashboard</div>
-          </div>
-          <div className="icons">
-            <div className="icon">
-              <a href="https://www.stellar.org/privacy-policy" target="_blank">
-                Privacy Policy
-              </a>
-            </div>
-            <div className="icon">
-              <a
-                href="https://www.stellar.org/terms-of-service"
-                target="_blank"
-              >
-                Terms of Service
-              </a>
-            </div>
-            <div className="icon">
-              <a href="https://github.com/stellar/dashboard" target="_blank">
-                GitHub
-              </a>
-            </div>
+      <header className="site-header">
+        <div className="container site-header-inner">
+          <a
+            className="site-brand"
+            href="https://www.stellar.org"
+            title="Back to Stellar.org"
+          >
+            <img className="site-logo" src={logoUrl} alt="Stellar" />
+            <span className="site-brand-suffix">Network Dashboard</span>
+          </a>
+          <nav className="site-nav">
+            <a
+              className="hide-mobile"
+              href="https://www.stellar.org/privacy-policy"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Privacy Policy
+            </a>
+            <a
+              className="hide-mobile"
+              href="https://www.stellar.org/terms-of-service"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Terms of Service
+            </a>
+            <a
+              href="https://github.com/stellar/dashboard"
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub
+            </a>
             {this.props.forceTheme ? (
-              <div className="icon">
-                <a href="#" onClick={this.props.turnOffForceTheme}>
-                  <i className="material-icons">star_border</i>
-                  <br />
-                  Turn off the Force theme
-                </a>
-              </div>
+              <a href="#" onClick={this.props.turnOffForceTheme}>
+                Turn off the Force theme
+              </a>
             ) : null}
-          </div>
+          </nav>
         </div>
-      </div>
+      </header>
     );
   }
 }

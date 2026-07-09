@@ -1,5 +1,4 @@
 import React from "react";
-import Panel from "muicss/lib/react/panel";
 import { EventEmitter } from "fbemitter";
 import axios from "axios";
 import moment from "moment";
@@ -173,53 +172,51 @@ export default class App extends React.Component {
           turnOffForceTheme={this.turnOffForceTheme.bind(this)}
         />
 
-        {
-          /* Incidents */
-          this.state.statusPage
-            ? this.state.statusPage.incidents.map((m) => {
-                return (
-                  <Panel key={m.id} className="mui--bg-accent">
-                    <div className="mui--text-subhead mui--text-light">
+        <div className="container">
+          {
+            /* Incidents */
+            this.state.statusPage
+              ? this.state.statusPage.incidents.map((m) => {
+                  return (
+                    <div key={m.id} className="banner">
                       <a href={"https://status.stellar.org/incidents/" + m.id}>
-                        <strong>{m.name}</strong>
-                      </a>{" "}
-                      (started: {moment(m.started_at).fromNow()}
-                      {m.incident_updates.length > 0
-                        ? ", last update: " +
-                          moment(m.incident_updates[0].created_at).fromNow()
-                        : null}
-                      )<br />
-                      <small>
-                        Affected: {m.components.map((c) => c.name).join(", ")}
-                      </small>
-                      <br />
+                        {m.name}
+                      </a>
+                      <div className="banner-meta">
+                        started {moment(m.started_at).fromNow()}
+                        {m.incident_updates.length > 0
+                          ? ", last update " +
+                            moment(m.incident_updates[0].created_at).fromNow()
+                          : null}
+                        {" · affected: "}
+                        {m.components.map((c) => c.name).join(", ")}
+                      </div>
                       {m.incident_updates.length > 0 ? (
-                        <span>{sanitizeHtml(m.incident_updates[0].body)}</span>
+                        <div>{sanitizeHtml(m.incident_updates[0].body)}</div>
                       ) : null}
                     </div>
-                  </Panel>
-                );
-              })
-            : null
-        }
-        {
-          /* Scheduled maintenances */
-          this.state.statusPage &&
-          this.state.statusPage.scheduled_maintenances.length ? (
-            <ScheduledMaintenance
-              scheduledMaintenances={
-                this.state.statusPage.scheduled_maintenances
-              }
-            />
-          ) : null
-        }
-        {this.chrome57 ? (
-          <Panel>
-            <div className="mui--text-subhead mui--text-dark-secondary">
+                  );
+                })
+              : null
+          }
+          {
+            /* Scheduled maintenances */
+            this.state.statusPage &&
+            this.state.statusPage.scheduled_maintenances.length ? (
+              <ScheduledMaintenance
+                scheduledMaintenances={
+                  this.state.statusPage.scheduled_maintenances
+                }
+              />
+            ) : null
+          }
+          {this.chrome57 ? (
+            <div className="banner warning">
               You are using Chrome 57. There is a{" "}
               <a
                 href="https://bugs.chromium.org/p/chromium/issues/detail?id=707544"
                 target="_blank"
+                rel="noreferrer"
               >
                 known bug
               </a>{" "}
@@ -227,25 +224,24 @@ export default class App extends React.Component {
               Please switch to any other browser or wait for a fix by a Chromium
               team.
             </div>
-          </Panel>
-        ) : null}
-        {this.state.sleeping ? (
-          <Panel>
-            <div className="mui--text-subhead mui--text-accent">
+          ) : null}
+          {this.state.sleeping ? (
+            <div className="banner warning">
               System sleep detected. Waiting for internet connection...
             </div>
-          </Panel>
-        ) : null}
-        {this.state.forceTheme && this.state.may4 ? (
-          <h1 className="may4">
-            May the 4<sup>th</sup> be with you!
-          </h1>
-        ) : null}
-        <div id="main" className="mui-container-fluid">
-          <section>
-            <h1>Live network status</h1>
-            <div className="row">
-              <div className="mui-col-md-4">
+          ) : null}
+          {this.state.forceTheme && this.state.may4 ? (
+            <h1 className="may4">
+              May the 4<sup>th</sup> be with you!
+            </h1>
+          ) : null}
+        </div>
+
+        <main className="container">
+          <section className="section">
+            <h1 className="section-title">Live network</h1>
+            <div className="grid">
+              <div className="col-4 stack">
                 <NetworkStatus
                   network="Live network"
                   horizonURL={horizonLive}
@@ -261,8 +257,9 @@ export default class App extends React.Component {
                   emitter={this.emitter}
                 />
               </div>
-              <div className="mui-col-md-8">
+              <div className="col-8 stack">
                 <LedgerCloseChart
+                  chartHeight={150}
                   network="Live network"
                   horizonURL={horizonLive}
                   limit="100"
@@ -270,6 +267,7 @@ export default class App extends React.Component {
                   emitter={this.emitter}
                 />
                 <TransactionsChart
+                  chartHeight={150}
                   network="Live network"
                   horizonURL={horizonLive}
                   limit="100"
@@ -277,99 +275,126 @@ export default class App extends React.Component {
                   emitter={this.emitter}
                 />
                 <FailedTransactionsChart
+                  chartHeight={150}
                   network="Live network"
                   horizonURL={horizonLive}
                   limit="100"
                   newLedgerEventName={LIVE_NEW_LEDGER}
                   emitter={this.emitter}
                 />
-                <PublicNetworkLedgersHistoryChart />
+                <PublicNetworkLedgersHistoryChart chartHeight={150} />
               </div>
             </div>
           </section>
 
-          <section>
-            <h1>LUMEN SUPPLY</h1>
-            <div className="mui-col-md-4">
-              <TotalCoins />
+          <section className="section">
+            <h1 className="section-title">Lumen supply</h1>
+            <div className="grid">
+              <div className="col-4">
+                <TotalCoins />
+              </div>
+              <div className="col-4">
+                <LumensNonCirculating />
+              </div>
+              <div className="col-4">
+                <LumensCirculating />
+              </div>
             </div>
-
-            <div className="mui-col-md-4">
-              <LumensNonCirculating />
-            </div>
-
-            <div className="mui-col-md-4">
-              <LumensCirculating />
-            </div>
-            <h2>
+            <p className="section-footnote">
+              How these numbers are calculated:{" "}
               <a
                 href="https://www.stellar.org/developers/guides/lumen-supply-metrics.html"
                 target="_blank"
+                rel="noreferrer"
               >
-                Lumen Supply Metrics
+                Lumen supply metrics
               </a>
-            </h2>
+            </p>
           </section>
 
-          <section>
-            <h1>Network Nodes</h1>
-            <h2>
-              View network nodes on Stellarbeat and visualize consensus.
-              <br />
-              <a href="https://stellarbeat.io" target="_blank">
-                Explore Nodes
-              </a>
-            </h2>
+          <section className="section">
+            <h1 className="section-title">Network nodes</h1>
+            <div className="card">
+              <div className="card-body nodes-cta">
+                <span>
+                  View network nodes on Stellarbeat and visualize consensus.
+                </span>
+                <a
+                  href="https://stellarbeat.io"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Explore nodes &rarr;
+                </a>
+              </div>
+            </div>
           </section>
 
-          <section>
-            <h1>Test network status</h1>
-            <div className="mui-col-md-4">
-              <NetworkStatus
-                network="Test network"
-                horizonURL={horizonTest}
-                newLedgerEventName={TEST_NEW_LEDGER}
-                emitter={this.emitter}
-              />
-              <RecentOperations
-                limit="20"
-                label="Test network"
-                horizonURL={horizonTest}
-                emitter={this.emitter}
-              />
-            </div>
-            <div className="mui-col-md-8">
-              <LedgerCloseChart
-                network="Test network"
-                horizonURL={horizonTest}
-                limit="100"
-                newLedgerEventName={TEST_NEW_LEDGER}
-                emitter={this.emitter}
-              />
-              <TransactionsChart
-                network="Test network"
-                horizonURL={horizonTest}
-                limit="100"
-                newLedgerEventName={TEST_NEW_LEDGER}
-                emitter={this.emitter}
-              />
-              <FailedTransactionsChart
-                network="Test network"
-                horizonURL={horizonTest}
-                limit="100"
-                newLedgerEventName={TEST_NEW_LEDGER}
-                emitter={this.emitter}
-              />
-            </div>
-            <div className="mui-col-md-4">
-              <AccountBalance
-                horizonURL={horizonTest}
-                name="Friendbot"
-                id="GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR"
-              />
+          <section className="section">
+            <h1 className="section-title">Test network</h1>
+            <div className="grid">
+              <div className="col-4 stack">
+                <NetworkStatus
+                  network="Test network"
+                  horizonURL={horizonTest}
+                  newLedgerEventName={TEST_NEW_LEDGER}
+                  emitter={this.emitter}
+                />
+                <AccountBalance
+                  horizonURL={horizonTest}
+                  name="Friendbot"
+                  id="GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR"
+                />
+                <RecentOperations
+                  limit="20"
+                  label="Test network"
+                  horizonURL={horizonTest}
+                  emitter={this.emitter}
+                />
+              </div>
+              <div className="col-8 stack">
+                <LedgerCloseChart
+                  chartHeight={150}
+                  network="Test network"
+                  horizonURL={horizonTest}
+                  limit="100"
+                  newLedgerEventName={TEST_NEW_LEDGER}
+                  emitter={this.emitter}
+                />
+                <TransactionsChart
+                  chartHeight={150}
+                  network="Test network"
+                  horizonURL={horizonTest}
+                  limit="100"
+                  newLedgerEventName={TEST_NEW_LEDGER}
+                  emitter={this.emitter}
+                />
+                <FailedTransactionsChart
+                  chartHeight={150}
+                  network="Test network"
+                  horizonURL={horizonTest}
+                  limit="100"
+                  newLedgerEventName={TEST_NEW_LEDGER}
+                  emitter={this.emitter}
+                />
+              </div>
             </div>
           </section>
-        </div>
+        </main>
+
+        <footer className="site-footer">
+          <div className="container">
+            Live metrics for the Stellar network, streamed from Horizon and the
+            dashboard API.{" "}
+            <a
+              href="https://github.com/stellar/dashboard"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Source on GitHub
+            </a>
+          </div>
+        </footer>
       </div>
     );
   }
