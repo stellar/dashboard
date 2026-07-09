@@ -4,13 +4,6 @@ import round from "lodash/round";
 import { ago, agoSeconds } from "../common/time";
 import { copyStatusCard } from "./ui/statusCard.js";
 
-const STATUS_COLORS = {
-  "": "#fdda24",
-  slow: "#ff9f0a",
-  "very-slow": "#e5484d",
-  down: "#e5484d",
-};
-
 // ledgersInAverageCalculation defines how many last ledgers should be
 // considered when calculating average ledger length.
 const ledgersInAverageCalculation = 200;
@@ -134,7 +127,7 @@ export default class NetworkStatus extends React.Component {
     copyStatusCard({
       eyebrow: `${this.props.network} status`,
       statusText,
-      statusColor: STATUS_COLORS[statusClass] || "#fdda24",
+      statusClass,
       stats: [
         { label: "Last ledger", value: `#${this.state.lastLedgerSequence}` },
         {
