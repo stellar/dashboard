@@ -242,9 +242,13 @@ export default class App extends React.Component {
       });
   }
 
-  turnOffForceTheme() {
+  turnOffForceTheme(e) {
+    // Returning false doesn't prevent the anchor's default in React, so the
+    // page would jump to "#". Prevent it explicitly.
+    if (e) {
+      e.preventDefault();
+    }
     this.setState({ forceTheme: false });
-    return false;
   }
 
   renderLiveMain() {
