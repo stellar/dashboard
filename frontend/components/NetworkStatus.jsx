@@ -190,7 +190,11 @@ export default class NetworkStatus extends React.Component {
               {!this.state.loading ? (
                 <button
                   type="button"
-                  className="share-button"
+                  className={
+                    this.state.shareState
+                      ? "share-button active"
+                      : "share-button"
+                  }
                   onClick={() =>
                     this.shareCard(statusText, statusClass, averageLedgerLength)
                   }

@@ -185,11 +185,26 @@
   color: var(--color-text-faint);
   cursor: pointer;
   transition: color var(--transition-fast),
-    border-color var(--transition-fast);
+    border-color var(--transition-fast),
+    opacity var(--transition-fast);
 
   &:hover {
     color: var(--color-text);
     border-color: var(--color-text-faint);
+  }
+}
+
+// Only surface the share button while the hero is being explored. Devices
+// without hover (touch) keep it visible, and keyboard focus always reveals it.
+@media (hover: hover) {
+  .share-button {
+    opacity: 0;
+  }
+
+  .network-hero:hover .share-button,
+  .share-button:focus-visible,
+  .share-button.active {
+    opacity: 1;
   }
 }
 
