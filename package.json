@@ -31,6 +31,8 @@
   },
   "author": "Stellar.org",
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/lora": "^5.2.8",
     "@google-cloud/bigquery": "^5.10.0",
     "@stellar/prettier-config": "^1.0.1",
     "@stellar/stellar-sdk": "^14.4.3",

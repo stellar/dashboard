@@ -54,23 +54,26 @@
       content="https://www.stellar.org/developers/images/favicon/rocket-144x144.png"
     />
 
-    <!-- load custom font -->
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <!-- load MUI -->
-    <link
-      href="https://cdn.muicss.com/mui-0.9.6/css/mui.min.css"
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-    />
+    <meta name="theme-color" content="#0f0f0f" />
+
+    <!-- Set theme before first paint to avoid a flash of the wrong theme -->
+    <script>
+      (function () {
+        var stored;
+        try {
+          stored = localStorage.getItem("theme");
+        } catch (e) {
+          stored = null;
+        }
+        var theme =
+          stored ||
+          (window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: light)").matches
+            ? "light"
+            : "dark");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>

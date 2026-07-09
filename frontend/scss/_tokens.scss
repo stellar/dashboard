@@ -1,0 +1,82 @@
+// Design tokens — Stellar Brand Guidelines 2026
+// Primary: gold #FDDA24 · black #0F0F0F · white #F6F7F8
+// Secondary: warm gray #D6D2C4 · lavender #B7ACE8 · teal #00A7B5 · navy #002E5D
+
+:root {
+  // surfaces
+  --color-bg: #0f0f0f;
+  --color-surface: #161616;
+  --color-surface-raised: #1c1c1c;
+  --color-border: #262626;
+  --color-border-strong: #333333;
+
+  // text
+  --color-text: #f6f7f8;
+  --color-text-secondary: #a8a8a8;
+  --color-text-faint: #6e6e6e;
+
+  // brand
+  --color-accent: #fdda24;
+  --color-accent-contrast: #0f0f0f;
+  --color-lavender: #b7ace8;
+  --color-teal: #00a7b5;
+  --color-warm: #d6d2c4;
+  --color-navy: #002e5d;
+
+  // semantic
+  --color-danger: #e5484d;
+  --color-warning: #ff9f0a;
+  --color-link: #fdda24;
+
+  // charts
+  --chart-primary: #fdda24;
+  --chart-secondary: #b7ace8;
+  --chart-tertiary: #00a7b5;
+  --chart-muted: rgba(214, 210, 196, 0.55);
+  --chart-grid: rgba(246, 247, 248, 0.07);
+  --chart-axis-text: #6e6e6e;
+
+  // typography
+  --font-serif: "Lora", georgia, serif;
+  --font-sans: "Inter", -apple-system, blinkmacsystemfont, "Helvetica Neue",
+    sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Menlo", monospace;
+
+  // shape & motion
+  --radius-card: 12px;
+  --radius-chip: 6px;
+  --shadow-card: none;
+  --transition-fast: 120ms ease-out;
+
+  // header glow (brand "fluid gradient" language)
+  --header-glow: radial-gradient(
+    60% 220px at 50% 0,
+    rgba(253, 218, 36, 0.09),
+    transparent
+  );
+}
+
+:root[data-theme="light"] {
+  --color-bg: #f6f7f8;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-border: #e4e4e4;
+  --color-border-strong: #cfcfcf;
+
+  --color-text: #0f0f0f;
+  --color-text-secondary: #555555;
+  --color-text-faint: #8a8a8a;
+
+  // gold fails WCAG as text on light backgrounds — use navy for links there
+  --color-link: #002e5d;
+
+  --chart-grid: rgba(15, 15, 15, 0.07);
+  --chart-axis-text: #8a8a8a;
+  --shadow-card: 0 1px 2px rgba(15, 15, 15, 0.06);
+
+  --header-glow: radial-gradient(
+    60% 220px at 50% 0,
+    rgba(253, 218, 36, 0.18),
+    transparent
+  );
+}

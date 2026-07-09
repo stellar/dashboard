@@ -1,0 +1,470 @@
+// Component layer: header, cards, chips, tables, banners, status, skeletons.
+
+// ---------------------------------------------------------------------------
+// Site header
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-bg);
+  background-image: var(--header-glow);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 64px;
+}
+
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-text);
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  .site-logo {
+    display: block;
+    height: 22px;
+    width: auto;
+  }
+
+  .site-brand-suffix {
+    padding-left: 12px;
+    border-left: 1px solid var(--color-border-strong);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+}
+
+// The extracted brand SVG is white; flip it for the light theme.
+:root[data-theme="light"] .site-logo {
+  filter: invert(1);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  a {
+    color: var(--color-text-secondary);
+    font-size: 13px;
+
+    &:hover {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    gap: 12px;
+
+    .hide-mobile {
+      display: none;
+    }
+  }
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-chip);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast),
+    border-color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-faint);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Cards
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-border-strong);
+  }
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.card-title {
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.card-api-link {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-chip);
+  color: var(--color-accent);
+  transition: background-color var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover {
+    background-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+    text-decoration: none;
+  }
+}
+
+:root[data-theme="light"] .card-api-link {
+  // gold-on-white fails contrast; use ink instead
+  border-color: var(--color-border-strong);
+  color: var(--color-text-secondary);
+
+  &:hover {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+}
+
+.card-body {
+  padding: 16px 20px;
+
+  &.flush {
+    padding: 0;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Chips & legends
+
+.chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-chip);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.primary {
+    background: var(--chart-primary);
+  }
+
+  &.secondary {
+    background: var(--chart-secondary);
+  }
+
+  &.tertiary {
+    background: var(--chart-tertiary);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Tables
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    padding: 6px 0;
+  }
+
+  td {
+    padding: 7px 0;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text);
+    vertical-align: top;
+  }
+
+  tr:first-child td {
+    border-top: none;
+  }
+
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .label {
+    color: var(--color-text-secondary);
+  }
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+// ---------------------------------------------------------------------------
+// Banners (active incidents / maintenance)
+
+.banner {
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-danger);
+  border-radius: var(--radius-chip);
+  background: var(--color-surface);
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 13px;
+
+  a {
+    font-weight: 600;
+  }
+
+  .banner-meta {
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  &.warning {
+    border-left-color: var(--color-warning);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Network status
+
+.status-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.status-dot {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  flex-shrink: 0;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid var(--color-accent);
+    opacity: 0;
+  }
+
+  &.slow {
+    background: var(--color-warning);
+
+    &::after {
+      border-color: var(--color-warning);
+    }
+  }
+
+  &.very-slow,
+  &.down {
+    background: var(--color-danger);
+
+    &::after {
+      border-color: var(--color-danger);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot::after {
+    animation: status-ring 2.4s ease-out infinite;
+  }
+
+  .status-dot.very-slow::after,
+  .status-dot.down::after {
+    animation-duration: 1.2s;
+  }
+}
+
+@keyframes status-ring {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+
+  70% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.status-word {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+
+.stat {
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    margin-bottom: 2px;
+  }
+
+  .stat-value {
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Hero numbers (lumen supply)
+
+.amount-hero {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 38px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+
+  .amount-unit {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-text-faint);
+    margin-left: 6px;
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 1180px) {
+    font-size: 30px;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Skeletons
+
+.skeleton {
+  display: inline-block;
+  width: 100%;
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(
+    100deg,
+    var(--color-border) 40%,
+    var(--color-border-strong) 50%,
+    var(--color-border) 60%
+  );
+  background-size: 200% 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton {
+    animation: skeleton-shimmer 1.4s linear infinite;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 120% 0;
+  }
+
+  to {
+    background-position: -80% 0;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Footer
+
+.site-footer {
+  margin-top: 56px;
+  border-top: 1px solid var(--color-border);
+  padding: 24px 0 40px;
+  color: var(--color-text-faint);
+  font-size: 12px;
+
+  a {
+    color: var(--color-text-secondary);
+  }
+}
