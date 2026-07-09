@@ -24,14 +24,11 @@ export default class TotalCoins extends AmountWidget {
     });
   }
 
-  renderName() {
-    return (
-      <div>
-        <span>Total Supply</span>
-        <a href="/api/v2/lumens/" target="_blank" className="api-link">
-          API
-        </a>
-      </div>
-    );
+  name() {
+    return "Total supply";
+  }
+
+  apiUrl() {
+    return "/api/v2/lumens/";
   }
 }

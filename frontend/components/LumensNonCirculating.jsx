@@ -1,6 +1,5 @@
 import React from "react";
 import AmountWidget from "./AmountWidget.jsx";
-import Panel from "muicss/lib/react/panel";
 import * as lumens from "../../common/lumens.js";
 const { noncirculatingSupply } = lumens;
 
@@ -24,14 +23,11 @@ export default class LumensNonCirculating extends AmountWidget {
     });
   }
 
-  renderName() {
-    return (
-      <div>
-        <span>Non-Circulating Supply</span>
-        <a href="/api/v2/lumens/" target="_blank" className="api-link">
-          API
-        </a>
-      </div>
-    );
+  name() {
+    return "Non-circulating supply";
+  }
+
+  apiUrl() {
+    return "/api/v2/lumens/";
   }
 }

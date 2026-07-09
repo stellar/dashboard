@@ -1,6 +1,6 @@
 import React from "react";
-import Panel from "muicss/lib/react/panel";
 import BigNumber from "bignumber.js";
+import Card from "./ui/Card.jsx";
 
 export default class AmountWidget extends React.Component {
   constructor(props) {
@@ -8,16 +8,19 @@ export default class AmountWidget extends React.Component {
     this.state = { loading: true };
   }
 
-  renderName() {
+  // Subclasses override these.
+  name() {
+    return null;
+  }
+
+  apiUrl() {
     return null;
   }
 
   render() {
     let amountBig;
     let amount;
-    if (this.state.loading) {
-      amountBig = "Loading...";
-    } else {
+    if (!this.state.loading) {
       if (this.state.amount >= 1000000000) {
         amountBig = Math.floor(this.state.amount / 10000000) / 100 + "B";
       } else if (this.state.amount >= 1000000) {
@@ -28,27 +31,32 @@ export default class AmountWidget extends React.Component {
         amountBig = Math.floor(this.state.amount);
       }
 
-      if (this.state.code) {
-        amountBig += ` ${this.state.code}`;
-      }
-
       amount = new BigNumber(this.state.amount).toFormat(7);
     }
 
     return (
-      <Panel>
-        <div className="widget-name">{this.renderName()}</div>
-        <div className="mui--text-display3 mui--text-center">{amountBig}</div>
-        <div className="mui--text-caption mui--text-center">
-          {this.state.loading ? (
-            ""
-          ) : (
-            <span>
+      <Card title={this.name()} apiUrl={this.apiUrl()}>
+        {this.state.loading ? (
+          <div>
+            <div className="amount-hero">
+              <span className="skeleton" style={{ width: "60%" }}></span>
+            </div>
+            <div className="amount-precise">
+              <span className="skeleton" style={{ width: "40%" }}></span>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="amount-hero">
+              {amountBig}
+              <span className="amount-unit">{this.state.code}</span>
+            </div>
+            <div className="amount-precise">
               {amount} {this.state.code}
-            </span>
-          )}
-        </div>
-      </Panel>
+            </div>
+          </div>
+        )}
+      </Card>
     );
   }
 }

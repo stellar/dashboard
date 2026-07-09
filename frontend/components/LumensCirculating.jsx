@@ -1,7 +1,5 @@
 import React from "react";
 import AmountWidget from "./AmountWidget.jsx";
-import BigNumber from "bignumber.js";
-import Panel from "muicss/lib/react/panel";
 import * as lumens from "../../common/lumens.js";
 const { circulatingSupply } = lumens;
 
@@ -29,14 +27,11 @@ export default class LumensCirculating extends AmountWidget {
     });
   }
 
-  renderName() {
-    return (
-      <div>
-        <span>Circulating Supply</span>
-        <a href="/api/v2/lumens/" target="_blank" className="api-link">
-          API
-        </a>
-      </div>
-    );
+  name() {
+    return "Circulating supply";
+  }
+
+  apiUrl() {
+    return "/api/v2/lumens/";
   }
 }

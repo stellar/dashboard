@@ -1,8 +1,8 @@
 import React from "react";
-import Panel from "muicss/lib/react/panel";
 import axios from "axios";
 import round from "lodash/round";
 import { ago, agoSeconds } from "../common/time";
+import Card from "./ui/Card.jsx";
 
 // ledgersInAverageCalculation defines how many last ledgers should be
 // considered when calculating average ledger length.
@@ -99,77 +99,74 @@ export default class NetworkStatus extends React.Component {
   }
 
   render() {
-    let statusClass;
+    let statusClass = "";
     let statusText;
 
     let averageLedgerLength =
       this.state.ledgerLengthSum / ledgersInAverageCalculation;
     if (this.state.loading) {
-      statusText = <strong className="mui--text-body2">Loading...</strong>;
+      statusText = "Connecting…";
     } else if (this.state.closedAgo >= 90) {
       // If last ledger closed more than 90 seconds ago it means network is down.
       statusClass = "down";
-      statusText = (
-        <strong className="mui--text-body2" style={{ color: "#666" }}>
-          Network (or monitoring node) down!
-        </strong>
-      );
+      statusText = "Network (or monitoring node) down";
     } else {
       // Now we check the average close time but we also need to check the latest ledger
       // close time because if there are no new ledgers it means that network is slow or down.
       if (averageLedgerLength <= 10 && this.state.closedAgo < 20) {
-        statusText = (
-          <strong className="mui--text-body2" style={{ color: "#2196f3" }}>
-            Up and running!
-          </strong>
-        );
+        statusText = "Up and running";
       } else if (averageLedgerLength <= 15 && this.state.closedAgo < 40) {
         statusClass = "slow";
-        statusText = (
-          <strong className="mui--text-body2" style={{ color: "orange" }}>
-            Network slow!
-          </strong>
-        );
+        statusText = "Network slow";
       } else {
         statusClass = "very-slow";
-        statusText = (
-          <strong className="mui--text-body2" style={{ color: "red" }}>
-            Network very slow!
-          </strong>
-        );
+        statusText = "Network very slow";
       }
     }
 
     return (
-      <Panel>
-        <div className="widget-name">Network Status: {this.props.network}</div>
-        <div className="mui--text-center">
-          {/* Fancy pulse effect */}
-          <div className="pulse-container">
-            <div className={"pulse pulse1 " + statusClass}></div>
-            <div className={"pulse pulse2 " + statusClass}></div>
-          </div>
+      <Card title={`Network status · ${this.props.network}`}>
+        <div className="status-hero">
+          <div className={"status-dot " + statusClass}></div>
+          <div className="status-word">{statusText}</div>
         </div>
-        <div className="mui--text-caption mui--text-center">
-          {statusText}
-          <br />
-          {!this.state.loading ? (
-            <div>
-              Protocol version: {this.state.protocolVersion}
-              <br />
-              Last ledger: #{this.state.lastLedgerSequence} closed ~
-              {ago(this.state.closedAt)} ago in{" "}
-              {this.state.lastLedgerLength / 1000}s.
-              <br />
-              Average ledger close time in the last{" "}
-              {ledgersInAverageCalculation} ledgers:{" "}
-              {round(averageLedgerLength, 2)}s.
+        {!this.state.loading ? (
+          <div className="status-grid">
+            <div className="stat">
+              <div className="stat-label">Last ledger</div>
+              <div className="stat-value">
+                #{this.state.lastLedgerSequence}
+              </div>
             </div>
-          ) : (
-            ""
-          )}
-        </div>
-      </Panel>
+            <div className="stat">
+              <div className="stat-label">Protocol</div>
+              <div className="stat-value">{this.state.protocolVersion}</div>
+            </div>
+            <div className="stat">
+              <div className="stat-label">Closed</div>
+              <div className="stat-value">
+                ~{ago(this.state.closedAt)} ago in{" "}
+                {this.state.lastLedgerLength / 1000}s
+              </div>
+            </div>
+            <div className="stat">
+              <div className="stat-label">
+                Avg close · {ledgersInAverageCalculation} ledgers
+              </div>
+              <div className="stat-value">
+                {round(averageLedgerLength, 2)}s
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="status-grid">
+            <span className="skeleton"></span>
+            <span className="skeleton"></span>
+            <span className="skeleton"></span>
+            <span className="skeleton"></span>
+          </div>
+        )}
+      </Card>
     );
   }
 }

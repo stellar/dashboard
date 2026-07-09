@@ -1,6 +1,5 @@
 import React from "react";
 import AmountWidget from "./AmountWidget.jsx";
-import Panel from "muicss/lib/react/panel";
 import axios from "axios";
 import find from "lodash/find";
 
@@ -31,16 +30,11 @@ export default class AccountBalance extends AmountWidget {
     });
   }
 
-  renderName() {
-    return (
-      <span>
-        {this.props.name}:{" "}
-        <code>
-          <a href={this.url} target="_blank">
-            {this.props.id.substr(0, 4)}
-          </a>
-        </code>
-      </span>
-    );
+  name() {
+    return `${this.props.name} balance`;
+  }
+
+  apiUrl() {
+    return this.url;
   }
 }

@@ -174,6 +174,25 @@
   }
 }
 
+.nodes-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--color-text-secondary);
+
+  a {
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Chips & legends
 
@@ -215,12 +234,12 @@
     background: var(--chart-primary);
   }
 
-  &.secondary {
-    background: var(--chart-secondary);
+  &.series-a {
+    background: var(--chart-series-a);
   }
 
-  &.tertiary {
-    background: var(--chart-tertiary);
+  &.series-b {
+    background: var(--chart-series-b);
   }
 }
 
@@ -266,6 +285,112 @@
 .mono {
   font-family: var(--font-mono);
   font-size: 12px;
+}
+
+// ---------------------------------------------------------------------------
+// Operations stream
+
+.ops-card .card-body {
+  max-height: 460px;
+  overflow-y: auto;
+}
+
+.ops-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ops-row {
+  padding: 10px 0;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+
+  &:first-child {
+    border-top: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ops-row.fresh {
+    animation: ops-flash 1.2s ease-out both;
+  }
+}
+
+@keyframes ops-flash {
+  from {
+    background-color: rgba(253, 218, 36, 0.1);
+  }
+
+  to {
+    background-color: transparent;
+  }
+}
+
+.ops-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+
+  a.chip {
+    color: var(--color-text-secondary);
+
+    &:hover {
+      color: var(--color-text);
+      border-color: var(--color-text-faint);
+      text-decoration: none;
+    }
+  }
+}
+
+.ops-time {
+  color: var(--color-text-faint);
+  font-size: 12px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ops-row-body {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text);
+  }
+
+  // Account/asset links read as data, not as calls to action — keep them
+  // quiet so gold stays scarce.
+  a {
+    color: var(--color-text);
+
+    &:hover {
+      color: var(--color-link);
+    }
+  }
+}
+
+.account-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  margin-left: 4px;
+  border-radius: var(--radius-chip);
+  background: var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.account img {
+  height: 12px;
+  margin-left: 4px;
+  vertical-align: -1px;
 }
 
 // ---------------------------------------------------------------------------
@@ -397,6 +522,86 @@
 }
 
 // ---------------------------------------------------------------------------
+// Incident history
+
+.incident-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 0;
+    border-top: 1px solid var(--color-border);
+
+    &:first-child {
+      border-top: none;
+    }
+
+    a {
+      color: var(--color-text);
+      min-width: 0;
+
+      &:hover {
+        color: var(--color-link);
+      }
+    }
+  }
+
+  .incident-time {
+    flex-shrink: 0;
+    color: var(--color-text-faint);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+.incidents-card .card-body {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+// ---------------------------------------------------------------------------
+// Capacity meter (fee stats)
+
+.capacity-meter {
+  margin-bottom: 12px;
+}
+
+.capacity-meter-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.capacity-meter-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.capacity-meter-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--color-accent);
+  transition: width 400ms ease-out;
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.text-danger {
+  color: var(--color-danger);
+}
+
+// ---------------------------------------------------------------------------
 // Hero numbers (lumen supply)
 
 .amount-hero {
@@ -419,6 +624,13 @@
   @media (max-width: 1180px) {
     font-size: 30px;
   }
+}
+
+.amount-precise {
+  margin-top: 4px;
+  color: var(--color-text-faint);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
 // ---------------------------------------------------------------------------
