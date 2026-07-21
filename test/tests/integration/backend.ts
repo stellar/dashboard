@@ -18,7 +18,12 @@ describe("integration", function () {
 
   describe("backend api endpoints", function () {
     it("/api/lumens should return successfuly with data", async function () {
-      let { body } = await request(app).get("/api/lumens").expect(200);
+      let { body, headers } = await request(app)
+        .get("/api/lumens")
+        .expect(200)
+        .expect("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
+
+      chai.expect(headers["cache-control"]).to.include("max-age=300");
 
       chai.expect(body).to.be.an("object");
       chai.expect(Object.keys(body).length).to.not.equal(0);

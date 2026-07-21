@@ -18,6 +18,10 @@ export async function v1Handler(_: any, res: Response, next: NextFunction) {
   try {
     const cachedData = await getOrThrow(redisClient, "lumensV1");
     const obj: CachedData = JSON.parse(cachedData);
+    res.setHeader(
+      "Cache-Control",
+      "public, max-age=300, stale-while-revalidate=600",
+    );
     res.json(obj);
   } catch (e) {
     next(e);
