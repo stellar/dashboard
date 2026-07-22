@@ -223,9 +223,7 @@ describe("integration", function () {
       });
 
       it("path variants of GET /api/lumens should keep the higher limit", async function () {
-        const { headers } = await request(app)
-          .get("/api/lumens/")
-          .expect(200);
+        const { headers } = await request(app).get("/api/lumens/").expect(200);
 
         chai.expect(headers["ratelimit-limit"]).to.equal("1000");
       });
@@ -234,6 +232,51 @@ describe("integration", function () {
         const { headers } = await request(app).post("/api/lumens").expect(404);
 
         chai.expect(headers["ratelimit-limit"]).to.equal("100");
+      });
+
+      // The limiters key on client IP, so spoofing X-Forwarded-For (trusted
+      // from loopback) gives each test a fresh, isolated budget.
+      it("general api traffic should not consume the /api/lumens budget", async function () {
+        const ip = "203.0.113.10";
+
+        // Exhaust the general API budget for this IP...
+        for (let i = 0; i < 100; i++) {
+          await request(app)
+            .get("/api/v2/lumens")
+            .set("X-Forwarded-For", ip)
+            .expect(200);
+        }
+        await request(app)
+          .get("/api/v2/lumens")
+          .set("X-Forwarded-For", ip)
+          .expect(429);
+
+        // ...and /api/lumens is still available, having only counted its own
+        // requests.
+        const { headers } = await request(app)
+          .get("/api/lumens")
+          .set("X-Forwarded-For", ip)
+          .expect(200);
+
+        chai.expect(headers["ratelimit-remaining"]).to.equal("999");
+      });
+
+      it("/api/lumens traffic should not consume the general api budget", async function () {
+        const ip = "203.0.113.20";
+
+        for (let i = 0; i < 5; i++) {
+          await request(app)
+            .get("/api/lumens")
+            .set("X-Forwarded-For", ip)
+            .expect(200);
+        }
+
+        const { headers } = await request(app)
+          .get("/api/v2/lumens")
+          .set("X-Forwarded-For", ip)
+          .expect(200);
+
+        chai.expect(headers["ratelimit-remaining"]).to.equal("99");
       });
     });
 
