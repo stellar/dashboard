@@ -51,10 +51,10 @@ describe("integration", function () {
       chai
         .expect(body.programs.productAndInnovation)
         .to.match(DECIMAL_NUMBER_REGEX);
+      chai.expect(body.programs.growth).to.match(DECIMAL_NUMBER_REGEX);
       chai
-        .expect(body.programs.growth)
+        .expect(body.programs.assetsAndLiquidity)
         .to.match(DECIMAL_NUMBER_REGEX);
-      chai.expect(body.programs.assetsAndLiquidity).to.match(DECIMAL_NUMBER_REGEX);
     });
 
     it("/api/v2/lumens should return successfuly with data", async function () {
@@ -192,6 +192,35 @@ describe("integration", function () {
       chai.expect(body).to.be.a("string");
       chai.expect(body).to.not.equal("");
       chai.expect(body).to.match(DECIMAL_NUMBER_REGEX);
+    });
+
+    describe("rate limiting", function () {
+      // Rate limiters are skipped when DEV=true (how tests run), so toggle
+      // it off to exercise them.
+      let originalDev: string | undefined;
+
+      before(function () {
+        originalDev = process.env.DEV;
+        process.env.DEV = "false";
+      });
+
+      after(function () {
+        process.env.DEV = originalDev;
+      });
+
+      it("/api/lumens should have its own higher rate limit", async function () {
+        const { headers } = await request(app).get("/api/lumens").expect(200);
+
+        chai.expect(headers["ratelimit-limit"]).to.equal("1000");
+      });
+
+      it("other api endpoints should keep the general rate limit", async function () {
+        const { headers } = await request(app)
+          .get("/api/v2/lumens")
+          .expect(200);
+
+        chai.expect(headers["ratelimit-limit"]).to.equal("100");
+      });
     });
 
     it("/api/ledgers/public should return successfully with data", async function () {

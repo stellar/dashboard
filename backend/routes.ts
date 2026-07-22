@@ -28,6 +28,10 @@ app.set("trust proxy", proxyAddr.compile(trustProxyCidrs));
 
 app.use(logger("combined"));
 
+// /api/lumens serves straight from the Redis cache, so it gets its own
+// higher limit and is excluded from the global and general limiters.
+const LUMENS_V1_PATH = "/api/lumens";
+
 // Global rate limiting for all requests (including static files)
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -39,14 +43,20 @@ const globalLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  skip: () => process.env.DEV === "true",
+  skip: (req) =>
+    process.env.DEV === "true" || req.baseUrl + req.path === LUMENS_V1_PATH,
 });
 
 // Apply global rate limiting to all requests
 app.use(globalLimiter);
 
 // Rate limiting configuration
-const createRateLimit = (windowMs: number, max: number, message: string) => {
+const createRateLimit = (
+  windowMs: number,
+  max: number,
+  message: string,
+  skipPath?: string,
+) => {
   return rateLimit({
     windowMs,
     max,
@@ -58,7 +68,9 @@ const createRateLimit = (windowMs: number, max: number, message: string) => {
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     // Skip rate limiting in development
-    skip: () => process.env.DEV === "true",
+    skip: (req) =>
+      process.env.DEV === "true" ||
+      (skipPath !== undefined && req.baseUrl + req.path === skipPath),
   });
 };
 
@@ -66,6 +78,14 @@ const createRateLimit = (windowMs: number, max: number, message: string) => {
 const generalApiLimiter = createRateLimit(
   15 * 60 * 1000, // 15 minutes
   100,
+  "Too many API requests from this IP, please try again later.",
+  LUMENS_V1_PATH, // /api/lumens has its own, higher limit
+);
+// /api/lumens is served from the Redis cache, so it can take a much higher
+// rate than the general API limit.
+const lumensLimiter = createRateLimit(
+  15 * 60 * 1000, // 15 minutes
+  1000,
   "Too many API requests from this IP, please try again later.",
 );
 
@@ -200,7 +220,7 @@ if (process.env.DEV === "true") {
 
 // API Routes with appropriate rate limiting
 app.get("/api/ledgers/public", strictApiLimiter, ledgers.handler);
-app.get("/api/lumens", lumens.v1Handler);
+app.get("/api/lumens", lumensLimiter, lumens.v1Handler);
 
 app.get("/api/v2/lumens", lumensV2V3.v2Handler);
 /* For CoinMarketCap - heavily rate limited */
