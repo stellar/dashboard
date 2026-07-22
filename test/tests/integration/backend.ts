@@ -221,6 +221,20 @@ describe("integration", function () {
 
         chai.expect(headers["ratelimit-limit"]).to.equal("100");
       });
+
+      it("path variants of GET /api/lumens should keep the higher limit", async function () {
+        const { headers } = await request(app)
+          .get("/api/lumens/")
+          .expect(200);
+
+        chai.expect(headers["ratelimit-limit"]).to.equal("1000");
+      });
+
+      it("non-GET requests to /api/lumens should stay rate limited", async function () {
+        const { headers } = await request(app).post("/api/lumens").expect(404);
+
+        chai.expect(headers["ratelimit-limit"]).to.equal("100");
+      });
     });
 
     it("/api/ledgers/public should return successfully with data", async function () {

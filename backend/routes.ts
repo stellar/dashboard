@@ -29,8 +29,20 @@ app.set("trust proxy", proxyAddr.compile(trustProxyCidrs));
 app.use(logger("combined"));
 
 // /api/lumens serves straight from the Redis cache, so it gets its own
-// higher limit and is excluded from the global and general limiters.
+// higher limit and is excluded from the global and general limiters. The
+// exemption only covers requests the GET route actually serves (Express
+// routing is case-insensitive, tolerates trailing slashes, and answers HEAD
+// through GET handlers) — anything else stays fully rate limited.
 const LUMENS_V1_PATH = "/api/lumens";
+const isLumensV1Request = (req: express.Request): boolean => {
+  const normalizedPath = (req.baseUrl + req.path)
+    .toLowerCase()
+    .replace(/\/+$/, "");
+  return (
+    (req.method === "GET" || req.method === "HEAD") &&
+    normalizedPath === LUMENS_V1_PATH
+  );
+};
 
 // Global rate limiting for all requests (including static files)
 const globalLimiter = rateLimit({
@@ -43,8 +55,7 @@ const globalLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) =>
-    process.env.DEV === "true" || req.baseUrl + req.path === LUMENS_V1_PATH,
+  skip: (req) => process.env.DEV === "true" || isLumensV1Request(req),
 });
 
 // Apply global rate limiting to all requests
@@ -55,7 +66,7 @@ const createRateLimit = (
   windowMs: number,
   max: number,
   message: string,
-  skipPath?: string,
+  skipRequest?: (req: express.Request) => boolean,
 ) => {
   return rateLimit({
     windowMs,
@@ -70,7 +81,7 @@ const createRateLimit = (
     // Skip rate limiting in development
     skip: (req) =>
       process.env.DEV === "true" ||
-      (skipPath !== undefined && req.baseUrl + req.path === skipPath),
+      (skipRequest !== undefined && skipRequest(req)),
   });
 };
 
@@ -79,7 +90,7 @@ const generalApiLimiter = createRateLimit(
   15 * 60 * 1000, // 15 minutes
   100,
   "Too many API requests from this IP, please try again later.",
-  LUMENS_V1_PATH, // /api/lumens has its own, higher limit
+  isLumensV1Request, // /api/lumens has its own, higher limit
 );
 // /api/lumens is served from the Redis cache, so it can take a much higher
 // rate than the general API limit.
