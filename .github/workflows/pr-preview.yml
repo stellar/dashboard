@@ -1,0 +1,69 @@
+# PR preview environments, replacing the Jenkins preview pipeline
+# (Jenkinsfile-preview). Previews move from the stellar-dashboard-dev
+# namespace and dashboard-previews domain into common-previews with the
+# standard host scheme. CI only builds the image and signals with the
+# `preview` label; ArgoCD's preview-stellar-dashboard ApplicationSet
+# (stellar/kube) does the deploying.
+# See https://github.com/stellar/actions/tree/main/sdf-pr-preview
+
+name: pr-preview
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, closed]
+
+# pull_request_target runs in base-repo context, so these are real write
+# permissions even for fork PRs. On `pull_request`, fork runs get no OIDC
+# token and a read-only token.
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: write
+
+concurrency:
+  group: pr-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  ECR_REPOSITORY: dev/stellar-dashboard
+  PREVIEW_HOST: stellar-dashboard-pr-${{ github.event.pull_request.number }}.previews.kube001.services.stellar-ops.com
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      # Nothing that touches PR code may run before the gate, and every step
+      # after it must be guarded by `member == 'true'`.
+      - id: gate
+        uses: stellar/actions/sdf-pr-preview/gate@main
+        with:
+          app-id: ${{ vars.PREVIEW_BOT_APP_ID }}
+          private-key: ${{ secrets.PREVIEW_BOT_PRIVATE_KEY }}
+
+      # PR head SHA, not the default base ref - must match the
+      # ApplicationSet's {{ .head_sha }}.
+      - uses: actions/checkout@v6
+        if: steps.gate.outputs.member == 'true'
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - id: ecr-login
+        if: steps.gate.outputs.member == 'true'
+        uses: stellar/actions/sdf-ecr-login@main
+
+      - name: Build and push preview image
+        if: steps.gate.outputs.member == 'true'
+        env:
+          TAG: ${{ steps.ecr-login.outputs.ecr-registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.gate.outputs.image-tag }}
+        run: |
+          set -eu
+          make docker-build
+          make docker-push
+          echo "IMAGE=${TAG}" >> "$GITHUB_ENV"
+
+      - uses: stellar/actions/sdf-pr-preview/publish@main
+        if: steps.gate.outputs.member == 'true'
+        with:
+          images: ${{ env.IMAGE }}
+          preview-host: ${{ env.PREVIEW_HOST }}
