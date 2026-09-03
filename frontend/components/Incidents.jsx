@@ -1,7 +1,7 @@
 import React from "react";
-import Panel from "muicss/lib/react/panel";
 import axios from "axios";
 import moment from "moment";
+import Card from "./ui/Card.jsx";
 
 export default class Incidents extends React.Component {
   constructor(props) {
@@ -34,25 +34,34 @@ export default class Incidents extends React.Component {
 
   render() {
     return (
-      <Panel>
-        <div className="widget-name">Incidents</div>
+      <Card title="Incidents" className="incidents-card">
         {this.state.loading ? (
-          <span>Loading...</span>
+          <div>
+            <span className="skeleton"></span>
+            <span className="skeleton" style={{ width: "80%" }}></span>
+            <span className="skeleton" style={{ width: "90%" }}></span>
+          </div>
         ) : (
-          <ul className="incidents">
+          <ul className="incident-list">
             {this.state.incidents.map((m) => {
               return (
                 <li key={m.id}>
-                  <a href={"https://status.stellar.org/incidents/" + m.id}>
+                  <a
+                    href={"https://status.stellar.org/incidents/" + m.id}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     {m.name}
-                  </a>{" "}
-                  ({moment(m.started_at).fromNow()})
+                  </a>
+                  <span className="incident-time">
+                    {moment(m.started_at).fromNow()}
+                  </span>
                 </li>
               );
             })}
           </ul>
         )}
-      </Panel>
+      </Card>
     );
   }
 }

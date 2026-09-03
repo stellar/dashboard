@@ -31,6 +31,9 @@
   },
   "author": "Stellar.org",
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/lora": "^5.2.8",
+    "@fontsource/press-start-2p": "^5.2.7",
     "@google-cloud/bigquery": "^5.10.0",
     "@stellar/prettier-config": "^1.0.1",
     "@stellar/stellar-sdk": "^14.4.3",
@@ -48,7 +51,6 @@
     "lodash": "^4.17.21",
     "moment": "^2.17.1",
     "morgan": "^1.8.2",
-    "muicss": "^0.9.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "redis": "^4.0.1"

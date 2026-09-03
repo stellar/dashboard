@@ -1,0 +1,1020 @@
+// Component layer: header, cards, chips, tables, banners, status, skeletons.
+
+// ---------------------------------------------------------------------------
+// Site header
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 64px;
+}
+
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-text);
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  .site-logo {
+    display: block;
+    height: 22px;
+    width: auto;
+  }
+
+  .site-brand-suffix {
+    padding-left: 12px;
+    border-left: 1px solid var(--color-border-strong);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+
+    @media (max-width: 760px) {
+      display: none;
+    }
+  }
+}
+
+// The extracted brand SVG is white; flip it for the light theme.
+:root[data-theme="light"] .site-logo {
+  filter: invert(1);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  a {
+    color: var(--color-text-secondary);
+    font-size: 13px;
+
+    &:hover {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    gap: 12px;
+
+    .hide-mobile {
+      display: none;
+    }
+  }
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-chip);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast),
+    border-color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-faint);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.site-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+
+.network-switcher {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-chip);
+
+  a {
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+
+    &:hover {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    &.active {
+      background: var(--color-accent);
+      color: var(--color-accent-contrast);
+    }
+  }
+
+  @media (max-width: 600px) {
+    a {
+      padding: 3px 7px;
+      font-size: 11px;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Network hero
+
+.network-hero {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.network-hero-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding-block: 36px 32px;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 1180px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+
+.network-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.share-button {
+  padding: 2px 8px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-chip);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-faint);
+  cursor: pointer;
+  transition: color var(--transition-fast),
+    border-color var(--transition-fast),
+    opacity var(--transition-fast);
+
+  &:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-faint);
+  }
+}
+
+// Only surface the share button while the hero is being explored. Devices
+// without hover (touch) keep it visible, and keyboard focus always reveals it.
+@media (hover: hover) {
+  .share-button {
+    opacity: 0;
+  }
+
+  .network-hero:hover .share-button,
+  .share-button:focus-visible,
+  .share-button.active {
+    opacity: 1;
+  }
+}
+
+.network-hero-status {
+  .stat-label {
+    margin-bottom: 10px;
+  }
+
+  > .network-hero-eyebrow .stat-label {
+    margin-bottom: 0;
+  }
+
+  .status-hero {
+    margin-bottom: 0;
+    gap: 16px;
+  }
+
+  .status-dot {
+    width: 14px;
+    height: 14px;
+  }
+
+  .status-word {
+    font-size: 40px;
+    letter-spacing: -0.01em;
+
+    @media (max-width: 600px) {
+      font-size: 28px;
+    }
+  }
+}
+
+.network-hero-stats {
+  display: flex;
+  gap: 36px;
+  flex-wrap: wrap;
+
+  .stat-value {
+    font-size: 17px;
+  }
+
+  @media (max-width: 900px) {
+    gap: 20px 28px;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Live mode (fullscreen big-screen view: conferences, wall monitors)
+
+.live-mode {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+  padding: 48px;
+  background: var(--color-bg);
+  text-align: center;
+
+  .live-mode-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .live-mode-logo {
+    display: block;
+    height: clamp(28px, 3vw, 46px);
+    width: auto;
+  }
+
+  .live-mode-eyebrow {
+    font-size: clamp(14px, 1.2vw, 20px);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+  }
+
+  .status-hero {
+    margin: 0;
+    gap: clamp(16px, 2vw, 32px);
+    justify-content: center;
+  }
+
+  .status-dot {
+    width: clamp(16px, 1.8vw, 28px);
+    height: clamp(16px, 1.8vw, 28px);
+  }
+
+  .status-word {
+    font-size: clamp(48px, 8vw, 140px);
+    letter-spacing: -0.015em;
+  }
+
+  .live-mode-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(28px, 5vw, 96px);
+    text-align: left;
+
+    .stat-label {
+      font-size: clamp(12px, 1vw, 17px);
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: clamp(26px, 3vw, 52px);
+      font-variant-numeric: tabular-nums;
+      border-radius: var(--radius-chip);
+    }
+  }
+
+  .live-mode-footer {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    translate: -50% 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .live-mode-url {
+    font-size: clamp(13px, 1vw, 17px);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+
+  .live-mode-hint {
+    padding: 4px 10px;
+    border: none;
+    background: none;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--color-text-faint);
+    cursor: pointer;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+// The applause moment: protocol version just changed.
+@media (prefers-reduced-motion: no-preference) {
+  .stat-value.flash {
+    animation: protocol-flash 1.5s ease-out 4;
+  }
+}
+
+@keyframes protocol-flash {
+  0% {
+    color: inherit;
+    text-shadow: none;
+  }
+
+  25% {
+    color: var(--color-accent);
+    text-shadow: 0 0 24px rgba(253, 218, 36, 0.45);
+  }
+
+  100% {
+    color: inherit;
+    text-shadow: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Cards
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+  min-width: 0;
+
+  // Charts get a fixed pixel width via JS; while the resize observer catches
+  // up (e.g. after a viewport change) let them scale down instead of
+  // overflowing the layout.
+  svg {
+    max-width: 100%;
+  }
+
+  &:hover {
+    border-color: var(--color-border-strong);
+  }
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.card-title {
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.card-api-link {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-chip);
+  color: var(--color-accent);
+  transition: background-color var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover {
+    background-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+    text-decoration: none;
+  }
+}
+
+:root[data-theme="light"] .card-api-link {
+  // gold-on-white fails contrast; use ink instead
+  border-color: var(--color-border-strong);
+  color: var(--color-text-secondary);
+
+  &:hover {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+}
+
+.card-body {
+  padding: 16px 20px;
+
+  &.flush {
+    padding: 0;
+  }
+}
+
+.nodes-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--color-text-secondary);
+
+  a {
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Chips & legends
+
+.chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-chip);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.primary {
+    background: var(--chart-primary);
+  }
+
+  &.series-a {
+    background: var(--chart-series-a);
+  }
+
+  &.series-b {
+    background: var(--chart-series-b);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Tables
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    padding: 6px 0;
+  }
+
+  td {
+    padding: 7px 0;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text);
+    vertical-align: top;
+  }
+
+  tr:first-child td {
+    border-top: none;
+  }
+
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .label {
+    color: var(--color-text-secondary);
+  }
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+// ---------------------------------------------------------------------------
+// Operations stream
+
+.ops-card .card-body {
+  max-height: 460px;
+  overflow-y: auto;
+}
+
+.ops-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ops-row {
+  padding: 10px 0;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+
+  &:first-child {
+    border-top: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ops-row.fresh {
+    animation: ops-flash 1.2s ease-out both;
+  }
+}
+
+@keyframes ops-flash {
+  from {
+    background-color: rgba(253, 218, 36, 0.1);
+  }
+
+  to {
+    background-color: transparent;
+  }
+}
+
+.ops-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+
+  a.chip {
+    color: var(--color-text-secondary);
+
+    &:hover {
+      color: var(--color-text);
+      border-color: var(--color-text-faint);
+      text-decoration: none;
+    }
+  }
+}
+
+.ops-time {
+  color: var(--color-text-faint);
+  font-size: 12px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ops-row-body {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text);
+  }
+
+  // Account/asset links read as data, not as calls to action — keep them
+  // quiet so gold stays scarce.
+  a {
+    color: var(--color-text);
+
+    &:hover {
+      color: var(--color-link);
+    }
+  }
+}
+
+.account-known {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 1px 6px;
+  border-radius: var(--radius-chip);
+  background: var(--color-border);
+}
+
+:root[data-theme="light"] .account-known {
+  background: #ececec;
+}
+
+// ---------------------------------------------------------------------------
+// Banners (active incidents / maintenance)
+
+.banner {
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-danger);
+  border-radius: var(--radius-chip);
+  background: var(--color-surface);
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 13px;
+
+  a {
+    font-weight: 600;
+  }
+
+  .banner-meta {
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  &.warning {
+    border-left-color: var(--color-warning);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Network status
+
+.status-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.status-dot {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  flex-shrink: 0;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid var(--color-accent);
+    opacity: 0;
+  }
+
+  &.slow {
+    background: var(--color-warning);
+
+    &::after {
+      border-color: var(--color-warning);
+    }
+  }
+
+  &.very-slow,
+  &.down {
+    background: var(--color-danger);
+
+    &::after {
+      border-color: var(--color-danger);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot::after {
+    animation: status-ring 2.4s ease-out infinite;
+  }
+
+  .status-dot.very-slow::after,
+  .status-dot.down::after {
+    animation-duration: 1.2s;
+  }
+}
+
+@keyframes status-ring {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+
+  70% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.status-word {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+
+.stat {
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    margin-bottom: 2px;
+  }
+
+  .stat-value {
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Incident history
+
+.incident-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 0;
+    border-top: 1px solid var(--color-border);
+
+    &:first-child {
+      border-top: none;
+    }
+
+    a {
+      color: var(--color-text);
+      min-width: 0;
+
+      &:hover {
+        color: var(--color-link);
+      }
+    }
+  }
+
+  .incident-time {
+    flex-shrink: 0;
+    color: var(--color-text-faint);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+.incidents-card .card-body {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+// ---------------------------------------------------------------------------
+// Capacity meter (fee stats)
+
+.capacity-meter {
+  margin-bottom: 12px;
+}
+
+.capacity-meter-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.capacity-meter-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.capacity-meter-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--color-accent);
+  transition: width 400ms ease-out;
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.text-danger {
+  color: var(--color-danger);
+}
+
+.fee-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.text-button {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-link);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Hero numbers (lumen supply)
+
+.amount-hero {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 38px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+
+  .amount-unit {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-text-faint);
+    margin-left: 6px;
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 1180px) {
+    font-size: 30px;
+  }
+}
+
+.amount-precise {
+  margin-top: 4px;
+  color: var(--color-text-faint);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+// ---------------------------------------------------------------------------
+// Supply distribution bar
+
+.supply-bar {
+  display: flex;
+  gap: 2px;
+  height: 24px;
+  border-radius: var(--radius-chip);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.supply-segment {
+  min-width: 2px;
+  transition: opacity var(--transition-fast);
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.supply-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+
+  .supply-legend-value {
+    color: var(--color-text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Skeletons
+
+.skeleton {
+  display: inline-block;
+  width: 100%;
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(
+    100deg,
+    var(--color-border) 40%,
+    var(--color-border-strong) 50%,
+    var(--color-border) 60%
+  );
+  background-size: 200% 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton {
+    animation: skeleton-shimmer 1.4s linear infinite;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 120% 0;
+  }
+
+  to {
+    background-position: -80% 0;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Footer
+
+.site-footer {
+  margin-top: 56px;
+  border-top: 1px solid var(--color-border);
+  padding: 24px 0 40px;
+  color: var(--color-text-faint);
+  font-size: 12px;
+
+  a {
+    color: var(--color-text-secondary);
+  }
+}

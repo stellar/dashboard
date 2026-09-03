@@ -1,5 +1,4 @@
 import React from "react";
-import Panel from "muicss/lib/react/panel";
 import moment from "moment";
 import sanitizeHtml from "../utilities/sanitizeHtml.js";
 
@@ -13,16 +12,12 @@ export const ScheduledMaintenance = ({ scheduledMaintenances }) => {
     incident_updates: updates,
     scheduled_for,
   } = sortedMaintenances[0];
-  const scheduledFor = moment(scheduled_for);
 
   return (
-    <Panel key={id} className="mui--bg-accent-light">
-      <div className="mui--text-subhead mui--text-light">
-        Scheduled Maintenance:{" "}
-        <a href={"https://status.stellar.org/incidents/" + id}>
-          <strong>{name}</strong>
-        </a>{" "}
-        on{" "}
+    <div key={id} className="banner warning">
+      Scheduled maintenance:{" "}
+      <a href={"https://status.stellar.org/incidents/" + id}>{name}</a>
+      <div className="banner-meta">
         {moment(scheduled_for).utc().format("dddd, MMMM Do YYYY, [at] h:mma")}{" "}
         UTC (
         {moment(scheduled_for).format(
@@ -32,12 +27,8 @@ export const ScheduledMaintenance = ({ scheduledMaintenances }) => {
             : "MMMM Do YYYY, h:mma",
         )}{" "}
         local time)
-        <br />
-        {updates.length > 0 ? (
-          <span>{sanitizeHtml(updates[0].body)}</span>
-        ) : null}
-        <br />
       </div>
-    </Panel>
+      {updates.length > 0 ? <div>{sanitizeHtml(updates[0].body)}</div> : null}
+    </div>
   );
 };

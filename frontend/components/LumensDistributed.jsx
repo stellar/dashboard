@@ -1,9 +1,5 @@
 import React from "react";
 import AmountWidget from "./AmountWidget.jsx";
-import Panel from "muicss/lib/react/panel";
-import BigNumber from "bignumber.js";
-import axios from "axios";
-import find from "lodash/find";
 import * as lumens from "../../common/lumens.js";
 const { distributionAll } = lumens;
 
@@ -27,14 +23,11 @@ export default class LumensDistributed extends AmountWidget {
     });
   }
 
-  renderName() {
-    return (
-      <div>
-        <span>Lumens Distributed</span>
-        <a href="/api/lumens" target="_blank" className="api-link">
-          API
-        </a>
-      </div>
-    );
+  name() {
+    return "Lumens distributed";
+  }
+
+  apiUrl() {
+    return "/api/lumens";
   }
 }

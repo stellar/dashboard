@@ -21,11 +21,23 @@ export default defineConfig({
     }),
   ],
 
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          "stellar-sdk": ["@stellar/stellar-sdk"],
+          d3: ["d3"],
+        },
+      },
+    },
+  },
+
   // API proxy to backend
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: process.env.API_PROXY_TARGET || "http://localhost:5000",
         changeOrigin: true,
       },
     },

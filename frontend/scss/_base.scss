@@ -1,0 +1,159 @@
+// Base layer: resets, typography, layout primitives.
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+
+// Data everywhere: keep digits aligned as values update live.
+td,
+th,
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+// ---------------------------------------------------------------------------
+// Layout
+
+.container {
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 24px;
+
+  @media (max-width: 600px) {
+    padding-inline: 16px;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  align-items: start;
+
+  // Never let a fixed-width child (chart SVGs) blow the grid out.
+  > * {
+    min-width: 0;
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.col-4 {
+  grid-column: span 4;
+
+  @media (max-width: 900px) {
+    grid-column: 1 / -1;
+  }
+}
+
+.col-8 {
+  grid-column: span 8;
+
+  @media (max-width: 900px) {
+    grid-column: 1 / -1;
+  }
+}
+
+.col-12 {
+  grid-column: 1 / -1;
+}
+
+// Widgets stacked inside a grid column.
+.stack > * + * {
+  margin-top: 24px;
+
+  @media (max-width: 900px) {
+    margin-top: 16px;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Sections
+
+.section {
+  padding-block: 40px 8px;
+
+  @media (max-width: 600px) {
+    padding-block: 28px 4px;
+  }
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-bottom: 24px;
+
+  // Short gold rule above the title — the one brand flourish per section.
+  &::before {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 3px;
+    margin-bottom: 12px;
+    background: var(--color-accent);
+  }
+}
+
+.section-subtitle {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  max-width: 560px;
+  margin-top: -16px;
+  margin-bottom: 24px;
+}
+
+.section-footnote {
+  color: var(--color-text-faint);
+  font-size: 12px;
+  margin: 16px 0 0;
+}

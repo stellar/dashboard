@@ -1,5 +1,4 @@
 import React from "react";
-import Panel from "muicss/lib/react/panel";
 import axios from "axios";
 import moment from "moment";
 import each from "lodash/each";
@@ -9,6 +8,7 @@ import LiquidityPoolBadge from "./LiquidityPoolBadge.jsx";
 import AssetLink from "./AssetLink.jsx";
 import BigNumber from "bignumber.js";
 import { ago } from "../common/time";
+import Card from "./ui/Card.jsx";
 
 export default class RecentOperations extends React.Component {
   constructor(props) {
@@ -31,13 +31,20 @@ export default class RecentOperations extends React.Component {
 
     axios.get(this.url).then((response) => {
       let records = response.data._embedded.records;
+      // Track which rows are new so only those flash on arrival.
+      let knownIds = {};
+      each(this.state.operations, (op) => {
+        knownIds[op.id] = true;
+      });
+      let isFirstLoad = this.state.operations.length === 0;
       let operations = [];
       each(records, (operation) => {
         operation.createdAtMoment = moment(operation.created_at);
         operation.ago = ago(operation.createdAtMoment);
+        operation.fresh = !isFirstLoad && !knownIds[operation.id];
         operations.push(operation);
       });
-      this.setState({ operations });
+      this.setState({ operations, loading: false });
       this.operationsLoading = false;
     });
   }
@@ -231,55 +238,56 @@ export default class RecentOperations extends React.Component {
 
   render() {
     return (
-      <Panel>
-        <div className="widget-name">
-          Recent operations: {this.props.label}{" "}
-          {this.props.account ? this.props.account.substr(0, 4) : ""}
-          <a href={this.url} target="_blank" className="api-link">
-            API
-          </a>
-        </div>
-        <table className="mui-table small">
-          <thead>
-            <tr>
-              <th>Source</th>
-              <th>Operation</th>
-              <th>Details</th>
-              <th>Time ago</th>
-            </tr>
-          </thead>
-          <tbody>
+      <Card
+        title={`Recent operations · ${this.props.label}${
+          this.props.account ? " " + this.props.account.substr(0, 4) : ""
+        }`}
+        apiUrl={this.url}
+        className="ops-card"
+      >
+        {this.state.loading ? (
+          <div>
+            <span className="skeleton"></span>
+            <span className="skeleton" style={{ width: "85%" }}></span>
+            <span className="skeleton" style={{ width: "90%" }}></span>
+          </div>
+        ) : (
+          <ul className="ops-list">
             {this.state.operations.map((op) => {
               return (
-                <tr key={op.id}>
-                  <td>
-                    <AccountBadge
-                      horizonURL={this.props.horizonURL}
-                      id={op.source_account}
-                      known={this.props.account}
-                    />
-                  </td>
-                  <td>
-                    <a href={op._links.self.href} target="_blank">
+                <li key={op.id} className={op.fresh ? "ops-row fresh" : "ops-row"}>
+                  <div className="ops-row-head">
+                    <a
+                      className="chip"
+                      href={op._links.self.href}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       {op.type == "create_passive_offer"
                         ? "passive_offer"
                         : op.type}
                     </a>
-                  </td>
-                  <td>{this.operationTypeColRender(op)}</td>
-                  <td>
-                    {op.ago ? (
-                      <span title={op.createdAtMoment.format()}>{op.ago}</span>
-                    ) : (
-                      "..."
-                    )}
-                  </td>
-                </tr>
+                    <span
+                      className="ops-time"
+                      title={op.ago ? op.createdAtMoment.format() : undefined}
+                    >
+                      {op.ago ? op.ago : "…"}
+                    </span>
+                  </div>
+                  <div className="ops-row-body">
+                    <AccountBadge
+                      horizonURL={this.props.horizonURL}
+                      id={op.source_account}
+                      known={this.props.account}
+                    />{" "}
+                    {this.operationTypeColRender(op)}
+                  </div>
+                </li>
               );
             })}
-          </tbody>
-        </table>
-      </Panel>
+          </ul>
+        )}
+      </Card>
     );
   }
 }

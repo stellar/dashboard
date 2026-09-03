@@ -1,0 +1,38 @@
+// Chart layer: D3 SVG styling driven by the token palette.
+
+.chart-container {
+  padding: 12px 12px 4px;
+}
+
+.axis {
+  text {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    fill: var(--chart-axis-text);
+  }
+
+  // No spines: gridlines carry the scale.
+  path.domain,
+  line {
+    stroke: none;
+  }
+}
+
+.chart-grid line {
+  stroke: var(--chart-grid);
+  shape-rendering: crispedges;
+}
+
+.chart-tooltip {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-chip);
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}

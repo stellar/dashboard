@@ -1,11 +1,10 @@
 import React from "react";
-import Panel from "muicss/lib/react/panel";
 import axios from "axios";
-import clone from "lodash/clone";
 import find from "lodash/find";
 import reduce from "lodash/reduce";
 import AccountBadge from "./AccountBadge.jsx";
 import BigNumber from "bignumber.js";
+import Card from "./ui/Card.jsx";
 
 export default class ListAccounts extends React.Component {
   constructor(props) {
@@ -45,21 +44,20 @@ export default class ListAccounts extends React.Component {
   }
 
   render() {
-    let sum = _.reduce(
+    let sum = reduce(
       this.state.balances,
-      (sum, balance) => sum.add(balance),
+      (acc, balance) => acc.add(balance),
       new BigNumber(0),
     );
 
     return (
-      <Panel>
-        <div className="widget-name">List of accounts: {this.props.label}</div>
+      <Card title={`List of accounts · ${this.props.label}`}>
         {sum.gt(0) ? (
-          <table className="mui-table small">
+          <table className="data-table">
             <thead>
               <tr>
                 <th>Account</th>
-                <th>Balance</th>
+                <th className="num">Balance</th>
               </tr>
             </thead>
             <tbody>
@@ -72,9 +70,9 @@ export default class ListAccounts extends React.Component {
                         id={key}
                       />
                     </td>
-                    <td className="amount-column">
+                    <td className="num">
                       {typeof this.state.balances[key] === "undefined"
-                        ? "Loading..."
+                        ? "—"
                         : `${this.state.balances[key].toFormat(
                             0,
                             BigNumber.ROUND_FLOOR,
@@ -87,16 +85,19 @@ export default class ListAccounts extends React.Component {
             <tfoot>
               <tr>
                 <th>Sum</th>
-                <th className="amount-column">
+                <th className="num">
                   {sum.toFormat(0, BigNumber.ROUND_FLOOR)} XLM
                 </th>
               </tr>
             </tfoot>
           </table>
         ) : (
-          "Loading..."
+          <div>
+            <span className="skeleton"></span>
+            <span className="skeleton" style={{ width: "80%" }}></span>
+          </div>
         )}
-      </Panel>
+      </Card>
     );
   }
 }

@@ -10,7 +10,7 @@
     />
 
     <!-- social media tags -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@StellarOrg" />
     <meta name="twitter:title" content="Stellar Network Dashboard" />
     <meta
@@ -18,59 +18,46 @@
       content="Live metrics about the Stellar public network, testnet, and lumen supply numbers."
     />
     <meta name="twitter:creator" content="@StellarOrg" />
-    <meta name="twitter:image:src" content="" />
+    <meta
+      name="twitter:image:src"
+      content="https://dashboard.stellar.org/og.png"
+    />
     <meta property="og:title" content="Stellar Network Dashboard" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://dashboard.stellar.org" />
-    <meta property="og:image" content="" />
+    <meta property="og:image" content="https://dashboard.stellar.org/og.png" />
     <meta
       property="og:description"
       content="Live metrics about the Stellar public network, testnet, and lumen supply numbers."
     />
 
     <link
-      rel="apple-touch-icon"
-      sizes="144x144"
-      href="https://www.stellar.org/developers/images/favicon/rocket-144x144.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="152x152"
-      href="https://www.stellar.org/developers/images/favicon/rocket-152x152.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="https://www.stellar.org/developers/images/favicon/rocket-180x180.png"
-    />
-    <link
       rel="icon"
-      type="image/png"
-      href="https://www.stellar.org/developers/images/favicon/rocket-96x96.png"
-      sizes="96x96"
+      type="image/svg+xml"
+      href="/frontend/assets/favicon.svg"
     />
-    <meta
-      name="msapplication-TileImage"
-      content="https://www.stellar.org/developers/images/favicon/rocket-144x144.png"
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
-    <!-- load custom font -->
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <!-- load MUI -->
-    <link
-      href="https://cdn.muicss.com/mui-0.9.6/css/mui.min.css"
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-    />
+    <meta name="theme-color" content="#0f0f0f" />
+
+    <!-- Set theme before first paint to avoid a flash of the wrong theme -->
+    <script>
+      (function () {
+        var stored;
+        try {
+          stored = localStorage.getItem("theme");
+        } catch (e) {
+          stored = null;
+        }
+        var theme =
+          stored ||
+          (window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: light)").matches
+            ? "light"
+            : "dark");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>
