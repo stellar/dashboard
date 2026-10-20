@@ -267,6 +267,23 @@ app.get(
   lumensV2V3.v3CirculatingSupplyHandler,
 );
 
+export function errorHandler(
+  err: Error & { status?: number },
+  _req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) {
+  // Only Express's default handler can close a response that has started.
+  if (res.headersSent) {
+    return next(err);
+  }
+  console.error(err);
+  const status =
+    err.status && err.status >= 400 && err.status < 600 ? err.status : 500;
+  res.sendStatus(status);
+}
+app.use(errorHandler);
+
 // Start listening only when this file is executed directly (not when required by tests)
 if (require.main === module && process.env.NODE_ENV !== "test") {
   app.listen(app.get("port"), () => {
