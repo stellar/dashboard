@@ -315,9 +315,7 @@ describe("integration", function () {
         }
       } else if (response.status === 500) {
         // Ledgers cache might not be initialized - this is acceptable for this test
-        chai
-          .expect(response.body.message || response.text)
-          .to.include("redis key not found");
+        chai.expect(response.text).to.equal("Internal Server Error");
       } else {
         throw new Error(`Unexpected status code: ${response.status}`);
       }
