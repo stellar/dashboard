@@ -34,13 +34,16 @@ app.use(logger("combined"));
 // routing is case-insensitive, tolerates trailing slashes, and answers HEAD
 // through GET handlers) — anything else stays fully rate limited.
 const LUMENS_V1_PATH = "/api/lumens";
-const isLumensV1Request = (req: express.Request): boolean => {
-  const normalizedPath = (req.baseUrl + req.path)
-    .toLowerCase()
-    .replace(/\/+$/, "");
+export const isLumensV1Request = (req: express.Request): boolean => {
+  const fullPath = (req.baseUrl + req.path).toLowerCase();
+  // Not /\/+$/: that regex is quadratic on a long run of slashes.
+  let end = fullPath.length;
+  while (end > 0 && fullPath[end - 1] === "/") {
+    end--;
+  }
   return (
     (req.method === "GET" || req.method === "HEAD") &&
-    normalizedPath === LUMENS_V1_PATH
+    fullPath.slice(0, end) === LUMENS_V1_PATH
   );
 };
 
