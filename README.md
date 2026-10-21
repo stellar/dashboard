@@ -7,7 +7,7 @@ started.
 
 To build this project, you must have the following dependencies installed:
 
-- Node v22
+- Node v22.23.4 or higher
 - NPM
 
 ## Installation
