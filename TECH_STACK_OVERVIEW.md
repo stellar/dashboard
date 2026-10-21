@@ -100,7 +100,7 @@ This pins `ua-parser-js` to prevent dependency vulnerabilities.
 
 ### Environment
 
-- **Node.js version**: 22.x (specified in `engines`)
+- **Node.js version**: ^22.23.4 (specified in `engines`)
 
 ---
 
