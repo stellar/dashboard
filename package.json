@@ -33,9 +33,9 @@
   "dependencies": {
     "@google-cloud/bigquery": "^5.10.0",
     "@stellar/prettier-config": "^1.0.1",
-    "@stellar/stellar-sdk": "^14.4.3",
-    "axios": "^1.13.2",
-    "bignumber.js": "^9.0.1",
+    "@stellar/stellar-sdk": "^17.4.0",
+    "axios": "^1.21.1",
+    "bignumber.js": "^11.1.5",
     "bourbon": "^7.3.0",
     "d3": "^7.9.0",
     "dompurify": "^2.2.6",
@@ -43,12 +43,13 @@
     "express": "^4.14.0",
     "express-http-proxy": "^1.0.6",
     "express-rate-limit": "^8.7.2",
-    "fbemitter": "^2.1.1",
+    "fbemitter": "^3.0.0",
     "html-react-parser": "^1.2.4",
     "lodash": "^4.17.21",
     "moment": "^2.17.1",
     "morgan": "^1.12.1",
     "muicss": "^0.9.5",
+    "proxy-addr": "^2.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "redis": "^4.0.1"
@@ -82,7 +83,6 @@
     "ts-node": "^10.4.0",
     "tsx": "^3.12.0",
     "typescript": "^5.9.3",
-    "vite": "^4.3.0",
-    "vite-plugin-node-polyfills": "^0.24.0"
+    "vite": "^4.3.0"
   }
 }

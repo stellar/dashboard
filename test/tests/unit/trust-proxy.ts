@@ -227,5 +227,13 @@ describe("Trust Proxy Configuration", function () {
       // Should extract the IPv6 address from X-Forwarded-For
       chai.expect(response.body.ip).to.equal("2001:db8::1");
     });
+
+    it("🔴should_not_trust_every_IPv4_for_a_short_IPv4_mapped_subnet", function () {
+      // GHSA-jqcg-44mw-7w3h: proxy-addr <=2.0.7 matched every IPv4 address
+      // against "::ffff:10.0.0.0/8".
+      const compiled = proxyAddr.compile(["::ffff:10.0.0.0/8"]);
+
+      chai.expect(compiled("203.0.113.1", 0)).to.be.false;
+    });
   });
 });

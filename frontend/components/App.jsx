@@ -140,7 +140,9 @@ export default class App extends React.Component {
       .then((response) => {
         let lastLedger = response.data._embedded.records[0];
 
-        new StellarSdk.Horizon.Server(horizonURL)
+        // onerror can run before stream() returns, when EventSource throws.
+        let closeStream;
+        closeStream = new StellarSdk.Horizon.Server(horizonURL)
           .ledgers()
           .cursor(lastLedger.paging_token)
           .limit(200)
@@ -148,6 +150,11 @@ export default class App extends React.Component {
             onmessage: (ledger) => this.emitter.emit(eventName, ledger),
             onerror: (error) => {
               console.warn("Stellar streaming error:", error);
+              // The SDK reconnects on its own; close it so the retry below
+              // does not leave a second stream running.
+              if (closeStream) {
+                closeStream();
+              }
               // Retry after 5 seconds
               setTimeout(() => this.streamLedgers(horizonURL, eventName), 5000);
             },
