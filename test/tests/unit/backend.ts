@@ -189,6 +189,100 @@ describe("ledgers", function () {
       ]);
       chai.assert.equal(cachedPagingToken as string, "103");
     });
+    it("should sort December before November in a Nov-Dec window", async function () {
+      await redisClient.del(REDIS_LEDGER_KEY_TEST);
+      await redisClient.del(REDIS_PAGING_TOKEN_KEY_TEST);
+
+      const ledgers: LedgerRecord[] = [
+        {
+          paging_token: "201",
+          sequence: 20001,
+          successful_transaction_count: 10,
+          failed_transaction_count: 0,
+          operation_count: 20,
+          closed_at: "2022-11-29T12:00:00Z",
+        },
+        {
+          paging_token: "202",
+          sequence: 20002,
+          successful_transaction_count: 15,
+          failed_transaction_count: 0,
+          operation_count: 30,
+          closed_at: "2022-11-30T12:00:00Z",
+        },
+        {
+          paging_token: "203",
+          sequence: 20003,
+          successful_transaction_count: 20,
+          failed_transaction_count: 0,
+          operation_count: 40,
+          closed_at: "2022-12-01T12:00:00Z",
+        },
+      ];
+
+      await updateCache(
+        ledgers,
+        REDIS_LEDGER_KEY_TEST,
+        REDIS_PAGING_TOKEN_KEY_TEST,
+      );
+
+      const cached = JSON.parse(
+        (await redisClient.get(REDIS_LEDGER_KEY_TEST)) as string,
+      );
+      const dates = cached.map((l: any) => l.date);
+      chai.expect(dates).to.eql(["12-01", "11-30", "11-29"]);
+    });
+    it("should sort January before December at year boundary", async function () {
+      await redisClient.del(REDIS_LEDGER_KEY_TEST);
+      await redisClient.del(REDIS_PAGING_TOKEN_KEY_TEST);
+
+      const ledgers: LedgerRecord[] = [
+        {
+          paging_token: "301",
+          sequence: 30001,
+          successful_transaction_count: 5,
+          failed_transaction_count: 0,
+          operation_count: 10,
+          closed_at: "2022-12-30T12:00:00Z",
+        },
+        {
+          paging_token: "302",
+          sequence: 30002,
+          successful_transaction_count: 5,
+          failed_transaction_count: 0,
+          operation_count: 10,
+          closed_at: "2022-12-31T12:00:00Z",
+        },
+        {
+          paging_token: "303",
+          sequence: 30003,
+          successful_transaction_count: 5,
+          failed_transaction_count: 0,
+          operation_count: 10,
+          closed_at: "2023-01-01T12:00:00Z",
+        },
+        {
+          paging_token: "304",
+          sequence: 30004,
+          successful_transaction_count: 5,
+          failed_transaction_count: 0,
+          operation_count: 10,
+          closed_at: "2023-01-02T12:00:00Z",
+        },
+      ];
+
+      await updateCache(
+        ledgers,
+        REDIS_LEDGER_KEY_TEST,
+        REDIS_PAGING_TOKEN_KEY_TEST,
+      );
+
+      const cached = JSON.parse(
+        (await redisClient.get(REDIS_LEDGER_KEY_TEST)) as string,
+      );
+      const dates = cached.map((l: any) => l.date);
+      chai.expect(dates).to.eql(["01-02", "01-01", "12-31", "12-30"]);
+    });
   });
   describe("catchup", function () {
     this.timeout(20000);

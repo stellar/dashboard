@@ -149,17 +149,18 @@ export async function updateCache(
 }
 
 function dateSorter(a: LedgerStat, b: LedgerStat) {
-  const dateA = new Date(a.date);
-  const dateB = new Date(b.date);
+  if (a.date === b.date) return 0;
+  const [ma, da] = a.date.split("-").map(Number);
+  const [mb, db] = b.date.split("-").map(Number);
 
-  if (dateA.getMonth() === 11) {
-    dateA.setFullYear(dateA.getFullYear() - 1);
+  // In a <=30-day window, months >6 apart means the window wraps Dec->Jan.
+  // The lower month (Jan) is the more recent one in that case.
+  if (Math.abs(ma - mb) > 6) {
+    return ma < mb ? -1 : 1;
   }
-  if (dateB.getMonth() === 11) {
-    dateB.setFullYear(dateB.getFullYear() - 1);
-  }
-
-  return dateB.getTime() - dateA.getTime();
+  // Normal: descending by month then day
+  if (ma !== mb) return mb - ma;
+  return db - da;
 }
 
 // MM-DD
